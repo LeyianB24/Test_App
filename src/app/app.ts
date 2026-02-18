@@ -1,43 +1,102 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { HeaderComponent } from './layout/header/header.component';
+import { FooterComponent } from './layout/footer/footer.component';
+import { Component, inject, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NotificationComponent } from './notification/notification.component';
-import { NotificationService } from './notification/notification.service';
+import { RouterOutlet, Router } from '@angular/router';
+import { SidebarComponent } from './layout/sidebar/sidebar.component';
+import { AuthService } from './services/auth.service';
+import { UserDataService } from './services/user-data.service';
+import { DashboardDataService } from './services/dashboard-data.service';
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NotificationComponent, CommonModule],
-  templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  imports: [CommonModule, RouterOutlet, SidebarComponent, HeaderComponent, FooterComponent],
+  template: `
+    <div class="loading-overlay" *ngIf="isLoading()">
+      <div class="spinner"></div>
+    </div>
+    
+    <!-- Show layout only when authenticated -->
+    <div class="dashboard-container" *ngIf="isAuthenticated(); else loginView">
+
+        <app-sidebar
+            [collapsed]="isCollapsed"
+            [isMobileOpen]="isMobileOpen"
+            (toggle)="toggleSidebar()"
+            (closeMobile)="isMobileOpen = false"
+            (logout)="handleLogout()">
+        </app-sidebar>
+
+        <main class="main-content" [class.expanded]="isCollapsed">
+
+            <app-header
+              (toggleSidebar)="handleSidebarToggle()"
+              (logout)="handleLogout()">
+            </app-header>
+
+            <div class="content-wrapper">
+                <router-outlet></router-outlet>
+                <app-footer></app-footer>
+            </div>
+        </main>
+    </div>
+
+    <!-- Login view (no layout) -->
+    <ng-template #loginView>
+      <router-outlet></router-outlet>
+    </ng-template>
+  `
 })
-export class App {
-  title = 'KRA Tax Portal';
-  currentDate = new Date();
+export class AppComponent implements OnInit {
+  private authService = inject(AuthService);
+  private userDataService = inject(UserDataService);
+  private dashboardData = inject(DashboardDataService);
+  private router = inject(Router);
 
-  // Enhanced Stats with Progress bars
-  stats = [
-    { label: 'Total Tax Due', value: 'KES 145,200', trend: 'Due in 5 days', color: 'red', progress: 75 },
-    { label: 'VAT Returns', value: 'Submitted', trend: 'On Time', color: 'green', progress: 100 },
-    { label: 'eTIMS Invoices', value: '340', trend: '+12 this week', color: 'blue', progress: 60 },
-    { label: 'Compliance Score', value: '98%', trend: 'Excellent', color: 'green', progress: 98 }
-  ];
+  isCollapsed = false;
+  isMobileOpen = false;
 
-  // Enhanced Activity with Status
-  recentActivity = [
-    { user: 'Bezalel Leyian', action: 'Filed VAT Return (Jan 2026)', time: '2 mins ago', status: 'success', statusText: 'Filed' },
-    { user: 'System', action: 'Generated Payment Slip (PRN)', time: '1 hour ago', status: 'pending', statusText: 'Pending Pay' },
-    { user: 'KRA Notifications', action: 'Compliance Certificate Approved', time: '5 hours ago', status: 'success', statusText: 'Approved' },
-    { user: 'Bezalel Leyian', action: 'Uploaded Withholding Cert', time: '1 day ago', status: 'warning', statusText: 'Reviewing' }
-  ];
+  // Reactive authentication state
+  isAuthenticated = this.authService.isAuthenticated;
+  currentUser = this.authService.currentUser;
+  userData = this.userDataService.currentUser;
+  userName = computed(() => this.userData()?.name || this.authService.userName());
+  station = this.dashboardData.station;
+  isLoading = computed(() => 
+    this.dashboardData.isLoading() || 
+    this.authService.isLoading() || 
+    this.userDataService.isLoadingUser()
+  );
 
-  constructor(private notifyService: NotificationService) {}
+  handleSidebarToggle() {
+    if (window.innerWidth <= 768) {
+      this.isMobileOpen = !this.isMobileOpen;
+    } else {
+      this.isCollapsed = !this.isCollapsed;
+    }
+  }
 
-  handleAction() {
-    this.notifyService.show('Initiating new tax return...', 'info');
+  toggleSidebar() {
+    this.isCollapsed = !this.isCollapsed;
   }
 
   handleLogout() {
-    this.notifyService.show('Logging out of secure portal...', 'success');
+    console.log('App: Logging out...');
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/login']);
+    });
+  }
+
+  // Initialize user data on app startup if authenticated
+  ngOnInit() {
+    if (this.authService.isLoggedIn()) {
+      const user = this.authService.getCurrentUser();
+      if (user) {
+        console.log('🔄 App: Loading user data on startup...');
+        this.userDataService.loadUserData(user.taxpayer_id).subscribe();
+      }
+    }
   }
 }

@@ -1,0 +1,310 @@
+import { Injectable, inject, signal, computed } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { SummaryStats, ApiResponse } from '../models/enhanced.models';
+import { Observable, of } from 'rxjs';
+import { tap, map, catchError } from 'rxjs/operators';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EnhancedDashboardService {
+  private http = inject(HttpClient);
+  private apiUrl = 'http://localhost/itax/kra-api/dashboard_actions.php';
+  
+  // Signals for reactive state management
+  private summaryStats = signal<SummaryStats>({
+    totalPaid: 0,
+    pendingDue: 0,
+    lastPaymentDate: '',
+    totalPayments: 0,
+    totalReturns: 0,
+    totalInvoices: 0,
+    totalTax: 0,
+    syncedInvoices: 0,
+    pendingInvoices: 0
+  });
+  
+  private loading = signal(false);
+  private error = signal<string | null>(null);
+  private lastUpdated = signal<Date | null>(null);
+  
+  // Computed values
+  stats = computed(() => this.summaryStats());
+  isLoading = computed(() => this.loading());
+  errorMessage = computed(() => this.error());
+  lastUpdateTime = computed(() => this.lastUpdated());
+  
+  // Additional computed metrics
+  hasPendingPayments = computed(() => this.summaryStats().pendingDue > 0);
+  hasOverdueReturns = computed(() => false); // Will be calculated from returns service
+  hasPendingInvoices = computed(() => this.summaryStats().pendingInvoices > 0);
+  totalOutstanding = computed(() => this.summaryStats().pendingDue);
+  paymentSuccessRate = computed(() => {
+    const total = this.summaryStats().totalPayments;
+    const paid = total; // Assuming all loaded payments are successful for now
+    return total > 0 ? (paid / total) * 100 : 0;
+  });
+
+  constructor() {
+    this.loadDashboardStats();
+  }
+
+  // ========== Dashboard Data Loading ==========
+  
+  loadDashboardStats(): Observable<ApiResponse<SummaryStats>> {
+    this.loading.set(true);
+    this.error.set(null);
+    
+    return this.http.get<any>(this.apiUrl).pipe(
+      tap(response => {
+        this.loading.set(false);
+        if (response.success) {
+          this.summaryStats.set(response.data || this.getEmptyStats());
+          this.lastUpdated.set(new Date());
+        } else {
+          this.error.set(response.message || 'Failed to load dashboard statistics');
+        }
+      }),
+      map(response => response as ApiResponse<SummaryStats>),
+      catchError(error => {
+        this.loading.set(false);
+        this.error.set('Failed to connect to server');
+        return of({ success: false, message: 'Connection error' });
+      })
+    );
+  }
+
+  refreshDashboard(): void {
+    this.loadDashboardStats();
+  }
+
+  // ========== Real-time Updates ==========
+  
+  updateStats(updates: Partial<SummaryStats>): void {
+    const currentStats = this.summaryStats();
+    const updatedStats = { ...currentStats, ...updates };
+    this.summaryStats.set(updatedStats);
+    this.lastUpdated.set(new Date());
+  }
+
+  incrementPaymentCount(amount: number): void {
+    const currentStats = this.summaryStats();
+    this.updateStats({
+      totalPayments: currentStats.totalPayments + 1,
+      totalPaid: currentStats.totalPaid + amount,
+      lastPaymentDate: new Date().toISOString().split('T')[0]
+    });
+  }
+
+  incrementReturnCount(): void {
+    const currentStats = this.summaryStats();
+    this.updateStats({
+      totalReturns: currentStats.totalReturns + 1
+    });
+  }
+
+  incrementInvoiceCount(synced: boolean = false): void {
+    const currentStats = this.summaryStats();
+    this.updateStats({
+      totalInvoices: currentStats.totalInvoices + 1,
+      syncedInvoices: synced ? currentStats.syncedInvoices + 1 : currentStats.syncedInvoices,
+      pendingInvoices: !synced ? currentStats.pendingInvoices + 1 : currentStats.pendingInvoices
+    });
+  }
+
+  // ========== Utility Methods ==========
+  
+  getEmptyStats(): SummaryStats {
+    return {
+      totalPaid: 0,
+      pendingDue: 0,
+      lastPaymentDate: '',
+      totalPayments: 0,
+      totalReturns: 0,
+      totalInvoices: 0,
+      totalTax: 0,
+      syncedInvoices: 0,
+      pendingInvoices: 0
+    };
+  }
+
+  formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('en-KE', {
+      style: 'currency',
+      currency: 'KES',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount);
+  }
+
+  formatDate(dateString: string): string {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-KE', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  }
+
+  getDaysUntilDue(dueDate: string): number {
+    const today = new Date();
+    const due = new Date(dueDate);
+    const diffTime = due.getTime() - today.getTime();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+
+  getPaymentStatusColor(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'paid': return '#28a745';
+      case 'pending': return '#ffc107';
+      case 'failed': return '#dc3545';
+      case 'refunded': return '#6c757d';
+      default: return '#6c757d';
+    }
+  }
+
+  getReturnStatusColor(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'accepted': return '#28a745';
+      case 'submitted': return '#17a2b8';
+      case 'draft': return '#ffc107';
+      case 'rejected': return '#dc3545';
+      case 'amended': return '#6f42c1';
+      default: return '#6c757d';
+    }
+  }
+
+  getInvoiceStatusColor(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'paid': return '#28a745';
+      case 'issued': return '#17a2b8';
+      case 'draft': return '#ffc107';
+      case 'overdue': return '#dc3545';
+      case 'cancelled': return '#6c757d';
+      default: return '#6c757d';
+    }
+  }
+
+  // ========== Export and Reporting ==========
+  
+  exportDashboardReport(): void {
+    const stats = this.summaryStats();
+    const reportData = {
+      generated_at: new Date().toISOString(),
+      summary: stats,
+      metrics: {
+        payment_success_rate: this.paymentSuccessRate(),
+        has_pending_payments: this.hasPendingPayments(),
+        total_outstanding: this.totalOutstanding(),
+        has_pending_invoices: this.hasPendingInvoices()
+      }
+    };
+
+    const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dashboard_report_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  printDashboardSummary(): void {
+    const stats = this.summaryStats();
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Dashboard Summary</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          .header { text-align: center; margin-bottom: 30px; }
+          .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+          .summary-item { padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+          .summary-item h3 { margin: 0 0 10px 0; color: #333; }
+          .summary-item p { margin: 5px 0; font-size: 14px; }
+          .amount { font-size: 18px; font-weight: bold; color: #28a745; }
+          .footer { margin-top: 30px; text-align: center; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>KRA iTAX DASHBOARD SUMMARY</h1>
+          <p>Generated on ${new Date().toLocaleDateString()}</p>
+        </div>
+        
+        <div class="summary-grid">
+          <div class="summary-item">
+            <h3>Payments</h3>
+            <p>Total Payments: <span class="amount">${stats.totalPayments}</span></p>
+            <p>Total Paid: <span class="amount">KES ${stats.totalPaid.toFixed(2)}</span></p>
+            <p>Pending Due: <span class="amount">KES ${stats.pendingDue.toFixed(2)}</span></p>
+            <p>Last Payment: ${stats.lastPaymentDate || 'No payments'}</p>
+          </div>
+          
+          <div class="summary-item">
+            <h3>Returns</h3>
+            <p>Total Returns: <span class="amount">${stats.totalReturns}</span></p>
+            <p>Total Tax: <span class="amount">KES ${stats.totalTax.toFixed(2)}</span></p>
+          </div>
+          
+          <div class="summary-item">
+            <h3>Invoices</h3>
+            <p>Total Invoices: <span class="amount">${stats.totalInvoices}</span></p>
+            <p>Synced: <span class="amount">${stats.syncedInvoices}</span></p>
+            <p>Pending: <span class="amount">${stats.pendingInvoices}</span></p>
+          </div>
+          
+          <div class="summary-item">
+            <h3>Metrics</h3>
+            <p>Payment Success Rate: <span class="amount">${this.paymentSuccessRate().toFixed(1)}%</span></p>
+            <p>Has Pending Payments: ${this.hasPendingPayments() ? 'Yes' : 'No'}</p>
+            <p>Total Outstanding: <span class="amount">KES ${this.totalOutstanding().toFixed(2)}</span></p>
+          </div>
+        </div>
+        
+        <div class="footer">
+          <p>This is a computer-generated summary and requires no signature.</p>
+          <p>KRA iTax Portal - Dashboard Report</p>
+        </div>
+      </body>
+      </html>
+    `;
+    
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(printContent);
+      printWindow.document.close();
+      printWindow.print();
+    }
+  }
+
+  // ========== State Management ==========
+  
+  clearError(): void {
+    this.error.set(null);
+  }
+
+  resetState(): void {
+    this.summaryStats.set(this.getEmptyStats());
+    this.error.set(null);
+    this.loading.set(false);
+    this.lastUpdated.set(null);
+  }
+
+  // ========== Auto-refresh ==========
+  
+  enableAutoRefresh(intervalMs: number = 60000): void {
+    setInterval(() => {
+      if (!this.loading()) {
+        this.loadDashboardStats();
+      }
+    }, intervalMs);
+  }
+
+  disableAutoRefresh(): void {
+    // Implementation would clear the interval
+    // This would need to store the interval ID
+  }
+}

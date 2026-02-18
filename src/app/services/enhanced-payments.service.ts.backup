@@ -1,0 +1,438 @@
+import { Injectable, inject, signal, computed } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Payment, SearchFilters, PaginationInfo, ApiResponse } from '../models/enhanced.models';
+import { Observable, of } from 'rxjs';
+import { tap, map, catchError } from 'rxjs/operators';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EnhancedPaymentsService {
+  private http = inject(HttpClient);
+  private apiUrl = 'http://localhost/itax/kra-api/payment_actions.php';
+  
+  // Signals for reactive state management
+  private payments = signal<Payment[]>([]);
+  private loading = signal(false);
+  private error = signal<string | null>(null);
+  private pagination = signal<PaginationInfo>({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    itemsPerPage: 10,
+    hasNext: false,
+    hasPrevious: false
+  });
+  
+  // Computed values
+  allPayments = computed(() => this.payments());
+  isLoading = computed(() => this.loading());
+  errorMessage = computed(() => this.error());
+  paginationInfo = computed(() => this.pagination());
+  
+  // Filtered computed values
+  paidPayments = computed(() => 
+    this.payments().filter(p => p.status === 'paid')
+  );
+  pendingPayments = computed(() => 
+    this.payments().filter(p => p.status === 'pending')
+  );
+  failedPayments = computed(() => 
+    this.payments().filter(p => p.status === 'failed')
+  );
+  refundedPayments = computed(() => 
+    this.payments().filter(p => p.status === 'refunded')
+  );
+  
+  // Statistics
+  totalPaid = computed(() => 
+    this.paidPayments().reduce((sum, p) => sum + p.amount, 0)
+  );
+  totalPending = computed(() => 
+    this.pendingPayments().reduce((sum, p) => sum + p.amount, 0)
+  );
+  totalPaymentsCount = computed(() => this.payments().length);
+  paidCount = computed(() => this.paidPayments().length);
+  pendingCount = computed(() => this.pendingPayments().length);
+  failedCount = computed(() => this.failedPayments().length);
+
+  constructor() {
+    this.loadPayments();
+  }
+
+  // ========== CRUD Operations ==========
+  
+  loadPayments(filters?: SearchFilters): Observable<ApiResponse<Payment[]>> {
+    this.loading.set(true);
+    this.error.set(null);
+    
+    const params = this.buildQueryParams(filters);
+    
+    return this.http.get<any>(`${this.apiUrl}?${params}`).pipe(
+      tap(response => {
+        this.loading.set(false);
+        if (response.success) {
+          this.payments.set(response.data || []);
+          if (response.pagination) {
+            this.pagination.set(response.pagination);
+          }
+        } else {
+          this.error.set(response.message || 'Failed to load payments');
+        }
+      }),
+      map(response => response as ApiResponse<Payment[]>),
+      catchError(error => {
+        this.loading.set(false);
+        this.error.set('Failed to connect to server');
+        return of({ success: false, message: 'Connection error' });
+      })
+    );
+  }
+
+  createPayment(paymentData: Partial<Payment>): Observable<ApiResponse<Payment>> {
+    this.loading.set(true);
+    
+    const payload = {
+      ...paymentData,
+      payment_reference: this.generatePaymentReference(),
+      status: 'pending',
+      created_at: new Date().toISOString()
+    };
+
+    return this.http.post<any>(this.apiUrl, payload).pipe(
+      tap(response => {
+        this.loading.set(false);
+        if (response.success) {
+          // Refresh the payment list
+          this.loadPayments();
+        } else {
+          this.error.set(response.message || 'Failed to create payment');
+        }
+      }),
+      map(response => response as ApiResponse<Payment>),
+      catchError(error => {
+        this.loading.set(false);
+        this.error.set('Failed to create payment');
+        return of({ success: false, message: 'Connection error' });
+      })
+    );
+  }
+
+  updatePayment(id: number, updates: Partial<Payment>): Observable<ApiResponse<Payment>> {
+    this.loading.set(true);
+    
+    return this.http.put<any>(`${this.apiUrl}?id=${id}`, updates).pipe(
+      tap(response => {
+        this.loading.set(false);
+        if (response.success) {
+          // Update local state
+          const currentPayments = this.payments();
+          const updatedPayments = currentPayments.map(payment => 
+            payment.id === id ? { ...payment, ...updates } : payment
+          );
+          this.payments.set(updatedPayments);
+        } else {
+          this.error.set(response.message || 'Failed to update payment');
+        }
+      }),
+      map(response => response as ApiResponse<Payment>),
+      catchError(error => {
+        this.loading.set(false);
+        this.error.set('Failed to update payment');
+        return of({ success: false, message: 'Connection error' });
+      })
+    );
+  }
+
+  deletePayment(id: number): Observable<ApiResponse<boolean>> {
+    this.loading.set(true);
+    
+    return this.http.delete<any>(`${this.apiUrl}?id=${id}`).pipe(
+      tap(response => {
+        this.loading.set(false);
+        if (response.success) {
+          // Remove from local state
+          const currentPayments = this.payments();
+          const filteredPayments = currentPayments.filter(payment => payment.id !== id);
+          this.payments.set(filteredPayments);
+        } else {
+          this.error.set(response.message || 'Failed to delete payment');
+        }
+      }),
+      map(response => response as ApiResponse<boolean>),
+      catchError(error => {
+        this.loading.set(false);
+        this.error.set('Failed to delete payment');
+        return of({ success: false, message: 'Connection error' });
+      })
+    );
+  }
+
+  // ========== Payment Processing ==========
+  
+  processPayment(id: number, method: string): Observable<ApiResponse<Payment>> {
+    this.loading.set(true);
+    
+    return this.http.post<any>(`${this.apiUrl}/process`, { 
+      payment_id: id, 
+      payment_method: method 
+    }).pipe(
+      tap(response => {
+        this.loading.set(false);
+        if (response.success) {
+          // Update local payment status
+          this.updatePaymentStatus(id, 'paid');
+        } else {
+          this.error.set(response.message || 'Failed to process payment');
+        }
+      }),
+      map(response => response as ApiResponse<Payment>),
+      catchError(error => {
+        this.loading.set(false);
+        this.error.set('Failed to process payment');
+        return of({ success: false, message: 'Connection error' });
+      })
+    );
+  }
+
+  refundPayment(id: number, reason: string): Observable<ApiResponse<Payment>> {
+    this.loading.set(true);
+    
+    return this.http.post<any>(`${this.apiUrl}/refund`, { 
+      payment_id: id, 
+      reason: reason 
+    }).pipe(
+      tap(response => {
+        this.loading.set(false);
+        if (response.success) {
+          // Update local payment status
+          this.updatePaymentStatus(id, 'refunded');
+        } else {
+          this.error.set(response.message || 'Failed to refund payment');
+        }
+      }),
+      map(response => response as ApiResponse<Payment>),
+      catchError(error => {
+        this.loading.set(false);
+        this.error.set('Failed to refund payment');
+        return of({ success: false, message: 'Connection error' });
+      })
+    );
+  }
+
+  // ========== Search and Filter Operations ==========
+  
+  searchPayments(query: string): Payment[] {
+    if (!query.trim()) return this.payments();
+    
+    const lowerQuery = query.toLowerCase();
+    return this.payments().filter(payment => 
+      payment.payment_reference.toLowerCase().includes(lowerQuery) ||
+      payment.tax_type.toLowerCase().includes(lowerQuery) ||
+      payment.transaction_id?.toLowerCase().includes(lowerQuery) ||
+      payment.receipt_number?.toLowerCase().includes(lowerQuery) ||
+      payment.description?.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  filterPayments(filters: SearchFilters): Payment[] {
+    let filtered = this.payments();
+    
+    if (filters.status) {
+      filtered = filtered.filter(payment => payment.status === filters.status);
+    }
+    
+    if (filters.dateFrom) {
+      const fromDate = new Date(filters.dateFrom);
+      filtered = filtered.filter(payment => new Date(payment.payment_date) >= fromDate);
+    }
+    
+    if (filters.dateTo) {
+      const toDate = new Date(filters.dateTo);
+      filtered = filtered.filter(payment => new Date(payment.payment_date) <= toDate);
+    }
+    
+    if (filters.type) {
+      filtered = filtered.filter(payment => 
+        payment.tax_type.toLowerCase().includes(filters.type!.toLowerCase())
+      );
+    }
+    
+    return filtered;
+  }
+
+  // ========== Utility Methods ==========
+  
+  getPaymentById(id: number): Payment | undefined {
+    return this.payments().find(payment => payment.id === id);
+  }
+
+  getPaymentsByStatus(status: string): Payment[] {
+    return this.payments().filter(payment => payment.status === status);
+  }
+
+  getPaymentsByDateRange(startDate: string, endDate: string): Payment[] {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    return this.payments().filter(payment => {
+      const paymentDate = new Date(payment.payment_date);
+      return paymentDate >= start && paymentDate <= end;
+    });
+  }
+
+  getPaymentsByTaxType(taxType: string): Payment[] {
+    return this.payments().filter(payment => 
+      payment.tax_type.toLowerCase() === taxType.toLowerCase()
+    );
+  }
+
+  exportToExcel(payments: Payment[]): void {
+    // Create CSV content
+    const headers = [
+      'Payment Reference', 'Tax Type', 'Amount', 'Payment Date', 
+      'Payment Method', 'Status', 'Transaction ID', 'Receipt Number', 'Description'
+    ];
+    const rows = payments.map(payment => [
+      payment.payment_reference,
+      payment.tax_type,
+      payment.amount.toFixed(2),
+      payment.payment_date,
+      payment.payment_method,
+      payment.status,
+      payment.transaction_id || '',
+      payment.receipt_number || '',
+      payment.description || ''
+    ]);
+    
+    const csvContent = [headers, ...rows]
+      .map(row => row.join(','))
+      .join('\n');
+    
+    // Download file
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `payments_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  printReceipt(payment: Payment): void {
+    // Create printable receipt HTML
+    const printContent = this.generatePrintableReceipt(payment);
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(printContent);
+      printWindow.document.close();
+      printWindow.print();
+    }
+  }
+
+  // ========== Private Helper Methods ==========
+  
+  private updatePaymentStatus(id: number, status: string): void {
+    const currentPayments = this.payments();
+    const updatedPayments = currentPayments.map(payment => 
+      payment.id === id ? { ...payment, status: status as any } : payment
+    );
+    this.payments.set(updatedPayments);
+  }
+
+  private buildQueryParams(filters?: SearchFilters): string {
+    if (!filters) return '';
+    
+    const params = new URLSearchParams();
+    
+    if (filters.query) params.append('search', filters.query);
+    if (filters.dateFrom) params.append('date_from', filters.dateFrom);
+    if (filters.dateTo) params.append('date_to', filters.dateTo);
+    if (filters.status) params.append('status', filters.status);
+    if (filters.type) params.append('type', filters.type);
+    if (filters.limit) params.append('limit', filters.limit.toString());
+    if (filters.offset) params.append('offset', filters.offset.toString());
+    
+    return params.toString();
+  }
+
+  private generatePaymentReference(): string {
+    const year = new Date().getFullYear();
+    const month = String(new Date().getMonth() + 1).padStart(2, '0');
+    const random = Math.floor(100000 + Math.random() * 900000);
+    return `PAY${year}${month}${random}`;
+  }
+
+  private generatePrintableReceipt(payment: Payment): string {
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Payment Receipt - ${payment.payment_reference}</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          .header { text-align: center; margin-bottom: 30px; }
+          .receipt-details { margin-bottom: 20px; }
+          .payment-info { margin-bottom: 20px; }
+          .footer { margin-top: 30px; text-align: center; font-size: 12px; }
+          .status { padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; }
+          .paid { background-color: #d4edda; color: #155724; }
+          .pending { background-color: #fff3cd; color: #856404; }
+          .failed { background-color: #f8d7da; color: #721c24; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>PAYMENT RECEIPT</h1>
+          <h2>${payment.payment_reference}</h2>
+        </div>
+        
+        <div class="receipt-details">
+          <p><strong>Tax Type:</strong> ${payment.tax_type}</p>
+          <p><strong>Payment Date:</strong> ${payment.payment_date}</p>
+          <p><strong>Payment Method:</strong> ${payment.payment_method}</p>
+          <p><strong>Amount:</strong> KES ${payment.amount.toFixed(2)}</p>
+          ${payment.transaction_id ? `<p><strong>Transaction ID:</strong> ${payment.transaction_id}</p>` : ''}
+          ${payment.receipt_number ? `<p><strong>Receipt Number:</strong> ${payment.receipt_number}</p>` : ''}
+          ${payment.description ? `<p><strong>Description:</strong> ${payment.description}</p>` : ''}
+        </div>
+        
+        <div class="payment-info">
+          <div class="status ${payment.status}">
+            STATUS: ${payment.status.toUpperCase()}
+          </div>
+        </div>
+        
+        <div class="footer">
+          <p>This is a computer-generated receipt and requires no signature.</p>
+          <p>KRA iTax Portal - Official Payment Record</p>
+        </div>
+      </body>
+      </html>
+    `;
+  }
+
+  // ========== State Management ==========
+  
+  clearError(): void {
+    this.error.set(null);
+  }
+
+  refresh(): void {
+    this.loadPayments();
+  }
+
+  resetState(): void {
+    this.payments.set([]);
+    this.error.set(null);
+    this.loading.set(false);
+    this.pagination.set({
+      currentPage: 1,
+      totalPages: 1,
+      totalItems: 0,
+      itemsPerPage: 10,
+      hasNext: false,
+      hasPrevious: false
+    });
+  }
+}
