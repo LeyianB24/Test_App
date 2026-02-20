@@ -35,14 +35,30 @@ export class NotificationService {
     this._notifications.update(list => [newNotif, ...list]);
   }
 
+  showSuccess(message: string, title: string = 'Success') {
+    this.addNotification(title, message, 'success');
+  }
+
+  showError(message: string, title: string = 'Error') {
+    this.addNotification(title, message, 'error');
+  }
+
+  showWarning(message: string, title: string = 'Warning') {
+    this.addNotification(title, message, 'warning');
+  }
+
+  showInfo(message: string, title: string = 'Information') {
+    this.addNotification(title, message, 'info');
+  }
+
   markAsRead(id: number) {
-    this._notifications.update(list => 
+    this._notifications.update(list =>
       list.map(n => n.id === id ? { ...n, read: true } : n)
     );
   }
 
   markAllAsRead() {
-    this._notifications.update(list => 
+    this._notifications.update(list =>
       list.map(n => ({ ...n, read: true }))
     );
   }

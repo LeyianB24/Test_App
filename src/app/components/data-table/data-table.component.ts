@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ExportService, ExportColumn } from '../services/export.service';
-import { NotificationService } from '../services/notification.service';
+import { ExportService, ExportColumn } from '../../services/export.service';
+import { NotificationService } from '../../services/notification.service';
 
 export interface TableColumn {
   key: string;
@@ -72,7 +72,7 @@ export interface TableAction {
                 <span>📋</span> Export to CSV
               </button>
               <button (click)="exportTable('json')" class="export-option">
-                <span>{ }</span> Export to JSON
+                <span>{{ '{' }} {{ '}' }}</span> Export to JSON
               </button>
             </div>
           </button>

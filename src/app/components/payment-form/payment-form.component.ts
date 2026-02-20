@@ -1,10 +1,10 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PaymentService } from '../services/payment.service';
-import { ValidationService, ValidationRule } from '../services/validation.service';
-import { NotificationService } from '../services/notification.service';
-import { MpesaService } from '../services/mpesa.service';
+import { PaymentService } from '../../services/payment.service';
+import { ValidationService, ValidationRule } from '../../services/validation.service';
+import { NotificationService } from '../../services/notification.service';
+import { MpesaService } from '../../services/mpesa.service';
 
 @Component({
   selector: 'app-payment-form',

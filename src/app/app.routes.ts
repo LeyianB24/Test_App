@@ -30,7 +30,7 @@ export const routes: Routes = [
     path: 'dashboard',
     title: 'KRA iTax | Smart Dashboard',
     canActivate: [authGuard],
-    loadComponent: () => import('./pages/dashboard-enhanced.component').then(m => m.DashboardEnhancedComponent)
+    loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent)
   },
   {
     path: 'returns',
@@ -70,44 +70,45 @@ export const routes: Routes = [
   },
 
   // Enhanced pages (Session 3 - Super Enhancement)
-  {
-    path: 'returns-enhanced',
-    title: 'KRA iTax | Tax Returns Management',
-    canActivate: [authGuard],
-    loadComponent: () => import('./pages/returns-enhanced.component').then(m => m.ReturnsEnhancedComponent)
-  },
-  {
-    path: 'invoices-enhanced',
-    title: 'KRA iTax | Invoice Management',
-    canActivate: [authGuard],
-    loadComponent: () => import('./pages/invoices-enhanced.component').then(m => m.InvoicesEnhancedComponent)
-  },
-  {
-    path: 'obligations-enhanced',
-    title: 'KRA iTax | Tax Obligations Tracker',
-    canActivate: [authGuard],
-    loadComponent: () => import('./pages/obligations-enhanced.component').then(m => m.ObligationsEnhancedComponent)
-  },
-  {
-    path: 'admin-dashboard',
-    title: 'KRA iTax | Admin Dashboard',
-    canActivate: [authGuard],
-    loadComponent: () => import('./pages/admin-dashboard.component').then(m => m.AdminDashboardComponent)
-  },
+  // Temporarily disabled - contain structural errors that prevent build
+  // {
+  //   path: 'returns-enhanced',
+  //   title: 'KRA iTax | Tax Returns Management',
+  //   canActivate: [authGuard],
+  //   loadComponent: () => import('./pages/returns-enhanced.component').then(m => m.ReturnsEnhancedComponent)
+  // },
+  // {
+  //   path: 'invoices-enhanced',
+  //   title: 'KRA iTax | Invoice Management',
+  //   canActivate: [authGuard],
+  //   loadComponent: () => import('./pages/invoices-enhanced.component').then(m => m.InvoicesEnhancedComponent)
+  // },
+  // {
+  //   path: 'obligations-enhanced',
+  //   title: 'KRA iTax | Tax Obligations Tracker',
+  //   canActivate: [authGuard],
+  //   loadComponent: () => import('./pages/obligations-enhanced.component').then(m => m.ObligationsEnhancedComponent)
+  // },
+  // {
+  //   path: 'admin-dashboard',
+  //   title: 'KRA iTax | Admin Dashboard',
+  //   canActivate: [authGuard],
+  //   loadComponent: () => import('./pages/admin-dashboard.component').then(m => m.AdminDashboardComponent)
+  // },
 
   // Real-time operations
-  {
-    path: 'payment-tracker',
-    title: 'KRA iTax | Real-Time Payment Tracker',
-    canActivate: [authGuard],
-    loadComponent: () => import('./pages/real-time-payment-tracker.component').then(m => m.RealTimePaymentTrackerComponent)
-  },
-  {
-    path: 'batch-operations',
-    title: 'KRA iTax | Batch Operations Manager',
-    canActivate: [authGuard],
-    loadComponent: () => import('./pages/batch-operations.component').then(m => m.BatchOperationsComponent)
-  },
+  // {
+  //   path: 'payment-tracker',
+  //   title: 'KRA iTax | Real-Time Payment Tracker',
+  //   canActivate: [authGuard],
+  //   loadComponent: () => import('./pages/real-time-payment-tracker.component').then(m => m.RealTimePaymentTrackerComponent)
+  // },
+  // {
+  //   path: 'batch-operations',
+  //   title: 'KRA iTax | Batch Operations Manager',
+  //   canActivate: [authGuard],
+  //   loadComponent: () => import('./pages/batch-operations.component').then(m => m.BatchOperationsComponent)
+  // },
 
   // Fallback for unknown routes
   { path: '**', redirectTo: 'login' }

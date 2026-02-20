@@ -81,7 +81,7 @@ export class ExportService {
   /**
    * Convert array to CSV format
    */
-  private convertToCSV(data: any[], columns: ExportColumn[]): string {
+  convertToCSV(data: any[], columns: ExportColumn[]): string {
     const headers = columns.map(col => this.escapeCSVValue(col.label)).join(',');
 
     const rows = data.map(row => {

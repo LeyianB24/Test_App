@@ -48,8 +48,8 @@ import { CommonModule } from '@angular/common';
 
       <!-- Form Field Skeleton -->
       <div *ngIf="type === 'form'">
-        <div class="skeleton-loading skeleton-text" [style.width]="'30%'; margin-bottom: '8px;'"></div>
-        <div class="skeleton-loading skeleton-loading" [style.height]="'40px'; border-radius: '12px;'"></div>
+        <div class="skeleton-loading skeleton-text" [ngStyle]="{'width': '30%', 'margin-bottom': '8px'}"></div>
+        <div class="skeleton-loading skeleton-loading" [ngStyle]="{'height': '40px', 'border-radius': '12px'}"></div>
       </div>
 
       <!-- Chart/Bar Skeleton -->

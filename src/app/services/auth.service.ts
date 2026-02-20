@@ -8,7 +8,7 @@ import { UserDataService } from './user-data.service';
 
 /**
  * AuthService - Manages user authentication and session state
- * 
+ *
  * Connected to PHP Backend at: http://localhost/kra-api/
  */
 @Injectable({
@@ -22,14 +22,14 @@ export class AuthService {
 
   // Private BehaviorSubject to manage authentication state
   private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
-  
+
   // Public Observable for components to subscribe to
   public currentUser$ = this.currentUserSubject.asObservable();
-  
+
   // Signals for reactive UI updates
   public isAuthenticated = signal<boolean>(this.currentUserSubject.value !== null);
   public currentUser = signal<User | null>(this.currentUserSubject.value);
-  
+
   // Computed signal for user display name
   public userName = computed(() => this.currentUser()?.name || 'Guest');
   public userType = computed(() => this.currentUser()?.type || 'individual');
@@ -54,16 +54,16 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/auth_secure.php`, credentials, { withCredentials: true }).pipe(
       tap(response => {
         this.isLoading.set(false);
-        
+
         if (response.success && response.data && response.data.user) {
           const { user } = response.data;
-          
+
           // Store in localStorage for session persistence
           this.setUserInStorage(user);
-          
+
           // Update BehaviorSubject
           this.currentUserSubject.next(user);
-          
+
           console.log('✅ Login successful:', user.name);
         } else {
           console.log('❌ Login failed:', response.message);
@@ -85,16 +85,16 @@ export class AuthService {
    */
   logout(): Observable<boolean> {
     console.log('🚪 AuthService: Logging out user');
-    
+
     // Clear user data service
     this.userDataService.clearUserData();
-    
+
     // Clear localStorage
     this.clearUserFromStorage();
-    
+
     // Update BehaviorSubject
     this.currentUserSubject.next(null);
-    
+
     console.log('✅ Logout successful');
     return of(true);
   }
@@ -118,7 +118,7 @@ export class AuthService {
    */
   register(userData: Partial<User>): Observable<AuthResponse> {
     console.log('📝 AuthService: Registering new user');
-    
+
     return this.http.post<any>(`${this.apiUrl}/auth_register.php`, userData).pipe(
       tap(response => {
         if (response.success && response.data) {
@@ -144,7 +144,7 @@ export class AuthService {
 
     // If we had a profile endpoint:
     // return this.http.put<User>(`${this.apiUrl}/users/${user.id}`, updates)...
-    
+
     // For now, assume success and update local state
     const updatedUser = { ...user, ...updates };
     this.setUserInStorage(updatedUser, this.getAuthToken() || undefined);
@@ -165,7 +165,7 @@ export class AuthService {
   updatePassword(currentPassword: string, newPassword: string): Observable<any> {
     const user = this.getCurrentUser();
     if (!user) return of({ success: false, message: 'Not logged in' });
-    
+
     return this.http.post(`${this.apiUrl}/auth_update_password.php`, {
       user_id: user.id,
       current_password: currentPassword,
@@ -224,5 +224,30 @@ export class AuthService {
    */
   validateToken(): Observable<boolean> {
     return of(!!this.getAuthToken());
+  }
+
+  /**
+   * Check if refresh token is available
+   */
+  hasRefreshToken(): boolean {
+    return !!localStorage.getItem('refreshToken');
+  }
+
+  /**
+   * Refresh the auth token
+   */
+  refreshToken(): Observable<AuthResponse> {
+    const token = localStorage.getItem('authToken');
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/refresh`, { token })
+      .pipe(
+        tap(response => {
+          if (response.success && response.data?.token) {
+            localStorage.setItem('authToken', response.data.token);
+            if (response.data.refreshToken) {
+              localStorage.setItem('refreshToken', response.data.refreshToken);
+            }
+          }
+        })
+      );
   }
 }

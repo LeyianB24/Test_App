@@ -1,5 +1,6 @@
 import { Component, inject, input, output, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../services/notification.service';
 import { MpesaService } from '../../services/mpesa.service';
 
@@ -17,7 +18,7 @@ export interface PaymentSummary {
 @Component({
   selector: 'app-payment-confirmation',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="confirmation-overlay" (click)="onCancel()">
       <div class="confirmation-modal" (click)="$event.stopPropagation()">

@@ -22,12 +22,12 @@ export interface Toast {
   imports: [CommonModule],
   template: `
     <div class="toast-container" role="region" aria-label="Notifications" aria-live="polite">
-      <div *ngFor="let toast of toasts()" 
+      <div *ngFor="let toast of toasts()"
            [ngClass]="'toast-elite ' + toast.type"
            [@slideIn]
            role="alert"
            [attr.aria-live]="toast.type === 'error' ? 'assertive' : 'polite'">
-        
+
         <!-- Toast Icon -->
         <span class="toast-icon">{{ toast.icon }}</span>
 
@@ -47,7 +47,7 @@ export interface Toast {
         </button>
 
         <!-- Progress Bar -->
-        <div *ngIf="toast.duration" 
+        <div *ngIf="toast.duration"
              class="toast-progress"
              [style.animation]="'progress-bar ' + (toast.duration / 1000) + 's linear'">
         </div>
@@ -201,7 +201,7 @@ export interface Toast {
 export class ToastContainerComponent {
   toasts = signal<Toast[]>([]);
 
-  private toastMap = new Map<string, NodeJS.Timeout>();
+  private toastMap = new Map<string, ReturnType<typeof setTimeout>>();
 
   addToast(toast: Omit<Toast, 'id'>): void {
     const id = `toast-${Date.now()}-${Math.random()}`;

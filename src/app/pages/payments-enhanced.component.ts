@@ -1,10 +1,14 @@
-import { Component, inject, signal, effect, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal, effect, computed, ViewChild } from '@angular/core';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { PaymentService } from '../services/payment.service';
 import { ApiService } from '../services/api.service';
-import { DataTableComponent, TableColumn, TableAction } from './data-table/data-table.component';
-import { PaymentFormComponent } from './payment-form/payment-form.component';
+import { DataTableComponent, TableColumn, TableAction } from '../components/data-table/data-table.component';
+import { PaymentFormComponent } from '../components/payment-form/payment-form.component';
 import { NotificationService } from '../services/notification.service';
+import { SkeletonLoaderComponent } from '../components/skeleton-loader/skeleton-loader.component';
+import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
+import { TooltipComponent } from '../components/tooltip/tooltip.component';
 
 interface Payment {
   id: number;
@@ -20,119 +24,334 @@ interface Payment {
 @Component({
   selector: 'app-payments-enhanced',
   standalone: true,
-  imports: [CommonModule, DataTableComponent, PaymentFormComponent],
+  imports: [CommonModule, NgFor, NgIf, FormsModule, PaymentFormComponent, SkeletonLoaderComponent, ToastContainerComponent],
   template: `
     <div class="payments-container">
-      <!-- Header -->
-      <div class="page-header">
-        <div>
-          <h1>Payments Management</h1>
-          <p>Manage and track all your tax payments</p>
+      <!-- Breadcrumb Navigation -->
+      <nav class="breadcrumb-nav animate-up" style="margin-bottom: 24px;">
+        <div class="breadcrumb-item"><span>🏠</span></div>
+        <span class="breadcrumb-separator">/</span>
+        <div class="breadcrumb-item"><span>Dashboard</span></div>
+        <span class="breadcrumb-separator">/</span>
+        <div class="breadcrumb-item active"><span>Payments</span></div>
+      </nav>
+
+      <!-- Enhanced Header -->
+      <header class="page-header-elite animate-up delay-1" style="margin-bottom: 32px;">
+        <div class="header-info">
+          <h1 class="premium-title">💳 Payments Management</h1>
+          <p class="premium-subtitle">Track, manage and download payment receipts with secure processing</p>
         </div>
-        <button class="btn btn-primary" (click)="togglePaymentForm()">
-          <span>{{ showPaymentForm() ? '✕ Close' : '+ New Payment' }}</span>
-        </button>
-      </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button class="modern-btn secondary-btn" (click)="refreshPayments()" [disabled]="loading()" title="Refresh payment data">
+            <span *ngIf="!loading()">🔄 Refresh</span>
+            <span *ngIf="loading()">⏳ Loading...</span>
+          </button>
+          <button class="modern-btn primary-btn" (click)="togglePaymentForm()" [disabled]="loading()">
+            <span *ngIf="!showPaymentForm()">➕ New Payment</span>
+            <span *ngIf="showPaymentForm()">✕ Close Form</span>
+          </button>
+        </div>
+      </header>
 
       <!-- Payment Form (Collapsible) -->
-      <div *ngIf="showPaymentForm()" class="form-container">
-        <app-payment-form #paymentForm></app-payment-form>
-      </div>
-
-      <!-- Statistics -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon pending">💰</div>
-          <div class="stat-content">
-            <div class="stat-value">{{ totalPending() | number:'1.2-2' }}</div>
-            <div class="stat-label">Pending Payments</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon completed">✓</div>
-          <div class="stat-content">
-            <div class="stat-value">{{ totalCompleted() | number:'1.2-2' }}</div>
-            <div class="stat-label">Completed This Month</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">📊</div>
-          <div class="stat-content">
-            <div class="stat-value">{{ payments().length }}</div>
-            <div class="stat-label">Total Transactions</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon failed">⚠️</div>
-          <div class="stat-content">
-            <div class="stat-value">{{ totalFailed() }}</div>
-            <div class="stat-label">Failed Payments</div>
+      <div *ngIf="showPaymentForm()" class="animate-up delay-2" style="margin-bottom: 32px;">
+        <div class="content-card-premium" style="background: linear-gradient(135deg, rgba(227, 30, 36, 0.05) 0%, rgba(212, 175, 55, 0.05) 100%); border: 2px solid #E31E24;">
+          <div style="padding: 24px;">
+            <h3 class="premium-subtitle" style="margin: 0 0 16px; color: #1A365D;">New Payment Form</h3>
+            <app-payment-form #paymentForm></app-payment-form>
           </div>
         </div>
       </div>
 
-      <!-- Data Table -->
-      <div class="table-section">
-        <div class="section-header">
-          <h2>Payment Transactions</h2>
-          <div class="section-actions">
-            <input
-              type="text"
-              placeholder="Quick search..."
-              class="search-input"
-              (change)="onQuickSearch($event)">
-            <select class="filter-select" (change)="onStatusFilter($event)">
-              <option value="">All Statuses</option>
-              <option value="completed">Completed</option>
-              <option value="pending">Pending</option>
-              <option value="failed">Failed</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-            <button class="btn-icon" (click)="refreshPayments()" title="Refresh">
-              🔄
+      <!-- Action Bar with Search and Filters -->
+      <section class="animate-up delay-2" style="margin-bottom: 32px;">
+        <div class="action-bar-glass">
+          <div class="search-premium">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="search"
+                   class="search-input-elite"
+                   placeholder="Search by taxpayer, ID or amount..."
+                   (input)="filterPayments($event)"
+                   aria-label="Search payments">
+          </div>
+          <div class="filter-pills-elite">
+            <button class="pill-btn" [class.active]="statusFilter() === 'all'"
+                    (click)="filterByStatus('all')"
+                    title="Show all payments">
+              All <span class="badge">{{ payments().length }}</span>
+            </button>
+            <button class="pill-btn" [class.active]="statusFilter() === 'pending'"
+                    (click)="filterByStatus('pending')"
+                    title="Show pending payments">
+              Pending <span class="badge">{{ pendingCount() }}</span>
+            </button>
+            <button class="pill-btn" [class.active]="statusFilter() === 'completed'"
+                    (click)="filterByStatus('completed')"
+                    title="Show completed payments">
+              Completed <span class="badge">{{ completedCount() }}</span>
+            </button>
+            <button class="pill-btn" [class.active]="statusFilter() === 'failed'"
+                    (click)="filterByStatus('failed')"
+                    title="Show failed payments">
+              Failed <span class="badge">{{ failedCount() }}</span>
             </button>
           </div>
         </div>
+      </section>
 
-        <div *ngIf="loading()" class="loading-state">
-          <div class="spinner"></div>
-          <p>Loading payment data...</p>
+      <!-- Statistics Cards -->
+      <section class="animate-up delay-3" style="margin-bottom: 32px;">
+        <div class="stats-grid-premium">
+          <!-- Pending Payments -->
+          <div class="premium-stat-card animate-scale delay-1" style="cursor: pointer;" (click)="filterByStatus('pending')">
+            <div style="display: flex; gap: 20px; width: 100%;">
+              <div class="stat-icon-wrapper red" style="font-size: 28px; display: flex; align-items: center; justify-content: center;">💰</div>
+              <div class="stat-info" style="flex: 1;">
+                <div class="stat-label">Pending Payments</div>
+                <div class="stat-value-group">
+                  <h3 class="stat-number" style="amount in KES">KES {{ totalPending() | number:'1.2-2' }}</h3>
+                  <span class="stat-trend" style="font-size: 12px; color: #F59E0B;">{{ pendingCount() }} payments</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Completed Payments -->
+          <div class="premium-stat-card animate-scale delay-2" style="cursor: pointer;" (click)="filterByStatus('completed')">
+            <div style="display: flex; gap: 20px; width: 100%;">
+              <div class="stat-icon-wrapper green" style="font-size: 28px; display: flex; align-items: center; justify-content: center;">✓</div>
+              <div class="stat-info" style="flex: 1;">
+                <div class="stat-label">Completed This Month</div>
+                <div class="stat-value-group">
+                  <h3 class="stat-number">KES {{ totalCompleted() | number:'1.2-2' }}</h3>
+                  <span class="stat-trend" style="font-size: 12px; color: #10B981;">{{ completedCount() }} transactions</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Transactions -->
+          <div class="premium-stat-card animate-scale delay-3">
+            <div style="display: flex; gap: 20px; width: 100%;">
+              <div class="stat-icon-wrapper blue" style="font-size: 28px; display: flex; align-items: center; justify-content: center;">📊</div>
+              <div class="stat-info" style="flex: 1;">
+                <div class="stat-label">Total Transactions</div>
+                <div class="stat-value-group">
+                  <h3 class="stat-number">{{ payments().length }}</h3>
+                  <span class="stat-trend" style="font-size: 12px; color: #3B82F6;">on record</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Failed Payments -->
+          <div class="premium-stat-card animate-scale delay-4" style="cursor: pointer;" (click)="filterByStatus('failed')">
+            <div style="display: flex; gap: 20px; width: 100%;">
+              <div class="stat-icon-wrapper gold" style="font-size: 28px; display: flex; align-items: center; justify-content: center;">⚠️</div>
+              <div class="stat-info" style="flex: 1;">
+                <div class="stat-label">Failed Payments</div>
+                <div class="stat-value-group">
+                  <h3 class="stat-number">{{ failedCount() }}</h3>
+                  <span class="stat-trend" style="font-size: 12px; color: #EF4444;">need attention</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
 
-        <app-data-table
-          *ngIf="!loading()"
-          [data]="filteredPayments()"
-          [columns]="paymentColumns"
-          [actions]="paymentActions"
-          (actionTriggered)="handlePaymentAction($event)">
-        </app-data-table>
+      <!-- Payments Data Table -->
+      <section class="animate-up delay-4">
+        <div class="content-card-premium">
+          <!-- Table Header -->
+          <div class="table-header-elite"
+               style="display: flex; justify-content: space-between; align-items: center;
+                      background: linear-gradient(135deg, #f8fafc 0%, #f3f4f6 100%);
+                      padding: 20px 24px;
+                      border-bottom: 2px solid var(--border-color);
+                      border-radius: 20px 20px 0 0;">
+            <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-main); font-weight: 700;">
+              Payment Transactions
+            </h3>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-link" (click)="exportPayments()"
+                      title="Export as CSV"
+                      style="color: #E31E24; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: 8px; border: none; background: rgba(227, 30, 36, 0.1); transition: all 0.3s;">
+                📥 Export
+              </button>
+              <button class="btn-link" (click)="printPayments()"
+                      title="Print transactions"
+                      style="color: #1A365D; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: 8px; border: none; background: rgba(26, 54, 93, 0.1); transition: all 0.3s;">
+                🖨️ Print
+              </button>
+            </div>
+          </div>
 
-        <div *ngIf="!loading() && payments().length === 0" class="empty-state">
-          <div class="empty-icon">📭</div>
-          <h3>No Payments Yet</h3>
-          <p>You haven't made any payments. Click "New Payment" to get started.</p>
+          <!-- Loading State with Skeleton Loaders -->
+          <div *ngIf="loading()" style="padding: 40px 24px;">
+            <app-skeleton-loader type="table"></app-skeleton-loader>
+            <app-skeleton-loader type="table" style="margin-top: 12px;"></app-skeleton-loader>
+            <app-skeleton-loader type="table" style="margin-top: 12px;"></app-skeleton-loader>
+          </div>
+
+          <!-- Data Table -->
+          <div *ngIf="!loading()" class="table-responsive-elite">
+            <table class="modern-table-elite" *ngIf="filteredPayments().length > 0">
+              <thead>
+                <tr>
+                  <th (click)="sortByColumn('id')"
+                      [class.sorted]="sortColumn() === 'id'"
+                      style="cursor: pointer; user-select: none;">
+                    Transaction
+                    <span *ngIf="sortColumn() === 'id'" class="sort-indicator">
+                      <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
+                    </span>
+                  </th>
+                  <th (click)="sortByColumn('taxpayer_name')"
+                      [class.sorted]="sortColumn() === 'taxpayer_name'"
+                      style="cursor: pointer; user-select: none;">
+                    Taxpayer
+                    <span *ngIf="sortColumn() === 'taxpayer_name'" class="sort-indicator">
+                      <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
+                    </span>
+                  </th>
+                  <th (click)="sortByColumn('amount')"
+                      [class.sorted]="sortColumn() === 'amount'"
+                      style="cursor: pointer; user-select: none;">
+                    Amount
+                    <span *ngIf="sortColumn() === 'amount'" class="sort-indicator">
+                      <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
+                    </span>
+                  </th>
+                  <th (click)="sortByColumn('payment_method')"
+                      [class.sorted]="sortColumn() === 'payment_method'"
+                      style="cursor: pointer; user-select: none;">
+                    Method
+                    <span *ngIf="sortColumn() === 'payment_method'" class="sort-indicator">
+                      <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
+                    </span>
+                  </th>
+                  <th (click)="sortByColumn('payment_date')"
+                      [class.sorted]="sortColumn() === 'payment_date'"
+                      style="cursor: pointer; user-select: none;">
+                    Date
+                    <span *ngIf="sortColumn() === 'payment_date'" class="sort-indicator">
+                      <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
+                    </span>
+                  </th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let payment of filteredPayments(); let i = index"
+                    class="table-row-elite"
+                    [style.animation]="'slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) ' + (i * 50) + 'ms both'">
+                  <td><strong>#{{ payment.id }}</strong></td>
+                  <td>{{ payment.taxpayer_name }}</td>
+                  <td class="currency">KES {{ payment.amount | number:'1.2-2' }}</td>
+                  <td><span class="method-badge">{{ payment.payment_method | titlecase }}</span></td>
+                  <td>{{ payment.payment_date | date:'short' }}</td>
+                  <td>
+                    <span [ngClass]="'status-pill-elite ' + 'status-' + payment.status">
+                      <span class="dot" [style.background]="getStatusColor(payment.status)"></span>
+                      {{ payment.status | titlecase }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="action-group-elite">
+                      <button class="icon-btn-elite"
+                              (click)="viewPayment(payment)"
+                              [attr.aria-label]="'View details for payment ' + payment.id"
+                              title="View details">👁️</button>
+                      <button class="icon-btn-elite"
+                              *ngIf="payment.status === 'completed'"
+                              (click)="downloadReceipt(payment)"
+                              [attr.aria-label]="'Download receipt for payment ' + payment.id"
+                              title="Download receipt">📥</button>
+                      <button class="icon-btn-elite"
+                              *ngIf="payment.status === 'failed'"
+                              (click)="retryPayment(payment)"
+                              [attr.aria-label]="'Retry payment ' + payment.id"
+                              title="Retry payment">🔄</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="!loading() && filteredPayments().length === 0" class="empty-state animate-up">
+            <div class="empty-icon">💳</div>
+            <h3 class="empty-title">No Payments Found</h3>
+            <p class="empty-message">
+              <span *ngIf="statusFilter() === 'all'">You haven't made any payments yet. Click "New Payment" to get started.</span>
+              <span *ngIf="statusFilter() !== 'all'">No {{ statusFilter() }} payments found. Try a different filter.</span>
+            </p>
+            <div class="empty-action">
+              <button class="modern-btn primary-btn" (click)="togglePaymentForm()">
+                ➕ Make Payment
+              </button>
+              <button class="modern-btn secondary-btn" (click)="filterByStatus('all')" *ngIf="statusFilter() !== 'all'">
+                View All Payments
+              </button>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div *ngIf="!loading() && filteredPayments().length > 0" class="pagination-elite">
+            <button class="pagination-btn"
+                    [disabled]="currentPage() === 1"
+                    (click)="previousPage()"
+                    aria-label="Previous page">
+              ← Previous
+            </button>
+            <span class="pagination-info">Page {{ currentPage() }} of {{ totalPages() }}</span>
+            <button class="pagination-btn"
+                    [disabled]="currentPage() === totalPages()"
+                    (click)="nextPage()"
+                    aria-label="Next page">
+              Next →
+            </button>
+            <select class="pagination-select"
+                    [(ngModel)]="itemsPerPageValue"
+                    (change)="onPageSizeChange()"
+                    aria-label="Items per page">
+              <option value="10">10 per page</option>
+              <option value="25">25 per page</option>
+              <option value="50">50 per page</option>
+              <option value="100">100 per page</option>
+            </select>
+          </div>
         </div>
-      </div>
+      </section>
 
       <!-- Payment Details Modal -->
-      <div *ngIf="selectedPayment()" class="modal-overlay" (click)="selectedPayment.set(null)">
-        <div class="modal" (click)="$event.stopPropagation()">
-          <div class="modal-header">
-            <h3>Payment Details</h3>
-            <button class="modal-close" (click)="selectedPayment.set(null)">✕</button>
+      <div *ngIf="selectedPayment()" class="modal-overlay-elite animate-up" (click)="selectedPayment.set(null)">
+        <div class="modal-elite" (click)="$event.stopPropagation()">
+          <div class="modal-header-elite">
+            <h3 class="premium-title">Payment Details</h3>
+            <button class="modal-close-elite"
+                    (click)="selectedPayment.set(null)"
+                    aria-label="Close modal">✕</button>
           </div>
-          <div class="modal-content">
+          <div class="modal-content-elite">
             <div class="detail-group">
               <label>Transaction ID</label>
-              <div class="detail-value">{{ selectedPayment()?.transaction_id || selectedPayment()?.id }}</div>
+              <div class="detail-value strong">{{ selectedPayment()?.transaction_id || '#' + selectedPayment()?.id }}</div>
             </div>
             <div class="detail-group">
-              <label>Taxpayer</label>
+              <label>Taxpayer Name</label>
               <div class="detail-value">{{ selectedPayment()?.taxpayer_name }}</div>
             </div>
             <div class="detail-group">
-              <label>Amount</label>
-              <div class="detail-value currency">KES {{ selectedPayment()?.amount | number:'1.2-2' }}</div>
+              <label>Amount Paid</label>
+              <div class="detail-value strong currency">KES {{ selectedPayment()?.amount | number:'1.2-2' }}</div>
             </div>
             <div class="detail-group">
               <label>Payment Date</label>
@@ -145,19 +364,60 @@ interface Payment {
             <div class="detail-group">
               <label>Status</label>
               <div class="detail-value">
-                <span class="status-badge" [class]="'status-' + selectedPayment()?.status">
+                <span [ngClass]="'status-pill-elite status-' + selectedPayment()?.status">
+                  <span class="dot" [style.background]="getStatusColor(selectedPayment()?.status || '')"></span>
                   {{ selectedPayment()?.status | titlecase }}
                 </span>
               </div>
             </div>
           </div>
-          <div class="modal-actions">
-            <button class="btn btn-secondary" (click)="selectedPayment.set(null)">Close</button>
-            <button class="btn btn-primary" (click)="downloadReceipt()">📥 Download Receipt</button>
+          <div class="modal-actions-elite">
+            <button class="modern-btn secondary-btn" (click)="selectedPayment.set(null)">Close</button>
+            <button class="modern-btn primary-btn" (click)="downloadReceipt(selectedPayment()!)">
+              📥 Download Receipt
+            </button>
           </div>
         </div>
       </div>
+
+      <!-- Help Section -->
+      <section class="animate-up delay-5"
+               style="margin-top: 40px; background: var(--kra-gradient); color: white;
+                      border-radius: 20px; padding: 40px; box-shadow: var(--shadow-premium-red);">
+        <h2 style="margin: 0 0 24px 0; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px;">
+          💡 Payment Help &amp; Support
+        </h2>
+        <div class="stats-grid-premium">
+          <div class="help-card">
+            <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">✓ Payment Methods</h4>
+            <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+              We accept M-PESA, bank transfer, cheque, and online card payments.
+            </p>
+          </div>
+          <div class="help-card">
+            <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">📄 Receipt &amp; Proof</h4>
+            <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+              Download payment receipts immediately after successful transaction.
+            </p>
+          </div>
+          <div class="help-card">
+            <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">📅 Payment Plans</h4>
+            <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+              Contact support for assistance with payment plans or arrangements.
+            </p>
+          </div>
+          <div class="help-card">
+            <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">🔄 Failed Payments</h4>
+            <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+              Retry failed payments or contact support for troubleshooting.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
+
+    <!-- Toast Notifications -->
+    <app-toast-container #toastContainer></app-toast-container>
   `,
   styles: [`
     .payments-container {
@@ -166,450 +426,140 @@ interface Payment {
       margin: 0 auto;
     }
 
-    /* Header */
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 32px;
-    }
-
-    .page-header h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
-      color: #1f2937;
-    }
-
-    .page-header p {
-      margin: 0;
-      color: #6b7280;
-      font-size: 14px;
-    }
-
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
+    .method-badge {
+      background: rgba(99, 102, 241, 0.1);
+      color: #4F46E5;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-    }
-
-    /* Form Container */
-    .form-container {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 32px;
-      animation: slideDown 0.3s ease-out;
-    }
-
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Statistics */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .stat-card {
-      display: flex;
-      gap: 16px;
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
-      transition: all 0.2s;
-    }
-
-    .stat-card:hover {
-      border-color: #667eea;
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .stat-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 50px;
-      height: 50px;
-      border-radius: 10px;
-      background: #f3f4f6;
-      font-size: 24px;
-    }
-
-    .stat-icon.pending {
-      background: #fef3c7;
-    }
-
-    .stat-icon.completed {
-      background: #d1fae5;
-    }
-
-    .stat-icon.failed {
-      background: #fee2e2;
-    }
-
-    .stat-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .stat-value {
-      font-size: 24px;
+    .currency {
+      color: #10B981;
       font-weight: 700;
-      color: #1f2937;
-      margin-bottom: 4px;
     }
 
-    .stat-label {
-      font-size: 13px;
-      color: #6b7280;
+    .strong {
+      font-weight: 700;
     }
 
-    /* Table Section */
-    .table-section {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 24px;
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .section-header h2 {
-      margin: 0;
-      font-size: 20px;
-      color: #1f2937;
-    }
-
-    .section-actions {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .search-input,
-    .filter-select {
-      padding: 8px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-size: 13px;
-      transition: border-color 0.2s;
-    }
-
-    .search-input:focus,
-    .filter-select:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    .btn-icon {
-      width: 36px;
-      height: 36px;
-      padding: 0;
-      border: 1px solid #d1d5db;
-      background: white;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.2s;
-    }
-
-    .btn-icon:hover {
-      border-color: #667eea;
-      background: #f8f9ff;
-    }
-
-    /* Loading State */
-    .loading-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
-      color: #6b7280;
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 16px;
-      border: 4px solid #e5e7eb;
-      border-top-color: #667eea;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Empty State */
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
-    }
-
-    .empty-icon {
-      font-size: 64px;
-      margin-bottom: 16px;
-    }
-
-    .empty-state h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      color: #1f2937;
-    }
-
-    .empty-state p {
-      margin: 0;
-      color: #6b7280;
-      font-size: 14px;
-    }
-
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-    }
-
-    .modal {
-      background: white;
-      border-radius: 12px;
-      max-width: 500px;
-      width: 90%;
-      box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 24px;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .modal-header h3 {
-      margin: 0;
-      font-size: 18px;
-      color: #1f2937;
-    }
-
-    .modal-close {
+    .btn-link {
       background: none;
       border: none;
-      font-size: 24px;
       cursor: pointer;
-      color: #6b7280;
-      transition: color 0.2s;
-    }
-
-    .modal-close:hover {
-      color: #1f2937;
-    }
-
-    .modal-content {
-      padding: 24px;
-      max-height: 60vh;
-      overflow-y: auto;
-    }
-
-    .detail-group {
-      margin-bottom: 16px;
-    }
-
-    .detail-group:last-child {
-      margin-bottom: 0;
-    }
-
-    .detail-group label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: #6b7280;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
-    }
-
-    .detail-value {
-      font-size: 14px;
-      color: #1f2937;
-      font-weight: 500;
-    }
-
-    .detail-value.currency {
-      font-size: 18px;
-      color: #059669;
-      font-weight: 700;
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .status-completed {
-      background: #d1fae5;
-      color: #065f46;
-    }
-
-    .status-pending {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .status-failed {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .status-cancelled {
-      background: #e5e7eb;
-      color: #374151;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-      padding: 20px 24px;
-      border-top: 1px solid #e5e7eb;
-    }
-
-    .btn-secondary {
-      background: white;
-      border: 1px solid #d1d5db;
-      color: #374151;
-      flex: 1;
-    }
-
-    .btn-secondary:hover {
-      background: #f9fafb;
-    }
-
-    .btn-primary {
-      flex: 1;
+      padding: 0;
+      text-decoration: none;
+      transition: all 0.3s;
     }
 
     @media (max-width: 768px) {
       .payments-container {
-        padding: 16px;
-      }
-
-      .page-header {
-        flex-direction: column;
-        gap: 16px;
-        align-items: flex-start;
-      }
-
-      .section-actions {
-        flex-wrap: wrap;
-      }
-
-      .search-input,
-      .filter-select {
-        font-size: 12px;
-        padding: 6px 10px;
+        padding: 12px;
       }
     }
   `]
 })
 export class PaymentsEnhancedComponent {
+  @ViewChild('toastContainer') toastContainer!: ToastContainerComponent;
+
   private paymentService = inject(PaymentService);
   private apiService = inject(ApiService);
   private notificationService = inject(NotificationService);
 
-  // State
+  // State Signals
   payments = signal<Payment[]>([]);
   loading = signal(false);
   showPaymentForm = signal(false);
   selectedPayment = signal<Payment | null>(null);
-  filteredStatus = signal('');
+  statusFilter = signal<'all' | 'pending' | 'completed' | 'failed'>('all');
+  searchQuery = signal('');
+  sortColumn = signal('payment_date');
+  sortAsc = signal(false);
+  currentPage = signal(1);
+  itemsPerPageValue = signal('10');
 
-  // Computed
+  // Computed Properties
   filteredPayments = computed(() => {
-    const status = this.filteredStatus();
-    if (!status) return this.payments();
-    return this.payments().filter(p => p.status === status);
+    const status = this.statusFilter();
+    const query = this.searchQuery().toLowerCase();
+    let filtered = this.payments();
+
+    // Status filter
+    if (status !== 'all') {
+      filtered = filtered.filter(p => p.status === status);
+    }
+
+    // Search filter
+    if (query) {
+      filtered = filtered.filter(p =>
+        p.taxpayer_name.toLowerCase().includes(query) ||
+        p.id.toString().includes(query) ||
+        p.amount.toString().includes(query)
+      );
+    }
+
+    // Sort
+    const sorted = [...filtered].sort((a, b) => {
+      const col = this.sortColumn() as keyof Payment;
+      const aVal = a[col];
+      const bVal = b[col];
+
+      if (!aVal || !bVal) return 0;
+      if (aVal === bVal) return 0;
+      const cmp = aVal > bVal ? 1 : -1;
+      return this.sortAsc() ? cmp : -cmp;
+    });
+
+    // Paginate
+    const itemsPerPage = parseInt(this.itemsPerPageValue());
+    const start = (this.currentPage() - 1) * itemsPerPage;
+    return sorted.slice(start, start + itemsPerPage);
   });
 
-  totalCompleted = computed(() => {
-    return this.payments()
-      .filter(p => p.status === 'completed')
-      .reduce((sum, p) => sum + p.amount, 0);
-  });
+  totalCount = computed(() => this.payments().length);
+  pendingCount = computed(() => this.payments().filter(p => p.status === 'pending').length);
+  completedCount = computed(() => this.payments().filter(p => p.status === 'completed').length);
+  failedCount = computed(() => this.payments().filter(p => p.status === 'failed').length);
 
-  totalPending = computed(() => {
-    return this.payments()
+  totalPending = computed(() =>
+    this.payments()
       .filter(p => p.status === 'pending')
-      .reduce((sum, p) => sum + p.amount, 0);
-  });
+      .reduce((sum, p) => sum + p.amount, 0)
+  );
 
-  totalFailed = computed(() => {
-    return this.payments()
-      .filter(p => p.status === 'failed').length;
+  totalCompleted = computed(() =>
+    this.payments()
+      .filter(p => p.status === 'completed')
+      .reduce((sum, p) => sum + p.amount, 0)
+  );
+
+  totalPages = computed(() => {
+    const itemsPerPage = parseInt(this.itemsPerPageValue());
+    return Math.ceil(
+      this.payments().filter(p =>
+        (this.statusFilter() === 'all' || p.status === this.statusFilter()) &&
+        (this.searchQuery() === '' ||
+         p.taxpayer_name.toLowerCase().includes(this.searchQuery().toLowerCase()) ||
+         p.id.toString().includes(this.searchQuery()))
+      ).length / itemsPerPage
+    );
   });
 
   // Table Configuration
   paymentColumns: TableColumn[] = [
-    { key: 'id', label: 'ID', type: 'text', sortable: true, filterable: false, width: '80px' },
-    { key: 'taxpayer_name', label: 'Taxpayer', type: 'text', sortable: true, filterable: false },
-    { key: 'amount', label: 'Amount', type: 'currency', sortable: true, filterable: false },
-    { key: 'payment_date', label: 'Date', type: 'date', sortable: true, filterable: false },
-    { key: 'payment_method', label: 'Method', type: 'text', sortable: true, filterable: false, width: '100px' },
-    { key: 'status', label: 'Status', type: 'status', sortable: true, filterable: true }
+    { key: 'id', label: 'ID', type: 'text', sortable: true, filterable: false, width: '80px', exportable: true },
+    { key: 'taxpayer_name', label: 'Taxpayer', type: 'text', sortable: true, filterable: false, exportable: true },
+    { key: 'amount', label: 'Amount', type: 'currency', sortable: true, filterable: false, exportable: true },
+    { key: 'payment_date', label: 'Date', type: 'date', sortable: true, filterable: false, exportable: true },
+    { key: 'payment_method', label: 'Method', type: 'text', sortable: true, filterable: false, width: '100px', exportable: true },
+    { key: 'status', label: 'Status', type: 'status', sortable: true, filterable: true, exportable: true }
   ];
 
   paymentActions: TableAction[] = [
     { label: 'View', icon: '👁️', action: 'view', color: 'info' },
     { label: 'Receipt', icon: '📄', action: 'receipt', color: 'primary' },
-    { label: 'Resend Receipt', icon: '📧', action: 'resend', color: 'secondary' }
+    { label: 'Resend Receipt', icon: '📧', action: 'resend', color: 'info' }
   ];
 
   ngOnInit(): void {
@@ -619,61 +569,171 @@ export class PaymentsEnhancedComponent {
   loadPayments(): void {
     this.loading.set(true);
     this.apiService.get<Payment[]>('/api/payments').subscribe({
-      next: (data) => {
-        this.payments.set(data || this.getMockPayments());
+      next: (response) => {
+        const data = response && 'data' in response ? response.data : response;
+        this.payments.set(Array.isArray(data) ? data : this.getMockPayments());
         this.loading.set(false);
       },
       error: (error) => {
         console.error('Error loading payments:', error);
         this.payments.set(this.getMockPayments());
         this.loading.set(false);
+        this.showError('Failed to load payments');
       }
     });
   }
 
   refreshPayments(): void {
     this.loadPayments();
-    this.notificationService.showSuccess('Payments refreshed');
+    this.showSuccess('Payments refreshed successfully');
   }
 
   togglePaymentForm(): void {
     this.showPaymentForm.update(v => !v);
   }
 
-  handlePaymentAction(event: {action: string; data: any}): void {
-    switch (event.action) {
-      case 'view':
-        this.selectedPayment.set(event.data);
-        break;
-      case 'receipt':
-        this.downloadReceipt(event.data);
-        break;
-      case 'resend':
-        this.resendReceipt(event.data);
-        break;
+  filterByStatus(status: 'all' | 'pending' | 'completed' | 'failed'): void {
+    this.statusFilter.set(status);
+    this.currentPage.set(1);
+  }
+
+  filterPayments(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchQuery.set(input.value);
+    this.currentPage.set(1);
+  }
+
+  sortByColumn(column: string): void {
+    if (this.sortColumn() === column) {
+      this.sortAsc.update(v => !v);
+    } else {
+      this.sortColumn.set(column);
+      this.sortAsc.set(true);
     }
+  }
+
+  viewPayment(payment: Payment): void {
+    this.selectedPayment.set(payment);
   }
 
   downloadReceipt(payment?: Payment): void {
     const currentPayment = payment || this.selectedPayment();
     if (!currentPayment) return;
 
-    this.notificationService.showSuccess('Receipt download initiated');
-    // TODO: Implement actual receipt download
+    // TODO: Implement receipt download
+    this.showSuccess(`Receipt for payment #${currentPayment.id} downloaded`);
   }
 
-  resendReceipt(payment: Payment): void {
-    this.notificationService.showSuccess(`Receipt resent to ${payment.taxpayer_name}`);
-    // TODO: Implement actual resend
+  retryPayment(payment: Payment): void {
+    // TODO: Implement payment retry
+    this.showSuccess(`Retrying payment #${payment.id}...`);
   }
 
-  onQuickSearch(event: Event): void {
-    // TODO: Implement real-time search
+  exportPayments(): void {
+    // TODO: Implement CSV export
+    const csv = this.generateCSV();
+    this.downloadFile(csv, 'payments.csv');
+    this.showSuccess('Payments exported successfully');
   }
 
-  onStatusFilter(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    this.filteredStatus.set(target.value);
+  printPayments(): void {
+    window.print();
+  }
+
+  previousPage(): void {
+    if (this.currentPage() > 1) {
+      this.currentPage.update(p => p - 1);
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.update(p => p + 1);
+    }
+  }
+
+  onPageSizeChange(): void {
+    this.currentPage.set(1);
+  }
+
+  // Utility Methods
+  getStatusColor(status: string): string {
+    const colors: { [key: string]: string } = {
+      'completed': '#10B981',
+      'pending': '#F59E0B',
+      'failed': '#EF4444',
+      'cancelled': '#6B7280'
+    };
+    return colors[status] || '#6B7280';
+  }
+
+  handlePaymentAction(event: { action: string; data: any }): void {
+    switch (event.action) {
+      case 'view':
+        this.viewPayment(event.data);
+        break;
+      case 'receipt':
+        this.downloadReceipt(event.data);
+        break;
+      case 'resend':
+        // TODO: Implement receipt resend
+        this.showSuccess(`Receipt resent to ${event.data.taxpayer_name}`);
+        break;
+    }
+  }
+
+  private generateCSV(): string {
+    const headers = ['ID', 'Taxpayer', 'Amount', 'Method', 'Date', 'Status'];
+    const rows = this.payments().map(p => [
+      p.id,
+      p.taxpayer_name,
+      p.amount,
+      p.payment_method,
+      p.payment_date,
+      p.status
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
+
+    return csvContent;
+  }
+
+  private downloadFile(content: string, filename: string): void {
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
+  private showSuccess(message: string): void {
+    if (this.toastContainer) {
+      this.toastContainer.addToast({
+        title: 'Success',
+        message,
+        type: 'success',
+        duration: 5000,
+        icon: '✓'
+      });
+    }
+  }
+
+  private showError(message: string): void {
+    if (this.toastContainer) {
+      this.toastContainer.addToast({
+        title: 'Error',
+        message,
+        type: 'error',
+        duration: 7000,
+        dismissible: true,
+        icon: '✕'
+      });
+    }
   }
 
   private getMockPayments(): Payment[] {
@@ -706,6 +766,25 @@ export class PaymentsEnhancedComponent {
         amount: 150000,
         status: 'pending',
         payment_method: 'mpesa'
+      },
+      {
+        id: 4,
+        taxpayer_id: 4,
+        taxpayer_name: 'XYZ Limited',
+        payment_date: '2024-02-05',
+        amount: 85000,
+        status: 'failed',
+        payment_method: 'bank_transfer'
+      },
+      {
+        id: 5,
+        taxpayer_id: 5,
+        taxpayer_name: 'Tech Solutions Ltd',
+        payment_date: '2024-02-10',
+        amount: 125000,
+        status: 'completed',
+        payment_method: 'mpesa',
+        transaction_id: 'TXN003'
       }
     ];
   }
