@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpInterceptorFn, HttpErrorResponse, HttpEvent } from '@angular/common/http';
+import { HttpInterceptorFn, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap, tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
@@ -32,7 +32,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     tap((event) => {
       // Log successful requests in debug mode
-      if (event instanceof HttpEvent) {
+      if (event instanceof HttpResponse) {
         // Optional: Add analytics/logging here
       }
     }),
@@ -51,7 +51,7 @@ function handleHttpError(
   notificationService: NotificationService,
   req: any,
   next: any
-): Observable<never> {
+): Observable<any> {
   // Handle 401 Unauthorized - Token may be expired
   if (error.status === 401) {
     // Try to refresh token
@@ -227,7 +227,7 @@ export const loggingInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     tap({
       next: (event: any) => {
-        if (event instanceof HttpEvent) {
+        if (event instanceof HttpResponse) {
           const duration = (performance.now() - startTime).toFixed(2);
           console.debug(`[HTTP] ${method} ${url} ✓ (${duration}ms)`);
         }

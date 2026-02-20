@@ -243,9 +243,6 @@ export class AuthService {
         tap(response => {
           if (response.success && response.data?.token) {
             localStorage.setItem('authToken', response.data.token);
-            if (response.data.refreshToken) {
-              localStorage.setItem('refreshToken', response.data.refreshToken);
-            }
           }
         })
       );

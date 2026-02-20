@@ -644,11 +644,11 @@ export class DataTableComponent {
     try {
       switch (format) {
         case 'excel':
-          this.exportService.exportToExcel(this.filteredData(), exportColumns, `data_${Date.now()}`);
+          this.exportService.exportToExcel(this.filteredData(), { columns: exportColumns, filename: `data_${Date.now()}.csv` });
           this.notificationService.showSuccess('Exported to Excel successfully');
           break;
         case 'pdf':
-          this.exportService.exportToPDF(this.filteredData(), exportColumns, `data_${Date.now()}`);
+          this.exportService.exportToPDF(this.filteredData(), { columns: exportColumns, filename: `data_${Date.now()}.pdf` });
           this.notificationService.showSuccess('Exported to PDF successfully');
           break;
         case 'csv':

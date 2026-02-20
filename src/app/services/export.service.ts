@@ -264,7 +264,7 @@ export class ExportService {
     let groupedData: Record<string, any[]> = {};
     if (options.groupBy) {
       data.forEach(item => {
-        const key = item[options.groupBy];
+        const key = item[options.groupBy!];
         if (!groupedData[key]) {
           groupedData[key] = [];
         }
