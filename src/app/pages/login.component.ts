@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -15,11 +16,11 @@ import { LoginCredentials } from '../models/app.models';
       <div class="bg-image-container">
         <div class="bg-overlay"></div>
       </div>
-      
+
       <div class="auth-view-scroller">
         <div class="auth-container animate-up">
           <div class="glass-card elite-auth-card">
-            
+
             <!-- Luxury Branding -->
             <div class="auth-brand-box">
               <div class="logo-wrapper-luxury">
@@ -31,10 +32,26 @@ import { LoginCredentials } from '../models/app.models';
               </div>
             </div>
 
+              <div class="remember-row mt-12">
+                <label class="remember-me" style="color: rgba(255,255,255,0.6); font-weight:700;">
+                  <input type="checkbox" [(ngModel)]="rememberMe" /> Remember Me
+                </label>
+              </div>
+
             <!-- Login Header -->
             <div class="auth-header-mini mt-40">
               <h2>Account Authentication</h2>
               <p>Securely log in to your digital taxpayer terminal</p>
+            </div>
+
+            <!-- System Status Badges -->
+            <div class="system-status-row mt-16" *ngIf="systemStatus">
+              <div class="status-item" *ngFor="let k of statusKeys">
+                <span class="status-name">{{ k }}:</span>
+                <span class="status-value" [ngClass]="{'online': systemStatus[k].online, 'offline': !systemStatus[k].online}">
+                  {{ systemStatus[k].online ? 'Online ✓' : 'Offline ✗' }}
+                </span>
+              </div>
             </div>
 
             <!-- Form Area -->
@@ -96,7 +113,7 @@ import { LoginCredentials } from '../models/app.models';
             </form>
 
             <!-- Bottom Meta -->
-            <div class="auth-footer-luxury mt-48 text-center">
+              <div class="auth-footer-luxury mt-48 text-center">
               <p>Unregistered? <a routerLink="/registration" class="reg-link-bold">Request New PIN</a></p>
               <div class="security-seal-mini mt-24">
                  <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.946-2.597 9.289-6.5 11.534-3.903-2.245-6.5-6.588-6.5-11.534 0-.68.056-1.35.166-2.001zm8.334 1.5a1 1 0 10-2 0V9H7a1 1 0 100 2h1.5v2.5a1 1 0 102 0V11H12a1 1 0 100-2h-1.5V6.499z" clip-rule="evenodd"/></svg>
@@ -104,13 +121,14 @@ import { LoginCredentials } from '../models/app.models';
               </div>
             </div>
 
+
           </div>
         </div>
       </div>
     </div>
   `,
   styles: [`
-    .login-scene { 
+    .login-scene {
       min-height: 100vh; position: relative; background: #0a0a0b; overflow: hidden;
     }
     .bg-image-container {
@@ -158,7 +176,7 @@ import { LoginCredentials } from '../models/app.models';
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .elite-input-luxury.with-icon { padding-left: 64px; }
-    .elite-input-luxury:focus { 
+    .elite-input-luxury:focus {
       background: rgba(255,255,255,0.06); border-color: var(--kra-red); outline: none;
       box-shadow: 0 0 0 6px rgba(227, 30, 36, 0.15); transform: translateY(-2px);
     }
@@ -196,17 +214,24 @@ import { LoginCredentials } from '../models/app.models';
 export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private http = inject(HttpClient);
 
   credentials = signal<LoginCredentials>({ taxpayer_id: '', password: '' });
+  rememberMe = false;
   isLoading = signal(false);
   errorMessage = signal<string>('');
   showPassword = signal(false);
+  systemStatus: any = null;
+  statusKeys: string[] = [];
+
+  constructor() {
+    this.fetchSystemStatus();
+  }
 
   onLogin() {
     this.isLoading.set(true);
     this.errorMessage.set('');
-
-    this.authService.login(this.credentials()).subscribe({
+    this.authService.login(this.credentials(), this.rememberMe).subscribe({
       next: (response) => {
         this.isLoading.set(false);
         if (response.success && response.data?.user) {
@@ -224,5 +249,23 @@ export class LoginComponent {
 
   togglePasswordVisibility() {
     this.showPassword.update(val => !val);
+  }
+
+  private fetchSystemStatus() {
+    try {
+      this.http.get<any>('http://localhost/itax/kra-api/status.php').subscribe({
+        next: (res) => {
+          if (res && res.data) {
+            this.systemStatus = res.data;
+            this.statusKeys = Object.keys(this.systemStatus).filter(k => k !== 'timestamp');
+          }
+        },
+        error: () => {
+          // ignore
+        }
+      });
+    } catch (e) {
+      // ignore
+    }
   }
 }

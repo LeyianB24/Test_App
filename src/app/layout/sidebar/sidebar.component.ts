@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { RouterModule, Router } from '@angular/router';
 import { LogoComponent } from '../../components/logo.component';
 import { AuthService } from '../../services/auth.service';
@@ -80,7 +81,7 @@ interface MenuItem {
             <span class="f-label" *ngIf="!collapsed">Logout</span>
           </button>
         </div>
-        
+
         <div class="system-seal-elite" *ngIf="!collapsed">
            <span class="s-ver">v2.4.0-elite</span>
            <span class="s-sep">|</span>
@@ -98,12 +99,12 @@ interface MenuItem {
       z-index: 1000; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .sidebar-elite.collapsed { width: 90px; }
-    
+
     .sidebar-brand-elite {
       height: 90px; /* Aligned with header */
-      display: flex; align-items: center; justify-content: center; 
+      display: flex; align-items: center; justify-content: center;
       padding: 10px 20px;
-      border-bottom: 1px solid var(--border-light); 
+      border-bottom: 1px solid var(--border-light);
       background: var(--bg-surface);
       transition: all 0.3s ease;
     }
@@ -111,12 +112,12 @@ interface MenuItem {
       background: var(--bg-surface); /* Ensure dark mode bg matches */
       border-bottom-color: var(--border-color);
     }
-    .logo-sphere { 
-      width: 100%; 
-      height: 100%; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
+    .logo-sphere {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .brand-text-luxury { display: flex; flex-direction: column; }
     .brand-text-luxury .b-main { font-size: 1.3rem; font-weight: 900; color: var(--text-main); letter-spacing: -1px; }
@@ -142,7 +143,7 @@ interface MenuItem {
 
     .nav-scroller-elite { flex: 1; padding: 12px; }
     .nav-domain-label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; padding: 0 16px; margin: 16px 0 12px 0; }
-    
+
     .nav-link-elite {
       display: flex; align-items: center; gap: 16px; padding: 14px 16px;
       border-radius: 16px; color: var(--text-secondary); text-decoration: none;
@@ -150,7 +151,7 @@ interface MenuItem {
     }
     .nav-link-elite:hover { background: rgba(0,0,0,0.03); color: var(--text-main); }
     .nav-link-elite.active { background: var(--bg-active); color: var(--kra-red); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-    
+
     .icon-frame {
       width: 40px; height: 40px; border-radius: 12px; background: transparent;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
@@ -205,6 +206,7 @@ interface MenuItem {
 export class SidebarComponent {
   private authService = inject(AuthService);
   public themeService = inject(ThemeService);
+  private http = inject(HttpClient);
   private router = inject(Router);
 
   @Input() collapsed = false;
@@ -219,19 +221,35 @@ export class SidebarComponent {
 
   userTypeLabel = computed(() => {
     const type = this.userType();
-    return type === 'individual' ? 'Resident' : 
+    return type === 'individual' ? 'Resident' :
            type === 'business' ? 'Corporate' : 'System';
   });
 
-  menuItems: MenuItem[] = [
-    { label: 'Smart Dashboard', route: '/dashboard', iconPath: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z' },
-    { label: 'Returns Hub', route: '/returns', iconPath: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
-    { label: 'Revenue Payments', route: '/payments', notification: 2, iconPath: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
-    { label: 'Debt & Compliance', route: '/debt', notification: '!', variant: 'danger', iconPath: 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { label: 'e-TIMS Digital', route: '/etims', iconPath: 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z' },
-    { label: 'Taxpayer Profile', route: '/profile', iconPath: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
-    { label: 'Portal Settings', route: '/settings', iconPath: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z' }
-  ];
+  menuItems: MenuItem[] = [];
+
+  constructor() {
+    this.loadNavigation();
+  }
+
+  private loadNavigation() {
+    // Fetch navigation based on user role permissions
+    this.http.get<any>('http://localhost/itax/kra-api/admin_role_matrix.php?action=get_navigation').subscribe({
+      next: (res) => {
+        if (res && res.data && res.data.pages) {
+          this.menuItems = res.data.pages.map((p: any) => ({
+            label: p.title,
+            route: '/' + p.slug.replace(/\//g, '-'),
+            iconPath: p.iconPath || 'M4 6h16'
+          }));
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load navigation:', err);
+        // Fallback to empty menu on error
+        this.menuItems = [];
+      }
+    });
+  }
 
   handleLogout() {
     this.authService.logout().subscribe({

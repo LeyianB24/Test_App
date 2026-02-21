@@ -33,6 +33,7 @@ export class AuthService {
   // Computed signal for user display name
   public userName = computed(() => this.currentUser()?.name || 'Guest');
   public userType = computed(() => this.currentUser()?.type || 'individual');
+  public userRole = computed(() => this.currentUser()?.role || '');
 
   constructor() {
     // Subscribe to user changes to update signals
@@ -47,19 +48,23 @@ export class AuthService {
    * @param credentials - User PIN and password
    * @returns Observable<AuthResponse>
    */
-  login(credentials: LoginCredentials): Observable<AuthResponse> {
+  login(credentials: LoginCredentials, rememberMe: boolean = false): Observable<AuthResponse> {
     console.log('🔐 AuthService: Attempting login for Taxpayer ID:', credentials.taxpayer_id);
     this.isLoading.set(true);
 
-    return this.http.post<any>(`${this.apiUrl}/auth_secure.php`, credentials, { withCredentials: true }).pipe(
+    // POST to new JWT auth endpoint (falls back to ?action=login)
+    return this.http.post<any>(`${this.apiUrl}/auth_jwt.php?action=login`, credentials, { withCredentials: true }).pipe(
       tap(response => {
         this.isLoading.set(false);
 
         if (response.success && response.data && response.data.user) {
-          const { user } = response.data;
+          const { user, tokens } = response.data;
 
-          // Store in localStorage for session persistence
-          this.setUserInStorage(user);
+          // Persist tokens according to rememberMe
+          if (tokens) this.setTokensInStorage(tokens, rememberMe);
+
+          // Store user in localStorage
+          this.setUserInStorage(user, tokens?.access_token);
 
           // Update BehaviorSubject
           this.currentUserSubject.next(user);
@@ -86,16 +91,31 @@ export class AuthService {
   logout(): Observable<boolean> {
     console.log('🚪 AuthService: Logging out user');
 
-    // Clear user data service
+    const refresh = localStorage.getItem('refreshToken');
+
+    if (refresh) {
+      // Call server to revoke refresh token
+      return this.http.post<any>(`${this.apiUrl}/auth_jwt.php?action=logout`, { refresh_token: refresh }).pipe(
+        tap(() => {
+          this.userDataService.clearUserData();
+          this.clearUserFromStorage();
+          this.currentUserSubject.next(null);
+        }),
+        catchError(() => {
+          // Even if server call fails, clear local session
+          this.userDataService.clearUserData();
+          this.clearUserFromStorage();
+          this.currentUserSubject.next(null);
+          return of(true);
+        }),
+        switchMap(() => of(true))
+      );
+    }
+
+    // No refresh token - just clear locally
     this.userDataService.clearUserData();
-
-    // Clear localStorage
     this.clearUserFromStorage();
-
-    // Update BehaviorSubject
     this.currentUserSubject.next(null);
-
-    console.log('✅ Logout successful');
     return of(true);
   }
 
@@ -237,14 +257,32 @@ export class AuthService {
    * Refresh the auth token
    */
   refreshToken(): Observable<AuthResponse> {
-    const token = localStorage.getItem('authToken');
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/refresh`, { token })
+    const refresh = localStorage.getItem('refreshToken');
+    if (!refresh) return of({ success: false, message: 'No refresh token available' } as AuthResponse);
+
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth_jwt.php?action=refresh`, { refresh_token: refresh })
       .pipe(
         tap(response => {
-          if (response.success && response.data?.token) {
-            localStorage.setItem('authToken', response.data.token);
+          if (response.success && response.data?.tokens) {
+            const tokens = response.data.tokens as any;
+            this.setTokensInStorage(tokens, true);
           }
         })
       );
+  }
+
+  /**
+   * Persist access and refresh tokens. If rememberMe is false store access token only (session-like).
+   */
+  private setTokensInStorage(tokens: { access_token: string; refresh_token: string; access_expires_in?: number; refresh_expires_in?: number }, rememberMe: boolean) {
+    try {
+      if (tokens.access_token) localStorage.setItem('authToken', tokens.access_token);
+      if (rememberMe && tokens.refresh_token) localStorage.setItem('refreshToken', tokens.refresh_token);
+      // Optionally store expiry metadata
+      if (tokens.access_expires_in) localStorage.setItem('authTokenExpires', String(Date.now() + (tokens.access_expires_in * 1000)));
+      if (tokens.refresh_expires_in) localStorage.setItem('refreshTokenExpires', String(Date.now() + (tokens.refresh_expires_in * 1000)));
+    } catch (error) {
+      console.error('Failed to persist tokens:', error);
+    }
   }
 }

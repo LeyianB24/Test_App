@@ -6,6 +6,7 @@ export interface User {
   name: string;
   email: string;
   type: 'individual' | 'business' | 'admin';
+  role?: string; // Role-based access control: SUPER_ADMIN, ADMIN, USER, etc.
   registrationDate: string;
   lastLogin?: string;
   profile?: TaxpayerProfile; // Optional profile data for registration
@@ -36,6 +37,12 @@ export interface AuthResponse {
   data?: {
     user?: User;
     token?: string;
+    tokens?: {
+      access_token: string;
+      refresh_token?: string;
+      access_expires_in?: number;
+      refresh_expires_in?: number;
+    };
   };
   message?: string;
   token?: string;

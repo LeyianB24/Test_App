@@ -5,7 +5,42 @@ export const environment = {
 
   app: {
     name: 'KRA iTax Portal',
-    version: '1.0.0'
+    version: '2.4.0-elite'
+  },
+
+  // JWT Authentication Configuration
+  auth: {
+    // Token lifetimes (in seconds)
+    accessTokenLifetime: 900,        // 15 minutes
+    refreshTokenLifetime: 604800,    // 7 days
+
+    // Storage keys
+    accessTokenKey: 'authToken',
+    refreshTokenKey: 'refreshToken',
+    userKey: 'currentUser',
+
+    // JWT Endpoints
+    endpoints: {
+      login: '/auth_jwt.php?action=login',
+      refresh: '/auth_jwt.php?action=refresh',
+      logout: '/auth_jwt.php?action=logout',
+      status: '/status.php'
+    }
+  },
+
+  // Role-Based Access Control
+  rbac: {
+    endpoints: {
+      getMatrix: '/admin_role_matrix.php?action=get_matrix',
+      upsertPermission: '/admin_role_matrix.php?action=upsert_permission',
+      getNavigation: '/admin_role_matrix.php?action=get_navigation'
+    },
+    // Default roles with their descriptions
+    roles: {
+      SUPER_ADMIN: 'System Administrator with full access',
+      ADMIN: 'Administrator with limited access',
+      USER: 'Standard user with basic access'
+    }
   },
 
   mpesa: {
@@ -46,12 +81,28 @@ export const environment = {
     search: true,
     filters: true,
     userProfiles: true,
-    auditLogging: true
+    auditLogging: true,
+    roleMatrix: true,
+    debugLogging: false
   },
 
   notifications: {
     duration: 4000,
     position: 'top-right'
+  },
+
+  // External Service Health Checks
+  externalServices: {
+    itax: {
+      name: 'iTax Portal',
+      url: 'https://itax.kra.go.ke',
+      timeout: 5000
+    },
+    ecitizen: {
+      name: 'eCitizen',
+      url: 'https://www.ecitizen.go.ke',
+      timeout: 5000
+    }
   },
 
   // Logging and monitoring

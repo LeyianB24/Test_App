@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard } from './guards/auth.guard';
+import { authGuard, guestGuard, adminGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   // Login route (accessible only when not authenticated)
@@ -109,6 +109,65 @@ export const routes: Routes = [
   //   canActivate: [authGuard],
   //   loadComponent: () => import('./pages/batch-operations.component').then(m => m.BatchOperationsComponent)
   // },
+
+  // Tax Returns routes (Phase 4)
+  {
+    path: 'tax-returns',
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        title: 'KRA iTax | Tax Returns Management',
+        loadComponent: () => import('./pages/return-list.component').then(m => m.ReturnListComponent)
+      },
+      {
+        path: 'create',
+        title: 'KRA iTax | Create Tax Return',
+        loadComponent: () => import('./pages/return-create.component').then(m => m.ReturnCreateComponent)
+      },
+      {
+        path: ':id',
+        title: 'KRA iTax | Return Details',
+        loadComponent: () => import('./pages/return-detail.component').then(m => m.ReturnDetailComponent)
+      }
+    ]
+  },
+
+  // Helpdesk routes
+  {
+    path: 'helpdesk',
+    canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        title: 'KRA iTax | Support Tickets',
+        loadComponent: () => import('./pages/ticket-list.component').then(m => m.TicketListComponent)
+      },
+      {
+        path: 'create',
+        title: 'KRA iTax | Create Ticket',
+        loadComponent: () => import('./pages/ticket-create.component').then(m => m.TicketCreateComponent)
+      },
+      {
+        path: ':id',
+        title: 'KRA iTax | Ticket Details',
+        loadComponent: () => import('./pages/ticket-detail.component').then(m => m.TicketDetailComponent)
+      }
+    ]
+  },
+
+  // Admin-only routes (require admin role)
+  {
+    path: 'admin',
+    children: [
+      {
+        path: 'role-matrix',
+        title: 'KRA iTax | Role-Based Permission Matrix',
+        canActivate: [adminGuard],
+        loadComponent: () => import('./pages/admin-role-matrix.component').then(m => m.AdminRoleMatrixComponent)
+      }
+    ]
+  },
 
   // Fallback for unknown routes
   { path: '**', redirectTo: 'login' }
