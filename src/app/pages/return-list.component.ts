@@ -110,69 +110,81 @@ import { takeUntil } from 'rxjs/operators';
       </div>
 
       <!-- Loading State -->
-      <div *ngIf="service.loadingSignal()" class="text-center py-8">
-        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <p class="text-gray-600 mt-2">Loading returns...</p>
-      </div>
+      @if (service.loadingSignal()) {
+        <div class="text-center py-8">
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <p class="text-gray-600 mt-2">Loading returns...</p>
+        </div>
+      }
 
       <!-- Error State -->
-      <div *ngIf="service.errorSignal()" class="bg-red-50 border border-red-200 p-4 rounded-lg mb-4">
-        <p class="text-red-700">{{ service.errorSignal() }}</p>
-      </div>
+      @if (service.errorSignal(); as error) {
+        <div class="bg-red-50 border border-red-200 p-4 rounded-lg mb-4">
+          <p class="text-red-700">{{ error }}</p>
+        </div>
+      }
 
       <!-- Table -->
-      <div *ngIf="!service.loadingSignal()" class="bg-white rounded-lg border border-gray-200 overflow-hidden shadow">
-        <table class="w-full">
-          <thead class="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Return ID</th>
-              <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Type</th>
-              <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Year</th>
-              <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
-              <th class="px-6 py-3 text-right text-sm font-semibold text-gray-900">Tax Due/Refund</th>
-              <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Deadline</th>
-              <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Created</th>
-              <th class="px-6 py-3 text-center text-sm font-semibold text-gray-900">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-200">
-            <tr *ngFor="let ret of service.returnsSignal()" class="hover:bg-gray-50 transition">
-              <td class="px-6 py-4 text-sm font-medium text-blue-600">{{ ret.return_id }}</td>
-              <td class="px-6 py-4 text-sm">
-                <span class="px-2 py-1 rounded-full text-xs font-medium"
-                      [ngClass]="getReturnTypeClass(ret.return_type)">
-                  {{ ret.return_type }}
-                </span>
-              </td>
-              <td class="px-6 py-4 text-sm">{{ ret.tax_year }}</td>
-              <td class="px-6 py-4 text-sm">
-                <span class="px-2 py-1 rounded-full text-xs font-medium"
-                      [ngClass]="getStatusClass(ret.status)">
-                  {{ ret.status }}
-                </span>
-              </td>
-              <td class="px-6 py-4 text-sm text-right font-medium"
-                  [ngClass]="ret.tax_due > 0 ? 'text-red-600' : 'text-green-600'">
-                KES {{ (ret.tax_due | number: '1.2-2') || '0.00' }}
-              </td>
-              <td class="px-6 py-4 text-sm">
-                <span *ngIf="ret.deadline" [ngClass]="isDeadlineApproaching(ret.deadline) ? 'text-red-600 font-medium' : ''">
-                  {{ ret.deadline | date: 'MMM dd, yyyy' }}
-                </span>
-              </td>
-              <td class="px-6 py-4 text-sm text-gray-600">{{ ret.created_at | date: 'MMM dd' }}</td>
-              <td class="px-6 py-4 text-center">
-                <a [routerLink]="['/tax-returns', ret.id]" class="text-blue-600 hover:text-blue-800 text-sm font-medium">View</a>
-              </td>
-            </tr>
-            <tr *ngIf="service.returnsSignal().length === 0">
-              <td colspan="8" class="px-6 py-8 text-center text-gray-500">
-                No returns found. <a routerLink="/tax-returns/create" class="text-blue-600 hover:underline">Create one now</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      @if (!service.loadingSignal()) {
+        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden shadow">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Return ID</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Type</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Year</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Status</th>
+                <th class="px-6 py-3 text-right text-sm font-semibold text-gray-900">Tax Due/Refund</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Deadline</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Created</th>
+                <th class="px-6 py-3 text-center text-sm font-semibold text-gray-900">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              @for (ret of service.returnsSignal(); track ret.id) {
+                <tr class="hover:bg-gray-50 transition">
+                  <td class="px-6 py-4 text-sm font-medium text-blue-600">{{ ret.return_id }}</td>
+                  <td class="px-6 py-4 text-sm">
+                    <span class="px-2 py-1 rounded-full text-xs font-medium"
+                          [class]="getReturnTypeClass(ret.return_type)">
+                      {{ ret.return_type }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm">{{ ret.tax_year }}</td>
+                  <td class="px-6 py-4 text-sm">
+                    <span class="px-2 py-1 rounded-full text-xs font-medium"
+                          [class]="getStatusClass(ret.status)">
+                      {{ ret.status }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-right font-medium"
+                      [class.text-red-600]="ret.tax_due > 0"
+                      [class.text-green-600]="ret.tax_due <= 0">
+                    KES {{ (ret.tax_due | number: '1.2-2') || '0.00' }}
+                  </td>
+                  <td class="px-6 py-4 text-sm">
+                    @if (ret.deadline; as deadline) {
+                      <span [class.text-red-600]="isDeadlineApproaching(deadline)" [class.font-medium]="isDeadlineApproaching(deadline)">
+                        {{ deadline | date: 'MMM dd, yyyy' }}
+                      </span>
+                    }
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-600">{{ ret.created_at | date: 'MMM dd' }}</td>
+                  <td class="px-6 py-4 text-center">
+                    <a [routerLink]="['/tax-returns', ret.id]" class="text-blue-600 hover:text-blue-800 text-sm font-medium">View</a>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="8" class="px-6 py-8 text-center text-gray-500">
+                    No returns found. <a routerLink="/tax-returns/create" class="text-blue-600 hover:underline">Create one now</a>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
     </div>
   `,
   styles: [`

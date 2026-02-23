@@ -64,9 +64,11 @@ interface DashboardStat {
                     <div class="c-info">
                        <h2 class="u-display-name">{{ userName() }}</h2>
                        <p class="u-display-meta">STATION: {{ dashboardData.station() }} | ID: {{ dashboardData.taxpayerProfile()?.id_number }}</p>
-                       <div class="u-obligations">
-                          <span class="ob-chip" *ngFor="let ob of dashboardData.obligations()">{{ ob.obligation_name }}</span>
-                       </div>
+                        <div class="u-obligations">
+                           @for (ob of dashboardData.obligations(); track ob.obligation_id) {
+                             <span class="ob-chip">{{ ob.obligation_name }}</span>
+                           }
+                        </div>
                     </div>
                  </div>
 
@@ -85,30 +87,32 @@ interface DashboardStat {
            </div>
 
            <!-- Stats Intelligence Grids -->
-           <div class="row g-4 mt-3">
-              <div class="col-xl-3 col-md-6" *ngFor="let stat of stats(); let i = index">
-                  <div class="premium-stat-card d-flex align-items-center p-4 animate-up" [class]="'delay-' + (i+1)">
-                    <div class="stat-icon-wrapper me-3" [ngClass]="stat.color">
-                       <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" [attr.d]="stat.icon" />
-                       </svg>
+            <div class="row g-4 mt-3">
+               @for (stat of stats(); track stat.label; let i = $index) {
+                 <div class="col-xl-3 col-md-6">
+                    <div class="premium-stat-card d-flex align-items-center p-4 animate-up" [class]="'delay-' + (i+1)">
+                      <div class="stat-icon-wrapper me-3" [class]="stat.color">
+                         <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" [attr.d]="stat.icon" />
+                         </svg>
+                      </div>
+                      <div class="stat-info flex-grow-1">
+                         <span class="stat-label text-uppercase text-muted fw-bold d-block mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">{{ stat.label }}</span>
+                         <div class="d-flex align-items-baseline justify-content-between">
+                            <h3 class="stat-number mb-0 fw-bolder">{{ formatValue(stat) }}</h3>
+                            <span class="stat-trend badge rounded-pill" 
+                                  [class.bg-success-subtle]="stat.trendDirection === 'up'" 
+                                  [class.text-success]="stat.trendDirection === 'up'"
+                                  [class.bg-danger-subtle]="stat.trendDirection === 'down'"
+                                  [class.text-danger]="stat.trendDirection === 'down'">
+                              {{ stat.trend }}
+                            </span>
+                         </div>
+                      </div>
                     </div>
-                    <div class="stat-info flex-grow-1">
-                       <span class="stat-label text-uppercase text-muted fw-bold d-block mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">{{ stat.label }}</span>
-                       <div class="d-flex align-items-baseline justify-content-between">
-                          <h3 class="stat-number mb-0 fw-bolder">{{ formatValue(stat) }}</h3>
-                          <span class="stat-trend badge rounded-pill" 
-                                [class.bg-success-subtle]="stat.trendDirection === 'up'" 
-                                [class.text-success]="stat.trendDirection === 'up'"
-                                [class.bg-danger-subtle]="stat.trendDirection === 'down'"
-                                [class.text-danger]="stat.trendDirection === 'down'">
-                            {{ stat.trend }}
-                          </span>
-                       </div>
-                    </div>
-                  </div>
-              </div>
-           </div>
+                 </div>
+               }
+            </div>
 
            <!-- Revenue Flow Analytics -->
            <div class="content-card-premium mt-32 animate-up delay-2">
@@ -122,22 +126,25 @@ interface DashboardStat {
                     <button class="icon-btn-elite"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M7 12l3-3 3 3 4-4M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-width="2"/></svg></button>
                  </div>
               </div>
-              <div class="luxury-chart-surface">
-                 <div class="chart-bars-elite" *ngIf="chartData().length > 0; else noChartData">
-                   <div class="bar-elite-wrapper" *ngFor="let bar of chartData()">
-                      <div class="bar-elite" [style.height.%]="getBarHeight(bar.amount)" [class.active]="bar.active">
-                         <div class="bar-value-hint">KES {{ bar.amount / 1000 }}K</div>
-                      </div>
-                      <span class="bar-name">{{ bar.month }}</span>
-                   </div>
-                 </div>
-                 <ng-template #noChartData>
+               <div class="luxury-chart-surface">
+                 @if (chartData().length > 0) {
+                    <div class="chart-bars-elite">
+                      @for (bar of chartData(); track bar.month) {
+                        <div class="bar-elite-wrapper">
+                           <div class="bar-elite" [style.height.%]="getBarHeight(bar.amount)" [class.active]="bar.active">
+                              <div class="bar-value-hint">KES {{ bar.amount / 1000 }}K</div>
+                           </div>
+                           <span class="bar-name">{{ bar.month }}</span>
+                        </div>
+                      }
+                    </div>
+                 } @else {
                     <div class="no-data-placeholder">No revenue data available for this period.</div>
-                 </ng-template>
+                 }
                  <div class="chart-grid-lines">
                     <span></span><span></span><span></span><span></span>
                  </div>
-              </div>
+               </div>
            </div>
 
         </div>
@@ -172,21 +179,27 @@ interface DashboardStat {
                  <h3 class="card-p-title">Recent Transactions</h3>
                  <a href="#" class="view-link">See Archive</a>
               </div>
-              <div class="refined-timeline mt-24">
-                 <div class="timeline-unit" *ngFor="let act of activities()">
-                    <div class="unit-icon" [ngClass]="act.status">
-                       <svg *ngIf="act.status === 'success'" width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                       <svg *ngIf="act.status === 'warning'" width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+               <div class="refined-timeline mt-24">
+                  @for (act of activities(); track act.timestamp) {
+                    <div class="timeline-unit">
+                       <div class="unit-icon" [class]="act.status">
+                          @if (act.status === 'success') {
+                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                          }
+                          @if (act.status === 'warning') {
+                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                          }
+                       </div>
+                       <div class="unit-details">
+                          <p class="u-action">{{ act.action }}</p>
+                          <span class="u-date">{{ act.date }}</span>
+                       </div>
+                       <div class="unit-extra">
+                          <span class="u-badge" [class]="act.status">{{ act.statusLabel }}</span>
+                       </div>
                     </div>
-                    <div class="unit-details">
-                       <p class="u-action">{{ act.action }}</p>
-                       <span class="u-date">{{ act.date }}</span>
-                    </div>
-                    <div class="unit-extra">
-                       <span class="u-badge" [ngClass]="act.status">{{ act.statusLabel }}</span>
-                    </div>
-                 </div>
-              </div>
+                  }
+               </div>
               <button class="upgrade-ad-btn mt-32">
                  ⚡ Switch to Advance Portal
               </button>

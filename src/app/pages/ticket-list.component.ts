@@ -89,76 +89,83 @@ import { takeUntil } from 'rxjs/operators';
       </div>
 
       <!-- Loading State -->
-      <div *ngIf="helpdeskService.isLoading()" class="text-center py-8">
-        <div class="text-gray-500">Loading tickets...</div>
-      </div>
+      @if (helpdeskService.isLoading()) {
+        <div class="text-center py-8">
+          <div class="text-gray-500">Loading tickets...</div>
+        </div>
+      }
 
       <!-- Error State -->
-      <div *ngIf="helpdeskService.error() && !helpdeskService.isLoading()" class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg mb-6">
-        {{ helpdeskService.error() }}
-      </div>
+      @if (helpdeskService.error() && !helpdeskService.isLoading()) {
+        <div class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg mb-6">
+          {{ helpdeskService.error() }}
+        </div>
+      }
 
       <!-- Tickets Table -->
-      <div *ngIf="!helpdeskService.isLoading() && helpdeskService.tickets().length > 0" class="bg-white rounded-lg border border-gray-200 shadow overflow-x-auto">
-        <table class="w-full">
-          <thead>
-            <tr class="border-b border-gray-200 bg-gray-50">
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Ticket</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Subject</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Category</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Priority</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Created</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let ticket of helpdeskService.tickets()"
-              class="border-b border-gray-200 hover:bg-gray-50 transition"
-            >
-              <td class="px-6 py-4 text-sm font-mono text-gray-600">{{ ticket.ticket_number }}</td>
-              <td class="px-6 py-4 text-sm text-gray-900 font-medium">{{ ticket.subject }}</td>
-              <td class="px-6 py-4 text-sm text-gray-700">{{ ticket.category }}</td>
-              <td class="px-6 py-4 text-sm">
-                <span [ngClass]="getStatusClass(ticket.status)" class="px-3 py-1 rounded-full text-xs font-semibold">
-                  {{ ticket.status }}
-                </span>
-              </td>
-              <td class="px-6 py-4 text-sm">
-                <span [ngClass]="getPriorityClass(ticket.priority)" class="px-3 py-1 rounded-full text-xs font-semibold">
-                  {{ ticket.priority }}
-                </span>
-              </td>
-              <td class="px-6 py-4 text-sm text-gray-600">
-                {{ formatDate(ticket.created_at) }}
-              </td>
-              <td class="px-6 py-4 text-sm">
-                <a
-                  [routerLink]="['/helpdesk', ticket.id]"
-                  class="text-blue-600 hover:text-blue-800 font-medium"
-                >
-                  View →
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      @if (!helpdeskService.isLoading() && helpdeskService.tickets().length > 0) {
+        <div class="bg-white rounded-lg border border-gray-200 shadow overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-gray-200 bg-gray-50">
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Ticket</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Subject</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Category</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Priority</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Created</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (ticket of helpdeskService.tickets(); track ticket.id) {
+                <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+                  <td class="px-6 py-4 text-sm font-mono text-gray-600">{{ ticket.ticket_number }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 font-medium">{{ ticket.subject }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-700">{{ ticket.category }}</td>
+                  <td class="px-6 py-4 text-sm">
+                    <span [class]="getStatusClass(ticket.status)" class="px-3 py-1 rounded-full text-xs font-semibold">
+                      {{ ticket.status }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm">
+                    <span [class]="getPriorityClass(ticket.priority)" class="px-3 py-1 rounded-full text-xs font-semibold">
+                      {{ ticket.priority }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-600">
+                    {{ formatDate(ticket.created_at) }}
+                  </td>
+                  <td class="px-6 py-4 text-sm">
+                    <a
+                      [routerLink]="['/helpdesk', ticket.id]"
+                      class="text-blue-600 hover:text-blue-800 font-medium"
+                    >
+                      View →
+                    </a>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
 
       <!-- Empty State -->
-      <div *ngIf="!helpdeskService.isLoading() && helpdeskService.tickets().length === 0" class="text-center py-12 bg-white rounded-lg border border-gray-200">
-        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-        </svg>
-        <div class="text-gray-500 mt-4">No tickets found</div>
-        <button
-          [routerLink]="['/helpdesk/create']"
-          class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Create Your First Ticket
-        </button>
-      </div>
+      @if (!helpdeskService.isLoading() && helpdeskService.tickets().length === 0) {
+        <div class="text-center py-12 bg-white rounded-lg border border-gray-200">
+          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <div class="text-gray-500 mt-4">No tickets found</div>
+          <button
+            [routerLink]="['/helpdesk/create']"
+            class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Create Your First Ticket
+          </button>
+        </div>
+      }
     </div>
   `,
   styles: [`

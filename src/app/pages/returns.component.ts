@@ -142,7 +142,7 @@ import { ReturnsService } from '../services/returns.service';
                       <td><span class="period-pill">{{ r.period }}</span></td>
                       <td><span class="date-label-elite">{{ r.dateSubmitted || 'NOT TRANSMITTED' }}</span></td>
                       <td>
-                        <div class="status-pill-elite" [ngClass]="r.status">
+                        <div class="status-pill-elite" [class]="r.status">
                            <span class="dot"></span>
                            {{ r.status }}
                         </div>

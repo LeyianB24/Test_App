@@ -54,9 +54,11 @@ import { takeUntil } from 'rxjs/operators';
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select a category</option>
-              <option *ngFor="let cat of helpdeskService.categories()" [value]="cat">
-                {{ cat }}
-              </option>
+              @for (cat of helpdeskService.categories(); track cat) {
+                <option [value]="cat">
+                  {{ cat }}
+                </option>
+              }
             </select>
           </div>
 
@@ -66,17 +68,18 @@ import { takeUntil } from 'rxjs/operators';
               Priority
             </label>
             <div class="grid grid-cols-4 gap-2">
-              <button
-                type="button"
-                *ngFor="let p of ['Low', 'Medium', 'High', 'Critical']"
-                (click)="formData.priority = p"
-                [class.ring-2]="formData.priority === p"
-                [class.ring-blue-500]="formData.priority === p"
-                [ngClass]="getPriorityClass(p)"
-                class="px-3 py-2 rounded-lg font-medium text-sm transition"
-              >
-                {{ p }}
-              </button>
+              @for (p of ['Low', 'Medium', 'High', 'Critical']; track p) {
+                <button
+                  type="button"
+                  (click)="formData.priority = p"
+                  [class.ring-2]="formData.priority === p"
+                  [class.ring-blue-500]="formData.priority === p"
+                  [class]="getPriorityClass(p)"
+                  class="px-3 py-2 rounded-lg font-medium text-sm transition"
+                >
+                  {{ p }}
+                </button>
+              }
             </div>
           </div>
 
@@ -95,7 +98,9 @@ import { takeUntil } from 'rxjs/operators';
             ></textarea>
             <p class="text-xs text-gray-500 mt-1">
               {{ formData.description.length }}/5000 characters
-              <span *ngIf="formData.description.length >= 5000" class="text-red-500"> (Maximum reached)</span>
+              @if (formData.description.length >= 5000) {
+                <span class="text-red-500"> (Maximum reached)</span>
+              }
             </p>
           </div>
 
@@ -108,14 +113,18 @@ import { takeUntil } from 'rxjs/operators';
           </div>
 
           <!-- Error Message -->
-          <div *ngIf="errorMessage" class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg mb-6">
-            {{ errorMessage }}
-          </div>
+          @if (errorMessage) {
+            <div class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg mb-6">
+              {{ errorMessage }}
+            </div>
+          }
 
           <!-- Success Message -->
-          <div *ngIf="successMessage" class="bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg mb-6">
-            {{ successMessage }}
-          </div>
+          @if (successMessage) {
+            <div class="bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg mb-6">
+              {{ successMessage }}
+            </div>
+          }
 
           <!-- Action Buttons -->
           <div class="flex gap-4 justify-end">
