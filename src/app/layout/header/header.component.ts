@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, signal, HostListener, inject, computed } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, signal, inject, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DashboardDataService } from '../../services/dashboard-data.service';
@@ -8,7 +8,9 @@ import { NotificationService, AppNotification } from '../../services/notificatio
 @Component({
   selector: 'app-header',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, RouterModule],
+  host: { '(document:click)': 'onDocumentClick()' },
   template: `
     <header class="header-elite">
       <div class="header-inner">
@@ -38,7 +40,7 @@ import { NotificationService, AppNotification } from '../../services/notificatio
           <div class="notif-anchor">
             <button class="notif-btn-elite" 
                     (click)="toggleNotifications($event)" 
-                    [class.active]="isNotificationsOpen">
+                    [class.active]="isNotificationsOpen()">
               <div class="notif-icon-box" [class.pulse]="unreadCount() > 0">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
                 <div class="notif-badge" *ngIf="unreadCount() > 0">{{ unreadCount() }}</div>
@@ -46,7 +48,7 @@ import { NotificationService, AppNotification } from '../../services/notificatio
             </button>
 
             <!-- Luxury Notifications Panel -->
-            <div class="notif-panel-elite animate-scale" *ngIf="isNotificationsOpen" (click)="$event.stopPropagation()">
+            <div class="notif-panel-elite animate-scale" *ngIf="isNotificationsOpen()" (click)="$event.stopPropagation()">
               <div class="panel-header-elite">
                 <div class="p-title-box">
                    <h3>Notifications</h3>
@@ -81,17 +83,17 @@ import { NotificationService, AppNotification } from '../../services/notificatio
 
           <!-- User Intelligence Dropdown -->
           <div class="user-anchor">
-            <button class="user-trigger-elite" (click)="toggleMenu($event)" [class.active]="isMenuOpen">
+            <button class="user-trigger-elite" (click)="toggleMenu($event)" [class.active]="isMenuOpen()">
               <div class="user-avatar-small">{{ getInitials(userName()) }}</div>
               <div class="user-meta-mini hide-mobile">
                 <span class="u-name">{{ userName() }}</span>
                 <span class="u-pin">{{ userPin() }}</span>
               </div>
-              <svg class="chevron-elite" [class.rotated]="isMenuOpen" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 9l-7 7-7-7"></path></svg>
+              <svg class="chevron-elite" [class.rotated]="isMenuOpen()" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 9l-7 7-7-7"></path></svg>
             </button>
 
             <!-- Luxury User Menu -->
-            <div class="user-menu-elite animate-scale" *ngIf="isMenuOpen" (click)="$event.stopPropagation()">
+            <div class="user-menu-elite animate-scale" *ngIf="isMenuOpen()" (click)="$event.stopPropagation()">
               <div class="menu-intro-elite">
                 <div class="intro-avatar">{{ getInitials(userName()) }}</div>
                 <div class="intro-info">
@@ -102,20 +104,20 @@ import { NotificationService, AppNotification } from '../../services/notificatio
               
               <ul class="menu-links-elite">
                 <li>
-                  <a routerLink="/profile" (click)="isMenuOpen = false">
+                  <a routerLink="/profile" (click)="isMenuOpen.set(false)">
                     <div class="m-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></div>
                     <span>Authorized Profile</span>
                   </a>
                 </li>
                 <li>
-                  <a routerLink="/settings" (click)="isMenuOpen = false">
+                  <a routerLink="/settings" (click)="isMenuOpen.set(false)">
                     <div class="m-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg></div>
                     <span>Gateway Settings</span>
                   </a>
                 </li>
                 <li class="m-divider"></li>
                 <li>
-                  <button (click)="logout.emit(); isMenuOpen = false" class="m-logout-btn">
+                  <button (click)="logout.emit(); isMenuOpen.set(false)" class="m-logout-btn">
                     <div class="m-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></div>
                     <span>Terminate Session</span>
                   </button>
@@ -224,8 +226,14 @@ import { NotificationService, AppNotification } from '../../services/notificatio
     .m-divider { height: 1px; background: var(--border-light); margin: 8px 18px; }
 
     @media (max-width: 768px) {
-       .header-inner { padding: 0 20px; }
-       .notif-panel-elite { width: calc(100vw - 40px); right: -60px; }
+       .header-inner { padding: 0 16px; }
+       .notif-panel-elite { width: calc(100vw - 32px); right: -10px; left: auto; max-width: 360px; }
+       .user-menu-elite { width: 260px; }
+       .luxury-search { width: 100% !important; }
+    }
+    @media (max-width: 480px) {
+       .notif-panel-elite { right: -10px; width: calc(100vw - 20px); }
+       .user-menu-elite { right: -10px; width: calc(100vw - 20px); max-width: 300px; }
     }
   `]
 })
@@ -240,8 +248,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userPin = computed(() => this.authService.currentUser()?.taxpayer_id || 'N/A');
   userEmail = computed(() => this.authService.currentUser()?.email || 'N/A');
   
-  isMenuOpen = false;
-  isNotificationsOpen = false;
+  isMenuOpen = signal(false);
+  isNotificationsOpen = signal(false);
   private timer: any;
 
   notifications = this.notificationService.notifications;
@@ -257,22 +265,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.timer) clearInterval(this.timer);
   }
 
-  @HostListener('document:click')
   onDocumentClick() {
-    this.isMenuOpen = false;
-    this.isNotificationsOpen = false;
+    this.isMenuOpen.set(false);
+    this.isNotificationsOpen.set(false);
   }
 
   toggleMenu(event: MouseEvent) {
     event.stopPropagation();
-    this.isMenuOpen = !this.isMenuOpen;
-    this.isNotificationsOpen = false;
+    this.isMenuOpen.update(v => !v);
+    this.isNotificationsOpen.set(false);
   }
 
   toggleNotifications(event: MouseEvent) {
     event.stopPropagation();
-    this.isNotificationsOpen = !this.isNotificationsOpen;
-    this.isMenuOpen = false;
+    this.isNotificationsOpen.update(v => !v);
+    this.isMenuOpen.set(false);
   }
 
   getInitials(name: string): string {

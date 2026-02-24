@@ -59,4 +59,19 @@ export class DashboardDataService {
       })
     );
   }
+  /**
+   * Set data from external source (AuthService)
+   */
+  setData(d: any) {
+    if (d) {
+      console.log('📊 DashboardDataService: Manual state sync');
+      if (d.obligations) this.obligations.set(d.obligations);
+      if (d.station) this.station.set(d.station);
+      if (d.profile) this.taxpayerProfile.set(d.profile);
+      if (d.statistics) this.statistics.set(d.statistics);
+      if (d.chart_data) this.chartData.set(d.chart_data);
+      if (d.payments) this.recentPayments.set(d.payments);
+      if (d.returns) this.recentReturns.set(d.returns);
+    }
+  }
 }

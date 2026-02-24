@@ -1,11 +1,11 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminClientsService, ClientData } from '../services/admin-clients.service';
 
 @Component({
   selector: 'app-admin-clients',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule],
   template: `
     <div class="page-container animate-up">
@@ -33,7 +33,7 @@ import { AdminClientsService, ClientData } from '../services/admin-clients.servi
         {{ error() }}
       </div>
 
-      <div *ngIf="!loading() && !error()" class="content-card-premium table-responsive">
+      <div *ngIf="!loading() && !error()" class="content-card-premium table-responsive-elite">
         <table class="elite-table">
           <thead>
             <tr>
@@ -127,8 +127,14 @@ import { AdminClientsService, ClientData } from '../services/admin-clients.servi
     .flex { display: flex; }
     .gap-2 { gap: 8px; }
     .page-btn { padding: 8px 16px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
-    .page-btn:hover:not(:disabled) { background: var(--bg-hover); }
     .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    @media (max-width: 768px) {
+      .premium-input { width: 100%; }
+      .search-box { width: 100%; }
+      .content-card-premium { padding: 16px; }
+      .elite-table th, .elite-table td { padding: 12px; }
+    }
   `]
 })
 export class AdminClientsComponent implements OnInit {

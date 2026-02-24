@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
@@ -6,7 +6,7 @@ import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, NgOptimizedImage],
   template: `
     <div class="auth-layout login-scene">
@@ -317,11 +317,9 @@ import { Router, RouterModule } from '@angular/router';
     }
 
     .registration-view-scroller {
-      position: relative; z-index: 10; height: 100vh; overflow-y: auto; padding: 60px 20px;
+      position: relative; z-index: 10; height: 100vh; overflow-y: auto; display: flex; align-items: flex-start; justify-content: center; padding: 60px 20px;
     }
-    .registration-container {
-      width: 100%; max-width: 950px; margin: 0 auto;
-    }
+    .registration-container { width: 100%; max-width: 1000px; margin: 0 auto; }
 
     .elite-reg-card-premium {
       background: rgba(255, 255, 255, 0.03);
@@ -427,6 +425,7 @@ import { Router, RouterModule } from '@angular/router';
     .mt-48 { margin-top: 48px; }
 
     @media (max-width: 768px) {
+      .registration-view-scroller { padding: 30px 12px; }
       .elite-reg-card-premium { padding: 40px 24px; }
       .form-grid-elite { grid-template-columns: 1fr; }
       .auth-title-elite { font-size: 2.5rem; }

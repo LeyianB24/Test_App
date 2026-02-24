@@ -1,4 +1,4 @@
-import { Component, inject, computed, signal, OnInit } from '@angular/core';
+import { Component, inject, computed, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { DashboardDataService } from '../services/dashboard-data.service';
@@ -16,7 +16,7 @@ interface DashboardStat {
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, RouterModule],
   template: `
     <div class="page-container animate-up">
@@ -301,6 +301,27 @@ interface DashboardStat {
        .u-display-name { font-size: 1.5rem; }
        .c-body { flex-direction: column; align-items: flex-start; }
     }
+    @media (max-width: 768px) {
+       .compliance-glass { padding: 24px; }
+       .u-display-name { font-size: 1.3rem; letter-spacing: -0.5px; }
+       .c-body { gap: 24px; }
+       .c-footer { gap: 24px; flex-wrap: wrap; }
+       .luxury-chart-surface { padding: 0 20px 30px 20px; }
+       .chart-bars-elite { gap: 8px; }
+       .command-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+       .cmd-tile { padding: 16px; }
+       .bar-elite { max-width: 36px; }
+    }
+    @media (max-width: 480px) {
+       .compliance-glass { padding: 20px 16px; }
+       .c-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+       .c-footer { gap: 16px; }
+       .u-display-name { font-size: 1.2rem; }
+       .command-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+       .cmd-tile { padding: 14px 10px; gap: 8px; }
+       .cmd-tile span { font-size: 0.8rem; }
+       .luxury-chart-surface { height: 200px; }
+    }
   `]
 })
 export class DashboardComponent implements OnInit {
@@ -377,7 +398,7 @@ export class DashboardComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.dashboardData.refreshData().subscribe();
+    // Data is now prefetched by AuthService on login/startup
   }
 
   calculateDash(): number {

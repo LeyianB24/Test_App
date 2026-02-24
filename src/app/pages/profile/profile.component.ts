@@ -1,4 +1,4 @@
-import { Component, inject, computed, signal } from '@angular/core';
+import { Component, inject, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -6,7 +6,7 @@ import { DashboardDataService } from '../../services/dashboard-data.service';
 
 @Component({
   selector: 'app-profile',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule],
   template: `
     <div class="page-container animate-up">
@@ -304,6 +304,19 @@ import { DashboardDataService } from '../../services/dashboard-data.service';
 
     @media (max-width: 1200px) {
        .profile-grid-luxury { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+       .id-header-v { flex-direction: column; text-align: center; gap: 20px; }
+       .id-footer-v { flex-direction: column; gap: 20px; text-align: center; }
+       .isu-divider { display: none; }
+       .id-name-elite { font-size: 1.8rem; }
+       .p-val { font-size: 1rem; }
+       .luxury-info-stack { padding: 20px; gap: 24px; }
+       .li-val { font-size: 1rem; }
+       .luxury-mandate-list { padding: 20px; }
+       .mandate-item-elite { padding: 16px; gap: 12px; }
+       .m-icon-box { width: 36px; height: 36px; font-size: 0.8rem; }
+       .m-title { font-size: 0.9rem; }
     }
   `]
 })

@@ -1,13 +1,13 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-forgot-password',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, NgOptimizedImage],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, NgOptimizedImage],
   template: `
     <div class="auth-layout login-scene">
       <!-- Fixed Background Layer -->
@@ -38,7 +38,7 @@ import { AuthService } from '../services/auth.service';
 
             <!-- Form Area -->
             <div class="auth-form-luxury mt-32" *ngIf="!showSuccess()">
-              <form (ngSubmit)="onSubmit()" class="recovery-form">
+              <form [formGroup]="recoveryForm" (ngSubmit)="onSubmit()" class="recovery-form">
                 
                 <div class="form-group-luxury">
                   <label>Registered Taxpayer PIN</label>
@@ -47,11 +47,8 @@ import { AuthService } from '../services/auth.service';
                     <input 
                       type="text" 
                       class="elite-input-luxury with-icon" 
-                      [(ngModel)]="taxpayer_id" 
-                      name="taxpayer_id" 
+                      formControlName="taxpayer_id" 
                       placeholder="e.g. A000123456Z"
-                      [disabled]="isSubmitting()"
-                      required
                     >
                   </div>
                 </div>
@@ -67,7 +64,7 @@ import { AuthService } from '../services/auth.service';
                     <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     Back to Authentication
                   </button>
-                  <button type="submit" class="modern-btn primary-btn elite-glow" [disabled]="!taxpayer_id || isSubmitting()">
+                  <button type="submit" class="modern-btn primary-btn elite-glow" [disabled]="recoveryForm.invalid || isSubmitting()">
                     <span *ngIf="!isSubmitting()">Authorize Recovery</span>
                     <span *ngIf="isSubmitting()" class="loader-flex">
                        <div class="mini-spinner"></div>
@@ -178,6 +175,7 @@ import { AuthService } from '../services/auth.service';
     .mt-48 { margin-top: 48px; }
 
     @media (max-width: 600px) {
+      .auth-view-scroller { padding: 20px 12px; }
       .elite-auth-card { padding: 40px 24px; }
       .stage-footer { flex-direction: column-reverse; }
       .stage-footer button { width: 100%; }
@@ -186,20 +184,26 @@ import { AuthService } from '../services/auth.service';
 })
 export class ForgotPasswordComponent {
   private authService = inject(AuthService);
+  private fb = inject(FormBuilder);
   
-  taxpayer_id = '';
+  recoveryForm = this.fb.group({
+    taxpayer_id: ['', Validators.required]
+  });
+
   maskedEmail = signal('');
   isSubmitting = signal(false);
   errorMessage = signal('');
   showSuccess = signal(false);
 
   onSubmit() {
-    if (!this.taxpayer_id) return;
+    if (this.recoveryForm.invalid) return;
 
     this.isSubmitting.set(true);
     this.errorMessage.set('');
+    
+    const { taxpayer_id } = this.recoveryForm.getRawValue();
 
-    this.authService.forgotPassword(this.taxpayer_id).subscribe({
+    this.authService.forgotPassword(taxpayer_id!).subscribe({
       next: (response: any) => {
         this.isSubmitting.set(false);
         if (response.success) {

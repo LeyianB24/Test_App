@@ -111,4 +111,13 @@ export class UserDataService {
     const user = this.userData();
     return user?.type === 'individual';
   }
+  /**
+   * Set data from external source (AuthService)
+   */
+  setData(user: any) {
+    if (user) {
+      console.log('🔄 UserDataService: Manual state sync');
+      this.userData.set(user);
+    }
+  }
 }

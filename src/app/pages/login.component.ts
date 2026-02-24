@@ -1,7 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { LoginCredentials } from '../models/app.models';
@@ -9,8 +9,8 @@ import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, NgOptimizedImage],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, NgOptimizedImage],
   template: `
     <div class="auth-layout login-scene">
       <!-- Fixed Background Layer -->
@@ -33,9 +33,9 @@ import { environment } from '../../environments/environment';
               </div>
             </div>
 
-              <div class="remember-row mt-12">
+              <div class="remember-row mt-12" [formGroup]="loginForm">
                 <label class="remember-me" style="color: rgba(255,255,255,0.6); font-weight:700;">
-                  <input type="checkbox" [(ngModel)]="rememberMe" /> Remember Me
+                  <input type="checkbox" formControlName="rememberMe" /> Remember Me
                 </label>
               </div>
 
@@ -46,8 +46,8 @@ import { environment } from '../../environments/environment';
             </div>
 
             <!-- System Status Badges (Premium Status Bar) -->
-            <div class="status-bar-elite mt-24" *ngIf="systemStatus">
-              <div class="status-indicator" *ngFor="let portal of systemStatus">
+            <div class="status-bar-elite mt-24" *ngIf="systemStatus()">
+              <div class="status-indicator" *ngFor="let portal of systemStatus()">
                 <div class="dot" [class.online]="portal.online" [class.offline]="!portal.online"></div>
                 <span class="portal-name">{{ portal.name }}</span>
                 <span class="portal-latency" *ngIf="portal.online">{{ portal.latency }}</span>
@@ -55,18 +55,15 @@ import { environment } from '../../environments/environment';
             </div>
 
             <!-- Form Area -->
-            <form (ngSubmit)="onLogin()" class="auth-form-luxury mt-32">
+            <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form-luxury mt-32">
               <div class="form-group-luxury">
                 <label>Taxpayer PIN / User ID</label>
                 <div class="luxury-input-wrapper">
                   <svg class="input-icon-elite" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-width="2.5"/></svg>
                   <input
                     type="text"
-                    name="taxpayer_id"
-                    [(ngModel)]="credentials().taxpayer_id"
+                    formControlName="taxpayer_id"
                     placeholder="e.g. A000123456Z"
-                    [disabled]="isLoading()"
-                    required
                     class="elite-input-luxury with-icon"
                     autocomplete="username"
                   />
@@ -82,11 +79,8 @@ import { environment } from '../../environments/environment';
                   <svg class="input-icon-elite" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2.5"/></svg>
                   <input
                     [type]="showPassword() ? 'text' : 'password'"
-                    name="password"
-                    [(ngModel)]="credentials().password"
+                    formControlName="password"
                     placeholder="••••••••••••"
-                    [disabled]="isLoading()"
-                    required
                     class="elite-input-luxury with-icon"
                     autocomplete="current-password"
                   />
@@ -102,7 +96,7 @@ import { environment } from '../../environments/environment';
                  <span>{{ errorMessage() }}</span>
               </div>
 
-              <button type="submit" class="modern-btn primary-btn full-width elite-glow mt-40" [disabled]="isLoading()">
+              <button type="submit" class="modern-btn primary-btn full-width elite-glow mt-40" [disabled]="isLoading() || loginForm.invalid">
                 <span *ngIf="!isLoading()">Sign In to Portal</span>
                 <span *ngIf="isLoading()" class="loader-flex">
                    <div class="mini-spinner"></div>
@@ -141,6 +135,57 @@ import { environment } from '../../environments/environment';
     </div>
   `,
   styles: [`
+    .login-scene { 
+      min-height: 100vh; position: relative; background: #0a0a0b; overflow: hidden;
+    }
+    .bg-image-container {
+      position: fixed; inset: 0;
+      background-image: url('/assets/kra_background.png');
+      background-size: cover; background-position: center; z-index: 1;
+    }
+    .bg-overlay {
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at center, rgba(10, 10, 11, 0.75) 0%, rgba(10, 10, 11, 0.98) 100%);
+    }
+
+    .auth-view-scroller {
+      position: relative; z-index: 10; height: 100vh; overflow-y: auto; display: flex; align-items: center; justify-content: center; padding: 40px 20px;
+    }
+    .auth-container { width: 100%; max-width: 620px; }
+
+    .elite-auth-card {
+      background: rgba(255, 255, 255, 0.03);
+      -webkit-backdrop-filter: blur(32px); backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 48px;
+      padding: 60px; box-shadow: 0 50px 150px rgba(0,0,0,0.6);
+    }
+
+    .auth-brand-box { display: flex; align-items: center; gap: 24px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 32px; }
+    .logo-wrapper-luxury { background: white; padding: 12px; border-radius: 22px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(255,255,255,0.1); }
+    .hub-tag { display: block; color: var(--kra-red); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+    .auth-title-elite { font-size: 3rem; font-weight: 900; color: white; margin: 0; letter-spacing: -2px; line-height: 1; }
+
+    .auth-header-mini h2 { font-size: 1.5rem; font-weight: 800; color: white; margin: 0; letter-spacing: -0.5px; }
+    .auth-header-mini p { color: rgba(255,255,255,0.45); font-size: 1rem; margin-top: 8px; }
+
+    .form-group-luxury { display: flex; flex-direction: column; gap: 12px; }
+    .form-group-luxury label { font-size: 0.8rem; font-weight: 800; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; }
+
+    .luxury-input-wrapper { position: relative; }
+    .input-icon-elite { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.25); pointer-events: none; }
+    
+    .elite-input-luxury {
+      width: 100%; padding: 18px 24px; background: rgba(255,255,255,0.04);
+      border: 2px solid rgba(255,255,255,0.08); border-radius: 20px;
+      color: white; font-size: 1.1rem; font-weight: 600; font-family: inherit;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .elite-input-luxury.with-icon { padding-left: 64px; }
+    .elite-input-luxury:focus { 
+      background: rgba(255,255,255,0.06); border-color: var(--kra-red); outline: none;
+      box-shadow: 0 0 0 6px rgba(227, 30, 36, 0.15); transform: translateY(-2px);
+    }
+
     .status-bar-elite {
       display: flex; align-items: center; justify-content: space-around;
       background: rgba(255,255,255,0.02); padding: 16px; border-radius: 24px;
@@ -152,19 +197,49 @@ import { environment } from '../../environments/environment';
     .dot.offline { background: #ff4444; color: #ff4444; }
     .portal-name { font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.5px; }
     .portal-latency { font-size: 0.65rem; color: rgba(255,255,255,0.3); font-family: monospace; }
+
+    .auth-error-glass { background: rgba(227, 30, 36, 0.1); border: 1px solid rgba(227, 30, 36, 0.2); color: #ff9a9c; padding: 18px; border-radius: 20px; display: flex; align-items: center; gap: 14px; font-weight: 700; font-size: 0.95rem; }
+    .eye-toggle-luxury { position: absolute; right: 24px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .eye-toggle-luxury:hover { color: white; }
+
+    .auth-footer-luxury p { color: rgba(255,255,255,0.4); font-size: 1rem; font-weight: 600; }
+    .reg-link-bold { color: white; font-weight: 800; text-decoration: underline; text-underline-offset: 6px; margin-left: 8px; transition: 0.3s; }
+    .reg-link-bold:hover { color: var(--kra-red); }
+
+    .security-seal-mini { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.75rem; color: rgba(255,255,255,0.2); font-weight: 800; text-transform: uppercase; letter-spacing: 2.5px; }
+    .gradient-text { background: var(--kra-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    
+    .mini-spinner { width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid white; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .mt-24 { margin-top: 24px; }
+    .mt-32 { margin-top: 32px; }
+    .mt-40 { margin-top: 40px; }
+    .mt-48 { margin-top: 48px; }
+
+    /* Responsive login */
+    @media (max-width: 480px) {
+      .auth-view-scroller { padding: 20px 12px; }
+      .elite-auth-card { padding: 40px 24px; }
+    }
   `]
 })
 export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private http = inject(HttpClient);
+  private fb = inject(FormBuilder);
 
-  credentials = signal<LoginCredentials>({ taxpayer_id: '', password: '' });
-  rememberMe = false;
+  loginForm = this.fb.group({
+    taxpayer_id: ['', Validators.required],
+    password: ['', Validators.required],
+    rememberMe: [false]
+  });
+
   isLoading = signal(false);
   errorMessage = signal<string>('');
   showPassword = signal(false);
-  systemStatus: any = null;
+  systemStatus = signal<any>(null);
   statusKeys: string[] = [];
 
   constructor() {
@@ -172,9 +247,15 @@ export class LoginComponent {
   }
 
   onLogin() {
+    if (this.loginForm.invalid) return;
+
     this.isLoading.set(true);
     this.errorMessage.set('');
-    this.authService.login(this.credentials(), this.rememberMe).subscribe({
+    
+    const { taxpayer_id, password, rememberMe } = this.loginForm.getRawValue();
+    const credentials = { taxpayer_id: taxpayer_id!, password: password! };
+
+    this.authService.login(credentials, !!rememberMe).subscribe({
       next: (response) => {
         this.isLoading.set(false);
         if (response.success && response.data?.user) {
@@ -198,7 +279,7 @@ export class LoginComponent {
     this.http.get<any>(`${environment.apiUrl}/status_check.php`).subscribe({
       next: (res) => {
         if (res && res.success) {
-          this.systemStatus = res.data;
+          this.systemStatus.set(res.data);
         }
       },
       error: () => { /* Fail silently */ }

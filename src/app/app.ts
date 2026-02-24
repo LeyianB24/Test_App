@@ -92,12 +92,6 @@ export class AppComponent implements OnInit {
 
   // Initialize user data on app startup if authenticated
   ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      const user = this.authService.getCurrentUser();
-      if (user) {
-        console.log('🔄 App: Loading user data on startup...');
-        this.userDataService.loadUserData(user.taxpayer_id).subscribe();
-      }
-    }
+    // Session context is now handled automatically by AuthService constructor subscription
   }
 }

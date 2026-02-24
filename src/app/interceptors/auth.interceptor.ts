@@ -154,13 +154,12 @@ function handleHttpError(
  */
 function isAuthEndpoint(url: string): boolean {
   const authEndpoints = [
-    'auth/login',
-    'auth/register',
-    'auth/refresh',
-    'auth/forgot-password',
-    'auth/reset-password',
-    'auth/verify',
-    'auth/check-email'
+    'auth_jwt.php',
+    'auth_secure.php',
+    'auth_register.php',
+    'auth_forgot_password.php',
+    'auth_update_password.php',
+    'status_check.php',
   ];
 
   return authEndpoints.some(endpoint => url.includes(endpoint));

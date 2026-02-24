@@ -54,10 +54,10 @@ export const routes: Routes = [
     path: 'tax-engine',
     canActivate: [authGuard],
     children: [
-      { path: 'client', data: { slug: 'tax-engine/client' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent) },
+      { path: 'client', data: { slug: 'tax-engine/client' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/tax-engine/reconciliation.component').then(m => m.ReconciliationComponent) },
       { path: 'mpesa-analyser', data: { slug: 'tax-engine/mpesa-analyser' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/tax-engine/mpesa-analyser.component').then(m => m.MpesaAnalyserComponent) },
       { path: 'file/nil-return', data: { slug: 'tax-engine/file/nil-return' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/tax-engine/nil-return-wizard.component').then(m => m.NilReturnWizardComponent) },
-      { path: 'file/tot', data: { slug: 'tax-engine/file/tot' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent) },
+      { path: 'file/tot', data: { slug: 'tax-engine/file/tot' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/tax-engine/tot-wizard.component').then(m => m.TotWizardComponent) },
       { path: 'file/mri', data: { slug: 'tax-engine/file/mri' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent) },
       { path: 'calculators', data: { slug: 'tax-engine/calculators' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/tax-engine/tax-calculators.component').then(m => m.TaxCalculatorsComponent) },
     ]
@@ -68,9 +68,28 @@ export const routes: Routes = [
     path: 'checkers',
     canActivate: [authGuard],
     children: [
-      { path: 'pin', data: { slug: 'checkers/pin' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent) },
-      { path: 'tcc', data: { slug: 'checkers/tcc' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent) },
-      { path: 'prn', data: { slug: 'checkers/prn' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent) },
+      { path: 'pin', data: { slug: 'checkers/pin' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/checkers/pin-checker.component').then(m => m.PinCheckerComponent) },
+      { path: 'tcc', data: { slug: 'checkers/tcc' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/checkers/tcc-checker.component').then(m => m.TccCheckerComponent) },
+      { path: 'prn', data: { slug: 'checkers/prn' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/checkers/prn-checker.component').then(m => m.PrnCheckerComponent) },
+    ]
+  },
+
+  // Specialized Services
+  {
+    path: 'specialized',
+    canActivate: [authGuard],
+    children: [
+      { path: 'custom-declaration', data: { slug: 'specialized/custom-declaration' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/specialized/custom-declaration.component').then(m => m.CustomDeclarationComponent) }
+    ]
+  },
+
+  // Notification & Calendar
+  {
+    path: 'notifications',
+    canActivate: [authGuard],
+    children: [
+      { path: 'hub', data: { slug: 'notifications/hub' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/notifications/notification-hub.component').then(m => m.NotificationHubComponent) },
+      { path: 'calendar', data: { slug: 'notifications/calendar' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/notifications/deadline-calendar.component').then(m => m.DeadlineCalendarComponent) }
     ]
   },
 
@@ -154,7 +173,7 @@ export const routes: Routes = [
         title: 'KRA iTax | System Audit logs',
         canActivate: [permissionGuard],
         data: { slug: 'audit' },
-        loadComponent: () => import('./pages/admin-dashboard.component').then(m => m.AdminDashboardComponent)
+        loadComponent: () => import('./pages/admin/audit-log.component').then(m => m.AuditLogComponent)
       }
     ]
   },

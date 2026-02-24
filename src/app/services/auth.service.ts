@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { tap, catchError, switchMap } from 'rxjs/operators';
 import { User, LoginCredentials, AuthResponse } from '../models/app.models';
 import { UserDataService } from './user-data.service';
+import { DashboardDataService } from './dashboard-data.service';
 
 /**
  * AuthService - Manages user authentication and session state
@@ -17,6 +18,7 @@ import { UserDataService } from './user-data.service';
 export class AuthService {
   private http = inject(HttpClient);
   private userDataService = inject(UserDataService);
+  private dashboardData = inject(DashboardDataService);
   private apiUrl = 'http://localhost/itax/kra-api';
 
   // Reactive State (Source of Truth)
@@ -42,10 +44,28 @@ export class AuthService {
       this.currentUser.set(user);
       if (user) {
         this.fetchUserPages();
+        this.loadSessionContext();
       } else {
         this.userPages.set([]);
       }
     });
+  }
+
+  loadSessionContext() {
+    this.isLoading.set(true);
+    return this.http.get<any>(`${this.apiUrl}/get_taxpayer_data.php`, { withCredentials: true }).pipe(
+      tap(res => {
+        this.isLoading.set(false);
+        if (res.success && res.data) {
+          this.userDataService.setData(res.data.user || res.data); 
+          this.dashboardData.setData(res.data);
+        }
+      }),
+      catchError((_err: unknown) => {
+        this.isLoading.set(false);
+        return of(null);
+      })
+    ).subscribe();
   }
 
   fetchUserPages() {
@@ -72,28 +92,21 @@ export class AuthService {
    * Login method
    */
   login(credentials: LoginCredentials, rememberMe: boolean = false): Observable<AuthResponse> {
-    console.log('🔐 AuthService: Attempting login for Taxpayer ID:', credentials.taxpayer_id);
     this.isLoading.set(true);
 
     return this.http.post<any>(`${this.apiUrl}/auth_jwt.php?action=login`, credentials, { withCredentials: true }).pipe(
       tap(response => {
         this.isLoading.set(false);
-
         if (response.success && response.data && response.data.user) {
           const { user, tokens } = response.data;
           if (tokens) this.setTokensInStorage(tokens, rememberMe);
           this.setUserInStorage(user, tokens?.access_token);
+          // This triggers the constructor subscription which calls fetchUserPages() in background
           this.currentUserSubject.next(user);
-          
-          // Successfully logged in, fetch permissions
-          this.fetchUserPages();
-
-          console.log('✅ Login successful:', user.name);
         }
       }),
       catchError(error => {
         this.isLoading.set(false);
-        console.error('❌ Login error:', error);
         return of({
           success: false,
           message: error.error?.message || 'Connection failed'
