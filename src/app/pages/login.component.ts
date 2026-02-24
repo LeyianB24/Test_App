@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { LoginCredentials } from '../models/app.models';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -119,6 +120,19 @@ import { LoginCredentials } from '../models/app.models';
                  <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.946-2.597 9.289-6.5 11.534-3.903-2.245-6.5-6.588-6.5-11.534 0-.68.056-1.35.166-2.001zm8.334 1.5a1 1 0 10-2 0V9H7a1 1 0 100 2h1.5v2.5a1 1 0 102 0V11H12a1 1 0 100-2h-1.5V6.499z" clip-rule="evenodd"/></svg>
                  <span>Government Grade Encryption Active</span>
               </div>
+
+              <!-- Strategic Branding -->
+              <div class="auth-strategic-branding mt-32">
+                <div class="branding-divider"></div>
+                <div class="branding-logos">
+                  <div class="partner-logo-box">
+                    <img ngSrc="assets/itax.jpeg" width="100" height="40" alt="iTax" class="strategic-logo">
+                  </div>
+                  <div class="partner-logo-box">
+                    <img ngSrc="assets/vision_2030.png" width="100" height="40" alt="Vision 2030" class="strategic-logo">
+                  </div>
+                </div>
+              </div>
             </div>
 
 
@@ -204,10 +218,36 @@ import { LoginCredentials } from '../models/app.models';
     .mt-40 { margin-top: 40px; }
     .mt-48 { margin-top: 48px; }
     .text-center { text-align: center; }
+    
+    .auth-strategic-branding {
+      width: 100%; margin-top: 40px;
+    }
+    .branding-divider {
+      height: 1px; width: 100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+      margin-bottom: 24px;
+    }
+    .branding-logos {
+      display: flex; align-items: center; justify-content: center; gap: 32px;
+    }
+    .partner-logo-box {
+      opacity: 0.6; filter: grayscale(1);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: crosshair;
+    }
+    .partner-logo-box:hover {
+      opacity: 1; filter: grayscale(0);
+      transform: scale(1.1);
+    }
+    .strategic-logo {
+      max-height: 48px; width: auto; object-fit: contain;
+    }
 
     @media (max-width: 600px) {
       .elite-auth-card { padding: 40px 24px; }
       .auth-title-elite { font-size: 2.5rem; }
+      .branding-logos { gap: 20px; }
+      .strategic-logo { max-height: 36px; }
     }
   `]
 })
@@ -253,7 +293,7 @@ export class LoginComponent {
 
   private fetchSystemStatus() {
     try {
-      this.http.get<any>('http://localhost/itax/kra-api/status.php').subscribe({
+      this.http.get<any>(`${environment.apiUrl}/status.php`).subscribe({
         next: (res) => {
           if (res && res.data) {
             this.systemStatus = res.data;

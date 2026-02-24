@@ -18,28 +18,25 @@ export class AuthService {
   private http = inject(HttpClient);
   private userDataService = inject(UserDataService);
   private apiUrl = 'http://localhost/itax/kra-api';
-  isLoading = signal(false);
 
-  // Private BehaviorSubject to manage authentication state
+  // Reactive State (Source of Truth)
   private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
-
-  // Public Observable for components to subscribe to
   public currentUser$ = this.currentUserSubject.asObservable();
-
-  // Signals for reactive UI updates
-  public isAuthenticated = signal<boolean>(this.currentUserSubject.value !== null);
+  
+  // Signals for reactive UI (Driven by the subject for backward compatibility but using a single set point)
   public currentUser = signal<User | null>(this.currentUserSubject.value);
+  public isAuthenticated = computed(() => this.currentUser() !== null);
+  public isLoading = signal(false);
 
-  // Computed signal for user display name
-  public userName = computed(() => this.currentUser()?.name || 'Guest');
+  // Computed signal for user display name and metadata
+  public userName = computed(() => this.currentUser()?.name || 'Authorized Taxpayer');
   public userType = computed(() => this.currentUser()?.type || 'individual');
   public userRole = computed(() => this.currentUser()?.role || '');
 
   constructor() {
-    // Subscribe to user changes to update signals
+    // Sync the signal with the subject once
     this.currentUser$.subscribe(user => {
       this.currentUser.set(user);
-      this.isAuthenticated.set(user !== null);
     });
   }
 

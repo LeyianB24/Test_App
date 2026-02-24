@@ -499,7 +499,38 @@ body.dark-theme .alert-content h3 { color: #FECACA; }
 .social-link svg { width: 18px; height: 18px; fill: var(--text-main); }
 .social-link:hover { background: var(--kra-red); border-color: var(--kra-red); }
 .social-link:hover svg { fill: white; }
-.footer-bottom { background-color: var(--bg-surface); text-align: center; padding: 20px; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-color); }
+.footer-bottom { background-color: var(--bg-surface); border-top: 1px solid var(--border-color); padding: 30px 20px; }
+.footer-baseline { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 40px; }
+.footer-baseline p { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin: 0; }
+
+/* Enhanced Branding Layout */
+.footer-branding-top {
+  max-width: 1200px; margin: 0 auto 40px auto; padding: 0 0 30px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.f-top-logo-box {
+  display: inline-flex; background: white; padding: 12px 24px; border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.4s;
+}
+.f-top-logo-box:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+.f-logo-top {
+  height: 60px; width: auto; object-fit: contain; position: relative !important;
+}
+
+.f-bottom-logo-box {
+  background: white; padding: 10px 20px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-sm); transition: 0.4s;
+}
+.f-bottom-logo-box:hover { transform: scale(1.05); }
+.f-logo-bottom {
+  height: 50px; width: auto; object-fit: contain; position: relative !important;
+}
+
+@media (max-width: 768px) {
+  .footer-baseline { flex-direction: column; text-align: center; gap: 24px; }
+  .footer-branding-top { text-align: center; }
+}
 
 /* =========================================
    12. ELITE DESIGN SYSTEM (Core Components)

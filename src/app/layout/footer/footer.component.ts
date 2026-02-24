@@ -1,12 +1,18 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgOptimizedImage],
   template: `
     <footer class="main-footer">
+      <div class="footer-branding-top">
+        <div class="f-top-logo-box">
+          <img ngSrc="assets/itax.jpeg" width="180" height="70" alt="iTax" class="f-logo-top">
+        </div>
+      </div>
+
       <div class="footer-content">
 
         <div class="footer-col brand-col">
@@ -59,9 +65,12 @@ import { CommonModule } from '@angular/common';
       </div>
 
       <div class="footer-bottom">
-        <p>
-          &copy; {{ currentYear }} Kenya Revenue Authority. All Rights Reserved.
-         
+        <div class="footer-baseline">
+          <p>&copy; {{ currentYear }} Kenya Revenue Authority. All Rights Reserved.</p>
+          <div class="f-bottom-logo-box">
+             <img ngSrc="assets/vision_2030.png" width="150" height="60" alt="Vision 2030" class="f-logo-bottom">
+          </div>
+        </div>
       </div>
     </footer>
   `

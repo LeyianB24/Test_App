@@ -5,6 +5,7 @@ import { RouterModule, Router } from '@angular/router';
 import { LogoComponent } from '../../components/logo.component';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
+import { environment } from '../../../environments/environment';
 
 interface MenuItem {
   label: string;
@@ -233,12 +234,12 @@ export class SidebarComponent {
 
   private loadNavigation() {
     // Fetch navigation based on user role permissions
-    this.http.get<any>('http://localhost/itax/kra-api/admin_role_matrix.php?action=get_navigation').subscribe({
+    this.http.get<any>(`${environment.apiUrl}/admin_role_matrix.php?action=get_navigation`, { withCredentials: true }).subscribe({
       next: (res) => {
         if (res && res.data && res.data.pages) {
           this.menuItems = res.data.pages.map((p: any) => ({
             label: p.title,
-            route: '/' + p.slug.replace(/\//g, '-'),
+            route: '/' + p.slug,
             iconPath: p.iconPath || 'M4 6h16'
           }));
         }

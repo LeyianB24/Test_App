@@ -3,10 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
+import { environment } from '../../environments/environment';
+
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost/itax/kra-api';
+  private apiUrl = environment.apiUrl;
 
   getMatrix(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/admin_role_matrix.php?action=get_matrix`)

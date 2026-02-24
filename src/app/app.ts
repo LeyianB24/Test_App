@@ -1,7 +1,6 @@
 import { HeaderComponent } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { Component, inject, computed, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router } from '@angular/router';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { AuthService } from './services/auth.service';
@@ -12,41 +11,43 @@ import { DashboardDataService } from './services/dashboard-data.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, SidebarComponent, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, SidebarComponent, HeaderComponent, FooterComponent],
   template: `
-    <div class="loading-overlay" *ngIf="isLoading()">
-      <div class="spinner"></div>
-    </div>
-    
-    <!-- Show layout only when authenticated -->
-    <div class="dashboard-container" *ngIf="isAuthenticated(); else loginView">
+    @if (isLoading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+      </div>
+    }
 
-        <app-sidebar
-            [collapsed]="isCollapsed"
-            [isMobileOpen]="isMobileOpen"
-            (toggle)="toggleSidebar()"
-            (closeMobile)="isMobileOpen = false"
-            (logout)="handleLogout()">
-        </app-sidebar>
+    @if (isAuthenticated()) {
+      <!-- Show layout when authenticated -->
+      <div class="dashboard-container">
 
-        <main class="main-content" [class.expanded]="isCollapsed">
-
-            <app-header
-              (toggleSidebar)="handleSidebarToggle()"
+          <app-sidebar
+              [collapsed]="isCollapsed"
+              [isMobileOpen]="isMobileOpen"
+              (toggle)="toggleSidebar()"
+              (closeMobile)="isMobileOpen = false"
               (logout)="handleLogout()">
-            </app-header>
+          </app-sidebar>
 
-            <div class="content-wrapper">
-                <router-outlet></router-outlet>
-                <app-footer></app-footer>
-            </div>
-        </main>
-    </div>
+          <main class="main-content" [class.expanded]="isCollapsed">
 
-    <!-- Login view (no layout) -->
-    <ng-template #loginView>
+              <app-header
+                (toggleSidebar)="handleSidebarToggle()"
+                (logout)="handleLogout()">
+              </app-header>
+
+              <div class="content-wrapper">
+                  <router-outlet></router-outlet>
+                  <app-footer></app-footer>
+              </div>
+          </main>
+      </div>
+    } @else {
+      <!-- Guest view (login/register/forgot-password, no layout) -->
       <router-outlet></router-outlet>
-    </ng-template>
+    }
   `
 })
 export class AppComponent implements OnInit {

@@ -89,12 +89,6 @@ export const routes: Routes = [
   //   canActivate: [authGuard],
   //   loadComponent: () => import('./pages/obligations-enhanced.component').then(m => m.ObligationsEnhancedComponent)
   // },
-  // {
-  //   path: 'admin-dashboard',
-  //   title: 'KRA iTax | Admin Dashboard',
-  //   canActivate: [authGuard],
-  //   loadComponent: () => import('./pages/admin-dashboard.component').then(m => m.AdminDashboardComponent)
-  // },
 
   // Real-time operations
   // {
@@ -160,6 +154,24 @@ export const routes: Routes = [
   {
     path: 'admin',
     children: [
+      {
+        path: 'dashboard',
+        title: 'KRA iTax | Admin Dashboard',
+        canActivate: [adminGuard],
+        loadComponent: () => import('./pages/admin-dashboard.component').then(m => m.AdminDashboardComponent)
+      },
+      {
+        path: 'clients',
+        title: 'KRA iTax | Client Management',
+        canActivate: [adminGuard],
+        loadComponent: () => import('./pages/admin-clients.component').then(m => m.AdminClientsComponent)
+      },
+      {
+        path: 'reports',
+        title: 'KRA iTax | System Reports',
+        canActivate: [adminGuard],
+        loadComponent: () => import('./pages/admin-reports.component').then(m => m.AdminReportsComponent)
+      },
       {
         path: 'role-matrix',
         title: 'KRA iTax | Role-Based Permission Matrix',
