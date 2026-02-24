@@ -23,12 +23,15 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
   public currentUser$ = this.currentUserSubject.asObservable();
   
-  // Signals for reactive UI (Driven by the subject for backward compatibility but using a single set point)
+  // Signals for reactive UI
   public currentUser = signal<User | null>(this.currentUserSubject.value);
   public isAuthenticated = computed(() => this.currentUser() !== null);
   public isLoading = signal(false);
+  
+  // New: Page-level permissions
+  public userPages = signal<any[]>([]);
 
-  // Computed signal for user display name and metadata
+  // Computed signals for user metadata
   public userName = computed(() => this.currentUser()?.name || 'Authorized Taxpayer');
   public userType = computed(() => this.currentUser()?.type || 'individual');
   public userRole = computed(() => this.currentUser()?.role || '');
@@ -37,38 +40,55 @@ export class AuthService {
     // Sync the signal with the subject once
     this.currentUser$.subscribe(user => {
       this.currentUser.set(user);
+      if (user) {
+        this.fetchUserPages();
+      } else {
+        this.userPages.set([]);
+      }
     });
+  }
+
+  fetchUserPages() {
+    return this.http.get<any>(`${this.apiUrl}/admin_role_matrix.php?action=get_navigation`, { withCredentials: true })
+      .subscribe(res => {
+        if (res.success && res.data && res.data.pages) {
+          this.userPages.set(res.data.pages);
+        }
+      });
+  }
+
+  checkPermission(slug: string): boolean {
+    const user = this.currentUser();
+    if (!user) return false;
+    
+    // SUPER_ADMIN has god-mode
+    if (user.role?.toUpperCase() === 'SUPER_ADMIN') return true;
+    
+    // Check if slug exists in allowed pages
+    return this.userPages().some(p => p.slug === slug);
   }
 
   /**
    * Login method
-   * @param credentials - User PIN and password
-   * @returns Observable<AuthResponse>
    */
   login(credentials: LoginCredentials, rememberMe: boolean = false): Observable<AuthResponse> {
     console.log('🔐 AuthService: Attempting login for Taxpayer ID:', credentials.taxpayer_id);
     this.isLoading.set(true);
 
-    // POST to new JWT auth endpoint (falls back to ?action=login)
     return this.http.post<any>(`${this.apiUrl}/auth_jwt.php?action=login`, credentials, { withCredentials: true }).pipe(
       tap(response => {
         this.isLoading.set(false);
 
         if (response.success && response.data && response.data.user) {
           const { user, tokens } = response.data;
-
-          // Persist tokens according to rememberMe
           if (tokens) this.setTokensInStorage(tokens, rememberMe);
-
-          // Store user in localStorage
           this.setUserInStorage(user, tokens?.access_token);
-
-          // Update BehaviorSubject
           this.currentUserSubject.next(user);
+          
+          // Successfully logged in, fetch permissions
+          this.fetchUserPages();
 
           console.log('✅ Login successful:', user.name);
-        } else {
-          console.log('❌ Login failed:', response.message);
         }
       }),
       catchError(error => {

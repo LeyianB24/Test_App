@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, guestGuard, adminGuard } from './guards/auth.guard';
+import { authGuard, guestGuard, adminGuard, permissionGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   // Login route (accessible only when not authenticated)
@@ -15,115 +15,62 @@ export const routes: Routes = [
     canActivate: [guestGuard],
     loadComponent: () => import('./pages/forgot-password.component').then(m => m.ForgotPasswordComponent)
   },
-  {
-    path: 'registration',
-    title: 'KRA iTax | Taxpayer Enrollment',
-    canActivate: [guestGuard],
-    loadComponent: () => import('./pages/registration.component').then(m => m.RegistrationComponent)
-  },
 
   // Default redirect to login
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  // Protected routes (require authentication)
+  // Protected routes (require authentication + permission check)
   {
     path: 'dashboard',
     title: 'KRA iTax | Smart Dashboard',
-    canActivate: [authGuard],
+    canActivate: [authGuard, permissionGuard],
+    data: { slug: 'dashboard' },
     loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent)
   },
   {
     path: 'returns',
     title: 'KRA iTax | Returns Filing Hub',
-    canActivate: [authGuard],
+    canActivate: [authGuard, permissionGuard],
+    data: { slug: 'tax-engine/file/income-tax' }, // Mapping legacy path to new slug structure
     loadComponent: () => import('./pages/returns.component').then(m => m.ReturnsComponent)
   },
   {
     path: 'payments',
     title: 'KRA iTax | Secure Payments',
-    canActivate: [authGuard],
+    canActivate: [authGuard, permissionGuard],
+    data: { slug: 'tax-engine/payments' },
     loadComponent: () => import('./pages/payments-enhanced.component').then(m => m.PaymentsEnhancedComponent)
-  },
-  {
-    path: 'debt',
-    title: 'KRA iTax | Debt Management',
-    canActivate: [authGuard],
-    loadComponent: () => import('./pages/debt.component').then(m => m.DebtComponent)
   },
   {
     path: 'etims',
     title: 'KRA iTax | eTIMS Invoicing',
-    canActivate: [authGuard],
+    canActivate: [authGuard, permissionGuard],
+    data: { slug: 'tax-engine/etims' },
     loadComponent: () => import('./pages/etims.component').then(m => m.EtimsComponent)
   },
-  {
-    path: 'profile',
-    title: 'KRA iTax | Taxpayer Profile',
-    canActivate: [authGuard],
-    loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent)
-  },
-  {
-    path: 'settings',
-    title: 'KRA iTax | System Settings',
-    canActivate: [authGuard],
-    loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent)
-  },
 
-  // Enhanced pages (Session 3 - Super Enhancement)
-  // Temporarily disabled - contain structural errors that prevent build
-  // {
-  //   path: 'returns-enhanced',
-  //   title: 'KRA iTax | Tax Returns Management',
-  //   canActivate: [authGuard],
-  //   loadComponent: () => import('./pages/returns-enhanced.component').then(m => m.ReturnsEnhancedComponent)
-  // },
-  // {
-  //   path: 'invoices-enhanced',
-  //   title: 'KRA iTax | Invoice Management',
-  //   canActivate: [authGuard],
-  //   loadComponent: () => import('./pages/invoices-enhanced.component').then(m => m.InvoicesEnhancedComponent)
-  // },
-  // {
-  //   path: 'obligations-enhanced',
-  //   title: 'KRA iTax | Tax Obligations Tracker',
-  //   canActivate: [authGuard],
-  //   loadComponent: () => import('./pages/obligations-enhanced.component').then(m => m.ObligationsEnhancedComponent)
-  // },
-
-  // Real-time operations
-  // {
-  //   path: 'payment-tracker',
-  //   title: 'KRA iTax | Real-Time Payment Tracker',
-  //   canActivate: [authGuard],
-  //   loadComponent: () => import('./pages/real-time-payment-tracker.component').then(m => m.RealTimePaymentTrackerComponent)
-  // },
-  // {
-  //   path: 'batch-operations',
-  //   title: 'KRA iTax | Batch Operations Manager',
-  //   canActivate: [authGuard],
-  //   loadComponent: () => import('./pages/batch-operations.component').then(m => m.BatchOperationsComponent)
-  // },
-
-  // Tax Returns routes (Phase 4)
+  // Tax Expert Engine (Guided Wizards)
   {
-    path: 'tax-returns',
+    path: 'tax-engine',
     canActivate: [authGuard],
     children: [
-      {
-        path: '',
-        title: 'KRA iTax | Tax Returns Management',
-        loadComponent: () => import('./pages/return-list.component').then(m => m.ReturnListComponent)
-      },
-      {
-        path: 'create',
-        title: 'KRA iTax | Create Tax Return',
-        loadComponent: () => import('./pages/return-create.component').then(m => m.ReturnCreateComponent)
-      },
-      {
-        path: ':id',
-        title: 'KRA iTax | Return Details',
-        loadComponent: () => import('./pages/return-detail.component').then(m => m.ReturnDetailComponent)
-      }
+      { path: 'client', data: { slug: 'tax-engine/client' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent) },
+      { path: 'mpesa-analyser', data: { slug: 'tax-engine/mpesa-analyser' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/tax-engine/mpesa-analyser.component').then(m => m.MpesaAnalyserComponent) },
+      { path: 'file/nil-return', data: { slug: 'tax-engine/file/nil-return' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/tax-engine/nil-return-wizard.component').then(m => m.NilReturnWizardComponent) },
+      { path: 'file/tot', data: { slug: 'tax-engine/file/tot' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent) },
+      { path: 'file/mri', data: { slug: 'tax-engine/file/mri' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent) },
+      { path: 'calculators', data: { slug: 'tax-engine/calculators' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/tax-engine/tax-calculators.component').then(m => m.TaxCalculatorsComponent) },
+    ]
+  },
+
+  // KRA Checkers
+  {
+    path: 'checkers',
+    canActivate: [authGuard],
+    children: [
+      { path: 'pin', data: { slug: 'checkers/pin' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent) },
+      { path: 'tcc', data: { slug: 'checkers/tcc' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent) },
+      { path: 'prn', data: { slug: 'checkers/prn' }, canActivate: [permissionGuard], loadComponent: () => import('./pages/dashboard.component').then(m => m.DashboardComponent) },
     ]
   },
 
@@ -133,52 +80,90 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
+        path: 'dashboard',
+        title: 'KRA iTax | Helpdesk Dashboard',
+        canActivate: [permissionGuard],
+        data: { slug: 'tickets' },
+        loadComponent: () => import('./pages/helpdesk/helpdesk-dashboard.component').then(m => m.HelpdeskDashboardComponent)
+      },
+      {
         path: '',
         title: 'KRA iTax | Support Tickets',
+        canActivate: [permissionGuard],
+        data: { slug: 'tickets' },
         loadComponent: () => import('./pages/ticket-list.component').then(m => m.TicketListComponent)
       },
       {
         path: 'create',
         title: 'KRA iTax | Create Ticket',
+        canActivate: [permissionGuard],
+        data: { slug: 'tickets' },
         loadComponent: () => import('./pages/ticket-create.component').then(m => m.TicketCreateComponent)
       },
       {
-        path: ':id',
-        title: 'KRA iTax | Ticket Details',
-        loadComponent: () => import('./pages/ticket-detail.component').then(m => m.TicketDetailComponent)
+        path: 'knowledge-base',
+        title: 'KRA iTax | Support Knowledge Base',
+        canActivate: [permissionGuard],
+        data: { slug: 'kb' },
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./pages/helpdesk/kb-list.component').then(m => m.KbListComponent)
+          },
+          {
+            path: 'category/:id',
+            loadComponent: () => import('./pages/helpdesk/kb-category.component').then(m => m.KbCategoryComponent)
+          },
+          {
+            path: 'article/:slug',
+            loadComponent: () => import('./pages/helpdesk/kb-article.component').then(m => m.KbArticleComponent)
+          }
+        ]
       }
     ]
   },
 
-  // Admin-only routes (require admin role)
+  // Admin Module
   {
     path: 'admin',
+    canActivate: [authGuard],
     children: [
       {
         path: 'dashboard',
         title: 'KRA iTax | Admin Dashboard',
-        canActivate: [adminGuard],
+        canActivate: [permissionGuard],
+        data: { slug: 'dashboard' },
         loadComponent: () => import('./pages/admin-dashboard.component').then(m => m.AdminDashboardComponent)
       },
       {
         path: 'clients',
         title: 'KRA iTax | Client Management',
-        canActivate: [adminGuard],
+        canActivate: [permissionGuard],
+        data: { slug: 'clients' },
         loadComponent: () => import('./pages/admin-clients.component').then(m => m.AdminClientsComponent)
-      },
-      {
-        path: 'reports',
-        title: 'KRA iTax | System Reports',
-        canActivate: [adminGuard],
-        loadComponent: () => import('./pages/admin-reports.component').then(m => m.AdminReportsComponent)
       },
       {
         path: 'role-matrix',
         title: 'KRA iTax | Role-Based Permission Matrix',
-        canActivate: [adminGuard],
+        canActivate: [permissionGuard],
+        data: { slug: 'role-matrix' },
         loadComponent: () => import('./pages/admin-role-matrix.component').then(m => m.AdminRoleMatrixComponent)
+      },
+      {
+        path: 'audit',
+        title: 'KRA iTax | System Audit logs',
+        canActivate: [permissionGuard],
+        data: { slug: 'audit' },
+        loadComponent: () => import('./pages/admin-dashboard.component').then(m => m.AdminDashboardComponent)
       }
     ]
+  },
+
+  {
+    path: 'profile',
+    title: 'KRA iTax | Taxpayer Profile',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent)
   },
 
   // Fallback for unknown routes

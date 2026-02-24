@@ -45,13 +45,12 @@ import { environment } from '../../environments/environment';
               <p>Securely log in to your digital taxpayer terminal</p>
             </div>
 
-            <!-- System Status Badges -->
-            <div class="system-status-row mt-16" *ngIf="systemStatus">
-              <div class="status-item" *ngFor="let k of statusKeys">
-                <span class="status-name">{{ k }}:</span>
-                <span class="status-value" [ngClass]="{'online': systemStatus[k].online, 'offline': !systemStatus[k].online}">
-                  {{ systemStatus[k].online ? 'Online ✓' : 'Offline ✗' }}
-                </span>
+            <!-- System Status Badges (Premium Status Bar) -->
+            <div class="status-bar-elite mt-24" *ngIf="systemStatus">
+              <div class="status-indicator" *ngFor="let portal of systemStatus">
+                <div class="dot" [class.online]="portal.online" [class.offline]="!portal.online"></div>
+                <span class="portal-name">{{ portal.name }}</span>
+                <span class="portal-latency" *ngIf="portal.online">{{ portal.latency }}</span>
               </div>
             </div>
 
@@ -142,113 +141,17 @@ import { environment } from '../../environments/environment';
     </div>
   `,
   styles: [`
-    .login-scene {
-      min-height: 100vh; position: relative; background: #0a0a0b; overflow: hidden;
+    .status-bar-elite {
+      display: flex; align-items: center; justify-content: space-around;
+      background: rgba(255,255,255,0.02); padding: 16px; border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.05);
     }
-    .bg-image-container {
-      position: fixed; inset: 0;
-      background-image: url('/assets/kra_background.png');
-      background-size: cover; background-position: center; z-index: 1;
-    }
-    .bg-overlay {
-      position: absolute; inset: 0;
-      background: radial-gradient(circle at center, rgba(10, 10, 11, 0.75) 0%, rgba(10, 10, 11, 0.98) 100%);
-    }
-
-    .auth-view-scroller {
-      position: relative; z-index: 10; height: 100vh; overflow-y: auto; display: flex; align-items: center; justify-content: center; padding: 40px 20px;
-    }
-    .auth-container { width: 100%; max-width: 580px; }
-
-    .elite-auth-card {
-      background: rgba(255, 255, 255, 0.03);
-      -webkit-backdrop-filter: blur(32px); backdrop-filter: blur(32px);
-      border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 48px;
-      padding: 60px; box-shadow: 0 50px 150px rgba(0,0,0,0.6);
-    }
-
-    .auth-brand-box { display: flex; align-items: center; gap: 24px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 32px; }
-    .logo-wrapper-luxury { background: white; padding: 14px; border-radius: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(255,255,255,0.1); }
-    .hub-tag { display: block; color: var(--kra-red); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
-    .auth-title-elite { font-size: 3rem; font-weight: 900; color: white; margin: 0; letter-spacing: -2px; line-height: 1; }
-
-    .auth-header-mini h2 { font-size: 1.5rem; font-weight: 800; color: white; margin: 0; letter-spacing: -0.5px; }
-    .auth-header-mini p { color: rgba(255,255,255,0.45); font-size: 1rem; margin-top: 8px; }
-
-    .form-group-luxury { display: flex; flex-direction: column; gap: 12px; }
-    .form-group-luxury label { font-size: 0.8rem; font-weight: 800; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; }
-
-    .luxury-input-wrapper { position: relative; }
-    .input-icon-elite { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.25); pointer-events: none; }
-    .eye-toggle-luxury { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.2); cursor: pointer; padding: 8px; border-radius: 12px; transition: 0.3s; }
-    .eye-toggle-luxury:hover { color: white; background: rgba(255,255,255,0.05); }
-
-    .elite-input-luxury {
-      width: 100%; padding: 18px 24px; background: rgba(255,255,255,0.04);
-      border: 2px solid rgba(255,255,255,0.08); border-radius: 20px;
-      color: white; font-size: 1.1rem; font-weight: 600; font-family: inherit;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .elite-input-luxury.with-icon { padding-left: 64px; }
-    .elite-input-luxury:focus {
-      background: rgba(255,255,255,0.06); border-color: var(--kra-red); outline: none;
-      box-shadow: 0 0 0 6px rgba(227, 30, 36, 0.15); transform: translateY(-2px);
-    }
-
-    .label-flex-elite { display: flex; justify-content: space-between; align-items: center; }
-    .auth-link-elite { color: rgba(255,255,255,0.3); font-size: 0.85rem; font-weight: 700; text-decoration: none; transition: 0.3s; }
-    .auth-link-elite:hover { color: white; }
-
-    .auth-error-glass { background: rgba(227, 30, 36, 0.1); border: 1px solid rgba(227, 30, 36, 0.2); color: #ff9a9c; padding: 18px; border-radius: 20px; display: flex; align-items: center; gap: 14px; font-weight: 700; font-size: 0.95rem; }
-
-    .full-width { width: 100%; }
-    .elite-glow:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-    .loader-flex { display: flex; align-items: center; justify-content: center; gap: 12px; }
-    .mini-spinner { width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid white; border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .auth-footer-luxury p { color: rgba(255,255,255,0.4); font-size: 1.05rem; font-weight: 600; }
-    .reg-link-bold { color: var(--kra-red); font-weight: 800; text-decoration: none; margin-left: 6px; }
-    .reg-link-bold:hover { text-decoration: underline; }
-    .security-seal-mini { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.7rem; color: rgba(255,255,255,0.25); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
-
-    .gradient-text { background: var(--kra-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .mt-24 { margin-top: 24px; }
-    .mt-32 { margin-top: 32px; }
-    .mt-40 { margin-top: 40px; }
-    .mt-48 { margin-top: 48px; }
-    .text-center { text-align: center; }
-    
-    .auth-strategic-branding {
-      width: 100%; margin-top: 40px;
-    }
-    .branding-divider {
-      height: 1px; width: 100%;
-      background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
-      margin-bottom: 24px;
-    }
-    .branding-logos {
-      display: flex; align-items: center; justify-content: center; gap: 32px;
-    }
-    .partner-logo-box {
-      opacity: 0.6; filter: grayscale(1);
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      cursor: crosshair;
-    }
-    .partner-logo-box:hover {
-      opacity: 1; filter: grayscale(0);
-      transform: scale(1.1);
-    }
-    .strategic-logo {
-      max-height: 48px; width: auto; object-fit: contain;
-    }
-
-    @media (max-width: 600px) {
-      .elite-auth-card { padding: 40px 24px; }
-      .auth-title-elite { font-size: 2.5rem; }
-      .branding-logos { gap: 20px; }
-      .strategic-logo { max-height: 36px; }
-    }
+    .status-indicator { display: flex; align-items: center; gap: 8px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 10px currentColor; }
+    .dot.online { background: #00ff88; color: #00ff88; }
+    .dot.offline { background: #ff4444; color: #ff4444; }
+    .portal-name { font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.5px; }
+    .portal-latency { font-size: 0.65rem; color: rgba(255,255,255,0.3); font-family: monospace; }
   `]
 })
 export class LoginComponent {
@@ -292,20 +195,13 @@ export class LoginComponent {
   }
 
   private fetchSystemStatus() {
-    try {
-      this.http.get<any>(`${environment.apiUrl}/status.php`).subscribe({
-        next: (res) => {
-          if (res && res.data) {
-            this.systemStatus = res.data;
-            this.statusKeys = Object.keys(this.systemStatus).filter(k => k !== 'timestamp');
-          }
-        },
-        error: () => {
-          // ignore
+    this.http.get<any>(`${environment.apiUrl}/status_check.php`).subscribe({
+      next: (res) => {
+        if (res && res.success) {
+          this.systemStatus = res.data;
         }
-      });
-    } catch (e) {
-      // ignore
-    }
+      },
+      error: () => { /* Fail silently */ }
+    });
   }
 }
