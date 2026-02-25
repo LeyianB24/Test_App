@@ -109,8 +109,14 @@ export const routes: Routes = [
         path: '',
         title: 'KRA iTax | Support Tickets',
         canActivate: [permissionGuard],
-        data: { slug: 'tickets' },
         loadComponent: () => import('./pages/ticket-list.component').then(m => m.TicketListComponent)
+      },
+      {
+        path: ':id',
+        title: 'KRA iTax | Ticket Details',
+        canActivate: [permissionGuard],
+        data: { slug: 'tickets' },
+        loadComponent: () => import('./pages/ticket-detail.component').then(m => m.TicketDetailComponent)
       },
       {
         path: 'create',

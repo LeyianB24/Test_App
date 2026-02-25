@@ -47,16 +47,29 @@ import { KbService, KbArticle } from '../../services/kb.service';
           <footer class="mt-12 pt-8 border-t border-slate-50 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="help-section">
               <h4 class="font-bold text-slate-800 mb-1">Was this article helpful?</h4>
-              <div class="flex gap-3">
-                <button class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-green-50 hover:border-green-200 hover:text-green-700 transition-all flex items-center gap-2">
-                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M14 10h4.708c.954 0 1.708.754 1.708 1.708 0 .153-.021.304-.061.448l-1.444 5.278c-.287 1.05-1.238 1.774-2.324 1.774H7V10l3-5c.5-.5 1.5-.5 1.5 1v4h2.5z" stroke-width="2"/></svg>
-                  Yes
-                </button>
-                <button class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-red-50 hover:border-red-200 hover:text-red-700 transition-all flex items-center gap-2">
-                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="transform: scaleY(-1)"><path d="M14 10h4.708c.954 0 1.708.754 1.708 1.708 0 .153-.021.304-.061.448l-1.444 5.278c-.287 1.05-1.238 1.774-2.324 1.774H7V10l3-5c.5-.5 1.5-.5 1.5 1v4h2.5z" stroke-width="2"/></svg>
-                  No
-                </button>
-              </div>
+              @if (!feedbackSent()) {
+                <div class="flex gap-3">
+                  <button 
+                    (click)="sendFeedback(true)"
+                    class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-green-50 hover:border-green-200 hover:text-green-700 transition-all flex items-center gap-2"
+                  >
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M14 10h4.708c.954 0 1.708.754 1.708 1.708 0 .153-.021.304-.061.448l-1.444 5.278c-.287 1.05-1.238 1.774-2.324 1.774H7V10l3-5c.5-.5 1.5-.5 1.5 1v4h2.5z" stroke-width="2"/></svg>
+                    Yes
+                  </button>
+                  <button 
+                    (click)="sendFeedback(false)"
+                    class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-red-50 hover:border-red-200 hover:text-red-700 transition-all flex items-center gap-2"
+                  >
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="transform: scaleY(-1)"><path d="M14 10h4.708c.954 0 1.708.754 1.708 1.708 0 .153-.021.304-.061.448l-1.444 5.278c-.287 1.05-1.238 1.774-2.324 1.774H7V10l3-5c.5-.5 1.5-.5 1.5 1v4h2.5z" stroke-width="2"/></svg>
+                    No
+                  </button>
+                </div>
+              } @else {
+                <p class="text-green-600 font-bold animate-fade-in flex items-center gap-2">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                  Thank you for your feedback!
+                </p>
+              }
             </div>
 
             <button 
@@ -93,6 +106,7 @@ export class KbArticleComponent implements OnInit {
   private route = inject(ActivatedRoute);
   
   article = signal<KbArticle | null>(null);
+  feedbackSent = signal(false);
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -109,5 +123,10 @@ export class KbArticleComponent implements OnInit {
         this.article.set(res.data);
       }
     });
+  }
+
+  sendFeedback(isHelpful: boolean) {
+    // In a real app, this would call an API
+    this.feedbackSent.set(true);
   }
 }
