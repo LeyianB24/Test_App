@@ -65,11 +65,8 @@ export class AppComponent implements OnInit {
   userData = this.userDataService.currentUser;
   userName = computed(() => this.userData()?.name || this.authService.userName());
   station = this.dashboardData.station;
-  isLoading = computed(() => 
-    this.dashboardData.isLoading() || 
-    this.authService.isLoading() || 
-    this.userDataService.isLoadingUser()
-  );
+  // We only show the global loading overlay while the initial auth state is unknown
+  isLoading = computed(() => !this.authService.isInitialized());
 
   handleSidebarToggle() {
     if (window.innerWidth <= 768) {

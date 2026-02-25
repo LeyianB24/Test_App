@@ -29,6 +29,7 @@ export class AuthService {
   public currentUser = signal<User | null>(this.currentUserSubject.value);
   public isAuthenticated = computed(() => this.currentUser() !== null);
   public isLoading = signal(false);
+  public isInitialized = signal(false); // Tracks if initial session check is done
   
   // New: Page-level permissions
   public userPages = signal<any[]>([]);
@@ -47,26 +48,27 @@ export class AuthService {
         this.loadSessionContext();
       } else {
         this.userPages.set([]);
+        this.isInitialized.set(true); // If no user, we are initialized (guest state)
       }
     });
   }
 
   loadSessionContext() {
-    this.isLoading.set(true);
     return this.http.get<any>(`${this.apiUrl}/get_taxpayer_data.php`, { withCredentials: true }).pipe(
       tap(res => {
-        this.isLoading.set(false);
         if (res.success && res.data) {
           this.userDataService.setData(res.data.user || res.data); 
           this.dashboardData.setData(res.data);
         }
+        this.isInitialized.set(true);
       }),
       catchError((_err: unknown) => {
-        this.isLoading.set(false);
+        this.isInitialized.set(true);
         return of(null);
       })
     ).subscribe();
   }
+
 
   fetchUserPages() {
     return this.http.get<any>(`${this.apiUrl}/admin_role_matrix.php?action=get_navigation`, { withCredentials: true })

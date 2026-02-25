@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router'; // Needed for the RouterOutlet
-import { AppComponent } from './app'; // Matches the class name in app.ts
-// This import will error until we create the file in the next step
+import { provideRouter } from '@angular/router';
+import { AppComponent } from './app';
 import { NotificationService } from './notification/notification.service';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('AppComponent', () => {
+
   beforeEach(async () => {
     // We create a "Fake" notification service so the test doesn't crash
     const notificationSpy = { show: vi.fn() };
