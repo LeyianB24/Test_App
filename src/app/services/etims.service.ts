@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Invoice } from '../models/app.models';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EtimsService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost/itax/kra-api/etims_actions.php';
+  private apiUrl = `${environment.apiUrl}/etims_actions.php`;
   
   private invoices = signal<Invoice[]>([]);
   

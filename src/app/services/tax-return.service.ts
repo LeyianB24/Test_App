@@ -2,6 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface TaxReturn {
   id: number;
@@ -65,7 +66,7 @@ export interface ReturnDeadline {
   providedIn: 'root'
 })
 export class TaxReturnService {
-  private apiUrl = '/kra-api/tax_returns_api.php';
+  private apiUrl = `${environment.apiUrl}/tax_returns_api.php`;
 
   // Signals for state management
   returnsSignal = signal<TaxReturn[]>([]);

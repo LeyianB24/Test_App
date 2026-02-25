@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { Observable, tap } from 'rxjs';
 export class DashboardDataService {
   private http = inject(HttpClient);
   
-  private apiUrl = 'http://localhost/itax/kra-api/get_taxpayer_data.php';
+  private apiUrl = `${environment.apiUrl}/get_taxpayer_data.php`;
   
   isLoading = signal(false);
   obligations = signal<any[]>([]);

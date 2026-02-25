@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { TaxReturn } from '../models/app.models';
 import { Observable, throwError } from 'rxjs';
 import { tap, map, catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReturnsService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost/itax/kra-api/returns_api_v2.php';
+  private apiUrl = `${environment.apiUrl}/returns_api_v2.php`;
 
   private returns = signal<TaxReturn[]>([]);
 

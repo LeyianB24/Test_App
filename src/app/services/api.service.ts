@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, retry, timeout } from 'rxjs/operators';
 import { NotificationService } from './notification.service';
+import { environment } from '../../environments/environment';
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -26,7 +27,7 @@ export class ApiService {
   private http = inject(HttpClient);
   private notificationService = inject(NotificationService);
 
-  private readonly API_BASE_URL = 'http://localhost/itax/kra-api';
+  private readonly API_BASE_URL = environment.apiUrl;
   private readonly TIMEOUT = 30000; // 30 seconds
   private readonly MAX_RETRIES = 3;
 

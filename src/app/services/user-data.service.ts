@@ -4,13 +4,14 @@ import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { User } from '../models/app.models';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserDataService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost/itax/kra-api';
+  private apiUrl = environment.apiUrl;
 
   // Signal-based state management
   private userData = signal<User | null>(null);

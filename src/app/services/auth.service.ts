@@ -6,11 +6,12 @@ import { tap, catchError, switchMap } from 'rxjs/operators';
 import { User, LoginCredentials, AuthResponse } from '../models/app.models';
 import { UserDataService } from './user-data.service';
 import { DashboardDataService } from './dashboard-data.service';
+import { environment } from '../../environments/environment';
 
 /**
  * AuthService - Manages user authentication and session state
  *
- * Connected to PHP Backend at: http://localhost/kra-api/
+ * Connected to PHP Backend at: API URL
  */
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private userDataService = inject(UserDataService);
   private dashboardData = inject(DashboardDataService);
-  private apiUrl = 'http://localhost/itax/kra-api';
+  private apiUrl = environment.apiUrl;
 
   // Reactive State (Source of Truth)
   private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());

@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Payment } from '../models/app.models';
 import { map, tap, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PaymentService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost/itax/kra-api/payments_api_v2.php';
+  private apiUrl = `${environment.apiUrl}/payments_api_v2.php`;
 
   // Signals to hold state
   payments = signal<Payment[]>([]);
