@@ -1,7 +1,7 @@
 import { Component, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { PaymentService } from '../services/payment.service';
+import { PaymentService } from '../../../services/payment.service';
 
 @Component({
   selector: 'app-debt',

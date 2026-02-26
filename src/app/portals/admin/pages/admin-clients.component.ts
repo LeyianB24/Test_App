@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AdminClientsService, ClientData } from '../services/admin-clients.service';
+import { AdminClientsService, ClientData } from '../../../services/admin-clients.service';
 
 @Component({
   selector: 'app-admin-clients',

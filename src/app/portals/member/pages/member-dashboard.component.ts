@@ -15,7 +15,7 @@ interface DashboardStat {
 }
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-member-dashboard',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, RouterModule],
   template: `

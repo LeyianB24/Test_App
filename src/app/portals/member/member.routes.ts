@@ -178,6 +178,11 @@ export const memberRoutes: Routes = [
         title: 'KRA iTax | My Profile',
         loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent)
       },
+      {
+        path: 'settings',
+        title: 'KRA iTax | Gateway Settings',
+        loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent)
+      },
     ]
   }
 ];

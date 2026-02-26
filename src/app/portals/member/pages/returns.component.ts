@@ -1,7 +1,7 @@
 import { Component, inject, computed, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ReturnsService } from '../services/returns.service';
+import { ReturnsService } from '../../../services/returns.service';
 
 @Component({
   selector: 'app-returns',

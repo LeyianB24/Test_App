@@ -1,10 +1,10 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MpesaService, MpesaSTKPush, PaymentTracking } from '../services/mpesa.service';
-import { ValidationService } from '../services/validation.service';
-import { ExportService } from '../services/export.service';
-import { NotificationService } from '../services/notification.service';
+import { MpesaService, MpesaSTKPush, PaymentTracking } from '../../../services/mpesa.service';
+import { ValidationService } from '../../../services/validation.service';
+import { ExportService } from '../../../services/export.service';
+import { NotificationService } from '../../../services/notification.service';
 
 interface PaymentFormData {
   phone: string;

@@ -1,14 +1,14 @@
 import { Component, inject, signal, effect, computed, ViewChild } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PaymentService } from '../services/payment.service';
-import { ApiService } from '../services/api.service';
-import { DataTableComponent, TableColumn, TableAction } from '../components/data-table/data-table.component';
-import { PaymentFormComponent } from '../components/payment-form/payment-form.component';
-import { NotificationService } from '../services/notification.service';
-import { SkeletonLoaderComponent } from '../components/skeleton-loader/skeleton-loader.component';
-import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
-import { TooltipComponent } from '../components/tooltip/tooltip.component';
+import { PaymentService } from '../../../services/payment.service';
+import { ApiService } from '../../../services/api.service';
+import { DataTableComponent, TableColumn, TableAction } from '../../../components/data-table/data-table.component';
+import { PaymentFormComponent } from '../../../components/payment-form/payment-form.component';
+import { NotificationService } from '../../../services/notification.service';
+import { SkeletonLoaderComponent } from '../../../components/skeleton-loader/skeleton-loader.component';
+import { ToastContainerComponent } from '../../../components/toast-container/toast-container.component';
+import { TooltipComponent } from '../../../components/tooltip/tooltip.component';
 
 interface Payment {
   id: number;

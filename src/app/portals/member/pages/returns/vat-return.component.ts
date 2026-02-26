@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -179,7 +179,7 @@ import { RouterModule } from '@angular/router';
       background: #1e293b;
       border: 2px solid #334155;
       display: flex;
-      items-center;
+      align-items: center;
       justify-content: center;
       color: #64748b;
       font-weight: 700;
@@ -232,7 +232,7 @@ export class VatReturnComponent {
     declaration: [false, Validators.requiredTrue]
   });
 
-  constructor(private fb: FormBuilder) {}
+  constructor() {}
 
   nextStep() {
     if (this.currentStep() < 4) {
@@ -260,4 +260,4 @@ export class VatReturnComponent {
   }
 }
 
-import { inject } from '@angular/core';
+

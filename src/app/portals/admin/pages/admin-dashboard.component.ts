@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdminDashboardService, AdminDashboardSummary, PortalStatus } from '../services/admin-dashboard.service';
+import { AdminDashboardService, AdminDashboardSummary, PortalStatus } from '../../../services/admin-dashboard.service';
 import { forkJoin } from 'rxjs';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { EtimsService } from '../services/etims.service';
+import { EtimsService } from '../../../services/etims.service';
 
 @Component({
   selector: 'app-etims',
