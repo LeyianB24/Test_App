@@ -69,16 +69,17 @@ import { PaymentService } from '../../../services/payment.service';
 
         <div class="premium-stat-card animate-up delay-3">
           <div class="stat-icon-wrapper blue">
-             <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-width="2.2"/></svg>
+             <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4M7.835 4.697a.75.75 0 00-1.282.645A12.01 12.01 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016a.75.75 0 00-1.094-.571 12.002 12.002 0 01-8.69 0z" stroke-width="2.2"/></svg>
           </div>
           <div class="stat-info">
-            <span class="stat-label">Growth Coefficient</span>
+            <span class="stat-label">Compliance Integrity Score</span>
             <div class="stat-value-group">
-               <h3 class="stat-number">1.0% <span class="unit-text">PER CYCLE</span></h3>
+               <h3 class="stat-number">{{ complianceScore() }}% <span class="unit-text">VERIFIED</span></h3>
             </div>
           </div>
         </div>
       </div>
+
 
       <!-- Main Ledger Decomposition -->
       <div class="content-card-premium mt-32 animate-up delay-2">
@@ -177,6 +178,7 @@ export class DebtComponent {
   private router = inject(Router);
 
   debts = signal<any[]>([]);
+  complianceScore = signal<number>(0);
 
   totalDebt = computed(() => {
     return this.debts().reduce((sum: number, d: any) => sum + d.principal + d.interest + d.penalty, 0);
@@ -186,7 +188,15 @@ export class DebtComponent {
     this.paymentService.getLiabilities().subscribe(data => {
       this.debts.set(data);
     });
+
+    this.paymentService.getObligationStats().subscribe((stats: any) => {
+      if (stats) {
+        this.complianceScore.set(stats.complianceScore || 0);
+      }
+    });
+
   }
+
 
   downloadStatement() {
     alert('Generating Sovereign Ledger Statement (PDF)...');

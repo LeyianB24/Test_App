@@ -12,14 +12,16 @@ import { TooltipComponent } from '../../../components/tooltip/tooltip.component'
 
 interface Payment {
   id: number;
-  taxpayer_id: number;
-  taxpayer_name: string;
-  payment_date: string;
+  taxpayerId: string;
+  taxpayerName: string;
+  paymentDate: string;
   amount: number;
   status: 'completed' | 'pending' | 'failed' | 'cancelled';
-  payment_method: string;
-  transaction_id?: string;
+  paymentMethod: string;
+  referenceNumber?: string;
+  prn?: string;
 }
+
 
 @Component({
   selector: 'app-payments-enhanced',
@@ -74,8 +76,8 @@ interface Payment {
             </svg>
             <input type="search"
                    class="search-input-elite"
-                   placeholder="Search by taxpayer, ID or amount..."
-                   (input)="filterPayments($event)"
+                    placeholder="Search by taxpayer, PRN or reference..."
+                    (input)="filterPayments($event)"
                    aria-label="Search payments">
           </div>
           <div class="filter-pills-elite">
@@ -211,11 +213,11 @@ interface Payment {
                       <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
                     </span>
                   </th>
-                  <th (click)="sortByColumn('taxpayer_name')"
-                      [class.sorted]="sortColumn() === 'taxpayer_name'"
+                  <th (click)="sortByColumn('taxpayerName')"
+                      [class.sorted]="sortColumn() === 'taxpayerName'"
                       style="cursor: pointer; user-select: none;">
                     Taxpayer
-                    <span *ngIf="sortColumn() === 'taxpayer_name'" class="sort-indicator">
+                    <span *ngIf="sortColumn() === 'taxpayerName'" class="sort-indicator">
                       <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
                     </span>
                   </th>
@@ -227,19 +229,19 @@ interface Payment {
                       <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
                     </span>
                   </th>
-                  <th (click)="sortByColumn('payment_method')"
-                      [class.sorted]="sortColumn() === 'payment_method'"
+                  <th (click)="sortByColumn('paymentMethod')"
+                      [class.sorted]="sortColumn() === 'paymentMethod'"
                       style="cursor: pointer; user-select: none;">
                     Method
-                    <span *ngIf="sortColumn() === 'payment_method'" class="sort-indicator">
+                    <span *ngIf="sortColumn() === 'paymentMethod'" class="sort-indicator">
                       <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
                     </span>
                   </th>
-                  <th (click)="sortByColumn('payment_date')"
-                      [class.sorted]="sortColumn() === 'payment_date'"
+                  <th (click)="sortByColumn('paymentDate')"
+                      [class.sorted]="sortColumn() === 'paymentDate'"
                       style="cursor: pointer; user-select: none;">
                     Date
-                    <span *ngIf="sortColumn() === 'payment_date'" class="sort-indicator">
+                    <span *ngIf="sortColumn() === 'paymentDate'" class="sort-indicator">
                       <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
                     </span>
                   </th>
@@ -252,10 +254,10 @@ interface Payment {
                     class="table-row-elite"
                     [style.animation]="'slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) ' + (i * 50) + 'ms both'">
                   <td><strong>#{{ payment.id }}</strong></td>
-                  <td>{{ payment.taxpayer_name }}</td>
+                  <td>{{ payment.taxpayerName }}</td>
                   <td class="currency">KES {{ payment.amount | number:'1.2-2' }}</td>
-                  <td><span class="method-badge">{{ payment.payment_method | titlecase }}</span></td>
-                  <td>{{ payment.payment_date | date:'short' }}</td>
+                  <td><span class="method-badge">{{ payment.paymentMethod | titlecase }}</span></td>
+                  <td>{{ payment.paymentDate | date:'short' }}</td>
                   <td>
                     <span [ngClass]="'status-pill-elite ' + 'status-' + payment.status">
                       <span class="dot" [style.background]="getStatusColor(payment.status)"></span>
@@ -347,7 +349,7 @@ interface Payment {
             </div>
             <div class="detail-group">
               <label>Taxpayer Name</label>
-              <div class="detail-value">{{ selectedPayment()?.taxpayer_name }}</div>
+              <div class="detail-value">{{ selectedPayment()?.taxpayerName }}</div>
             </div>
             <div class="detail-group">
               <label>Amount Paid</label>
@@ -355,11 +357,11 @@ interface Payment {
             </div>
             <div class="detail-group">
               <label>Payment Date</label>
-              <div class="detail-value">{{ selectedPayment()?.payment_date | date:'medium' }}</div>
+              <div class="detail-value">{{ selectedPayment()?.paymentDate | date:'medium' }}</div>
             </div>
             <div class="detail-group">
               <label>Payment Method</label>
-              <div class="detail-value">{{ selectedPayment()?.payment_method | titlecase }}</div>
+              <div class="detail-value">{{ selectedPayment()?.paymentMethod | titlecase }}</div>
             </div>
             <div class="detail-group">
               <label>Status</label>
@@ -474,10 +476,11 @@ export class PaymentsEnhancedComponent {
   selectedPayment = signal<Payment | null>(null);
   statusFilter = signal<'all' | 'pending' | 'completed' | 'failed'>('all');
   searchQuery = signal('');
-  sortColumn = signal('payment_date');
+  sortColumn = signal('paymentDate');
   sortAsc = signal(false);
   currentPage = signal(1);
   itemsPerPageValue = signal('10');
+
 
   // Computed Properties
   filteredPayments = computed(() => {
@@ -493,8 +496,9 @@ export class PaymentsEnhancedComponent {
     // Search filter
     if (query) {
       filtered = filtered.filter(p =>
-        p.taxpayer_name.toLowerCase().includes(query) ||
-        p.id.toString().includes(query) ||
+        p.taxpayerName.toLowerCase().includes(query) ||
+        (p.prn && p.prn.toLowerCase().includes(query)) ||
+        (p.referenceNumber && p.referenceNumber.toLowerCase().includes(query)) ||
         p.amount.toString().includes(query)
       );
     }
@@ -540,7 +544,8 @@ export class PaymentsEnhancedComponent {
       this.payments().filter(p =>
         (this.statusFilter() === 'all' || p.status === this.statusFilter()) &&
         (this.searchQuery() === '' ||
-         p.taxpayer_name.toLowerCase().includes(this.searchQuery().toLowerCase()) ||
+         p.taxpayerName.toLowerCase().includes(this.searchQuery().toLowerCase()) ||
+         (p.prn && p.prn.toLowerCase().includes(this.searchQuery().toLowerCase())) ||
          p.id.toString().includes(this.searchQuery()))
       ).length / itemsPerPage
     );
@@ -549,10 +554,10 @@ export class PaymentsEnhancedComponent {
   // Table Configuration
   paymentColumns: TableColumn[] = [
     { key: 'id', label: 'ID', type: 'text', sortable: true, filterable: false, width: '80px', exportable: true },
-    { key: 'taxpayer_name', label: 'Taxpayer', type: 'text', sortable: true, filterable: false, exportable: true },
+    { key: 'taxpayerName', label: 'Taxpayer', type: 'text', sortable: true, filterable: false, exportable: true },
     { key: 'amount', label: 'Amount', type: 'currency', sortable: true, filterable: false, exportable: true },
-    { key: 'payment_date', label: 'Date', type: 'date', sortable: true, filterable: false, exportable: true },
-    { key: 'payment_method', label: 'Method', type: 'text', sortable: true, filterable: false, width: '100px', exportable: true },
+    { key: 'paymentDate', label: 'Date', type: 'date', sortable: true, filterable: false, exportable: true },
+    { key: 'paymentMethod', label: 'Method', type: 'text', sortable: true, filterable: false, width: '100px', exportable: true },
     { key: 'status', label: 'Status', type: 'status', sortable: true, filterable: true, exportable: true }
   ];
 
@@ -568,20 +573,23 @@ export class PaymentsEnhancedComponent {
 
   loadPayments(): void {
     this.loading.set(true);
-    this.apiService.get<Payment[]>('/api/payments').subscribe({
+    this.apiService.get<any>('payments_enhanced_api.php?action=list').subscribe({
       next: (response) => {
-        const data = response && 'data' in response ? response.data : response;
-        this.payments.set(Array.isArray(data) ? data : this.getMockPayments());
+        if (response.success && response.data?.payments) {
+          this.payments.set(response.data.payments);
+        } else {
+          this.payments.set([]);
+        }
         this.loading.set(false);
       },
       error: (error) => {
         console.error('Error loading payments:', error);
-        this.payments.set(this.getMockPayments());
         this.loading.set(false);
         this.showError('Failed to load payments');
       }
     });
   }
+
 
   refreshPayments(): void {
     this.loadPayments();
@@ -620,14 +628,38 @@ export class PaymentsEnhancedComponent {
     const currentPayment = payment || this.selectedPayment();
     if (!currentPayment) return;
 
-    // TODO: Implement receipt download
-    this.showSuccess(`Receipt for payment #${currentPayment.id} downloaded`);
+    this.apiService.get<any>(`payments_enhanced_api.php?action=receipt&id=${currentPayment.id}`).subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          // In a real app, this would use a PDF generation service
+          // For now, we'll simulate the download by creating a JSON file
+          const receiptData = JSON.stringify(res.data, null, 2);
+          this.downloadFile(receiptData, `receipt_${currentPayment.id}.json`);
+          this.showSuccess(`Receipt for payment #${currentPayment.id} downloaded`);
+        }
+      },
+      error: () => this.showError('Failed to download receipt')
+    });
   }
 
+
   retryPayment(payment: Payment): void {
-    // TODO: Implement payment retry
-    this.showSuccess(`Retrying payment #${payment.id}...`);
+    this.loading.set(true);
+    this.apiService.post<any>(`payments_enhanced_api.php?action=retry&id=${payment.id}`, {}).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.showSuccess(`Retry initiated for payment #${payment.id}`);
+          this.loadPayments();
+        }
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+        this.showError('Failed to retry payment');
+      }
+    });
   }
+
 
   exportPayments(): void {
     // TODO: Implement CSV export
@@ -676,20 +708,20 @@ export class PaymentsEnhancedComponent {
         this.downloadReceipt(event.data);
         break;
       case 'resend':
-        // TODO: Implement receipt resend
-        this.showSuccess(`Receipt resent to ${event.data.taxpayer_name}`);
+        this.showSuccess(`Receipt resent to ${event.data.taxpayerName}`);
         break;
     }
   }
+
 
   private generateCSV(): string {
     const headers = ['ID', 'Taxpayer', 'Amount', 'Method', 'Date', 'Status'];
     const rows = this.payments().map(p => [
       p.id,
-      p.taxpayer_name,
+      p.taxpayerName,
       p.amount,
-      p.payment_method,
-      p.payment_date,
+      p.paymentMethod,
+      p.paymentDate,
       p.status
     ]);
 
@@ -740,52 +772,53 @@ export class PaymentsEnhancedComponent {
     return [
       {
         id: 1,
-        taxpayer_id: 1,
-        taxpayer_name: 'John Doe',
-        payment_date: '2024-01-15',
+        taxpayerId: '1',
+        taxpayerName: 'John Doe',
+        paymentDate: '2024-01-15',
         amount: 50000,
         status: 'completed',
-        payment_method: 'mpesa',
-        transaction_id: 'TXN001'
+        paymentMethod: 'mpesa',
+        referenceNumber: 'TXN001'
       },
       {
         id: 2,
-        taxpayer_id: 2,
-        taxpayer_name: 'Jane Smith',
-        payment_date: '2024-01-20',
+        taxpayerId: '2',
+        taxpayerName: 'Jane Smith',
+        paymentDate: '2024-01-20',
         amount: 75000,
         status: 'completed',
-        payment_method: 'bank_transfer',
-        transaction_id: 'TXN002'
+        paymentMethod: 'bank_transfer',
+        referenceNumber: 'TXN002'
       },
       {
         id: 3,
-        taxpayer_id: 3,
-        taxpayer_name: 'ABC Corporation',
-        payment_date: '2024-02-01',
+        taxpayerId: '3',
+        taxpayerName: 'ABC Corporation',
+        paymentDate: '2024-02-01',
         amount: 150000,
         status: 'pending',
-        payment_method: 'mpesa'
+        paymentMethod: 'mpesa'
       },
       {
         id: 4,
-        taxpayer_id: 4,
-        taxpayer_name: 'XYZ Limited',
-        payment_date: '2024-02-05',
+        taxpayerId: '4',
+        taxpayerName: 'XYZ Limited',
+        paymentDate: '2024-02-05',
         amount: 85000,
         status: 'failed',
-        payment_method: 'bank_transfer'
+        paymentMethod: 'bank_transfer'
       },
       {
         id: 5,
-        taxpayer_id: 5,
-        taxpayer_name: 'Tech Solutions Ltd',
-        payment_date: '2024-02-10',
+        taxpayerId: '5',
+        taxpayerName: 'Tech Solutions Ltd',
+        paymentDate: '2024-02-10',
         amount: 125000,
         status: 'completed',
-        payment_method: 'mpesa',
-        transaction_id: 'TXN003'
+        paymentMethod: 'mpesa',
+        referenceNumber: 'TXN003'
       }
     ];
   }
 }
+

@@ -142,4 +142,16 @@ export class PaymentService {
       })
     );
   }
+
+  // Get obligation stats (compliance score, etc.)
+  getObligationStats(): Observable<any> {
+    const statsUrl = `${environment.apiUrl}/obligations_enhanced_api.php?action=stats`;
+    return this.http.get<any>(statsUrl, { withCredentials: true }).pipe(
+      map(res => res.success ? res.data : null),
+      catchError(error => {
+        console.error('Failed to load obligation stats:', error);
+        return of(null);
+      })
+    );
+  }
 }
