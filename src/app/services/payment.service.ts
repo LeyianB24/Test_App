@@ -125,4 +125,21 @@ export class PaymentService {
   getPaymentsByTaxpayer(taxpayerId: string): Payment[] {
     return this.payments().filter(p => p.taxpayerId === taxpayerId);
   }
+
+  // Get liabilities/debts
+  getLiabilities(): Observable<any> {
+    const obligationsUrl = `${environment.apiUrl}/obligations_enhanced_api.php?action=list`;
+    return this.http.get<any>(obligationsUrl, { withCredentials: true }).pipe(
+      map(res => {
+        if (res.success && res.data?.obligations) {
+          return res.data.obligations;
+        }
+        return [];
+      }),
+      catchError(error => {
+        console.error('Failed to load liabilities:', error);
+        return of([]);
+      })
+    );
+  }
 }

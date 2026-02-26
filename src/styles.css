@@ -1394,7 +1394,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .search-premium { max-width: none; }
   .filter-pills-elite {
     overflow-x: auto; padding-bottom: 4px; scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
   }
   .pill-btn { white-space: nowrap; }
 
@@ -1407,7 +1406,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .drawer-content { max-width: 100%; }
 
   .table-responsive-elite {
-    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
   }
   .modern-table-elite { min-width: 500px; }
 

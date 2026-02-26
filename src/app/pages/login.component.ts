@@ -259,7 +259,11 @@ export class LoginComponent {
       next: (response) => {
         this.isLoading.set(false);
         if (response.success && response.data?.user) {
-          this.router.navigate(['/dashboard'], { replaceUrl: true });
+          // Route to the correct portal based on roleCategory
+          const portal = this.authService.roleCategory() === 'member'
+            ? '/member/dashboard'
+            : '/admin-portal/dashboard';
+          this.router.navigate([portal], { replaceUrl: true });
         } else {
           this.errorMessage.set(response.message || 'Authentication sequence failed.');
         }

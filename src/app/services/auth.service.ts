@@ -1,8 +1,8 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { tap, catchError, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError, forkJoin } from 'rxjs';
+import { tap, catchError, switchMap, map } from 'rxjs/operators';
 import { User, LoginCredentials, AuthResponse } from '../models/app.models';
 import { UserDataService } from './user-data.service';
 import { DashboardDataService } from './dashboard-data.service';
@@ -40,13 +40,37 @@ export class AuthService {
   public userType = computed(() => this.currentUser()?.type || 'individual');
   public userRole = computed(() => this.currentUser()?.role || '');
 
+  /**
+   * Determines which portal the user belongs to.
+   * 'member' = Taxpayers (TAXPAYER role)
+   * 'admin'  = All staff/admin roles
+   */
+  public roleCategory = computed<'member' | 'admin'>(() => {
+    const role = (this.currentUser()?.role || '').toUpperCase();
+    return role === 'TAXPAYER' ? 'member' : 'admin';
+  });
+
+
+
   constructor() {
     // Sync the signal with the subject once
     this.currentUser$.subscribe(user => {
       this.currentUser.set(user);
       if (user) {
-        this.fetchUserPages();
-        this.loadSessionContext();
+        // Coordinate initial data loading
+        forkJoin({
+          pages: this.fetchUserPages(),
+          context: this.loadSessionContext()
+        }).subscribe({
+          next: () => {
+            console.log('✅ AuthService: Initialization complete');
+            this.isInitialized.set(true);
+          },
+          error: (err) => {
+            console.error('❌ AuthService: Initialization failed', err);
+            this.isInitialized.set(true); // Still set to true to avoid stuck spinner
+          }
+        });
       } else {
         this.userPages.set([]);
         this.isInitialized.set(true); // If no user, we are initialized (guest state)
@@ -54,30 +78,37 @@ export class AuthService {
     });
   }
 
-  loadSessionContext() {
+  loadSessionContext(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/get_taxpayer_data.php`, { withCredentials: true }).pipe(
       tap(res => {
         if (res.success && res.data) {
           this.userDataService.setData(res.data.user || res.data); 
           this.dashboardData.setData(res.data);
         }
-        this.isInitialized.set(true);
       }),
       catchError((_err: unknown) => {
-        this.isInitialized.set(true);
         return of(null);
       })
-    ).subscribe();
+    );
   }
 
 
-  fetchUserPages() {
-    return this.http.get<any>(`${this.apiUrl}/admin_role_matrix.php?action=get_navigation`, { withCredentials: true })
-      .subscribe(res => {
+  fetchUserPages(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/admin_role_matrix.php?action=get_navigation`, { withCredentials: true }).pipe(
+      tap(res => {
         if (res.success && res.data && res.data.pages) {
-          this.userPages.set(res.data.pages);
+          // Deduplicate by slug
+          const uniquePages = Array.from(
+            new Map(res.data.pages.map((p: any) => [p.slug, p])).values()
+          );
+          this.userPages.set(uniquePages);
         }
-      });
+      }),
+      catchError((_err: unknown) => {
+        this.userPages.set([]);
+        return of(null);
+      })
+    );
   }
 
   checkPermission(slug: string): boolean {
@@ -87,8 +118,14 @@ export class AuthService {
     // SUPER_ADMIN has god-mode
     if (user.role?.toUpperCase() === 'SUPER_ADMIN') return true;
     
-    // Check if slug exists in allowed pages
-    return this.userPages().some(p => p.slug === slug);
+    // Normalize input slug (remove leading/trailing slashes)
+    const normalizedSlug = slug.replace(/^\/+|\/+$/g, '');
+    
+    // Check if normalized slug exists in allowed pages
+    return this.userPages().some(p => {
+      const pSlug = p.slug.replace(/^\/+|\/+$/g, '');
+      return pSlug === normalizedSlug;
+    });
   }
 
   /**
