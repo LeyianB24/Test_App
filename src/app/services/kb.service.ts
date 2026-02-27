@@ -53,6 +53,10 @@ export class KbService {
     });
   }
 
+  public getCategories(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}?action=get_categories`);
+  }
+
   getArticles(categoryId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}?action=get_articles&category_id=${categoryId}`);
   }

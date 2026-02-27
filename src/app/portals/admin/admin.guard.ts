@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { map, filter, take } from 'rxjs/operators';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 
 /**
  * Admin Portal Guard - Only allows non-TAXPAYER roles (admin, staff, etc) into
@@ -18,7 +18,7 @@ export const adminPortalGuard: CanActivateFn = (_route, _state) => {
     filter(initialized => initialized === true),
     take(1),
     map(() => {
-      if (!authService.isLoggedIn()) {
+      if (!authService.isAuthenticated()) {
         router.navigate(['/login']);
         return false;
       }

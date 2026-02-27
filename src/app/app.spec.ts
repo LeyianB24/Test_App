@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { AppComponent } from './app';
-import { NotificationService } from './notification/notification.service';
+import { NotificationService } from './core/services/notification.service';
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('AppComponent', () => {

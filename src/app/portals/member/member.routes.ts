@@ -178,6 +178,17 @@ export const memberRoutes: Routes = [
         ]
       },
 
+      // Specialized Services
+      {
+        path: 'specialized',
+        canActivate: [permissionGuard],
+        data: { slug: 'specialized' },
+        children: [
+          { path: 'custom-declaration', title: 'KRA iTax | Customs Discovery', loadComponent: () => import('./pages/specialized/custom-declaration.component').then(m => m.CustomDeclarationComponent) },
+          { path: 'ibid-auction', title: 'KRA iTax | iBid Auctions', loadComponent: () => import('./pages/specialized/ibid-auction.component').then(m => m.IBidAuctionComponent) },
+        ]
+      },
+
       // Notifications
       {
         path: 'notifications',

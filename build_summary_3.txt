@@ -1,0 +1,318 @@
+﻿
+  full_build_log_3.txt
+:9:[1mExpected 
+":"[0m 
+  full_build_log_3.txt
+:10:[1m[35m[plugin 
+  full_build_log_3.txt
+:11:angular-compiler]
+[0m 
+> full_build_log_3.txt
+:12:[css-syntax-error]
+  full_build_log_3.txt
+:13:At 
+C:\Users\USER\AppDa
+  full_build_log_3.txt
+:14:ta\Roaming\npm\ng.
+ps1:
+  full_build_log_3.txt
+:15:24 char:5
+  full_build_log_3.txt
+:25:          : 
+NotSpeci  
+  full_build_log_3.txt
+:26:  fied: 
+([1m[33m   
+  full_build_log_3.txt
+:27: 
+[33mΓ...s-syntax-    
+> full_build_log_3.txt
+:28:error]:String) [] 
+   
+  full_build_log_3.txt
+:29:, RemoteException
+  full_build_log_3.txt
+:30:    + 
+FullyQualifiedE 
+  full_build_log_3.txt
+:31:   rrorId : 
+NativeCo  
+> full_build_log_3.txt
+:32:  mmandError
+  full_build_log_3.txt
+:33: 
+  full_build_log_3.txt
+:34:
+  full_build_log_3.txt
+:35:    
+angular:styles/com
+  full_build_log_3.txt
+:61:":"[0m 
+  full_build_log_3.txt
+:62:[1m[35m[plugin 
+  full_build_log_3.txt
+:63:angular-compiler]
+[0m 
+> full_build_log_3.txt
+:64:[css-syntax-error]
+  full_build_log_3.txt
+:65:
+  full_build_log_3.txt
+:66:    
+angular:styles/com
+  full_build_log_3.txt
+:67:ponent:css;35abf15
+ddb0
+  full_build_log_3.txt
+:93:":"[0m 
+  full_build_log_3.txt
+:94:[1m[35m[plugin 
+  full_build_log_3.txt
+:95:angular-compiler]
+[0m 
+> full_build_log_3.txt
+:96:[css-syntax-error]
+  full_build_log_3.txt
+:97:
+  full_build_log_3.txt
+:98:    
+angular:styles/com
+  full_build_log_3.txt
+:99:ponent:css;9365319
+71c9
+  full_build_log_3.txt
+:119:
+  full_build_log_3.txt
+:120:[39m[22m
+  full_build_log_3.txt
+:121:[1m[31m[31mX 
+[41;3
+> full_build_log_3.txt
+:122:1m[[41;97mERROR
+[41;3
+  full_build_log_3.txt
+:123:1m][0m 
+[1mTS2339: 
+  full_build_log_3.txt
+:124:Property 
+  full_build_log_3.txt
+:125:'transaction_id' 
+does 
+  full_build_log_3.txt
+:143:
+  full_build_log_3.txt
+:144:
+  full_build_log_3.txt
+:145:[31mX 
+[41;31m[[41;9
+> full_build_log_3.txt
+:146:7mERROR[41;31m]
+[0m 
+  full_build_log_3.txt
+:147:[1mTS2307: 
+Cannot 
+  full_build_log_3.txt
+:148:find module 
+'./notific
+  full_build_log_3.txt
+:149:ation.service' 
+or its 
+  full_build_log_3.txt
+:166:
+  full_build_log_3.txt
+:167:
+  full_build_log_3.txt
+:168:[31mX 
+[41;31m[[41;9
+> full_build_log_3.txt
+:169:7mERROR[41;31m]
+[0m 
+  full_build_log_3.txt
+:170:[1mTS2571: 
+Object is 
+  full_build_log_3.txt
+:171:of type 
+  full_build_log_3.txt
+:172:'unknown'.[0m 
+  full_build_log_3.txt
+:178:[37m      234 
+Γöé    
+  full_build_log_3.txt
+:179:   
+[32mthis.notificat
+  full_build_log_3.txt
+:180:ionService[37m.s
+howEr
+> full_build_log_3.txt
+:181:ror(errorMessage)
+;
+  full_build_log_3.txt
+:182:          Γò╡    
+   [
+  full_build_log_3.txt
+:183:32m~~~~~~~~~~~~~~
+~~~~~
+  full_build_log_3.txt
+:184:~~~~~[0m
+  full_build_log_3.txt
+:185:
+  full_build_log_3.txt
+:186:
+  full_build_log_3.txt
+:187:[31mX 
+[41;31m[[41;9
+> full_build_log_3.txt
+:188:7mERROR[41;31m]
+[0m 
+  full_build_log_3.txt
+:189:[1mTS2307: 
+Cannot 
+  full_build_log_3.txt
+:190:find module 
+'./notific
+  full_build_log_3.txt
+:191:ation.service' 
+or its 
+  full_build_log_3.txt
+:208:
+  full_build_log_3.txt
+:209:
+  full_build_log_3.txt
+:210:[31mX 
+[41;31m[[41;9
+> full_build_log_3.txt
+:211:7mERROR[41;31m]
+[0m 
+  full_build_log_3.txt
+:212:[1mNG2003: No 
+  full_build_log_3.txt
+:213:suitable 
+injection 
+  full_build_log_3.txt
+:214:token for 
+parameter 
+  full_build_log_3.txt
+:255:
+  full_build_log_3.txt
+:256:
+  full_build_log_3.txt
+:257:[31mX 
+[41;31m[[41;9
+> full_build_log_3.txt
+:258:7mERROR[41;31m]
+[0m 
+  full_build_log_3.txt
+:259:[1mTS2307: 
+Cannot 
+  full_build_log_3.txt
+:260:find module 
+'./notific
+  full_build_log_3.txt
+:261:ation.service' 
+or its 
+  full_build_log_3.txt
+:278:
+  full_build_log_3.txt
+:279:
+  full_build_log_3.txt
+:280:[31mX 
+[41;31m[[41;9
+> full_build_log_3.txt
+:281:7mERROR[41;31m]
+[0m 
+  full_build_log_3.txt
+:282:[1mTS2571: 
+Object is 
+  full_build_log_3.txt
+:283:of type 
+  full_build_log_3.txt
+:284:'unknown'.[0m 
+  full_build_log_3.txt
+:298:
+  full_build_log_3.txt
+:299:
+  full_build_log_3.txt
+:300:[31mX 
+[41;31m[[41;9
+> full_build_log_3.txt
+:301:7mERROR[41;31m]
+[0m 
+  full_build_log_3.txt
+:302:[1mTS2571: 
+Object is 
+  full_build_log_3.txt
+:303:of type 
+  full_build_log_3.txt
+:304:'unknown'.[0m 
+  full_build_log_3.txt
+:317:
+  full_build_log_3.txt
+:318:
+  full_build_log_3.txt
+:319:[31mX 
+[41;31m[[41;9
+> full_build_log_3.txt
+:320:7mERROR[41;31m]
+[0m 
+  full_build_log_3.txt
+:321:[1mTS2571: 
+Object is 
+  full_build_log_3.txt
+:322:of type 
+  full_build_log_3.txt
+:323:'unknown'.[0m 
+  full_build_log_3.txt
+:336:
+  full_build_log_3.txt
+:337:
+  full_build_log_3.txt
+:338:[31mX 
+[41;31m[[41;9
+> full_build_log_3.txt
+:339:7mERROR[41;31m]
+[0m 
+  full_build_log_3.txt
+:340:[1mTS2571: 
+Object is 
+  full_build_log_3.txt
+:341:of type 
+  full_build_log_3.txt
+:342:'unknown'.[0m 
+  full_build_log_3.txt
+:355:
+  full_build_log_3.txt
+:356:
+  full_build_log_3.txt
+:357:[31mX 
+[41;31m[[41;9
+> full_build_log_3.txt
+:358:7mERROR[41;31m]
+[0m 
+  full_build_log_3.txt
+:359:[1mCould not 
+resolve 
+  full_build_log_3.txt
+:360:"./notification.s
+ervic
+  full_build_log_3.txt
+:361:e"[0m
+  full_build_log_3.txt
+:374:
+  full_build_log_3.txt
+:375:
+  full_build_log_3.txt
+:376:[31mX 
+[41;31m[[41;9
+> full_build_log_3.txt
+:377:7mERROR[41;31m]
+[0m 
+  full_build_log_3.txt
+:378:[1mCould not 
+resolve 
+  full_build_log_3.txt
+:379:"./notification.s
+ervic
+  full_build_log_3.txt
+:380:e"[0m
+
+

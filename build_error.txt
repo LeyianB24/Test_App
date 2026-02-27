@@ -1,0 +1,8 @@
+﻿
+> test-app@0.0.0 build
+> ng build
+
+[33mΓ¥»[39m Building...
+[32mΓ£ö[39m Building...
+Application bundle generation failed. [8.871 seconds] - 2026-02-27T11:59:38.654Z
+

@@ -169,6 +169,11 @@ export class HelpdeskService {
     });
   }
 
+  public getCategories(): Observable<any> {
+    const params = new HttpParams().set('action', 'get_categories');
+    return this.http.get<any>(this.apiUrl, { params });
+  }
+
   /**
    * Get single ticket details
    */

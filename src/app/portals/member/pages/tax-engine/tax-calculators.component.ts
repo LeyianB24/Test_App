@@ -1,6 +1,7 @@
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 interface TaxBracket { min: number; max: number; rate: number; }
 
@@ -15,8 +16,8 @@ const PAYE_BRACKETS: TaxBracket[] = [
 
 const PERSONAL_RELIEF = 2400;
 const INSURANCE_RELIEF_MAX = 5000;
-const NSSF_TIER1 = 360;   // 6% of 6000
-const NSSF_TIER2 = 1080;  // 6% of 18000
+const NSSF_TIER1 = 420;   // 6% of 7000 (2026 rates)
+const NSSF_TIER2 = 2160;  // 6% of 36000 (2026 rates)
 const NHIF_RATES: { min: number; max: number; amount: number }[] = [
   { min: 0, max: 5999, amount: 150 }, { min: 6000, max: 7999, amount: 300 },
   { min: 8000, max: 11999, amount: 400 }, { min: 12000, max: 14999, amount: 500 },
@@ -25,7 +26,7 @@ const NHIF_RATES: { min: number; max: number; amount: number }[] = [
   { min: 35000, max: 39999, amount: 950 }, { min: 40000, max: 44999, amount: 1000 },
   { min: 45000, max: 49999, amount: 1100 }, { min: 50000, max: 59999, amount: 1200 },
   { min: 60000, max: 69999, amount: 1300 }, { min: 70000, max: 79999, amount: 1400 },
-  { min: 80000, max: 89999, amount: 1500 }, { min: 90000, max: 99999, amount: 1600 },
+  { min: 8000, max: 89999, amount: 1500 }, { min: 90000, max: 99999, amount: 1600 },
   { min: 100000, max: Infinity, amount: 1700 },
 ];
 
@@ -33,13 +34,14 @@ type CalcMode = 'paye' | 'vat' | 'tot' | 'mri';
 
 @Component({
   selector: 'app-tax-calculators',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   template: `
     <div class="calc-page p-6">
       <header class="mb-8">
         <h1 class="text-3xl font-black text-slate-800 tracking-tight">Tax Calculators</h1>
-        <p class="text-slate-500 mt-1">Kenya Revenue Authority 2025 tax computation tools</p>
+        <p class="text-slate-500 mt-1">Kenya Revenue Authority 2026 tax computation tools</p>
       </header>
 
       <!-- Mode Tabs -->
@@ -124,7 +126,7 @@ type CalcMode = 'paye' | 'vat' | 'tot' | 'mri';
       <!-- TOT Calculator -->
       @if (mode() === 'tot') {
         <div class="calc-card animate-fade-in" style="max-width:600px">
-          <h3 class="font-bold text-lg text-slate-800 mb-6 uppercase tracking-tighter">Turnover Tax Calculator (1%)</h3>
+          <h3 class="font-bold text-lg text-slate-800 mb-6 uppercase tracking-tighter">Turnover Tax Calculator (3%)</h3>
           <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-6">Micro & Small Enterprises</p>
           <div class="form-field">
             <label>Monthly Turnover (KES)</label>
@@ -132,8 +134,8 @@ type CalcMode = 'paye' | 'vat' | 'tot' | 'mri';
           </div>
           <div class="result-rows mt-6">
             <div class="r-row"><span>Gross Turnover</span><span class="r-val">{{ fmt(totTurnover) }}</span></div>
-            <div class="r-row"><span>TOT Rate</span><span class="r-val">1.0%</span></div>
-            <div class="r-row final"><span>TOT Payable</span><span class="r-val text-red-500">{{ fmt(totTurnover * 0.01) }}</span></div>
+            <div class="r-row"><span>TOT Rate</span><span class="r-val">3.0%</span></div>
+            <div class="r-row final"><span>TOT Payable</span><span class="r-val text-red-500">{{ fmt(totTurnover * 0.03) }}</span></div>
           </div>
           <button routerLink="/member/tax-engine/file/tot" class="w-full mt-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all">
              File Quarterly TOT Return

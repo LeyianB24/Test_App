@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, retry, timeout } from 'rxjs/operators';
-import { NotificationService } from './notification.service';
+import { NotificationService } from '../core/services/notification.service';
 import { environment } from '../../environments/environment';
 
 export interface ApiResponse<T = any> {
@@ -168,11 +168,11 @@ export class ApiService {
 
         case 400:
           errorMessage = 'Invalid request. Please check your input.';
-          if (error.error?.errors) {
+          if ((error.error as any)?.errors) {
             // Handle validation errors
-            errorDetails = this.parseValidationErrors(error.error.errors);
-          } else if (error.error?.message) {
-            errorMessage = error.error.message;
+            errorDetails = this.parseValidationErrors((error.error as any).errors);
+          } else if ((error.error as any)?.message) {
+            errorMessage = (error.error as any).message;
           }
           break;
 
@@ -199,8 +199,8 @@ export class ApiService {
 
         case 422:
           errorMessage = 'Validation failed. Please check your input.';
-          if (error.error?.errors) {
-            errorDetails = this.parseValidationErrors(error.error.errors);
+          if ((error.error as any)?.errors) {
+            errorDetails = this.parseValidationErrors((error.error as any).errors);
           }
           break;
 
@@ -225,7 +225,7 @@ export class ApiService {
           break;
 
         default:
-          errorMessage = error.error?.message || `Error ${error.status}: ${error.statusText}`;
+          errorMessage = (error.error as any)?.message || `Error ${error.status}: ${error.statusText}`;
       }
     }
 

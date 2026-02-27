@@ -231,4 +231,18 @@ export class AuthService {
       })
     );
   }
+
+  updatePassword(oldPassword: string, newPassword: string): Observable<any> {
+    this.isLoading.set(true);
+    return this.http.post<any>(`${this.apiUrl}/auth_jwt.php?action=update_password`, { 
+      current_password: oldPassword, 
+      new_password: newPassword 
+    }, { withCredentials: true }).pipe(
+      tap(() => this.isLoading.set(false)),
+      catchError(err => {
+        this.isLoading.set(false);
+        return throwError(() => err);
+      })
+    );
+  }
 }

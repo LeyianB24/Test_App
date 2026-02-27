@@ -1,0 +1,699 @@
+﻿
+  full_build_log_2.txt
+:9:[1mExpected 
+":"[0m 
+  full_build_log_2.txt
+:10:[1m[35m[plugin 
+  full_build_log_2.txt
+:11:angular-compiler]
+[0m 
+> full_build_log_2.txt
+:12:[css-syntax-error]
+  full_build_log_2.txt
+:13:At 
+C:\Users\USER\AppDa
+  full_build_log_2.txt
+:14:ta\Roaming\npm\ng.
+ps1:
+  full_build_log_2.txt
+:15:24 char:5
+  full_build_log_2.txt
+:25:          : 
+NotSpeci  
+  full_build_log_2.txt
+:26:  fied: 
+([1m[33m   
+  full_build_log_2.txt
+:27: 
+[33mΓ...s-syntax-    
+> full_build_log_2.txt
+:28:error]:String) [] 
+   
+  full_build_log_2.txt
+:29:, RemoteException
+  full_build_log_2.txt
+:30:    + 
+FullyQualifiedE 
+  full_build_log_2.txt
+:31:   rrorId : 
+NativeCo  
+> full_build_log_2.txt
+:32:  mmandError
+  full_build_log_2.txt
+:33: 
+  full_build_log_2.txt
+:34:
+  full_build_log_2.txt
+:35:    
+angular:styles/com
+  full_build_log_2.txt
+:61:":"[0m 
+  full_build_log_2.txt
+:62:[1m[35m[plugin 
+  full_build_log_2.txt
+:63:angular-compiler]
+[0m 
+> full_build_log_2.txt
+:64:[css-syntax-error]
+  full_build_log_2.txt
+:65:
+  full_build_log_2.txt
+:66:    
+angular:styles/com
+  full_build_log_2.txt
+:67:ponent:css;35abf15
+ddb0
+  full_build_log_2.txt
+:93:":"[0m 
+  full_build_log_2.txt
+:94:[1m[35m[plugin 
+  full_build_log_2.txt
+:95:angular-compiler]
+[0m 
+> full_build_log_2.txt
+:96:[css-syntax-error]
+  full_build_log_2.txt
+:97:
+  full_build_log_2.txt
+:98:    
+angular:styles/com
+  full_build_log_2.txt
+:99:ponent:css;9365319
+71c9
+  full_build_log_2.txt
+:119:
+  full_build_log_2.txt
+:120:[39m[22m
+  full_build_log_2.txt
+:121:[1m[31m[31mX 
+[41;3
+> full_build_log_2.txt
+:122:1m[[41;97mERROR
+[41;3
+  full_build_log_2.txt
+:123:1m][0m 
+[1mTS2307: 
+  full_build_log_2.txt
+:124:Cannot find 
+module '..
+  full_build_log_2.txt
+:125:/../services/auth
+.serv
+  full_build_log_2.txt
+:144:
+  full_build_log_2.txt
+:145:
+  full_build_log_2.txt
+:146:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:147:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:148:[1mTS18046: 
+  full_build_log_2.txt
+:149:'authService' is 
+of 
+  full_build_log_2.txt
+:150:type 
+'unknown'.[0m 
+  full_build_log_2.txt
+:164:
+  full_build_log_2.txt
+:165:
+  full_build_log_2.txt
+:166:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:167:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:168:[1mTS18046: 
+  full_build_log_2.txt
+:169:'authService' is 
+of 
+  full_build_log_2.txt
+:170:type 
+'unknown'.[0m 
+  full_build_log_2.txt
+:182:
+  full_build_log_2.txt
+:183:
+  full_build_log_2.txt
+:184:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:185:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:186:[1mTS18046: 
+  full_build_log_2.txt
+:187:'authService' is 
+of 
+  full_build_log_2.txt
+:188:type 
+'unknown'.[0m 
+  full_build_log_2.txt
+:201:
+  full_build_log_2.txt
+:202:
+  full_build_log_2.txt
+:203:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:204:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:205:[1mTS2307: 
+Cannot 
+  full_build_log_2.txt
+:206:find module 
+'../../../
+  full_build_log_2.txt
+:207:services/auth.ser
+vice'
+  full_build_log_2.txt
+:226:
+  full_build_log_2.txt
+:227:
+  full_build_log_2.txt
+:228:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:229:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:230:[1mTS2571: 
+Object is 
+  full_build_log_2.txt
+:231:of type 
+  full_build_log_2.txt
+:232:'unknown'.[0m 
+  full_build_log_2.txt
+:246:
+  full_build_log_2.txt
+:247:
+  full_build_log_2.txt
+:248:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:249:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:250:[1mTS2307: 
+Cannot 
+  full_build_log_2.txt
+:251:find module 
+'../../../
+  full_build_log_2.txt
+:252:../services/auth.
+servi
+  full_build_log_2.txt
+:271:
+  full_build_log_2.txt
+:272:
+  full_build_log_2.txt
+:273:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:274:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:275:[1mTS2571: 
+Object is 
+  full_build_log_2.txt
+:276:of type 
+  full_build_log_2.txt
+:277:'unknown'.[0m 
+  full_build_log_2.txt
+:292:
+  full_build_log_2.txt
+:293:
+  full_build_log_2.txt
+:294:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:295:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:296:[1mTS2307: 
+Cannot 
+  full_build_log_2.txt
+:297:find module 
+'../../ser
+  full_build_log_2.txt
+:298:vices/auth.servic
+e' 
+  full_build_log_2.txt
+:317:
+  full_build_log_2.txt
+:318:
+  full_build_log_2.txt
+:319:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:320:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:321:[1mTS18046: 
+  full_build_log_2.txt
+:322:'authService' is 
+of 
+  full_build_log_2.txt
+:323:type 
+'unknown'.[0m 
+  full_build_log_2.txt
+:337:
+  full_build_log_2.txt
+:338:
+  full_build_log_2.txt
+:339:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:340:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:341:[1mTS18046: 
+  full_build_log_2.txt
+:342:'authService' is 
+of 
+  full_build_log_2.txt
+:343:type 
+'unknown'.[0m 
+  full_build_log_2.txt
+:355:
+  full_build_log_2.txt
+:356:
+  full_build_log_2.txt
+:357:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:358:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:359:[1mTS18046: 
+  full_build_log_2.txt
+:360:'authService' is 
+of 
+  full_build_log_2.txt
+:361:type 
+'unknown'.[0m 
+  full_build_log_2.txt
+:374:
+  full_build_log_2.txt
+:375:
+  full_build_log_2.txt
+:376:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:377:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:378:[1mTS2307: 
+Cannot 
+  full_build_log_2.txt
+:379:find module 
+'../../../
+  full_build_log_2.txt
+:380:services/notifica
+tion.
+  full_build_log_2.txt
+:400:
+  full_build_log_2.txt
+:401:
+  full_build_log_2.txt
+:402:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:403:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:404:[1mTS2571: 
+Object is 
+  full_build_log_2.txt
+:405:of type 
+  full_build_log_2.txt
+:406:'unknown'.[0m 
+  full_build_log_2.txt
+:421:
+  full_build_log_2.txt
+:422:
+  full_build_log_2.txt
+:423:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:424:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:425:[1mTS2571: 
+Object is 
+  full_build_log_2.txt
+:426:of type 
+  full_build_log_2.txt
+:427:'unknown'.[0m 
+  full_build_log_2.txt
+:442:
+  full_build_log_2.txt
+:443:
+  full_build_log_2.txt
+:444:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:445:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:446:[1mTS2571: 
+Object is 
+  full_build_log_2.txt
+:447:of type 
+  full_build_log_2.txt
+:448:'unknown'.[0m 
+  full_build_log_2.txt
+:455:[37m      769 
+Γöé    
+  full_build_log_2.txt
+:456:     
+[32mthis.notific
+  full_build_log_2.txt
+:457:ationService[37m
+.show
+> full_build_log_2.txt
+:458:Error(result.mess
+age);
+  full_build_log_2.txt
+:459:          Γò╡    
+     
+  full_build_log_2.txt
+:460:[32m~~~~~~~~~~~~
+~~~~~
+  full_build_log_2.txt
+:461:~~~~~~~[0m
+  full_build_log_2.txt
+:462:
+  full_build_log_2.txt
+:463:
+  full_build_log_2.txt
+:464:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:465:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:466:[1mTS2571: 
+Object is 
+  full_build_log_2.txt
+:467:of type 
+  full_build_log_2.txt
+:468:'unknown'.[0m 
+  full_build_log_2.txt
+:483:
+  full_build_log_2.txt
+:484:
+  full_build_log_2.txt
+:485:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:486:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:487:[1mTS2339: 
+Property 
+  full_build_log_2.txt
+:488:'transaction_id' 
+does 
+  full_build_log_2.txt
+:489:not exist on 
+type 
+  full_build_log_2.txt
+:506:
+  full_build_log_2.txt
+:507:
+  full_build_log_2.txt
+:508:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:509:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:510:[1mTS2307: 
+Cannot 
+  full_build_log_2.txt
+:511:find module 
+'./notific
+  full_build_log_2.txt
+:512:ation.service' 
+or its 
+  full_build_log_2.txt
+:529:
+  full_build_log_2.txt
+:530:
+  full_build_log_2.txt
+:531:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:532:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:533:[1mTS2571: 
+Object is 
+  full_build_log_2.txt
+:534:of type 
+  full_build_log_2.txt
+:535:'unknown'.[0m 
+  full_build_log_2.txt
+:541:[37m      234 
+Γöé    
+  full_build_log_2.txt
+:542:   
+[32mthis.notificat
+  full_build_log_2.txt
+:543:ionService[37m.s
+howEr
+> full_build_log_2.txt
+:544:ror(errorMessage)
+;
+  full_build_log_2.txt
+:545:          Γò╡    
+   [
+  full_build_log_2.txt
+:546:32m~~~~~~~~~~~~~~
+~~~~~
+  full_build_log_2.txt
+:547:~~~~~[0m
+  full_build_log_2.txt
+:548:
+  full_build_log_2.txt
+:549:
+  full_build_log_2.txt
+:550:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:551:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:552:[1mTS2307: 
+Cannot 
+  full_build_log_2.txt
+:553:find module 
+'./notific
+  full_build_log_2.txt
+:554:ation.service' 
+or its 
+  full_build_log_2.txt
+:571:
+  full_build_log_2.txt
+:572:
+  full_build_log_2.txt
+:573:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:574:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:575:[1mNG2003: No 
+  full_build_log_2.txt
+:576:suitable 
+injection 
+  full_build_log_2.txt
+:577:token for 
+parameter 
+  full_build_log_2.txt
+:618:
+  full_build_log_2.txt
+:619:
+  full_build_log_2.txt
+:620:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:621:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:622:[1mTS2307: 
+Cannot 
+  full_build_log_2.txt
+:623:find module 
+'./notific
+  full_build_log_2.txt
+:624:ation.service' 
+or its 
+  full_build_log_2.txt
+:641:
+  full_build_log_2.txt
+:642:
+  full_build_log_2.txt
+:643:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:644:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:645:[1mTS2571: 
+Object is 
+  full_build_log_2.txt
+:646:of type 
+  full_build_log_2.txt
+:647:'unknown'.[0m 
+  full_build_log_2.txt
+:661:
+  full_build_log_2.txt
+:662:
+  full_build_log_2.txt
+:663:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:664:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:665:[1mTS2571: 
+Object is 
+  full_build_log_2.txt
+:666:of type 
+  full_build_log_2.txt
+:667:'unknown'.[0m 
+  full_build_log_2.txt
+:680:
+  full_build_log_2.txt
+:681:
+  full_build_log_2.txt
+:682:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:683:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:684:[1mTS2571: 
+Object is 
+  full_build_log_2.txt
+:685:of type 
+  full_build_log_2.txt
+:686:'unknown'.[0m 
+  full_build_log_2.txt
+:699:
+  full_build_log_2.txt
+:700:
+  full_build_log_2.txt
+:701:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:702:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:703:[1mTS2571: 
+Object is 
+  full_build_log_2.txt
+:704:of type 
+  full_build_log_2.txt
+:705:'unknown'.[0m 
+  full_build_log_2.txt
+:718:
+  full_build_log_2.txt
+:719:
+  full_build_log_2.txt
+:720:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:721:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:722:[1mCould not 
+resolve 
+  full_build_log_2.txt
+:723:"../../../service
+s/aut
+  full_build_log_2.txt
+:724:h.service"[0m
+  full_build_log_2.txt
+:738:
+  full_build_log_2.txt
+:739:
+  full_build_log_2.txt
+:740:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:741:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:742:[1mCould not 
+resolve 
+  full_build_log_2.txt
+:743:"../../../../serv
+ices/
+  full_build_log_2.txt
+:744:auth.service"[0m
+  full_build_log_2.txt
+:758:
+  full_build_log_2.txt
+:759:
+  full_build_log_2.txt
+:760:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:761:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:762:[1mCould not 
+resolve 
+  full_build_log_2.txt
+:763:"../../../service
+s/not
+  full_build_log_2.txt
+:764:ification.service
+"[0m
+  full_build_log_2.txt
+:779:
+  full_build_log_2.txt
+:780:
+  full_build_log_2.txt
+:781:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:782:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:783:[1mCould not 
+resolve 
+  full_build_log_2.txt
+:784:"./notification.s
+ervic
+  full_build_log_2.txt
+:785:e"[0m
+  full_build_log_2.txt
+:798:
+  full_build_log_2.txt
+:799:
+  full_build_log_2.txt
+:800:[31mX 
+[41;31m[[41;9
+> full_build_log_2.txt
+:801:7mERROR[41;31m]
+[0m 
+  full_build_log_2.txt
+:802:[1mCould not 
+resolve 
+  full_build_log_2.txt
+:803:"./notification.s
+ervic
+  full_build_log_2.txt
+:804:e"[0m
+
+

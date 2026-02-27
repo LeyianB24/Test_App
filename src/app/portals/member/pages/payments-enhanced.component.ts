@@ -5,7 +5,7 @@ import { PaymentService } from '../../../services/payment.service';
 import { ApiService } from '../../../services/api.service';
 import { DataTableComponent, TableColumn, TableAction } from '../../../components/data-table/data-table.component';
 import { PaymentFormComponent } from '../../../components/payment-form/payment-form.component';
-import { NotificationService } from '../../../services/notification.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import { SkeletonLoaderComponent } from '../../../components/skeleton-loader/skeleton-loader.component';
 import { ToastContainerComponent } from '../../../components/toast-container/toast-container.component';
 import { TooltipComponent } from '../../../components/tooltip/tooltip.component';
@@ -20,6 +20,7 @@ interface Payment {
   paymentMethod: string;
   referenceNumber?: string;
   prn?: string;
+  transaction_id?: string;
 }
 
 
@@ -539,16 +540,22 @@ export class PaymentsEnhancedComponent {
   );
 
   totalPages = computed(() => {
+    const status = this.statusFilter();
+    const query = this.searchQuery().toLowerCase();
+    
+    let filteredCount = this.payments().filter(p => {
+      const matchStatus = status === 'all' || p.status === status;
+      const matchQuery = !query || 
+        p.taxpayerName.toLowerCase().includes(query) ||
+        (p.prn && p.prn.toLowerCase().includes(query)) ||
+        (p.referenceNumber && p.referenceNumber.toLowerCase().includes(query)) ||
+        p.amount.toString().includes(query);
+      
+      return matchStatus && matchQuery;
+    }).length;
+
     const itemsPerPage = parseInt(this.itemsPerPageValue());
-    return Math.ceil(
-      this.payments().filter(p =>
-        (this.statusFilter() === 'all' || p.status === this.statusFilter()) &&
-        (this.searchQuery() === '' ||
-         p.taxpayerName.toLowerCase().includes(this.searchQuery().toLowerCase()) ||
-         (p.prn && p.prn.toLowerCase().includes(this.searchQuery().toLowerCase())) ||
-         p.id.toString().includes(this.searchQuery()))
-      ).length / itemsPerPage
-    );
+    return Math.ceil(filteredCount / itemsPerPage) || 1;
   });
 
   // Table Configuration

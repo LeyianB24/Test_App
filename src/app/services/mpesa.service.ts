@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ApiService, ApiResponse } from './api.service';
-import { NotificationService } from './notification.service';
+import { NotificationService } from '../core/services/notification.service';
 
 export interface MpesaConfig {
   consumerKey: string;

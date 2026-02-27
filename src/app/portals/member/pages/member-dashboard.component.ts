@@ -2,7 +2,7 @@ import { Component, inject, computed, signal, OnInit, ChangeDetectionStrategy } 
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { DashboardDataService } from '../../../services/dashboard-data.service';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 interface DashboardStat {
   label: string;

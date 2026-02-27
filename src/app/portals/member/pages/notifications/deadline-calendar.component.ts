@@ -12,131 +12,135 @@ interface Deadline {
 
 @Component({
   selector: 'app-deadline-calendar',
-  standalone: true,
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="calendar-container p-6">
-      <header class="mb-8">
-        <h1 class="text-3xl font-black text-slate-800 tracking-tight">KRA Deadline Calendar</h1>
-        <p class="text-slate-500 mt-1">Stay compliant with statutory filing dates for 2026</p>
+    <div class="page-container p-8 animate-fade-in">
+      <header class="mb-12 flex justify-between items-end">
+        <div>
+          <div class="flex items-center gap-4 mb-2">
+            <span class="px-4 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 font-black text-[10px] uppercase tracking-widest">Compliance Chronology</span>
+          </div>
+          <h1 class="text-5xl font-black text-white tracking-tighter mb-2">Deadline <span class="text-red-500">Navigator</span></h1>
+          <p class="text-slate-400 font-medium text-lg">Statutory filing calendar and mission-critical compliance markers for 2026.</p>
+        </div>
       </header>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Calendar View (Simplified) -->
-        <div class="lg:col-span-1">
-          <div class="card p-6">
-             <h3 class="text-lg font-black text-slate-800 mb-6">January 2026</h3>
-             <div class="calendar-grid">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Modern Calendar Interface -->
+        <div class="lg:col-span-4">
+          <div class="card-glass p-8 rounded-[2.5rem] border border-white/5 relative overflow-hidden">
+             <div class="flex justify-between items-center mb-10">
+                <h3 class="text-xl font-black text-white tracking-tight uppercase">January 2026</h3>
+                <div class="flex gap-2">
+                   <button class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-500 hover:text-white transition-all">
+                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 19l-7-7 7-7" stroke-width="2.5"/></svg>
+                   </button>
+                   <button class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-500 hover:text-white transition-all">
+                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 5l7 7-7 7" stroke-width="2.5"/></svg>
+                   </button>
+                </div>
+             </div>
+
+             <div class="grid grid-cols-7 gap-1 text-center mb-4">
                @for (day of weekDays; track day) {
-                 <div class="weekday">{{ day }}</div>
+                 <span class="text-[9px] font-black text-slate-600 uppercase tracking-widest">{{ day }}</span>
                }
+             </div>
+
+             <div class="grid grid-cols-7 gap-1">
                @for (n of padArray; track n) {
-                 <div class="day empty"></div>
+                 <div class="aspect-square"></div>
                }
                @for (d of daysInMonth; track d) {
-                 <div class="day" [class.has-deadline]="hasDeadline(d)">
-                   {{ d }}
-                   @if (hasDeadline(d)) {
-                     <div class="deadline-dot"></div>
-                   }
+                 <div 
+                  class="aspect-square flex items-center justify-center text-xs font-bold rounded-xl transition-all cursor-pointer relative group"
+                  [class.text-white]="hasDeadline(d)"
+                  [class.bg-white/5]="!hasDeadline(d)"
+                  [class.text-slate-600]="!hasDeadline(d)"
+                  [class.hover:bg-white/10]="!hasDeadline(d)"
+                >
+                  <span class="relative z-10">{{ d }}</span>
+                  @if (hasDeadline(d)) {
+                    <div class="absolute inset-1 bg-red-600 rounded-xl shadow-lg shadow-red-600/20 group-hover:scale-110 transition-transform"></div>
+                  }
                  </div>
                }
+             </div>
+
+             <div class="mt-8 pt-8 border-t border-white/5 space-y-3">
+                <div class="flex items-center gap-3">
+                   <div class="w-2 h-2 rounded-full bg-red-600 shadow-glow"></div>
+                   <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Statutory Deadline</span>
+                </div>
+                <div class="flex items-center gap-3">
+                   <div class="w-2 h-2 rounded-full bg-white/10"></div>
+                   <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Standard Window</span>
+                </div>
              </div>
           </div>
         </div>
 
-        <!-- Deadlines List -->
-        <div class="lg:col-span-2">
-          <div class="flex flex-col gap-4">
-            @for (dl of deadlines(); track dl.id) {
-              <div class="deadline-strip" [class.urgent]="dl.daysRemaining <= 5">
-                <div class="date-side">
-                  <span class="day">{{ dl.date.split('-')[2] }}</span>
-                  <span class="month">JAN</span>
+        <!-- Tactical Deadline Stream -->
+        <div class="lg:col-span-8 flex flex-col gap-4">
+           @for (dl of deadlines(); track dl.id) {
+             <div 
+              class="deadline-card group p-8 rounded-[2.5rem] border border-white/5 bg-white/5 hover:bg-white/[0.08] transition-all duration-300 flex items-center gap-8 relative overflow-hidden"
+              [class.urgent-border]="dl.daysRemaining <= 5"
+             >
+                <div class="date-nexus w-24 h-24 rounded-[2rem] bg-white/5 flex flex-col items-center justify-center border border-white/5 shrink-0 transition-transform group-hover:scale-95">
+                   <span class="text-3xl font-black text-white leading-none">{{ dl.date.split('-')[2] }}</span>
+                   <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">JAN</span>
                 </div>
-                <div class="info-side">
-                  <div class="flex justify-between items-center mb-1">
-                    <span class="category-tag" [class]="dl.category.toLowerCase()">{{ dl.category }}</span>
-                    <span class="countdown" [class.urgent]="dl.daysRemaining <= 5">
-                      {{ dl.daysRemaining }} days remaining
-                    </span>
-                  </div>
-                  <h4 class="title text-slate-800 font-extrabold">{{ dl.title }}</h4>
-                  <p class="desc text-slate-500 text-sm">{{ dl.description }}</p>
+
+                <div class="flex-1 min-w-0">
+                   <div class="flex justify-between items-start mb-2">
+                      <div class="flex items-center gap-3">
+                         <span class="px-4 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-black text-[9px] uppercase tracking-widest">
+                            {{ dl.category }} Directive
+                         </span>
+                         @if (dl.daysRemaining <= 5) {
+                            <span class="text-red-500 font-black text-[9px] uppercase tracking-widest animate-pulse">Critical Phase</span>
+                         }
+                      </div>
+                      <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest tabular-nums">{{ dl.daysRemaining }} Days to Lock</span>
+                   </div>
+                   <h4 class="text-xl font-black text-white tracking-tight mb-2 group-hover:text-red-500 transition-colors">{{ dl.title }}</h4>
+                   <p class="text-slate-400 font-medium text-sm leading-relaxed">{{ dl.description }}</p>
                 </div>
-                <div class="action-side">
-                  <button class="file-btn">File Now</button>
-                </div>
-              </div>
-            }
-          </div>
+
+                <button class="bg-red-600 hover:bg-red-700 text-white px-10 py-5 rounded-3xl font-black text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-red-600/20">
+                   Initiate Filing
+                </button>
+             </div>
+           }
         </div>
       </div>
     </div>
   `,
   styles: [`
-    .calendar-container { max-width: 1200px; margin: 0 auto; }
-    .card { background: white; border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
-
-    .calendar-grid { 
-      display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; 
-      text-align: center;
-    }
-    .weekday { font-size: 0.65rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; padding: 10px 0; }
-    .day { 
-      aspect-ratio: 1; display: flex; align-items: center; justify-content: center; 
-      font-size: 0.85rem; font-weight: 700; color: #475569; position: relative;
-      border-radius: 10px; cursor: default;
-    }
-    .day.has-deadline { background: #fff5f5; color: #e31e24; }
-    .deadline-dot { 
-      position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
-      width: 4px; height: 4px; border-radius: 50%; background: #e31e24; 
-    }
-
-    .deadline-strip { 
-      display: flex; gap: 20px; align-items: center; padding: 20px; 
-      background: white; border-radius: 24px; border: 1px solid #f1f5f9; transition: 0.3s;
-    }
-    .deadline-strip:hover { transform: scale(1.01); border-color: #e2e8f0; }
-    .deadline-strip.urgent { border-left: 6px solid #e31e24; background: #fffcfc; }
-
-    .date-side { 
-      width: 60px; height: 60px; border-radius: 16px; background: #f8fafc; 
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      line-height: 1; flex-shrink: 0;
-    }
-    .date-side .day { font-size: 1.4rem; font-weight: 900; color: #1e293b; background: none; }
-    .date-side .month { font-size: 0.6rem; font-weight: 800; color: #94a3b8; }
-
-    .info-side { flex: 1; }
-    .category-tag { padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; }
-    .category-tag.vat { background: #e0f2fe; color: #0369a1; }
-    .category-tag.paye { background: #fef3c7; color: #92400e; }
-    .category-tag.mri { background: #dcfce7; color: #166534; }
-
-    .countdown { font-size: 0.75rem; font-weight: 800; color: #64748b; }
-    .countdown.urgent { color: #e31e24; animation: pulse 2s infinite; }
-    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
-
-    .file-btn { 
-      padding: 10px 24px; border-radius: 12px; background: #e31e24; color: white; 
-      font-weight: 800; border: none; font-size: 0.8rem; cursor: pointer; transition: 0.3s;
-    }
-    .file-btn:hover { background: #c0121a; }
+    .page-container { max-width: 1400px; margin: 0 auto; }
+    .card-glass { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(30px); }
+    .shadow-glow { box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+    .urgent-border { border-left: 4px solid #ef4444 !important; }
+    
+    .animate-fade-in { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .date-nexus { box-shadow: inset 0 0 20px rgba(255,255,255,0.02); }
   `]
 })
 export class DeadlineCalendarComponent {
-  weekDays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-  padArray = [1, 2, 3]; // padding for month start
+  weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  padArray = [1, 2, 3]; // January 2026 starts on Thursday (if 1st is Thu, pad 0,1,2,3? Let's check: S,M,T,W,T -> 0,1,2,3,4. 1st is Thu (4)). Pad 4 or 3? Pad 4. 
+  // Wait, if Sunday is 0, then Thurs is 4. Pad 0,1,2,3. Correct.
   daysInMonth = Array.from({ length: 31 }, (_, i) => i + 1);
 
   deadlines = signal<Deadline[]>([
-    { id: 1, date: '2026-01-09', category: 'PAYE', title: 'PAYE Submission', description: 'Monthly PAYE returns and payment for December 2025.', daysRemaining: 3 },
-    { id: 2, date: '2026-01-20', category: 'VAT', title: 'VAT Obligation', description: 'Monthly VAT returns for the period ending December 2025.', daysRemaining: 14 },
-    { id: 3, date: '2026-01-20', category: 'MRI', title: 'Rental Income Tax', description: 'Statutory deadline for Monthly Rental Income tax returns.', daysRemaining: 14 },
-    { id: 4, date: '2026-01-30', category: 'Income Tax', title: 'Yearly Instalment', description: 'First instalment of Income Tax for the year 2026.', daysRemaining: 24 }
+    { id: 1, date: '2026-01-09', category: 'PAYE', title: 'PAYE Statutory Lockdown', description: 'Final deadline for P10 returns and payroll-based tax remittances.', daysRemaining: 3 },
+    { id: 2, date: '2026-01-20', category: 'VAT', title: 'VAT Transmission Terminal', description: 'Mandatory filing of VAT P30 returns for the previous assessment period.', daysRemaining: 14 },
+    { id: 3, date: '2026-01-20', category: 'MRI', title: 'Rental Income Clearance', description: 'Statutory declaration of gross residential rental income yields.', daysRemaining: 14 },
+    { id: 4, date: '2026-01-30', category: 'Income Tax', title: 'Instalment Phase Alpha', description: 'First critical instalment phase for Individual/Corporate Income Tax.', daysRemaining: 24 }
   ]);
 
   hasDeadline(day: number) {
