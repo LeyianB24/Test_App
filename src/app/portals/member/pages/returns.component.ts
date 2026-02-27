@@ -163,14 +163,17 @@ import { ReturnsService } from '../../../services/returns.service';
   `,
   styles: [`
     .elite-filing-surface {
-      background: white; border-radius: 32px; border: 1px solid var(--border-color);
-      box-shadow: 0 40px 100px rgba(0,0,0,0.1); margin-bottom: 40px; overflow: hidden;
-      border-top: 5px solid var(--kra-red);
+      background: rgba(255, 255, 255, 0.9);
+      -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
+      border-radius: 32px; border: 1px solid rgba(255,255,255,0.6);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.1), inset 0 2px 0 rgba(255,255,255,0.8); 
+      margin-bottom: 40px; overflow: hidden;
+      border-top: 5px solid var(--kra-red); position: relative;
     }
-    .surface-header { padding: 32px 40px; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; background: #F8FAFC; }
+    .surface-header { padding: 32px 40px; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; background: rgba(248, 250, 252, 0.5); }
     .s-title-v h3 { font-size: 1.25rem; font-weight: 900; color: var(--text-main); margin: 0; }
     .s-title-v p { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 4px; }
-    .close-luxury { width: 44px; height: 44px; border-radius: 12px; border: none; background: #F1F5F9; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.3s; }
+    .close-luxury { width: 44px; height: 44px; border-radius: 12px; border: none; background: rgba(241, 245, 249, 0.5); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.3s; }
     .close-luxury:hover { background: #fee2e2; color: #ef4444; }
 
     .surface-body { padding: 40px; }
