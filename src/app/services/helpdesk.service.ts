@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
@@ -109,7 +109,9 @@ export class HelpdeskService {
     this.ticketsSignal().filter(t => t.status === 'Waiting for Customer').length
   );
 
-  constructor(private http: HttpClient) {
+  private http = inject(HttpClient);
+
+  constructor() {
     this.loadCategories();
     this.loadSLAs();
   }

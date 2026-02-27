@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable, tap } from 'rxjs';
@@ -30,8 +30,27 @@ export class KbService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/kb_api.php`;
 
-  getCategories(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}?action=get_categories`);
+  // State signals
+  private categoriesSignal = signal<KbCategory[]>([]);
+  private loadingSignal = signal<boolean>(false);
+
+  // Read-only signals
+  public categories = computed(() => this.categoriesSignal());
+  public isLoading = computed(() => this.loadingSignal());
+
+  constructor() {
+    this.refreshCategories();
+  }
+
+  public refreshCategories(): void {
+    this.loadingSignal.set(true);
+    this.http.get<any>(`${this.apiUrl}?action=get_categories`).subscribe({
+      next: (resp) => {
+        if (resp.success) this.categoriesSignal.set(resp.data);
+        this.loadingSignal.set(false);
+      },
+      error: () => this.loadingSignal.set(false)
+    });
   }
 
   getArticles(categoryId: number): Observable<any> {
@@ -44,5 +63,9 @@ export class KbService {
 
   search(query: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}?action=search&query=${query}`);
+  }
+
+  incrementView(articleId: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}?action=increment_view`, { id: articleId });
   }
 }

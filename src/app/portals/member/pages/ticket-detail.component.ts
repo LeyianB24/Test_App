@@ -1,339 +1,244 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, signal, computed, effect, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HelpdeskService, Ticket } from '../../../services/helpdesk.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-ticket-detail',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <div class="container mx-auto p-4 md:p-8">
-      <!-- Header -->
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+    <div class="page-container p-8 animate-fade-in">
+      <!-- Elite Header -->
+      <header class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">Ticket Details</h1>
-          <p class="text-gray-600 mt-1" *ngIf="ticket">{{ ticket.ticket_number }}</p>
+           <div class="flex items-center gap-3 mb-2">
+              <a routerLink="/helpdesk" class="text-blue-500 hover:text-blue-400 transition-colors">
+                 <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 19l-7-7 7-7"/></svg>
+              </a>
+              <h1 class="text-4xl font-black text-white tracking-tighter">Ticket Details</h1>
+           </div>
+           @if (ticket()) {
+              <p class="text-slate-500 font-mono text-sm tracking-widest pl-9">{{ ticket()?.ticket_number }}</p>
+           }
         </div>
-        <a
-          routerLink="/helpdesk"
-          class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
-        >
-          ← Back to Tickets
-        </a>
-      </div>
+        
+        <div class="flex gap-4">
+           @if (ticket() && !['Resolved', 'Closed'].includes(ticket()!.status)) {
+              <button (click)="updateStatus('Resolved')" class="bg-emerald-600 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/10">
+                 Mark as Resolved
+              </button>
+           }
+        </div>
+      </header>
 
-      <!-- Loading State -->
       @if (helpdeskService.isLoading()) {
-        <div class="text-center py-8">
-          <div class="text-gray-500">Loading ticket...</div>
+        <div class="py-20 flex flex-col items-center">
+          <div class="w-12 h-12 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
+          <p class="mt-4 text-slate-500 font-bold uppercase tracking-widest text-[10px]">Loading secure record...</p>
         </div>
-      }
-
-      <!-- Error State -->
-      @if (helpdeskService.error() && !helpdeskService.isLoading()) {
-        <div class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg mb-6">
-          {{ helpdeskService.error() }}
-        </div>
-      }
-
-      <!-- Ticket Content -->
-      @if (ticket && !helpdeskService.isLoading()) {
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Main Content -->
-          <div class="lg:col-span-2 space-y-6">
-            <!-- Ticket Info Card -->
-            <div class="bg-white rounded-lg border border-gray-200 shadow p-6">
-              <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ ticket.subject }}</h2>
-
-              <!-- Status Bar -->
-              <div class="flex flex-wrap gap-3 mb-6">
-                <span [class]="getStatusClass(ticket.status)" class="px-4 py-2 rounded-full text-sm font-semibold">
-                  {{ ticket.status }}
-                </span>
-                <span [class]="getPriorityClass(ticket.priority)" class="px-4 py-2 rounded-full text-sm font-semibold">
-                  {{ ticket.priority }} Priority
-                </span>
-                <span class="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-semibold">
-                  {{ ticket.category }}
-                </span>
-              </div>
-
-              <!-- Description -->
-              <div class="bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200">
-                <h3 class="text-sm font-semibold text-gray-700 mb-2">Description</h3>
-                <p class="text-gray-700 whitespace-pre-wrap">{{ ticket.description }}</p>
-              </div>
-
-              <!-- Metadata -->
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-gray-200">
-                <div>
-                  <p class="text-xs text-gray-500 uppercase tracking-wider">Created</p>
-                  <p class="text-sm font-medium text-gray-900 mt-1">{{ formatDate(ticket.created_at) }}</p>
+      } @else if (ticket()) {
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <!-- Main Thread -->
+          <div class="lg:col-span-2 space-y-10">
+             <!-- Ticket Master Card -->
+             <div class="card-glass p-10 rounded-[3rem] border border-white/5 relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl"></div>
+                
+                <div class="flex flex-wrap gap-4 mb-8 relative z-10">
+                   <span class="badge-elite" [class]="getStatusClass(ticket()!.status)">{{ ticket()!.status }}</span>
+                   <span class="badge-elite" [class]="getPriorityClass(ticket()!.priority)">{{ ticket()!.priority }} Priority</span>
+                   <span class="badge-elite bg-white/5 text-slate-400 border-none">{{ ticket()!.category }}</span>
                 </div>
-                <div>
-                  <p class="text-xs text-gray-500 uppercase tracking-wider">Updated</p>
-                  <p class="text-sm font-medium text-gray-900 mt-1">{{ formatDate(ticket.updated_at) }}</p>
+
+                <h2 class="text-3xl font-black text-white mb-6 leading-tight">{{ ticket()!.subject }}</h2>
+                
+                <div class="p-8 bg-black/20 rounded-3xl border border-white/5 mb-10">
+                   <p class="text-slate-300 font-medium leading-relaxed whitespace-pre-wrap">{{ ticket()!.description }}</p>
                 </div>
-                @if (ticket.first_response_at) {
-                  <div>
-                    <p class="text-xs text-gray-500 uppercase tracking-wider">1st Response</p>
-                    <p class="text-sm font-medium text-gray-900 mt-1">{{ formatDate(ticket.first_response_at) }}</p>
-                  </div>
-                }
-                @if (ticket.resolved_at) {
-                  <div>
-                    <p class="text-xs text-gray-500 uppercase tracking-wider">Resolved</p>
-                    <p class="text-sm font-medium text-gray-900 mt-1">{{ formatDate(ticket.resolved_at) }}</p>
-                  </div>
-                }
-              </div>
-            </div>
 
-            <!-- Replies Section -->
-            <div class="bg-white rounded-lg border border-gray-200 shadow p-6">
-              <h3 class="text-lg font-bold text-gray-900 mb-4">Replies & Comments</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pt-10 border-t border-white/5">
+                   <div>
+                      <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 block mb-1">Created</span>
+                      <span class="text-white font-bold text-sm">{{ ticket()!.created_at | date:'medium' }}</span>
+                   </div>
+                   <div>
+                      <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 block mb-1">Last Update</span>
+                      <span class="text-white font-bold text-sm">{{ ticket()!.updated_at | date:'medium' }}</span>
+                   </div>
+                </div>
+             </div>
 
-              <div class="space-y-4 mb-6 max-h-96 overflow-y-auto">
-                @for (reply of (ticket.replies || []); track reply.id) {
-                  <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <div class="flex justify-between items-start mb-2">
-                      <p class="font-medium text-gray-900">Reply #{{ reply.id }}</p>
-                      @if (reply.is_internal) {
-                        <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                          Internal Note
-                        </span>
-                      }
-                    </div>
-                    <p class="text-sm text-gray-700 whitespace-pre-wrap mb-2">{{ reply.reply_text }}</p>
-                    <p class="text-xs text-gray-500">{{ formatDate(reply.created_at) }}</p>
-                  </div>
-                } @empty {
-                  <div class="text-center py-8 text-gray-500">
-                    No replies yet
-                  </div>
-                }
-              </div>
-
-              <!-- Add Reply Form -->
-              <div class="border-t border-gray-200 pt-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Add Reply</label>
-                <textarea
-                  [(ngModel)]="newReply"
-                  placeholder="Type your reply here..."
-                  rows="4"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                ></textarea>
-                <button
-                  (click)="submitReply()"
-                  [disabled]="!newReply || isSubmitting"
-                  class="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition"
-                >
-                  {{ isSubmitting ? 'Sending...' : 'Send Reply' }}
-                </button>
-              </div>
-            </div>
-
-            <!-- Attachments Section -->
-            @if (ticket.attachments && ticket.attachments.length > 0) {
-              <div class="bg-white rounded-lg border border-gray-200 shadow p-6">
-                <h3 class="text-lg font-bold text-gray-900 mb-4">Attachments</h3>
-                <div class="space-y-2">
-                  @for (attachment of ticket.attachments; track attachment.id) {
-                    <a
-                      href="#"
-                      class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition border border-gray-200"
-                    >
-                      <svg class="w-5 h-5 text-gray-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M8 16.5a1 1 0 11-2 0 1 1 0 012 0zM15 7H4v2h11V7zM4 5h2V3H4v2zm6 0h2V3h-2v2zM9 3H7v2h2V3z"/>
-                      </svg>
-                      <div>
-                        <p class="font-medium text-gray-900">{{ attachment.filename }}</p>
-                        <p class="text-xs text-gray-500">{{ formatFileSize(attachment.file_size) }}</p>
+             <!-- Conversation Thread -->
+             <div class="space-y-6">
+                <h3 class="text-xl font-black text-white px-8">Communication History</h3>
+                
+                <div class="thread px-4 space-y-6">
+                   @for (reply of ticket()!.replies; track reply.id) {
+                      <div class="flex gap-4" [class.justify-end]="!reply.is_internal">
+                         <div class="max-w-[80%] p-6 rounded-[2rem] border" 
+                              [class]="reply.is_internal ? 'bg-slate-800/60 border-white/5 text-slate-300' : 'bg-blue-600 border-blue-500 text-white shadow-xl shadow-blue-600/10 rounded-tr-none'">
+                            @if (reply.is_internal) {
+                               <span class="text-[9px] font-black uppercase tracking-widest text-blue-400 block mb-2">Official Response</span>
+                            }
+                            <p class="font-medium text-sm leading-relaxed whitespace-pre-wrap">{{ reply.reply_text }}</p>
+                            <span class="text-[9px] font-bold opacity-50 block mt-4">{{ reply.created_at | date:'short' }}</span>
+                         </div>
                       </div>
-                    </a>
-                  }
+                   } @empty {
+                      <div class="text-center py-10 opacity-30">
+                         <p class="text-sm font-bold uppercase tracking-widest">No replies yet. Awaiting official review.</p>
+                      </div>
+                   }
                 </div>
-              </div>
-            }
+
+                <!-- Reply Composer -->
+                <div class="card-glass p-8 rounded-[3rem] border border-white/10 shadow-2xl">
+                   <h4 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 pl-4">Add Reply</h4>
+                   <textarea
+                      [(ngModel)]="newReply"
+                      placeholder="Type your message to the support team..."
+                      rows="4"
+                      class="w-full bg-white/5 border border-white/10 text-white p-6 rounded-3xl focus:border-blue-500 outline-none font-medium mb-6 transition-all"
+                   ></textarea>
+                   <div class="flex justify-end">
+                      <button
+                         (click)="submitReply()"
+                         [disabled]="!newReply.trim() || isSubmitting()"
+                         class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 disabled:bg-slate-800 transition-all shadow-xl shadow-blue-600/10"
+                      >
+                         {{ isSubmitting() ? 'Transmitting...' : 'Send Message' }}
+                      </button>
+                   </div>
+                </div>
+             </div>
           </div>
 
-          <!-- Sidebar -->
-          <div class="space-y-6">
-            <!-- Quick Actions -->
-            <div class="bg-white rounded-lg border border-gray-200 shadow p-6">
-              <h3 class="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
-              <div class="space-y-2">
-                @if (ticket.status !== 'In Progress') {
-                  <button
-                    (click)="updateStatus('In Progress')"
-                    class="w-full px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 text-sm font-medium"
-                  >
-                    Mark In Progress
-                  </button>
+          <!-- Sidebar Analytics -->
+          <div class="space-y-8">
+             <div class="card-glass p-8 rounded-[3rem] border border-white/5">
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-blue-500 mb-6">Service Level Agreement</h3>
+                @if (slaInfo()) {
+                   <div class="space-y-6">
+                      <div class="flex items-center gap-4">
+                         <div class="w-10 h-10 bg-emerald-500/10 text-emerald-500 rounded-xl flex items-center justify-center font-black text-xs">RT</div>
+                         <div>
+                            <span class="text-[9px] font-black uppercase text-slate-500 block">Response Target</span>
+                            <span class="text-white font-black">{{ slaInfo()!.response_time_hours }} Hours</span>
+                         </div>
+                      </div>
+                      <div class="flex items-center gap-4">
+                         <div class="w-10 h-10 bg-blue-500/10 text-blue-500 rounded-xl flex items-center justify-center font-black text-xs">RS</div>
+                         <div>
+                            <span class="text-[9px] font-black uppercase text-slate-500 block">Resolution Target</span>
+                            <span class="text-white font-black">{{ slaInfo()!.resolution_time_hours }} Hours</span>
+                         </div>
+                      </div>
+                   </div>
                 }
-                @if (!['Resolved', 'Closed'].includes(ticket.status)) {
-                  <button
-                    (click)="updateStatus('Resolved')"
-                    class="w-full px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm font-medium"
-                  >
-                    Mark Resolved
-                  </button>
-                }
-                @if (ticket.status !== 'Waiting for Customer') {
-                  <button
-                    (click)="updateStatus('Waiting for Customer')"
-                    class="w-full px-3 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 text-sm font-medium"
-                  >
-                    Waiting for Response
-                  </button>
-                }
-              </div>
-            </div>
+             </div>
 
-            <!-- SLA Info -->
-            @if (slaInfo) {
-              <div class="bg-white rounded-lg border border-gray-200 shadow p-6">
-                <h3 class="text-lg font-bold text-gray-900 mb-4">SLA Info</h3>
-                <div class="space-y-3">
-                  <div>
-                    <p class="text-xs text-gray-500 uppercase tracking-wider">Response Time Target</p>
-                    <p class="text-sm font-medium text-gray-900 mt-1">{{ slaInfo.response_time_hours }} hours</p>
-                  </div>
-                  <div>
-                    <p class="text-xs text-gray-500 uppercase tracking-wider">Resolution Time Target</p>
-                    <p class="text-sm font-medium text-gray-900 mt-1">{{ slaInfo.resolution_time_hours }} hours</p>
-                  </div>
+             <div class="card-glass p-8 rounded-[3rem] border border-white/5">
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Internal History</h3>
+                <div class="space-y-4">
+                   @for (event of ticket()!.history; track event.id) {
+                      <div class="flex gap-3 text-[11px]">
+                         <div class="w-1.5 h-1.5 rounded-full bg-slate-700 mt-1.5"></div>
+                         <div>
+                            <p class="text-slate-300 font-bold leading-tight mb-1">{{ event.description }}</p>
+                            <span class="text-slate-600 font-medium">{{ event.changed_at | date:'short' }}</span>
+                         </div>
+                      </div>
+                   }
                 </div>
-              </div>
-            }
-
-            <!-- History -->
-            @if (ticket.history && ticket.history.length > 0) {
-              <div class="bg-white rounded-lg border border-gray-200 shadow p-6">
-                <h3 class="text-lg font-bold text-gray-900 mb-4">History</h3>
-                <div class="space-y-3 text-sm max-h-64 overflow-y-auto">
-                  @for (event of ticket.history; track event.id) {
-                    <div class="pb-3 border-b border-gray-200 last:border-b-0">
-                      <p class="font-medium text-gray-900">{{ event.description }}</p>
-                      <p class="text-xs text-gray-500 mt-1">{{ formatDate(event.changed_at) }}</p>
-                    </div>
-                  }
-                </div>
-              </div>
-            }
+             </div>
           </div>
         </div>
       }
     </div>
   `,
   styles: [`
-    :host {
-      display: block;
-    }
+    .page-container { max-width: 1500px; margin: 0 auto; }
+    .animate-fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .card-glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); }
+    
+    .badge-elite { padding: 4px 12px; border-radius: 8px; font-size: 0.65rem; font-weight: 950; text-transform: uppercase; border: 1px solid transparent; }
+    .badge-open { color: #3B82F6; background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.2); }
+    .badge-progress { color: #F59E0B; background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.2); }
+    .badge-waiting { color: #F97316; background: rgba(249, 115, 22, 0.1); border-color: rgba(249, 115, 22, 0.2); }
+    .badge-resolved { color: #10B981; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); }
+    .badge-critical { color: white; background: #E31E24; }
+    .badge-high { color: #E31E24; background: rgba(227, 30, 36, 0.1); border-color: rgba(227, 30, 36, 0.2); }
   `]
 })
-export class TicketDetailComponent implements OnInit, OnDestroy {
-  ticket: Ticket | null = null;
-  slaInfo: any = null;
+export class TicketDetailComponent {
+  private route = inject(ActivatedRoute);
+  public helpdeskService = inject(HelpdeskService);
+
+  ticketId = toSignal(this.route.params.pipe(map(p => parseInt(p['id'], 10))));
+  ticket = this.helpdeskService.currentTicket;
+  
+  slaInfo = computed(() => {
+    const t = this.ticket();
+    return t ? this.helpdeskService.getSLAForPriority(t.priority) : null;
+  });
+
   newReply = '';
-  isSubmitting = false;
-  private destroy$ = new Subject<void>();
+  isSubmitting = signal(false);
 
-  constructor(
-    private route: ActivatedRoute,
-    public helpdeskService: HelpdeskService
-  ) {}
-
-  ngOnInit(): void {
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
-      const ticketId = parseInt(params['id'], 10);
-      this.loadTicket(ticketId);
+  constructor() {
+    effect(() => {
+      const id = this.ticketId();
+      if (id) {
+        this.helpdeskService.getTicket(id).subscribe();
+      }
     });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  loadTicket(ticketId: number): void {
-    this.helpdeskService.getTicket(ticketId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (ticket) => {
-          this.ticket = ticket;
-          this.slaInfo = this.helpdeskService.getSLAForPriority(ticket.priority);
-        }
-      });
-  }
-
   submitReply(): void {
-    if (!this.newReply.trim() || !this.ticket) return;
+    const id = this.ticketId();
+    if (!this.newReply.trim() || !id) return;
 
-    this.isSubmitting = true;
-    this.helpdeskService.addReply(this.ticket.id, this.newReply)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          this.newReply = '';
-          this.isSubmitting = false;
-          // Reload ticket to get updated replies
-          this.loadTicket(this.ticket!.id);
-        },
-        error: () => {
-          this.isSubmitting = false;
-        }
-      });
+    this.isSubmitting.set(true);
+    this.helpdeskService.addReply(id, this.newReply).subscribe({
+      next: () => {
+        this.newReply = '';
+        this.isSubmitting.set(false);
+        this.helpdeskService.getTicket(id).subscribe();
+      },
+      error: () => this.isSubmitting.set(false)
+    });
   }
 
   updateStatus(newStatus: string): void {
-    if (!this.ticket) return;
+    const id = this.ticketId();
+    if (!id) return;
 
-    this.helpdeskService.updateTicket(this.ticket.id, { status: newStatus })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          this.loadTicket(this.ticket!.id);
-        }
-      });
+    this.helpdeskService.updateTicket(id, { status: newStatus }).subscribe({
+      next: () => this.helpdeskService.getTicket(id).subscribe()
+    });
   }
 
   getStatusClass(status: string): string {
-    const statusClasses: Record<string, string> = {
-      'Open': 'bg-blue-100 text-blue-800',
-      'In Progress': 'bg-yellow-100 text-yellow-800',
-      'Waiting for Customer': 'bg-orange-100 text-orange-800',
-      'Resolved': 'bg-green-100 text-green-800',
-      'Closed': 'bg-gray-100 text-gray-800',
-      'Reopened': 'bg-red-100 text-red-800'
-    };
-    return statusClasses[status] || 'bg-gray-100 text-gray-800';
+    switch (status) {
+      case 'Open': return 'badge-open';
+      case 'In Progress': return 'badge-progress';
+      case 'Waiting for Customer': return 'badge-waiting';
+      case 'Resolved': return 'badge-resolved';
+      default: return '';
+    }
   }
 
   getPriorityClass(priority: string): string {
-    const priorityClasses: Record<string, string> = {
-      'Low': 'bg-green-100 text-green-800',
-      'Medium': 'bg-blue-100 text-blue-800',
-      'High': 'bg-orange-100 text-orange-800',
-      'Critical': 'bg-red-100 text-red-800'
-    };
-    return priorityClasses[priority] || 'bg-gray-100 text-gray-800';
-  }
-
-  formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-  }
-
-  formatFileSize(bytes: number): string {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    switch (priority) {
+      case 'Critical': return 'badge-critical';
+      case 'High': return 'badge-high';
+      default: return 'badge-open';
+    }
   }
 }
+import { map } from 'rxjs/operators';

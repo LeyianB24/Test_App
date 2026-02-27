@@ -13,38 +13,37 @@ interface PinDetails {
 
 @Component({
   selector: 'app-pin-checker',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, FormsModule],
   template: `
-    <div class="checker-container p-6">
-      <header class="mb-8">
-        <h1 class="text-3xl font-black text-slate-800 tracking-tight">PIN Checker</h1>
-        <p class="text-slate-500 mt-1">Verify KRA PIN validity and active tax obligations</p>
+    <div class="page-container p-8 animate-fade-in">
+      <header class="mb-12">
+        <h1 class="text-5xl font-black text-white tracking-tighter mb-2">PIN <span class="text-blue-500">Validation</span></h1>
+        <p class="text-slate-400 font-medium text-lg">Verify KRA PIN authenticity and operational directives</p>
       </header>
 
-      <div class="max-w-2xl mx-auto">
-        <div class="card p-8 mb-8">
-          <div class="flex flex-col gap-6">
-            <div class="field">
-              <label>KRA PIN Number</label>
-              <div class="flex gap-3">
+      <div class="max-w-3xl mx-auto">
+        <div class="card-glass p-10 rounded-[3rem] border border-white/5 shadow-2xl mb-12">
+          <div class="space-y-6">
+            <div class="space-y-3">
+              <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Registry PIN Number</label>
+              <div class="flex gap-4">
                 <input 
                   type="text" 
                   [(ngModel)]="pin" 
-                  class="input uppercase font-mono tracking-widest text-lg" 
-                  placeholder="e.g. A001234567X"
+                  class="flex-1 bg-white/5 border border-white/10 text-white px-8 py-5 rounded-3xl focus:border-blue-500 outline-none font-black text-xl tracking-[0.2em] uppercase placeholder:text-slate-600 transition-all" 
+                  placeholder="A001234567X"
                   maxlength="11"
                 />
                 <button 
-                  class="btn-primary" 
+                  class="bg-blue-600 text-white px-10 py-5 rounded-3xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 disabled:bg-slate-800 transition-all shadow-xl shadow-blue-600/20" 
                   [disabled]="!pin() || isLoading()" 
                   (click)="checkPin()"
                 >
                   @if (isLoading()) {
-                    <div class="spinner-sm"></div>
+                    <div class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
                   } @else {
-                    Verify
+                    Validate
                   }
                 </button>
               </div>
@@ -53,29 +52,37 @@ interface PinDetails {
         </div>
 
         @if (result()) {
-          <div class="result-card animate-fade-in">
-            <div class="header">
-              <div class="status-badge" [class.active]="result()?.pinStatus === 'Active'">
+          <div class="card-glass p-10 rounded-[3rem] border border-white/5 animate-fade-in relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[100px] -mr-32 -mt-32"></div>
+            
+            <div class="text-center space-y-4 mb-12">
+              <span class="badge-elite" [class]="result()?.pinStatus === 'Active' ? 'badge-active' : 'badge-inactive'">
                 {{ result()?.pinStatus }}
-              </div>
-              <h3 class="name">{{ result()?.taxpayerName }}</h3>
-              <p class="pin font-mono">{{ result()?.pin }}</p>
+              </span>
+              <h3 class="text-3xl font-black text-white tracking-tight leading-none">{{ result()?.taxpayerName }}</h3>
+              <p class="text-blue-500 font-black text-lg tracking-[0.3em] font-mono">{{ result()?.pin }}</p>
             </div>
 
-            <div class="details-grid mt-8">
-              <div class="detail-item">
-                <span class="label">iTax Status</span>
-                <span class="value">{{ result()?.iTaxStatus }}</span>
-              </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+               <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
+                  <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">iTax Registration</span>
+                  <span class="text-sm font-bold text-white">{{ result()?.iTaxStatus }}</span>
+               </div>
+               <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
+                  <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Status Classification</span>
+                  <span class="text-sm font-bold text-white">Consolidated</span>
+               </div>
             </div>
 
-            <div class="obligations mt-8">
-              <h4 class="font-bold text-slate-800 mb-4 px-2">Tax Obligations</h4>
-              <div class="ob-list">
+            <div class="space-y-4">
+              <h4 class="text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase ml-4">Tax Obligations Registry</h4>
+              <div class="space-y-3">
                 @for (ob of result()?.obligations; track ob.name) {
-                  <div class="ob-item">
-                    <span class="ob-name">{{ ob.name }}</span>
-                    <span class="ob-status" [class.active]="ob.status === 'Active'">{{ ob.status }}</span>
+                  <div class="flex justify-between items-center p-6 bg-white/5 rounded-[1.5rem] border border-white/5 group hover:bg-white/10 transition-all">
+                    <span class="text-sm font-bold text-slate-300 group-hover:text-white transition-colors">{{ ob.name }}</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest" [class]="ob.status === 'Active' ? 'text-emerald-500' : 'text-slate-600'">
+                       {{ ob.status }}
+                    </span>
                   </div>
                 }
               </div>
@@ -84,90 +91,59 @@ interface PinDetails {
         }
 
         @if (error()) {
-          <div class="error-msg animate-fade-in mt-4">
-            {{ error() }}
+          <div class="mt-8 p-6 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl font-bold flex items-center gap-3 animate-shake">
+             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-width="2"/></svg>
+             {{ error() }}
           </div>
         }
       </div>
     </div>
   `,
   styles: [`
-    .checker-container { max-width: 1000px; margin: 0 auto; }
-    .card { background: white; border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
-    
-    .field label { display: block; font-size: 0.8rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-    .input { 
-      flex: 1; padding: 14px 20px; border-radius: 14px; border: 2px solid #f1f5f9; 
-      background: #fbfcfd; font-weight: 700; transition: 0.3s;
-    }
-    .input:focus { border-color: #e31e24; background: white; outline: none; box-shadow: 0 0 0 4px rgba(227,30,36,0.05); }
+    .page-container { max-width: 1200px; margin: 0 auto; }
+    .card-glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); }
+    .animate-fade-in { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .animate-shake { animation: shake 0.5s; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
-    .btn-primary {
-      padding: 0 32px; height: 56px; border-radius: 14px; background: #e31e24; color: white;
-      font-weight: 800; border: none; cursor: pointer; transition: 0.3s;
-    }
-    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(227,30,36,0.2); }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .result-card { background: white; border-radius: 32px; padding: 40px; border: 1px solid #f1f5f9; box-shadow: 0 10px 40px rgba(0,0,0,0.02); }
-    .result-card .header { text-align: center; }
-    .status-badge { 
-      display: inline-block; padding: 6px 16px; border-radius: 50px; background: #fee2e2; color: #991b1b; 
-      font-size: 0.75rem; font-weight: 800; margin-bottom: 16px;
-    }
-    .status-badge.active { background: #dcfce7; color: #166534; }
-    .result-card .name { font-size: 1.5rem; font-weight: 900; color: #1e293b; margin: 0; }
-    .result-card .pin { font-size: 1rem; color: #94a3b8; margin-top: 4px; }
-
-    .ob-list { display: flex; flex-direction: column; gap: 8px; }
-    .ob-item { 
-      display: flex; justify-content: space-between; align-items: center; 
-      padding: 14px 20px; background: #fbfcfd; border-radius: 16px;
-    }
-    .ob-name { font-weight: 700; color: #475569; }
-    .ob-status { font-size: 0.7rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; }
-    .ob-status.active { color: #22c55e; }
-
-    .error-msg { 
-      padding: 16px 20px; background: #fff5f5; border: 1px solid #fee2e2; border-radius: 16px; 
-      color: #e31e24; font-weight: 700; font-size: 0.9rem; text-align: center;
-    }
-
-    .spinner-sm { width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .animate-fade-in { animation: fadeIn 0.4s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .badge-elite { display: inline-block; padding: 4px 12px; border-radius: 8px; font-size: 0.65rem; font-weight: 950; text-transform: uppercase; letter-spacing: 1px; }
+    .badge-active { background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.2); }
+    .badge-inactive { background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.2); }
   `]
 })
 export class PinCheckerComponent {
+  private http = inject(HttpClient);
+  
   pin = signal('');
   isLoading = signal(false);
   result = signal<PinDetails | null>(null);
   error = signal('');
 
   checkPin() {
+    if (this.pin().length < 11) {
+      this.error.set('AUTHENTICATION FAILED: PIN must be exactly 11 characters.');
+      return;
+    }
+
     this.isLoading.set(true);
     this.error.set('');
     this.result.set(null);
 
-    // Simulate API call
+    // Simulated API latency for elite feel
     setTimeout(() => {
       this.isLoading.set(false);
-      if (this.pin().length < 11) {
-        this.error.set('Invalid PIN format. Please enter a valid 11-character KRA PIN.');
-      } else {
-        this.result.set({
-          pin: this.pin().toUpperCase(),
-          taxpayerName: 'DOE JOHN ANTHONY',
-          pinStatus: 'Active',
-          iTaxStatus: 'Registered',
-          obligations: [
-            { name: 'Income Tax - Resident Individual', status: 'Active' },
-            { name: 'Value Added Tax (VAT)', status: 'Active' },
-            { name: 'Pay As You Earn (PAYE)', status: 'Inactive' }
-          ]
-        });
-      }
-    }, 1500);
+      this.result.set({
+        pin: this.pin().toUpperCase(),
+        taxpayerName: 'DOE JOHN ANTHONY',
+        pinStatus: 'Active',
+        iTaxStatus: 'Registered',
+        obligations: [
+          { name: 'Income Tax - Resident Individual', status: 'Active' },
+          { name: 'Value Added Tax (VAT)', status: 'Active' },
+          { name: 'Pay As You Earn (PAYE)', status: 'Inactive' }
+        ]
+      });
+    }, 1200);
   }
 }
