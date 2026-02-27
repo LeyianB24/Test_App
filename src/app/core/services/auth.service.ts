@@ -59,12 +59,22 @@ export class AuthService {
       pages: this.fetchUserPages(),
       context: this.loadSessionContext()
     }).subscribe({
-      next: () => {
+      next: (res) => {
         console.log('🛡️ AuthService: Security perimeter stabilized.');
+        
+        // If we have a user but no navigation pages, something is wrong with the role/permissions
+        if (this.currentUser() && (!res.pages || res.pages.length === 0)) {
+          console.warn('⚠️ AuthService: Session initialized with zero access pages. Verify RBAC matrix.');
+        }
+        
         this.isInitialized.set(true);
       },
-      error: () => {
-        console.warn('⚠️ AuthService: Degraded session state.');
+      error: (err) => {
+        console.error('🚫 AuthService: Gateway handshake failed.', err);
+        // If initial load fails (e.g. 401), we should probably clear the zombie session
+        if (err.status === 401 || err.status === 403) {
+          this.logout().subscribe();
+        }
         this.isInitialized.set(true);
       }
     });
@@ -186,7 +196,17 @@ export class AuthService {
   private getUserFromStorage(): User | null {
     try {
       const userJson = localStorage.getItem('currentUser');
-      return userJson ? JSON.parse(userJson) : null;
+      if (!userJson) return null;
+      
+      const user = JSON.parse(userJson) as User;
+      
+      // Strict validation: Must have taxpayer_id and at least default role info
+      if (!user.taxpayer_id || !user.type) {
+        console.warn('⚠️ AuthService: Purged corrupted user fragment from storage.');
+        return null;
+      }
+      
+      return user;
     } catch {
       return null;
     }
