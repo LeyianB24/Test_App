@@ -1,7 +1,8 @@
 import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../core/services/auth.service';
+import { NotificationService } from '../core/services/notification.service';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({

@@ -26,11 +26,11 @@ interface RolePermission {
         <div class="header-stats" *ngIf="!loading()">
            <div class="stat-pill">
               <span class="s-label">Active Roles:</span>
-              <span class="s-value">{{ roles.length }}</span>
+              <span class="s-value">{{ totalRolesCount() }}</span>
            </div>
            <div class="stat-pill">
               <span class="s-label">Total Pages:</span>
-              <span class="s-value">{{ pages.length }}</span>
+              <span class="s-value">{{ totalPagesCount() }}</span>
            </div>
         </div>
       </div>
@@ -51,7 +51,7 @@ interface RolePermission {
         <div class="role-selector-panel">
           <div class="panel-label">System Identities</div>
           <div class="role-cards-stack">
-            <button *ngFor="let role of roles" 
+            <button *ngFor="let role of roles()" 
                     class="role-card-btn"
                     [class.active]="selectedRoleId() === role.id"
                     (click)="selectedRoleId.set(role.id)">
@@ -149,13 +149,13 @@ interface RolePermission {
       </div>
 
       <!-- Compact Feed -->
-      <div class="compact-audit-elite" *ngIf="recentChanges.length > 0">
+      <div class="compact-audit-elite" *ngIf="recentChanges().length > 0">
         <div class="audit-head">
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           Live Integrity Stream
         </div>
         <div class="audit-track">
-          <div *ngFor="let change of recentChanges.slice(0, 3)" class="audit-entry">
+          <div *ngFor="let change of recentChanges().slice(0, 3)" class="audit-entry">
             {{ change }}
           </div>
         </div>
@@ -256,23 +256,23 @@ export class AdminRoleMatrixComponent implements OnInit {
   loading = signal(true);
   saving = signal(false);
   error = signal('');
-  roles: any[] = [];
-  pages: any[] = [];
-  permissions: RolePermission[] = [];
-  recentChanges: string[] = [];
-
-  // New Reactive State
+  
+  // 100% Signal-based state
+  roles = signal<any[]>([]);
+  pagesSource = signal<any[]>([]);
+  permissions = signal<RolePermission[]>([]);
+  recentChanges = signal<string[]>([]);
   selectedRoleId = signal<number | null>(null);
   expandedPage = signal<string | null>(null);
 
   selectedRole = computed(() => {
     const id = this.selectedRoleId();
-    return this.roles.find(r => r.id === id);
+    return this.roles().find(r => r.id === id);
   });
 
   modules = computed(() => {
     const groups: { name: string, pages: any[] }[] = [];
-    this.pages.forEach(p => {
+    this.pagesSource().forEach(p => {
       let group = groups.find(g => g.name === p.module);
       if (!group) {
         group = { name: p.module, pages: [] };
@@ -282,6 +282,9 @@ export class AdminRoleMatrixComponent implements OnInit {
     });
     return groups;
   });
+
+  totalRolesCount = computed(() => this.roles().length);
+  totalPagesCount = computed(() => this.pagesSource().length);
 
   ngOnInit(): void {
     this.fetchMatrix();
@@ -293,31 +296,30 @@ export class AdminRoleMatrixComponent implements OnInit {
     this.adminService.getMatrix().subscribe({
       next: (res) => {
         if (res && res.data) {
-          this.roles = res.data.roles || [];
-          this.pages = res.data.pages || [];
-          this.permissions = Object.values(res.data.permissions || {}) as RolePermission[];
+          this.roles.set(res.data.roles || []);
+          this.pagesSource.set(res.data.pages || []);
+          this.permissions.set(Object.values(res.data.permissions || {}) as RolePermission[]);
           
-          // Auto-select first role if none selected
-          if (!this.selectedRoleId() && this.roles.length > 0) {
-            this.selectedRoleId.set(this.roles[0].id);
+          if (!this.selectedRoleId() && this.roles().length > 0) {
+            this.selectedRoleId.set(this.roles()[0].id);
           }
         }
         this.loading.set(false);
       },
       error: (err) => {
-        this.error.set('Failed to load role matrix. Please try again.');
+        this.error.set('Failed to synchronize permissions registry.');
         this.loading.set(false);
       }
     });
   }
 
   toggleExpand(slug: string) {
-    this.expandedPage.set(this.expandedPage() === slug ? null : slug);
+    this.expandedPage.update(current => current === slug ? null : slug);
   }
 
-  getPermission(roleId: number | null, pageSlug: string, permKey: 'can_view' | 'can_edit' | 'can_delete' | 'can_export'): boolean {
+  getPermission(roleId: number | null, pageSlug: string, permKey: keyof RolePermission): boolean {
     if (roleId === null) return false;
-    const perm = this.permissions.find(p => p.role_id === roleId && p.page_slug === pageSlug);
+    const perm = this.permissions().find(p => p.role_id === roleId && p.page_slug === pageSlug);
     return perm ? (perm[permKey] === 1) : false;
   }
 
@@ -325,37 +327,37 @@ export class AdminRoleMatrixComponent implements OnInit {
     if (roleId === null) return;
     this.saving.set(true);
 
-    const currentPerms = this.permissions.find(p => p.role_id === roleId && p.page_slug === pageSlug) || { can_view: 0, can_edit: 0, can_delete: 0, can_export: 0 };
+    const currentPerms = this.permissions().find(p => p.role_id === roleId && p.page_slug === pageSlug) || 
+      { role_id: roleId, page_slug: pageSlug, can_view: 0, can_edit: 0, can_delete: 0, can_export: 0 };
+    
     const payload = {
-      role_id: roleId,
-      page_slug: pageSlug,
-      can_view: permKey === 'can_view' ? (value ? 1 : 0) : currentPerms.can_view,
-      can_edit: permKey === 'can_edit' ? (value ? 1 : 0) : currentPerms.can_edit,
-      can_delete: permKey === 'can_delete' ? (value ? 1 : 0) : currentPerms.can_delete,
-      can_export: permKey === 'can_export' ? (value ? 1 : 0) : currentPerms.can_export
+      ...currentPerms,
+      [permKey]: value ? 1 : 0
     };
 
-    this.adminService.upsertPermission(payload as any).subscribe({
+    this.adminService.upsertPermission(payload).subscribe({
       next: () => {
-        const action = value ? 'granted' : 'revoked';
-        const roleName = this.roles.find(r => r.id === roleId)?.name || `Role ${roleId}`;
-        const pageTitle = this.pages.find(p => p.slug === pageSlug)?.title || pageSlug;
+        const action = value ? 'GRANTED' : 'REVOKED';
+        const roleName = this.roles().find(r => r.id === roleId)?.name || `Role ${roleId}`;
+        const pageTitle = this.pagesSource().find(p => p.slug === pageSlug)?.title || pageSlug;
         const permLabel = permKey.replace('can_', '').toUpperCase();
         
-        this.recentChanges.unshift(`${action.toUpperCase()}: ${permLabel} for ${pageTitle} (${roleName})`);
+        this.recentChanges.update(prev => [`${action}: ${permLabel} for ${pageTitle} (${roleName})`, ...prev]);
         
-        // Update local session state to avoid full reload
-        const index = this.permissions.findIndex(p => p.role_id === roleId && p.page_slug === pageSlug);
-        if (index > -1) {
-          this.permissions[index] = { ...this.permissions[index], ...payload };
-        } else {
-          this.permissions.push(payload as RolePermission);
-        }
+        this.permissions.update(current => {
+          const index = current.findIndex(p => p.role_id === roleId && p.page_slug === pageSlug);
+          if (index > -1) {
+            const updated = [...current];
+            updated[index] = { ...updated[index], ...payload };
+            return updated;
+          }
+          return [...current, payload as RolePermission];
+        });
         
         this.saving.set(false);
       },
-      error: (err) => {
-        this.error.set('Failed to synchronize permission update.');
+      error: () => {
+        this.error.set('Integrity sync failed. Please verify network connection.');
         this.saving.set(false);
       }
     });

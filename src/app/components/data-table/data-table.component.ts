@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, computed, signal, inject } from
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ExportService, ExportColumn } from '../../services/export.service';
-import { NotificationService } from '../../services/notification.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 export interface TableColumn {
   key: string;

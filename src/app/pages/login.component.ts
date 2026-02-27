@@ -1,10 +1,10 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { LoginCredentials } from '../models/app.models';
+import { AuthService } from '../core/services/auth.service';
+import { LoginCredentials } from '../core/models/app.models';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -252,14 +252,19 @@ export class LoginComponent {
     this.isLoading.set(true);
     this.errorMessage.set('');
     
-    const { taxpayer_id, password, rememberMe } = this.loginForm.getRawValue();
-    const credentials = { taxpayer_id: taxpayer_id!, password: password! };
+    const { taxpayer_id, password } = this.loginForm.getRawValue();
+    const credentials: LoginCredentials = { 
+      taxpayer_id: taxpayer_id!, 
+      password: password! 
+    };
 
-    this.authService.login(credentials, !!rememberMe).subscribe({
+    const rememberMe = !!this.loginForm.get('rememberMe')?.value;
+
+    this.authService.login(credentials, rememberMe).subscribe({
       next: (response) => {
         this.isLoading.set(false);
-        if (response.success && response.data?.user) {
-          // Route to the correct portal based on roleCategory
+        if (response.success) {
+          // Route to the correct portal based on roleCategory signal
           const portal = this.authService.roleCategory() === 'member'
             ? '/member/dashboard'
             : '/admin-portal/dashboard';

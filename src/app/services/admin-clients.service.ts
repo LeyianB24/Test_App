@@ -49,4 +49,19 @@ export class AdminClientsService {
     return this.http.get<any>(`${this.apiUrl}/admin_clients_api.php`, { params, withCredentials: true })
       .pipe(catchError(err => of({ success: false, error: err })));
   }
+
+  upsertClient(client: Partial<ClientData>): Observable<{ success: boolean; message?: string; error?: any }> {
+    return this.http.post<any>(`${this.apiUrl}/admin_clients_api.php?action=upsert`, client, { withCredentials: true })
+      .pipe(catchError(err => of({ success: false, error: err })));
+  }
+
+  deleteClient(id: number): Observable<{ success: boolean; message?: string; error?: any }> {
+    return this.http.post<any>(`${this.apiUrl}/admin_clients_api.php?action=delete`, { id }, { withCredentials: true })
+      .pipe(catchError(err => of({ success: false, error: err })));
+  }
+
+  importClients(rows: any[]): Observable<{ success: boolean; message?: string; error?: any }> {
+    return this.http.post<any>(`${this.apiUrl}/admin_clients_api.php?action=import`, { rows }, { withCredentials: true })
+      .pipe(catchError(err => of({ success: false, error: err })));
+  }
 }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PaymentService } from '../../services/payment.service';
 import { ValidationService, ValidationRule } from '../../services/validation.service';
-import { NotificationService } from '../../services/notification.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { MpesaService } from '../../services/mpesa.service';
 
 @Component({

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../../layout/sidebar/sidebar.component';
 import { HeaderComponent } from '../../layout/header/header.component';
 import { FooterComponent } from '../../layout/footer/footer.component';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 
 /**

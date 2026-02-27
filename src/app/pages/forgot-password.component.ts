@@ -2,7 +2,8 @@ import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/cor
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../core/services/auth.service';
+import { NotificationService } from '../core/services/notification.service';
 
 @Component({
   selector: 'app-forgot-password',

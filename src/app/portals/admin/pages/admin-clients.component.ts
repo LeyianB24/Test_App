@@ -1,12 +1,13 @@
-import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AdminClientsService, ClientData } from '../../../services/admin-clients.service';
 
 @Component({
   selector: 'app-admin-clients',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   template: `
     <div class="page-container animate-up">
       <header class="page-header-elite">
@@ -15,12 +16,20 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
           <p class="premium-subtitle">Manage client accounts, compliance status, and system access</p>
         </div>
         <div class="header-actions">
-           <div class="search-box">
+           <div class="search-box mr-12">
              <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="search()" placeholder="Search PIN, Name, Email..." class="premium-input">
              <button class="search-btn" (click)="search()">
                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
              </button>
            </div>
+           <button class="btn-premium mr-8" (click)="openForge()">
+             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+             Client Forge
+           </button>
+           <button class="btn-premium-outline" (click)="showImport.set(true)">
+             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+             Bulk Ingest
+           </button>
         </div>
       </header>
 
@@ -33,7 +42,7 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
         {{ error() }}
       </div>
 
-      <div *ngIf="!loading() && !error()" class="content-card-premium table-responsive-elite">
+      <div *ngIf="!loading() && !error()" class="content-card-premium table-responsive-elite glassmorphism">
         <table class="elite-table">
           <thead>
             <tr>
@@ -68,9 +77,14 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
                 <span class="text-sm text-muted" *ngIf="!client.last_login">Never</span>
               </td>
               <td>
-                <button class="icon-btn" title="View Details">
-                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                </button>
+                <div class="flex gap-2">
+                  <button class="icon-btn" title="Edit Client" (click)="openForge(client)">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                  </button>
+                  <button class="icon-btn delete" title="Delete Client" (click)="confirmDelete(client)">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                  </button>
+                </div>
               </td>
             </tr>
             <tr *ngIf="clients().length === 0">
@@ -81,74 +95,227 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
 
         <!-- Pagination Controls -->
         <div class="pagination flex justify-between items-center mt-6 pt-4 border-t border-gray-100" *ngIf="totalPages() > 1">
-          <div class="text-sm text-muted">
+          <div class="text-sm text-muted font-bold">
              Showing page {{ currentPage() }} of {{ totalPages() }} ({{ totalCount() }} total)
           </div>
           <div class="flex gap-2">
-            <button class="page-btn" [disabled]="currentPage() === 1" (click)="loadPage(currentPage() - 1)">Prev</button>
-            <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="loadPage(currentPage() + 1)">Next</button>
+            <button class="page-btn" [disabled]="currentPage() === 1" (click)="loadPage(currentPage() - 1)">
+               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="loadPage(currentPage() + 1)">
+               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
           </div>
+        </div>
+      </div>
+
+      <!-- Client Forge Modal -->
+      <div class="modal-overlay" *ngIf="showForge()">
+        <div class="modal-card animate-scale glassmorphism">
+          <div class="modal-header">
+            <h2 class="modal-title">{{ editingClient() ? 'Edit' : 'Create' }} Taxpayer Record</h2>
+            <button class="close-btn" (click)="closeForge()">&times;</button>
+          </div>
+          <form [formGroup]="clientForm" (ngSubmit)="saveClient()" class="modal-body">
+             <div class="form-grid">
+               <div class="form-group">
+                 <label>Taxpayer PIN</label>
+                 <input type="text" formControlName="taxpayer_id" class="premium-input-full" placeholder="e.g. T001234567X">
+               </div>
+               <div class="form-group">
+                 <label>Full Name</label>
+                 <input type="text" formControlName="name" class="premium-input-full" placeholder="Legally Registered Name">
+               </div>
+               <div class="form-group">
+                 <label>Email Address</label>
+                 <input type="email" formControlName="email" class="premium-input-full" placeholder="contact@domain.com">
+               </div>
+               <div class="form-group">
+                 <label>Phone Number</label>
+                 <input type="text" formControlName="phone" class="premium-input-full" placeholder="+254 7XX XXX XXX">
+               </div>
+               <div class="form-group">
+                 <label>Station</label>
+                 <select formControlName="station" class="premium-input-full">
+                   <option value="Nairobi North">Nairobi North</option>
+                   <option value="Nairobi South">Nairobi South</option>
+                   <option value="Mombasa">Mombasa</option>
+                   <option value="Kisumu">Kisumu</option>
+                   <option value="Eldoret">Eldoret</option>
+                 </select>
+               </div>
+               <div class="form-group">
+                 <label>KRA PIN (Secondary Verification)</label>
+                 <input type="text" formControlName="kra_pin" class="premium-input-full" placeholder="Verify PIN">
+               </div>
+             </div>
+             
+             <div class="modal-actions mt-24">
+               <button type="button" class="btn-premium-outline" (click)="closeForge()">Cancel</button>
+               <button type="submit" class="btn-premium" [disabled]="clientForm.invalid || saving()">
+                 {{ saving() ? 'Processing...' : 'Forge Record' }}
+               </button>
+             </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Bulk Ingest Wizard -->
+      <div class="modal-overlay" *ngIf="showImport()">
+        <div class="modal-card import-card animate-scale glassmorphism">
+           <div class="modal-header">
+             <h2 class="modal-title">Bulk Ingest Portal</h2>
+             <button class="close-btn" (click)="showImport.set(false)">&times;</button>
+           </div>
+           <div class="modal-body">
+              <div class="upload-zone" *ngIf="!importPreview().length">
+                <input type="file" id="csvFile" (change)="onFileSelected($event)" accept=".csv" class="hidden">
+                <label for="csvFile" class="upload-label">
+                   <svg class="w-12 h-12 mb-4 text-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                   <span>Drop CSV here or click to browse</span>
+                   <p class="text-xs text-muted mt-4">Expected columns: taxpayer_id, name, email, phone, station, kra_pin</p>
+                </label>
+              </div>
+
+              <div class="preview-zone" *ngIf="importPreview().length">
+                 <h4 class="text-sm font-black mb-12 uppercase tracking-widest text-blue">Data Validation Preview ({{ importPreview().length }} records)</h4>
+                 <div class="preview-table-container custom-scrollbar">
+                    <table class="preview-table">
+                       <thead>
+                         <tr>
+                            <th>PIN</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Station</th>
+                         </tr>
+                       </thead>
+                       <tbody>
+                         @for (row of importPreview().slice(0, 5); track $index) {
+                           <tr>
+                             <td>{{ row.taxpayer_id }}</td>
+                             <td>{{ row.name }}</td>
+                             <td>{{ row.email }}</td>
+                             <td>{{ row.station }}</td>
+                           </tr>
+                         }
+                       </tbody>
+                    </table>
+                    <p class="text-xs italic mt-8" *ngIf="importPreview().length > 5">+ {{ importPreview().length - 5 }} more records...</p>
+                 </div>
+                 
+                 <div class="modal-actions mt-24">
+                    <button class="btn-premium-outline" (click)="importPreview.set([])">Clear</button>
+                    <button class="btn-premium" (click)="processImport()" [disabled]="saving()">
+                      {{ saving() ? 'Ingesting...' : 'Start Bulk Import' }}
+                    </button>
+                 </div>
+              </div>
+           </div>
         </div>
       </div>
     </div>
   `,
   styles: [`
-    .spin { width: 40px; height: 40px; border: 4px solid var(--border-color); border-top-color: var(--kra-red); border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-state { display: flex; flex-direction: column; align-items: center; padding: 60px; }
-    .error-banner { background: #FEE2E2; border: 1px solid #FECACA; color: #DC2626; padding: 16px; border-radius: 8px; margin-top: 16px; font-weight: 600; }
-    .content-card-premium { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); padding: 24px; margin-top: 24px; }
+    .page-container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+    .glassmorphism {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    }
     
-    .search-box { display: flex; align-items: center; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 4px; }
-    .premium-input { border: none; background: transparent; padding: 8px 16px; outline: none; width: 250px; color: var(--text-main); font-size: 0.9rem; }
-    .search-btn { background: var(--kra-red); color: white; border: none; border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-    .search-btn:hover { opacity: 0.9; }
-    
-    .elite-table { width: 100%; border-collapse: collapse; }
-    .elite-table th { text-align: left; padding: 16px; border-bottom: 2px solid var(--border-light); font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-    .elite-table td { padding: 16px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
-    .elite-table tbody tr:hover { background: var(--bg-hover); }
-    .font-bold { font-weight: 700; }
-    .text-main { color: var(--text-main); }
-    .text-muted { color: var(--text-muted); }
-    .text-xs { font-size: 0.75rem; }
-    .text-sm { font-size: 0.85rem; }
-    .block { display: block; }
-    .mt-1 { margin-top: 4px; }
-    
-    .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; }
+    .mr-12 { margin-right: 12px; }
+    .mr-8 { margin-right: 8px; }
+    .mt-24 { margin-top: 24px; }
+    .mb-24 { margin-bottom: 24px; }
+    .mb-12 { margin-bottom: 12px; }
+    .mb-8 { margin-bottom: 8px; }
+
+    .search-box { display: flex; align-items: center; background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+    .premium-input { border: none; background: transparent; padding: 8px 16px; outline: none; width: 220px; color: #1E293B; font-size: 0.85rem; }
+    .premium-input-full { width: 100%; padding: 12px 16px; border: 1.5px solid #E2E8F0; border-radius: 12px; outline: none; font-size: 0.9rem; transition: border 0.2s; }
+    .premium-input-full:focus { border-color: #3B82F6; }
+    .search-btn { background: #E2E8F0; color: #64748B; border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+    .search-btn:hover { background: #3B82F6; color: white; }
+
+    .elite-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+    .elite-table th { text-align: left; padding: 12px 16px; font-size: 0.75rem; font-weight: 900; color: #94A3B8; text-transform: uppercase; letter-spacing: 1px; }
+    .elite-table tbody tr { background: white; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.01); }
+    .elite-table tbody tr:hover { transform: scale(1.005); box-shadow: 0 4px 12px rgba(0,0,0,0.04); background: #F8FAFC; }
+    .elite-table td { padding: 16px; vertical-align: middle; }
+    .elite-table td:first-child { border-radius: 12px 0 0 12px; }
+    .elite-table td:last-child { border-radius: 0 12px 12px 0; }
+
+    .badge { padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 950; letter-spacing: 0.5px; }
     .badge-blue { background: rgba(59, 130, 246, 0.1); color: #2563EB; }
     .badge-purple { background: rgba(139, 92, 246, 0.1); color: #7C3AED; }
-    
-    .icon-btn { background: var(--bg-hover); border: none; width: 32px; height: 32px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-secondary); cursor: pointer; transition: 0.2s; }
-    .icon-btn:hover { background: var(--kra-red); color: white; }
-    
-    .pagination { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-light); }
-    .flex { display: flex; }
-    .gap-2 { gap: 8px; }
-    .page-btn { padding: 8px 16px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main); font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
-    .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    @media (max-width: 768px) {
-      .premium-input { width: 100%; }
-      .search-box { width: 100%; }
-      .content-card-premium { padding: 16px; }
-      .elite-table th, .elite-table td { padding: 12px; }
-    }
+    .icon-btn { width: 32px; height: 32px; border-radius: 8px; border: none; background: #F1F5F9; color: #64748B; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .icon-btn:hover { background: #3B82F6; color: white; transform: rotate(15deg); }
+    .icon-btn.delete:hover { background: #EF4444; color: white; }
+
+    .pagination { padding: 1.5rem 0; }
+    .page-btn { width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #E2E8F0; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748B; transition: 0.2s; }
+    .page-btn:hover:not(:disabled) { border-color: #3B82F6; color: #3B82F6; }
+    .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* Modal Styling */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); display: flex; items-center justify-center; z-index: 1000; padding: 20px; }
+    .modal-card { width: 100%; max-width: 650px; border-radius: 28px; overflow: hidden; }
+    .import-card { max-width: 500px; }
+    .modal-header { padding: 24px 32px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+    .modal-title { font-size: 1.25rem; font-weight: 900; color: #1E293B; margin: 0; }
+    .close-btn { background: none; border: none; font-size: 1.5rem; color: #94A3B8; cursor: pointer; }
+    .modal-body { padding: 32px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .form-group label { display: block; font-size: 0.75rem; font-weight: 900; color: #64748B; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 12px; }
+
+    /* Import Wizard */
+    .upload-zone { border: 2px dashed #CBD5E1; border-radius: 24px; padding: 48px; text-align: center; background: rgba(248, 250, 252, 0.5); transition: all 0.2s; }
+    .upload-zone:hover { border-color: #3B82F6; background: rgba(59, 130, 246, 0.05); }
+    .upload-label { cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+    .upload-label span { font-weight: 800; font-size: 1rem; color: #334155; }
+    .preview-table-container { max-height: 250px; overflow-y: auto; border: 1px solid #E2E8F0; border-radius: 12px; background: white; }
+    .preview-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .preview-table th { background: #F8FAFC; padding: 10px; border-bottom: 1px solid #E2E8F0; text-align: left; }
+    .preview-table td { padding: 10px; border-bottom: 1px solid #F1F5F9; }
+    .hidden { display: none; }
+
+    @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .animate-scale { animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   `]
 })
 export class AdminClientsComponent implements OnInit {
   private clientsService = inject(AdminClientsService);
+  private fb = inject(FormBuilder);
 
   loading = signal(true);
+  saving = signal(false);
   error = signal('');
   clients = signal<ClientData[]>([]);
+  
+  // Forge State
+  showForge = signal(false);
+  editingClient = signal<ClientData | null>(null);
+  clientForm = this.fb.group({
+    id: [null],
+    taxpayer_id: ['', [Validators.required, Validators.pattern(/^[A-Z0-9]+$/)]],
+    name: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    phone: [''],
+    station: ['Nairobi North'],
+    kra_pin: ['']
+  });
+
+  // Import State
+  showImport = signal(false);
+  importPreview = signal<any[]>([]);
   
   currentPage = signal(1);
   totalPages = signal(1);
   totalCount = signal(0);
   searchQuery = '';
-  
   pageSize = 10;
 
   ngOnInit() {
@@ -174,6 +341,106 @@ export class AdminClientsComponent implements OnInit {
       error: () => {
         this.error.set('Network error encountered while fetching directory.');
         this.loading.set(false);
+      }
+    });
+  }
+
+  openForge(client?: ClientData) {
+    if (client) {
+      this.editingClient.set(client);
+      this.clientForm.patchValue({
+        id: client.id as any,
+        taxpayer_id: client.taxpayer_id,
+        name: client.name,
+        email: client.email,
+        phone: client.phone || '',
+        station: client.station || 'Nairobi North',
+        kra_pin: client.kra_pin || ''
+      });
+    } else {
+      this.editingClient.set(null);
+      this.clientForm.reset({ station: 'Nairobi North' });
+    }
+    this.showForge.set(true);
+  }
+
+  closeForge() {
+    this.showForge.set(false);
+    this.editingClient.set(null);
+  }
+
+  saveClient() {
+    if (this.clientForm.invalid) return;
+    this.saving.set(true);
+    
+    this.clientsService.upsertClient(this.clientForm.value as any).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.loadData();
+          this.closeForge();
+        } else {
+          alert('Forge Failure: ' + (res.error || 'Unknown error'));
+        }
+        this.saving.set(false);
+      },
+      error: () => {
+        this.saving.set(false);
+      }
+    });
+  }
+
+  confirmDelete(client: ClientData) {
+    if (confirm(`Are you certain you want to redact record ${client.taxpayer_id}? This is audited.`)) {
+      this.clientsService.deleteClient(client.id).subscribe({
+        next: (res) => {
+          if (res.success) this.loadData();
+          else alert('Redaction Error: ' + res.error);
+        }
+      });
+    }
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const text = e.target.result;
+      const lines = text.split('\\n');
+      const result = [];
+      const headers = lines[0].split(',');
+
+      for (let i = 1; i < lines.length; i++) {
+        if (!lines[i]) continue;
+        const obj: any = {};
+        const currentline = lines[i].split(',');
+
+        for (let j = 0; j < headers.length; j++) {
+          obj[headers[j].trim()] = currentline[j].trim();
+        }
+        result.push(obj);
+      }
+      this.importPreview.set(result);
+    };
+    reader.readAsText(file);
+  }
+
+  processImport() {
+    if (!this.importPreview().length) return;
+    this.saving.set(true);
+    
+    this.clientsService.importClients(this.importPreview()).subscribe({
+      next: (res) => {
+        if (res.success) {
+          alert(res.message);
+          this.loadData();
+          this.showImport.set(false);
+          this.importPreview.set([]);
+        } else {
+          alert('Ingest Failure: ' + res.error);
+        }
+        this.saving.set(false);
       }
     });
   }

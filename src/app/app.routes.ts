@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { guestGuard } from './guards/auth.guard';
-import { memberGuard } from './portals/member/member.guard';
-import { adminPortalGuard } from './portals/admin/admin.guard';
+import { guestGuard } from './core/guards/guest.guard';
+import { memberGuard } from './core/guards/member.guard';
+import { adminPortalGuard } from './core/guards/admin-portal.guard';
 
 /**
  * Root Application Routes
@@ -11,8 +11,6 @@ import { adminPortalGuard } from './portals/admin/admin.guard';
  *  - /admin-portal/* → Admin/Staff portal (AdminShellComponent + admin routes)
  *
  * Each portal has its own layout shell, guard, and routing configuration.
- * This eliminates the need for per-route permissionGuard checks and the
- * circular redirect loops they caused.
  */
 export const routes: Routes = [
   // Auth routes (for guests only)
@@ -50,6 +48,13 @@ export const routes: Routes = [
     path: 'admin-portal',
     canActivate: [adminPortalGuard],
     loadChildren: () => import('./portals/admin/admin.routes').then(m => m.adminPortalRoutes)
+  },
+
+  // Unauthorized page
+  {
+    path: 'unauthorized',
+    title: 'Access Denied',
+    loadComponent: () => import('./pages/unauthorized.component').then(m => m.UnauthorizedComponent)
   },
 
   // Fallback — redirect unknown paths to login

@@ -1,18 +1,17 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, signal, inject, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, OnDestroy, signal, inject, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { DashboardDataService } from '../../services/dashboard-data.service';
-import { AuthService } from '../../core/services/auth.service';
-import { NotificationService, Notification } from '../../core/services/notification.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { NotificationService, Notification } from '../../../core/services/notification.service';
 
 @Component({
-  selector: 'app-header',
+  selector: 'app-admin-header',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, RouterModule],
   host: { '(document:click)': 'onDocumentClick()' },
   template: `
-    <header class="header-elite">
+    <header class="header-elite admin-header">
       <div class="header-inner">
         
         <div class="header-left">
@@ -21,15 +20,15 @@ import { NotificationService, Notification } from '../../core/services/notificat
           </button>
 
           <div class="page-context hide-mobile">
-            <span class="context-tag">KRA SMART PORTAL</span>
-            <h1 class="context-title">iTax <span class="gradient-text">Executive</span></h1>
+            <span class="context-tag admin-tag">KRA ADMINISTRATIVE CONSOLE</span>
+            <h1 class="context-title">Staff <span class="gradient-text admin-gradient">Portal</span></h1>
           </div>
         </div>
 
         <div class="header-center hide-mobile">
-          <div class="luxury-search">
+          <div class="luxury-search admin-search">
             <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" placeholder="Search revenue services, forms or PINs..." (keyup.enter)="handleSearch($event)" />
+            <input type="text" placeholder="Search systems, clients or audit entries..." (keyup.enter)="handleSearch($event)" />
             <div class="kbd-hint">ENTER</div>
           </div>
         </div>
@@ -49,17 +48,17 @@ import { NotificationService, Notification } from '../../core/services/notificat
 
             <!-- Luxury Notifications Panel -->
             <div class="notif-panel-elite animate-scale" *ngIf="isNotificationsOpen()" (click)="$event.stopPropagation()">
-              <div class="panel-header-elite">
+              <div class="panel-header-elite admin-panel-header">
                 <div class="p-title-box">
-                   <h3>Notifications</h3>
-                   <span class="p-count">{{ unreadCount() }} NEW ALERTS</span>
+                   <h3>System Alerts</h3>
+                   <span class="p-count admin-p-count">{{ unreadCount() }} NEW INCIDENTS</span>
                 </div>
                 <button class="p-action-btn" (click)="markAllRead()">Archive All</button>
               </div>
               <div class="panel-body-elite custom-scrollbar">
                 <div *ngIf="notifications().length === 0" class="notif-empty">
                   <div class="empty-icon">✓</div>
-                  <p>Compliance system clear. No pending alerts.</p>
+                  <p>All background systems operational.</p>
                 </div>
                 <div *ngFor="let note of notifications()" 
                      class="notif-item-elite" 
@@ -76,50 +75,50 @@ import { NotificationService, Notification } from '../../core/services/notificat
                 </div>
               </div>
               <div class="panel-footer-elite">
-                 <button class="view-all-btn" (click)="clearAll()">Purge Notification Cache</button>
+                 <button class="view-all-btn" (click)="clearAll()">Flush Audit Notifications</button>
               </div>
             </div>
           </div>
 
           <!-- User Intelligence Dropdown -->
           <div class="user-anchor">
-            <button class="user-trigger-elite" (click)="toggleMenu($event)" [class.active]="isMenuOpen()">
-              <div class="user-avatar-small">{{ getInitials(userName()) }}</div>
+            <button class="user-trigger-elite admin-user-trigger" (click)="toggleMenu($event)" [class.active]="isMenuOpen()">
+              <div class="user-avatar-small admin-avatar">{{ getInitials(userName()) }}</div>
               <div class="user-meta-mini hide-mobile">
                 <span class="u-name">{{ userName() }}</span>
-                <span class="u-pin">{{ userPin() }}</span>
+                <span class="u-pin admin-role">{{ userRole() }}</span>
               </div>
               <svg class="chevron-elite" [class.rotated]="isMenuOpen()" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 9l-7 7-7-7"></path></svg>
             </button>
 
             <!-- Luxury User Menu -->
             <div class="user-menu-elite animate-scale" *ngIf="isMenuOpen()" (click)="$event.stopPropagation()">
-              <div class="menu-intro-elite">
-                <div class="intro-avatar">{{ getInitials(userName()) }}</div>
+              <div class="menu-intro-elite admin-menu-intro">
+                <div class="intro-avatar admin-intro-avatar">{{ getInitials(userName()) }}</div>
                 <div class="intro-info">
                    <p class="i-name">{{ userName() }}</p>
-                   <p class="i-email">{{ userEmail() }}</p>
+                   <p class="i-email">{{ userRole() }} - Staff</p>
                 </div>
               </div>
               
               <ul class="menu-links-elite">
                 <li>
-                  <a [routerLink]="portalPrefix() + '/profile'" (click)="isMenuOpen.set(false)">
+                  <a [routerLink]="'/admin-portal/profile'" (click)="isMenuOpen.set(false)">
                     <div class="m-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></div>
-                    <span>Authorized Profile</span>
+                    <span>Staff Profile</span>
                   </a>
                 </li>
                 <li>
-                  <a [routerLink]="portalPrefix() + '/settings'" (click)="isMenuOpen.set(false)">
+                  <a [routerLink]="'/admin-portal/settings'" (click)="isMenuOpen.set(false)">
                     <div class="m-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg></div>
-                    <span>Gateway Settings</span>
+                    <span>Global Settings</span>
                   </a>
                 </li>
                 <li class="m-divider"></li>
                 <li>
                   <button (click)="logout.emit(); isMenuOpen.set(false)" class="m-logout-btn">
                     <div class="m-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></div>
-                    <span>Terminate Session</span>
+                    <span>Seal Session</span>
                   </button>
                 </li>
               </ul>
@@ -136,6 +135,7 @@ import { NotificationService, Notification } from '../../core/services/notificat
       background: var(--bg-topbar); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border-color); z-index: 900;
     }
+    .admin-header { border-bottom: 1.5px solid var(--kra-blue); }
     .header-inner { height: 100%; max-width: 1600px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; }
     
     .header-left { display: flex; align-items: center; gap: 32px; }
@@ -144,44 +144,36 @@ import { NotificationService, Notification } from '../../core/services/notificat
 
     .page-context { display: flex; flex-direction: column; }
     .context-tag { font-size: 0.7rem; font-weight: 800; color: var(--kra-red); text-transform: uppercase; letter-spacing: 2px; }
+    .admin-tag { color: var(--kra-blue); }
     .context-title { font-size: 1.5rem; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -1px; }
+    .admin-gradient { background: linear-gradient(135deg, var(--kra-blue), #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    .luxury-search {
-      position: relative; width: 450px; display: flex; align-items: center;
-    }
+    .luxury-search { position: relative; width: 450px; display: flex; align-items: center; }
     .luxury-search .s-icon { position: absolute; left: 20px; width: 24px; height: 24px; color: var(--text-muted); pointer-events: none; }
     .luxury-search input { 
       width: 100%; padding: 14px 100px 14px 56px; background: var(--bg-hover); border: 1.5px solid var(--border-color);
       border-radius: 18px; font-weight: 600; color: var(--text-main); transition: 0.3s; font-family: inherit;
     }
-    .luxury-search input:focus { background: var(--bg-surface); border-color: var(--kra-red); outline: none; box-shadow: 0 0 0 5px rgba(227,30,36,0.1); }
+    .luxury-search input:focus { background: var(--bg-surface); border-color: var(--kra-blue); outline: none; box-shadow: 0 0 0 5px rgba(59,130,246,0.1); }
     .kbd-hint { position: absolute; right: 12px; font-size: 0.65rem; font-weight: 800; color: var(--text-muted); border: 1.5px solid var(--border-color); padding: 4px 8px; border-radius: 8px; background: var(--bg-surface); }
 
     .header-right { display: flex; align-items: center; gap: 24px; }
     
     .notif-anchor, .user-anchor { position: relative; }
-    .notif-btn-elite { 
-      width: 50px; height: 50px; border-radius: 16px; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; position: relative;
-    }
+    .notif-btn-elite { width: 50px; height: 50px; border-radius: 16px; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; position: relative; }
     .notif-btn-elite:hover { background: rgba(0,0,0,0.03); color: var(--text-main); }
-    .notif-btn-elite.active { background: rgba(227,30,36,0.08); color: var(--kra-red); }
+    .notif-btn-elite.active { background: rgba(59,130,246,0.08); color: var(--kra-blue); }
     
     .notif-icon-box { position: relative; width: 22px; height: 22px; }
     .notif-icon-box.pulse { animation: notifPulse 2s infinite; }
-    @keyframes notifPulse { 
-      0% { transform: scale(1); } 
-      50% { transform: scale(1.15); } 
-      100% { transform: scale(1); } 
-    }
-    .notif-badge { position: absolute; top: -8px; right: -8px; background: var(--kra-red); color: white; font-size: 0.65rem; font-weight: 900; min-width: 18px; height: 18px; border-radius: 9px; display: flex; align-items: center; justify-content: center; border: 2.5px solid var(--bg-surface); padding: 0 4px; }
+    @keyframes notifPulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+    .notif-badge { position: absolute; top: -8px; right: -8px; background: var(--kra-blue); color: white; font-size: 0.65rem; font-weight: 900; min-width: 18px; height: 18px; border-radius: 9px; display: flex; align-items: center; justify-content: center; border: 2.5px solid var(--bg-surface); padding: 0 4px; }
 
-    /* Notifications Panel */
-    .notif-panel-elite {
-      position: absolute; top: 64px; right: 0; width: 420px; background: var(--bg-surface); border-radius: 28px; border: 1px solid var(--border-color); box-shadow: 0 30px 60px rgba(0,0,0,0.2); overflow: hidden;
-    }
+    .notif-panel-elite { position: absolute; top: 64px; right: 0; width: 420px; background: var(--bg-surface); border-radius: 28px; border: 1px solid var(--border-color); box-shadow: 0 30px 60px rgba(0,0,0,0.2); overflow: hidden; }
     .panel-header-elite { padding: 24px 30px; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; background: var(--bg-hover); }
+    .admin-panel-header { background: rgba(59,130,246,0.03); }
     .p-title-box h3 { font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin: 0; }
-    .p-count { font-size: 0.7rem; font-weight: 950; color: var(--kra-red); letter-spacing: 1px; }
+    .admin-p-count { color: var(--kra-blue); }
     .p-action-btn { color: var(--kra-blue); font-weight: 900; font-size: 0.8rem; background: none; border: none; cursor: pointer; }
 
     .panel-body-elite { max-height: 480px; overflow-y: auto; }
@@ -193,30 +185,18 @@ import { NotificationService, Notification } from '../../core/services/notificat
     .notif-indicator.warning { background: #F59E0B; }
     .notif-indicator.error { background: #EF4444; }
     .notif-indicator.info { background: #3B82F6; }
-    .notif-content { flex: 1; }
-    .notif-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .notif-title { font-weight: 800; color: var(--text-main); font-size: 0.95rem; }
-    .notif-time { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; }
-    .notif-msg { font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; line-height: 1.5; margin: 0; }
     .panel-footer-elite { padding: 16px; background: var(--bg-hover); text-align: center; }
     .view-all-btn { width: 100%; padding: 12px; background: var(--bg-surface); border: 1.5px solid var(--border-color); border-radius: 16px; font-weight: 800; color: var(--text-secondary); cursor: pointer; transition: 0.3s; }
-    .view-all-btn:hover { border-color: var(--kra-red); color: var(--kra-red); }
+    .view-all-btn:hover { border-color: var(--kra-blue); color: var(--kra-blue); }
 
-    /* User Menu */
-    .user-trigger-elite { display: flex; align-items: center; gap: 16px; padding: 6px; padding-right: 16px; background: var(--bg-hover); border: 1.5px solid var(--border-color); border-radius: 18px; cursor: pointer; transition: 0.3s; }
-    .user-trigger-elite:hover { border-color: var(--kra-red); background: var(--bg-surface); }
-    .user-avatar-small { width: 36px; height: 36px; background: var(--kra-gradient); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; }
-    .user-meta-mini { display: flex; flex-direction: column; text-align: left; }
-    .u-name { font-size: 0.9rem; font-weight: 800; color: var(--text-main); }
-    .u-pin { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); margin-top: -2px; }
-    .chevron-elite { color: var(--text-muted); transition: 0.3s; }
-    .chevron-elite.rotated { transform: rotate(180deg); color: var(--kra-red); }
+    .admin-user-trigger { background: rgba(59,130,246,0.03); border: 1.5px solid rgba(59,130,246,0.1); }
+    .admin-avatar { background: var(--kra-blue); }
+    .admin-role { font-size: 0.65rem; color: var(--kra-blue); text-transform: uppercase; letter-spacing: 0.5px; }
 
     .user-menu-elite { position: absolute; top: 64px; right: 0; width: 300px; background: var(--bg-surface); border-radius: 28px; border: 1px solid var(--border-color); box-shadow: 0 30px 60px rgba(0,0,0,0.2); overflow: hidden; }
     .menu-intro-elite { padding: 30px; background: var(--bg-hover); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; gap: 16px; }
-    .intro-avatar { width: 50px; height: 50px; background: var(--kra-blue); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.25rem; }
-    .i-name { font-weight: 800; color: var(--text-main); font-size: 1.1rem; margin: 0; }
-    .i-email { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+    .admin-menu-intro { background: rgba(59,130,246,0.03); }
+    .admin-intro-avatar { background: var(--kra-blue); }
 
     .menu-links-elite { list-style: none; padding: 12px; margin: 0; }
     .menu-links-elite a, .m-logout-btn { display: flex; align-items: center; gap: 16px; padding: 14px 18px; border-radius: 16px; color: var(--text-secondary); text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: 0.3s; width: 100%; border: none; background: transparent; cursor: pointer; font-family: inherit; }
@@ -224,20 +204,9 @@ import { NotificationService, Notification } from '../../core/services/notificat
     .m-logout-btn:hover { background: #FEF2F2; color: var(--kra-red); }
     .m-icon { width: 32px; height: 32px; border-radius: 10px; background: var(--bg-hover); display: flex; align-items: center; justify-content: center; }
     .m-divider { height: 1px; background: var(--border-light); margin: 8px 18px; }
-
-    @media (max-width: 768px) {
-       .header-inner { padding: 0 16px; }
-       .notif-panel-elite { width: calc(100vw - 32px); right: -10px; left: auto; max-width: 360px; }
-       .user-menu-elite { width: 260px; }
-       .luxury-search { width: 100% !important; }
-    }
-    @media (max-width: 480px) {
-       .notif-panel-elite { right: -10px; width: calc(100vw - 20px); }
-       .user-menu-elite { right: -10px; width: calc(100vw - 20px); max-width: 300px; }
-    }
   `]
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class AdminHeaderComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private notificationService = inject(NotificationService);
 
@@ -245,9 +214,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() logout = new EventEmitter<void>();
 
   userName = this.authService.userName;
-  userPin = computed(() => this.authService.currentUser()?.taxpayer_id || 'N/A');
-  userEmail = computed(() => this.authService.currentUser()?.email || 'N/A');
-  portalPrefix = signal('/member');
+  userRole = this.authService.userRole;
   
   isMenuOpen = signal(false);
   isNotificationsOpen = signal(false);
@@ -257,9 +224,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   unreadCount = this.notificationService.unreadCount;
 
   ngOnInit() {
-    this.timer = setInterval(() => {
-       // Future real-time updates
-    }, 5000);
+    this.timer = setInterval(() => {}, 5000);
   }
 
   ngOnDestroy() {
@@ -284,26 +249,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   getInitials(name: string): string {
-    if (!name) return 'U';
+    if (!name) return 'S';
     const parts = name.split(' ');
     if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 
-  markAsRead(note: Notification) {
-    this.notificationService.markAsRead(note.id);
-  }
-
-  markAllRead() {
-    this.notificationService.markAllAsRead();
-  }
-
-  clearAll() {
-    this.notificationService.clearAll();
-  }
-
+  markAsRead(note: Notification) { this.notificationService.markAsRead(note.id); }
+  markAllRead() { this.notificationService.markAllAsRead(); }
+  clearAll() { this.notificationService.clearAll(); }
   handleSearch(event: any) {
     const query = event.target.value;
-    if (query) alert(`Executing sovereign search sequence for: ${query}`);
+    if (query) alert(`Executing staff intelligence search for: ${query}`);
   }
 }

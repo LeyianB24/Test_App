@@ -1,9 +1,9 @@
 import { Component, input, output, inject, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { LogoComponent } from '../../components/logo.component';
-import { AuthService } from '../../core/services/auth.service';
-import { ThemeService } from '../../services/theme.service';
+import { LogoComponent } from '../../../components/logo.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../services/theme.service';
 
 interface MenuItem {
   label: string;
@@ -14,153 +14,63 @@ interface MenuItem {
 }
 
 /**
- * Top-level navigation map.
- * Defines which slugs are considered "top-level" and what Angular route they map to.
- * Nested slugs (e.g. "tax-engine/file/income-tax") are collapsed to their parent entry.
+ * Navigation map for the Admin Portal.
  */
-const NAV_MAP: { slug: string; route: string; label: string; iconPath: string }[] = [
+const ADMIN_NAV_MAP: MenuItem[] = [
   {
-    slug: 'dashboard',
-    route: 'dashboard',
     label: 'Dashboard',
+    route: '/admin-portal/dashboard',
     iconPath: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z'
   },
   {
-    slug: 'compliance',
-    route: 'compliance/tcc',
-    label: 'Compliance',
-    iconPath: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
-  },
-  {
-    slug: 'returns',
-    route: 'returns',
-    label: 'File Returns',
-    iconPath: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-  },
-  {
-    slug: 'payments',
-    route: 'payments',
-    label: 'Payments',
-    iconPath: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z'
-  },
-  {
-    slug: 'debt',
-    route: 'debt',
-    label: 'Liabilities',
-    iconPath: 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-  },
-  {
-    slug: 'installments',
-    route: 'installments',
-    label: 'Payment Plans',
-    iconPath: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'
-  },
-  {
-    slug: 'statements',
-    route: 'statements/ledger',
-    label: 'Tax Ledger',
-    iconPath: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-  },
-  {
-    slug: 'etims',
-    route: 'etims',
-    label: 'eTIMS Invoicing',
-    iconPath: 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z'
-  },
-  {
-    slug: 'correspondence',
-    route: 'correspondence/notices',
-    label: 'Notices',
-    iconPath: 'M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z'
-  },
-  {
-    slug: 'objections',
-    route: 'objections',
-    label: 'Objections',
-    iconPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z'
-  },
-  {
-    slug: 'refunds',
-    route: 'refunds',
-    label: 'Tax Refunds',
-    iconPath: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-  },
-  {
-    slug: 'm-service',
-    route: 'm-service',
-    label: 'M-Service',
-    iconPath: 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 012 2z'
-  },
-  {
-    slug: 'tax-engine',
-    route: 'tax-engine/calculators',
-    label: 'Tax Engine',
-    iconPath: 'M13 10V3L4 14h7v7l9-11h-7z'
-  },
-  {
-    slug: 'checkers',
-    route: 'checkers/pin',
-    label: 'KRA Checkers',
-    iconPath: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
-  },
-  {
-    slug: 'notifications',
-    route: 'notifications/hub',
-    label: 'Notifications',
-    iconPath: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
-  },
-  {
-    slug: 'tickets',
-    route: 'helpdesk/tickets',
-    label: 'Support',
-    iconPath: 'M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z'
-  },
-  {
-    slug: 'kb',
-    route: 'helpdesk/knowledge-base',
-    label: 'Knowledge Base',
-    iconPath: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.168.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'
-  },
-  {
-    slug: 'clients',
-    route: 'clients',
     label: 'Clients',
+    route: '/admin-portal/clients',
     iconPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'
   },
   {
-    slug: 'role-matrix',
-    route: 'role-matrix',
     label: 'Role Matrix',
+    route: '/admin-portal/role-matrix',
     iconPath: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'
   },
   {
-    slug: 'reports',
-    route: 'reports',
     label: 'Reports',
+    route: '/admin-portal/reports',
     iconPath: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
   },
   {
-    slug: 'audit',
-    route: 'audit',
     label: 'Audit Log',
+    route: '/admin-portal/audit',
     iconPath: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'
   },
   {
-    slug: 'profile',
-    route: 'profile',
+    label: 'Helpdesk Dashboard',
+    route: '/admin-portal/helpdesk/dashboard',
+    iconPath: 'M13 10V3L4 14h7v7l9-11h-7z'
+  },
+  {
+    label: 'Support Tickets',
+    route: '/admin-portal/helpdesk/tickets',
+    iconPath: 'M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z'
+  },
+  {
+    label: 'Custom Declaration',
+    route: '/admin-portal/specialized/custom-declaration',
+    iconPath: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+  },
+  {
     label: 'My Profile',
+    route: '/admin-portal/profile',
     iconPath: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'
   },
   {
-    slug: 'settings',
-    route: 'settings',
     label: 'Gateway Settings',
+    route: '/admin-portal/settings',
     iconPath: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z'
   }
 ];
 
 @Component({
-  selector: 'app-sidebar',
+  selector: 'app-admin-sidebar',
   imports: [CommonModule, RouterModule, LogoComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -176,20 +86,20 @@ const NAV_MAP: { slug: string; route: string; label: string; iconPath: string }[
       <!-- Premium Branding -->
       <div class="sidebar-brand-elite">
         <div class="logo-sphere">
-             <app-logo [height]="collapsed() ? '80%' : '100%'"></app-logo>
+             <app-logo [height]="collapsed() ? '80%' : '100%'" color="gold"></app-logo>
         </div>
       </div>
 
       <div class="nav-scroller-elite custom-scrollbar">
         <nav class="sidebar-nav-elite">
           @if (!collapsed()) {
-            <p class="nav-domain-label">Operational Hub</p>
+            <p class="nav-domain-label">Administration Suite</p>
           }
 
-          @for (item of menuItems(); track item.route) {
+          @for (item of menuItems; track item.route) {
             <a [routerLink]="item.route"
                routerLinkActive="active"
-               class="nav-link-elite"
+               class="nav-link-elite admin-link"
                [title]="item.label"
                (click)="closeMobileMenu()">
 
@@ -202,17 +112,7 @@ const NAV_MAP: { slug: string; route: string; label: string; iconPath: string }[
               @if (!collapsed()) {
                 <span class="link-label-elite">{{ item.label }}</span>
               }
-
-              @if (item.notification && !collapsed()) {
-                <div class="badge-ring" [class.danger]="item.variant === 'danger'">
-                   <span class="badge-text">{{ item.notification }}</span>
-                </div>
-              }
             </a>
-          }
-
-          @if (menuItems().length === 0) {
-            <p class="nav-empty-msg">No pages assigned to your role.</p>
           }
         </nav>
       </div>
@@ -239,7 +139,7 @@ const NAV_MAP: { slug: string; route: string; label: string; iconPath: string }[
         </div>
 
         <div class="system-seal-elite" *ngIf="!collapsed()">
-           <span class="s-ver">v2.4.0-elite</span>
+           <span class="s-ver">Staff v2.4.0-admin</span>
            <span class="s-sep">|</span>
            <span class="s-sec">AES-X</span>
         </div>
@@ -260,7 +160,7 @@ const NAV_MAP: { slug: string; route: string; label: string; iconPath: string }[
       height: 90px;
       display: flex; align-items: center; justify-content: center;
       padding: 10px 20px;
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: 3px solid var(--kra-blue);
       background: var(--bg-surface);
       transition: all 0.3s ease;
     }
@@ -273,8 +173,7 @@ const NAV_MAP: { slug: string; route: string; label: string; iconPath: string }[
     }
 
     .nav-scroller-elite { flex: 1; padding: 12px; overflow-y: auto; }
-    .nav-domain-label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; padding: 0 16px; margin: 16px 0 12px 0; }
-    .nav-empty-msg { font-size: 0.8rem; color: var(--text-muted); padding: 16px; text-align: center; }
+    .nav-domain-label { font-size: 0.7rem; font-weight: 800; color: var(--kra-blue); text-transform: uppercase; letter-spacing: 2px; padding: 0 16px; margin: 16px 0 12px 0; }
 
     .nav-link-elite {
       display: flex; align-items: center; gap: 16px; padding: 14px 16px;
@@ -282,22 +181,16 @@ const NAV_MAP: { slug: string; route: string; label: string; iconPath: string }[
       font-weight: 700; font-size: 0.95rem; transition: 0.3s; margin-bottom: 4px;
     }
     .nav-link-elite:hover { background: rgba(0,0,0,0.03); color: var(--text-main); }
-    .nav-link-elite.active { background: var(--bg-active); color: var(--kra-red); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+    .nav-link-elite.active { background: rgba(59,130,246,0.05); color: var(--kra-blue); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
 
     .icon-frame {
       width: 40px; height: 40px; border-radius: 12px; background: transparent;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
       transition: 0.3s;
     }
-    .nav-link-elite.active .icon-frame { background: rgba(227,30,36,0.08); color: var(--kra-red); }
+    .nav-link-elite.active .icon-frame { background: rgba(59,130,246,0.1); color: var(--kra-blue); }
     .nav-icon-elite { width: 22px; height: 22px; }
     .link-label-elite { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    .badge-ring {
-      margin-left: auto; padding: 2px 8px; border-radius: 8px;
-      background: var(--bg-hover); color: var(--text-secondary); font-size: 0.7rem; font-weight: 900;
-    }
-    .badge-ring.danger { background: #FEE2E2; color: #EF4444; }
 
     .sidebar-footer-elite { padding: 20px; border-top: 1px solid var(--border-light); }
     .footer-actions-elite { display: flex; flex-direction: column; gap: 8px; }
@@ -335,7 +228,7 @@ const NAV_MAP: { slug: string; route: string; label: string; iconPath: string }[
     }
   `]
 })
-export class SidebarComponent {
+export class AdminSidebarComponent {
   authService = inject(AuthService);
   themeService = inject(ThemeService);
   router = inject(Router);
@@ -347,25 +240,7 @@ export class SidebarComponent {
   logout = output<void>();
 
   isDarkMode = this.themeService.darkMode;
-  userName = this.authService.userName;
-  userType = this.authService.userType;
-
-  menuItems = computed<MenuItem[]>(() => {
-    const grantedSlugs = this.authService.userPages().map((p: any) =>
-      p.slug.replace(/^\/+|\/+$/g, '')
-    );
-    const prefix = '/member';
-
-    // Build top-level nav, only showing entries the user has access to
-    return NAV_MAP.filter(entry => {
-      const entrySlug = entry.slug.replace(/^\/+|\/+$/g, '');
-      // Check if the user has this exact slug OR any sub-slug starting with it
-      return grantedSlugs.some((g: string) => g === entrySlug || g.startsWith(entrySlug + '/'));
-    }).map(entry => ({
-      ...entry,
-      route: entry.route.startsWith('/') ? entry.route : `${prefix}/${entry.route}`
-    }));
-  });
+  menuItems = ADMIN_NAV_MAP;
 
   handleLogout() {
     this.authService.logout().subscribe({
