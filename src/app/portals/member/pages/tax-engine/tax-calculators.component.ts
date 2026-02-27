@@ -51,9 +51,9 @@ type CalcMode = 'paye' | 'vat' | 'tot' | 'mri';
 
       <!-- PAYE Calculator -->
       @if (mode() === 'paye') {
-        <div class="calc-card grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in">
+        <div class="calc-card grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in relative overflow-hidden">
           <div class="input-side">
-            <h3 class="font-bold text-lg text-slate-800 mb-6">Monthly PAYE Calculator</h3>
+            <h3 class="font-bold text-lg text-slate-800 mb-6 font-primary uppercase tracking-tight">Monthly PAYE Calculator (2026)</h3>
             <div class="form-field">
               <label>Gross Monthly Salary (KES)</label>
               <input type="number" [(ngModel)]="grossSalary" (ngModelChange)="calculate()" class="calc-input" placeholder="e.g. 100000"/>
@@ -62,21 +62,32 @@ type CalcMode = 'paye' | 'vat' | 'tot' | 'mri';
               <label>Insurance Premium / Month (KES)</label>
               <input type="number" [(ngModel)]="insurancePremium" (ngModelChange)="calculate()" class="calc-input" placeholder="Optional"/>
             </div>
+            
+            <div class="mt-8 p-6 bg-slate-50 rounded-2xl border border-slate-100">
+               <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Statutory Rates Applied</h4>
+               <ul class="space-y-2">
+                 <li class="text-xs font-bold text-slate-600 flex justify-between"><span>SHA (Social Health Auth)</span> <span class="text-blue-600">2.75%</span></li>
+                 <li class="text-xs font-bold text-slate-600 flex justify-between"><span>Housing Levy</span> <span class="text-amber-600">1.5%</span></li>
+                 <li class="text-xs font-bold text-slate-600 flex justify-between"><span>NSSF Tier II</span> <span class="text-slate-800">KES 2,160</span></li>
+               </ul>
+            </div>
           </div>
 
           <div class="result-side">
-            <h3 class="font-bold text-lg text-slate-800 mb-4">Breakdown</h3>
+            <h3 class="font-bold text-lg text-slate-800 mb-4">Net Pay Breakdown</h3>
             <div class="result-rows">
               <div class="r-row"><span>Gross Salary</span><span class="r-val">{{ fmt(grossSalary) }}</span></div>
-              <div class="r-row"><span>NSSF Deduction</span><span class="r-val text-red-500">- {{ fmt(payeResult().nssf) }}</span></div>
-              <div class="r-row"><span>Taxable Income</span><span class="r-val font-bold">{{ fmt(payeResult().taxableIncome) }}</span></div>
-              <div class="r-row divider"><span>Tax Before Relief</span><span class="r-val">{{ fmt(payeResult().taxBeforeRelief) }}</span></div>
-              <div class="r-row"><span>Personal Relief</span><span class="r-val text-green-600">- {{ fmt(payeResult().personalRelief) }}</span></div>
-              <div class="r-row"><span>Insurance Relief</span><span class="r-val text-green-600">- {{ fmt(payeResult().insuranceRelief) }}</span></div>
+              <div class="r-row text-red-500"><span>NSSF Deduction</span><span class="r-val">- {{ fmt(payeResult().nssf) }}</span></div>
+              <div class="r-row text-blue-500"><span>SHA Remittance (2.75%)</span><span class="r-val">- {{ fmt(payeResult().sha) }}</span></div>
+              <div class="r-row text-amber-600"><span>Housing Levy (1.5%)</span><span class="r-val">- {{ fmt(payeResult().housingLevy) }}</span></div>
+              <div class="r-row divider"><span>Taxable Income</span><span class="r-val font-black">{{ fmt(payeResult().taxableIncome) }}</span></div>
               <div class="r-row highlight"><span>PAYE (Tax Payable)</span><span class="r-val">{{ fmt(payeResult().paye) }}</span></div>
-              <div class="r-row"><span>NHIF</span><span class="r-val">{{ fmt(payeResult().nhif) }}</span></div>
-              <div class="r-row final"><span>NET PAY</span><span class="r-val text-green-600">{{ fmt(payeResult().netPay) }}</span></div>
+              <div class="r-row final mt-4"><span>NET TAKE-HOME</span><span class="r-val">{{ fmt(payeResult().netPay) }}</span></div>
             </div>
+            
+            <button routerLink="/member/tax-engine/file/paye" class="w-full mt-6 py-4 bg-red-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-red-600/10">
+               Proceed to File P10 Return
+            </button>
           </div>
         </div>
       }
@@ -104,41 +115,48 @@ type CalcMode = 'paye' | 'vat' | 'tot' | 'mri';
               <div class="r-row final"><span>VAT Inclusive</span><span class="r-val text-green-600">{{ fmt(vatAmount * 1.16) }}</span></div>
             }
           </div>
+          <button routerLink="/member/tax-engine/file/vat" class="w-full mt-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all">
+             Open VAT Filing Wizard
+          </button>
         </div>
       }
 
       <!-- TOT Calculator -->
       @if (mode() === 'tot') {
         <div class="calc-card animate-fade-in" style="max-width:600px">
-          <h3 class="font-bold text-lg text-slate-800 mb-6">Turnover Tax Calculator (1%)</h3>
-          <p class="text-slate-400 text-sm mb-4">For businesses with annual turnover between KES 1M and KES 50M</p>
+          <h3 class="font-bold text-lg text-slate-800 mb-6 uppercase tracking-tighter">Turnover Tax Calculator (1%)</h3>
+          <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-6">Micro & Small Enterprises</p>
           <div class="form-field">
-            <label>Annual Turnover (KES)</label>
-            <input type="number" [(ngModel)]="totTurnover" class="calc-input" placeholder="e.g. 5000000"/>
+            <label>Monthly Turnover (KES)</label>
+            <input type="number" [(ngModel)]="totTurnover" class="calc-input" placeholder="e.g. 500000"/>
           </div>
           <div class="result-rows mt-6">
-            <div class="r-row"><span>Annual Turnover</span><span class="r-val">{{ fmt(totTurnover) }}</span></div>
-            <div class="r-row"><span>TOT Rate</span><span class="r-val">1%</span></div>
-            <div class="r-row final"><span>Annual TOT Payable</span><span class="r-val text-red-500">{{ fmt(totTurnover * 0.01) }}</span></div>
-            <div class="r-row"><span>Monthly TOT</span><span class="r-val">{{ fmt(totTurnover * 0.01 / 12) }}</span></div>
+            <div class="r-row"><span>Gross Turnover</span><span class="r-val">{{ fmt(totTurnover) }}</span></div>
+            <div class="r-row"><span>TOT Rate</span><span class="r-val">1.0%</span></div>
+            <div class="r-row final"><span>TOT Payable</span><span class="r-val text-red-500">{{ fmt(totTurnover * 0.01) }}</span></div>
           </div>
+          <button routerLink="/member/tax-engine/file/tot" class="w-full mt-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all">
+             File Quarterly TOT Return
+          </button>
         </div>
       }
 
       <!-- MRI Calculator -->
       @if (mode() === 'mri') {
         <div class="calc-card animate-fade-in" style="max-width:600px">
-          <h3 class="font-bold text-lg text-slate-800 mb-6">Monthly Rental Income Tax (7.5%)</h3>
+          <h3 class="font-bold text-lg text-slate-800 mb-6 uppercase tracking-tighter">Monthly Rental Income Tax (7.5%)</h3>
           <div class="form-field">
             <label>Monthly Rent Received (KES)</label>
             <input type="number" [(ngModel)]="mriRent" class="calc-input" placeholder="e.g. 150000"/>
           </div>
           <div class="result-rows mt-6">
-            <div class="r-row"><span>Monthly Rent</span><span class="r-val">{{ fmt(mriRent) }}</span></div>
+            <div class="r-row"><span>Gross Rent</span><span class="r-val">{{ fmt(mriRent) }}</span></div>
             <div class="r-row"><span>MRI Tax Rate</span><span class="r-val">7.5%</span></div>
-            <div class="r-row final"><span>Monthly Tax Payable</span><span class="r-val text-red-500">{{ fmt(mriRent * 0.075) }}</span></div>
-            <div class="r-row"><span>Annual Tax</span><span class="r-val">{{ fmt(mriRent * 0.075 * 12) }}</span></div>
+            <div class="r-row final"><span>Monthly Tax Due</span><span class="r-val text-red-500">{{ fmt(mriRent * 0.075) }}</span></div>
           </div>
+          <button routerLink="/member/tax-engine/file/mri" class="w-full mt-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all">
+             File MRI Return
+          </button>
         </div>
       }
     </div>
@@ -221,8 +239,9 @@ export class TaxCalculatorsComponent {
     const insuranceRelief = Math.min((this.insurancePremium || 0) * 0.15, INSURANCE_RELIEF_MAX);
     const paye = Math.max(tax - personalRelief - insuranceRelief, 0);
 
-    const nhifAmount = NHIF_RATES.find(r => gross >= r.min && gross <= r.max)?.amount ?? 0;
-    const netPay = gross - paye - nssf - nhifAmount;
+    const sha = gross * 0.0275;
+    const housingLevy = gross * 0.015;
+    const netPay = gross - paye - nssf - sha - housingLevy;
 
     return {
       nssf: Math.round(nssf),
@@ -231,7 +250,8 @@ export class TaxCalculatorsComponent {
       personalRelief,
       insuranceRelief: Math.round(insuranceRelief),
       paye: Math.round(paye),
-      nhif: nhifAmount,
+      sha: Math.round(sha),
+      housingLevy: Math.round(housingLevy),
       netPay: Math.round(netPay),
     };
   });
