@@ -26,8 +26,8 @@ import { ReturnsService } from '../../../services/returns.service';
 
       <!-- Elite Summary Section -->
       <div class="stats-grid-premium">
-        <div class="premium-stat-card animate-up delay-1">
-          <div class="stat-icon-wrapper blue">
+        <div class="premium-stat-card d-flex align-items-center p-4 animate-up delay-1">
+          <div class="stat-icon-wrapper blue me-3">
             <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2.2"/></svg>
           </div>
           <div class="stat-info">
@@ -37,8 +37,8 @@ import { ReturnsService } from '../../../services/returns.service';
             </div>
           </div>
         </div>
-        <div class="premium-stat-card animate-up delay-2">
-          <div class="stat-icon-wrapper green">
+        <div class="premium-stat-card d-flex align-items-center p-4 animate-up delay-2">
+          <div class="stat-icon-wrapper green me-3">
             <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2.2"/></svg>
           </div>
           <div class="stat-info">
@@ -48,8 +48,8 @@ import { ReturnsService } from '../../../services/returns.service';
             </div>
           </div>
         </div>
-        <div class="premium-stat-card animate-up delay-3">
-          <div class="stat-icon-wrapper red">
+        <div class="premium-stat-card d-flex align-items-center p-4 animate-up delay-3">
+          <div class="stat-icon-wrapper red me-3">
             <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2.2"/></svg>
           </div>
           <div class="stat-info">

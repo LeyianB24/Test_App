@@ -7,17 +7,29 @@ import { AuthService } from '../../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="pin-cert-container p-6 animate-fade-in">
-      <header class="mb-10 text-center">
-        <h1 class="text-3xl font-bold text-white mb-2">PIN Registration Certificate</h1>
-        <p class="text-slate-400">View and download your official KRA PIN registration details.</p>
+    <div class="page-container animate-up">
+      <!-- Elite Page Header -->
+      <header class="page-header-elite">
+        <div class="header-info">
+          <h1 class="premium-title">PIN <span class="gradient-text">Registration Certificate</span></h1>
+          <p class="premium-subtitle">View and download your official KRA PIN registration details.</p>
+        </div>
+        <div class="header-actions">
+           <button class="modern-btn primary-btn">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              Download PDF Certificate
+           </button>
+           <button class="modern-btn outline-btn">
+              Update Information
+           </button>
+        </div>
       </header>
 
-      <div class="max-w-4xl mx-auto">
-        <div class="glass-card p-0 overflow-hidden border border-white/10 shadow-2xl relative">
+      <div class="max-w-4xl mx-auto mb-10">
+        <div class="content-card-premium p-0 overflow-hidden relative border-t-[5px] border-t-brand-red" style="border-top: 5px solid var(--kra-red);">
           <!-- Decorative Stamp -->
-          <div class="absolute top-10 right-10 w-24 h-24 border-4 border-emerald-500/20 rounded-full flex items-center justify-center -rotate-12 select-none pointer-events-none">
-             <div class="text-[10px] font-bold text-emerald-500/30 text-center leading-tight">OFFICIAL<br>KRA DOCUMENT</div>
+          <div class="absolute top-10 right-10 w-24 h-24 border-4 border-emerald-500/20 rounded-full flex items-center justify-center -rotate-12 select-none pointer-events-none opacity-50">
+             <div class="text-[10px] font-bold text-emerald-600 text-center leading-tight">OFFICIAL<br>KRA DOCUMENT</div>
           </div>
 
           <!-- Header Section -->
@@ -89,16 +101,6 @@ import { AuthService } from '../../../../core/services/auth.service';
                 </div>
              </div>
           </div>
-        </div>
-
-        <div class="mt-10 flex gap-4 justify-center">
-           <button class="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all shadow-xl shadow-blue-600/20 flex items-center">
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-              Download PDF Certificate
-           </button>
-           <button class="px-8 py-3 border border-slate-700 hover:bg-slate-800 text-white font-bold rounded-xl transition-all">
-              Update Information
-           </button>
         </div>
       </div>
     </div>

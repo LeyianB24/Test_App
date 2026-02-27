@@ -110,57 +110,49 @@ interface Payment {
       <section class="animate-up delay-3" style="margin-bottom: 32px;">
         <div class="stats-grid-premium">
           <!-- Pending Payments -->
-          <div class="premium-stat-card animate-scale delay-1" style="cursor: pointer;" (click)="filterByStatus('pending')">
-            <div style="display: flex; gap: 20px; width: 100%;">
-              <div class="stat-icon-wrapper red" style="font-size: 28px; display: flex; align-items: center; justify-content: center;">💰</div>
-              <div class="stat-info" style="flex: 1;">
-                <div class="stat-label">Pending Payments</div>
-                <div class="stat-value-group">
-                  <h3 class="stat-number" style="amount in KES">KES {{ totalPending() | number:'1.2-2' }}</h3>
-                  <span class="stat-trend" style="font-size: 12px; color: #F59E0B;">{{ pendingCount() }} payments</span>
-                </div>
+          <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-1" style="cursor: pointer;" (click)="filterByStatus('pending')">
+            <div class="stat-icon-wrapper red me-3" style="font-size: 28px;">💰</div>
+            <div class="stat-info flex-grow-1">
+              <div class="stat-label">Pending Payments</div>
+              <div class="stat-value-group">
+                <h3 class="stat-number" style="amount in KES">KES {{ totalPending() | number:'1.2-2' }}</h3>
+                <span class="stat-trend" style="font-size: 12px; color: #F59E0B;">{{ pendingCount() }} payments</span>
               </div>
             </div>
           </div>
 
           <!-- Completed Payments -->
-          <div class="premium-stat-card animate-scale delay-2" style="cursor: pointer;" (click)="filterByStatus('completed')">
-            <div style="display: flex; gap: 20px; width: 100%;">
-              <div class="stat-icon-wrapper green" style="font-size: 28px; display: flex; align-items: center; justify-content: center;">✓</div>
-              <div class="stat-info" style="flex: 1;">
-                <div class="stat-label">Completed This Month</div>
-                <div class="stat-value-group">
-                  <h3 class="stat-number">KES {{ totalCompleted() | number:'1.2-2' }}</h3>
-                  <span class="stat-trend" style="font-size: 12px; color: #10B981;">{{ completedCount() }} transactions</span>
-                </div>
+          <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-2" style="cursor: pointer;" (click)="filterByStatus('completed')">
+            <div class="stat-icon-wrapper green me-3" style="font-size: 28px;">✓</div>
+            <div class="stat-info flex-grow-1">
+              <div class="stat-label">Completed This Month</div>
+              <div class="stat-value-group">
+                <h3 class="stat-number">KES {{ totalCompleted() | number:'1.2-2' }}</h3>
+                <span class="stat-trend" style="font-size: 12px; color: #10B981;">{{ completedCount() }} transactions</span>
               </div>
             </div>
           </div>
 
           <!-- Total Transactions -->
-          <div class="premium-stat-card animate-scale delay-3">
-            <div style="display: flex; gap: 20px; width: 100%;">
-              <div class="stat-icon-wrapper blue" style="font-size: 28px; display: flex; align-items: center; justify-content: center;">📊</div>
-              <div class="stat-info" style="flex: 1;">
-                <div class="stat-label">Total Transactions</div>
-                <div class="stat-value-group">
-                  <h3 class="stat-number">{{ payments().length }}</h3>
-                  <span class="stat-trend" style="font-size: 12px; color: #3B82F6;">on record</span>
-                </div>
+          <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-3">
+            <div class="stat-icon-wrapper blue me-3" style="font-size: 28px;">📊</div>
+            <div class="stat-info flex-grow-1">
+              <div class="stat-label">Total Transactions</div>
+              <div class="stat-value-group">
+                <h3 class="stat-number">{{ payments().length }}</h3>
+                <span class="stat-trend" style="font-size: 12px; color: #3B82F6;">on record</span>
               </div>
             </div>
           </div>
 
           <!-- Failed Payments -->
-          <div class="premium-stat-card animate-scale delay-4" style="cursor: pointer;" (click)="filterByStatus('failed')">
-            <div style="display: flex; gap: 20px; width: 100%;">
-              <div class="stat-icon-wrapper gold" style="font-size: 28px; display: flex; align-items: center; justify-content: center;">⚠️</div>
-              <div class="stat-info" style="flex: 1;">
-                <div class="stat-label">Failed Payments</div>
-                <div class="stat-value-group">
-                  <h3 class="stat-number">{{ failedCount() }}</h3>
-                  <span class="stat-trend" style="font-size: 12px; color: #EF4444;">need attention</span>
-                </div>
+          <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-4" style="cursor: pointer;" (click)="filterByStatus('failed')">
+            <div class="stat-icon-wrapper gold me-3" style="font-size: 28px;">⚠️</div>
+            <div class="stat-info flex-grow-1">
+              <div class="stat-label">Failed Payments</div>
+              <div class="stat-value-group">
+                <h3 class="stat-number">{{ failedCount() }}</h3>
+                <span class="stat-trend" style="font-size: 12px; color: #EF4444;">need attention</span>
               </div>
             </div>
           </div>
