@@ -29,6 +29,34 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
         </div>
       </header>
 
+      <!-- KPI Summary Row -->
+      <div class="audit-kpi-row" *ngIf="!loading()">
+        <div class="ak-card">
+          <div class="ak-icon ak-slate">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </div>
+          <div><div class="ak-val">{{ totalCount() | number }}</div><div class="ak-lbl">Total Events</div></div>
+        </div>
+        <div class="ak-card">
+          <div class="ak-icon ak-green">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div><div class="ak-val">{{ successLogs() | number }}</div><div class="ak-lbl">Successful</div></div>
+        </div>
+        <div class="ak-card">
+          <div class="ak-icon ak-red">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div><div class="ak-val">{{ failedLogs() | number }}</div><div class="ak-lbl">Failures</div></div>
+        </div>
+        <div class="ak-card">
+          <div class="ak-icon ak-blue">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+          </div>
+          <div><div class="ak-val">{{ uniqueIPs() | number }}</div><div class="ak-lbl">Unique IPs</div></div>
+        </div>
+      </div>
+
       <div *ngIf="loading()" class="loading-state flex flex-col items-center justify-center p-12">
         <div class="spin"></div>
         <p class="mt-4 text-muted" style="color: var(--text-muted); margin-top: 1rem;">Retrieving audit trails...</p>
@@ -101,15 +129,23 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
   `,
   styles: [`
     .page-container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-    .glassmorphism {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-    }
-    
+    .glassmorphism { background: rgba(255,255,255,.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.3); box-shadow: 0 8px 32px rgba(0,0,0,.05); }
+
+    /* KPI Row */
+    .audit-kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+    @media (max-width: 768px) { .audit-kpi-row { grid-template-columns: 1fr 1fr; } }
+    .ak-card { background: #fff; border: 1px solid #F1F5F9; border-radius: 18px; padding: 18px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.04); transition: transform .3s, box-shadow .3s; }
+    .ak-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,.07); }
+    .ak-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ak-slate { background: rgba(100,116,139,.1); color: #64748B; }
+    .ak-green { background: rgba(16,185,129,.1);  color: #10B981; }
+    .ak-red   { background: rgba(239,68,68,.1);   color: #EF4444; }
+    .ak-blue  { background: rgba(59,130,246,.1);  color: #3B82F6; }
+    .ak-val   { font-size: 1.3rem; font-weight: 900; color: #1E293B; line-height: 1; }
+    .ak-lbl   { font-size: .65rem; font-weight: 800; color: #94A3B8; text-transform: uppercase; margin-top: 3px; }
+
     .mr-12 { margin-right: 12px; }
-    .mb-4 { margin-bottom: 4px; }
+    .mb-4  { margin-bottom: 4px; }
     .px-16 { padding-left: 16px; padding-right: 16px; }
     .py-12 { padding-top: 12px; padding-bottom: 12px; }
 
@@ -150,12 +186,17 @@ export class AuditLogComponent implements OnInit {
   logs = signal<AuditLog[]>([]);
   loading = signal(true);
   error = signal('');
-  
+
   currentPage = signal(1);
   totalPages = signal(1);
   totalCount = signal(0);
   searchQuery = '';
   pageSize = 15;
+
+  // Derived KPI signals
+  successLogs = signal(0);
+  failedLogs  = signal(0);
+  uniqueIPs   = signal(0);
 
   ngOnInit() {
     this.loadData();
@@ -172,6 +213,12 @@ export class AuditLogComponent implements OnInit {
           this.currentPage.set(res.data.pagination.page);
           this.totalPages.set(res.data.pagination.pages);
           this.totalCount.set(res.data.pagination.total);
+          // Derive KPI counts
+          const logList: AuditLog[] = res.data.logs;
+          this.successLogs.set(logList.filter(l => this.getActionColor(l.action) === 'text-success').length);
+          this.failedLogs.set(logList.filter(l => this.getActionColor(l.action) === 'text-error').length);
+          const ips = new Set(logList.map((l: any) => l.ip).filter(Boolean));
+          this.uniqueIPs.set(ips.size);
         } else {
           this.error.set(res.error || 'Failed to sync with Audit Nexus.');
         }

@@ -33,6 +33,46 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
         </div>
       </header>
 
+      <!-- Summary KPI Row -->
+      <div class="kpi-summary-row">
+        <div class="kpi-mini-card">
+          <div class="kpi-mini-icon kmi-blue">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <div>
+            <div class="kmi-val">{{ totalCount() | number }}</div>
+            <div class="kmi-lbl">Total Registered</div>
+          </div>
+        </div>
+        <div class="kpi-mini-card">
+          <div class="kpi-mini-icon kmi-green">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <div class="kmi-val">{{ activeThisMonth() | number }}</div>
+            <div class="kmi-lbl">Active This Month</div>
+          </div>
+        </div>
+        <div class="kpi-mini-card">
+          <div class="kpi-mini-icon kmi-purple">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          </div>
+          <div>
+            <div class="kmi-val">{{ individualCount() | number }}</div>
+            <div class="kmi-lbl">Individuals</div>
+          </div>
+        </div>
+        <div class="kpi-mini-card">
+          <div class="kpi-mini-icon kmi-amber">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          </div>
+          <div>
+            <div class="kmi-val">{{ businessCount() | number }}</div>
+            <div class="kmi-lbl">Businesses</div>
+          </div>
+        </div>
+      </div>
+
       <div *ngIf="loading()" class="loading-state flex flex-col items-center justify-center p-12">
         <div class="spin"></div>
         <p class="mt-4 text-muted" style="color: var(--text-muted); margin-top: 1rem;">Loading directory...</p>
@@ -223,7 +263,20 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
       border: 1px solid rgba(255, 255, 255, 0.3);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
     }
-    
+
+    /* KPI Summary Row */
+    .kpi-summary-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+    @media (max-width: 768px) { .kpi-summary-row { grid-template-columns: 1fr 1fr; } }
+    .kpi-mini-card { background: #fff; border: 1px solid #F1F5F9; border-radius: 18px; padding: 18px; display: flex; align-items: center; gap: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.04); transition: transform .3s,box-shadow .3s; }
+    .kpi-mini-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,.07); }
+    .kpi-mini-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .kmi-blue   { background: rgba(59,130,246,.1); color: #3B82F6; }
+    .kmi-green  { background: rgba(16,185,129,.1); color: #10B981; }
+    .kmi-purple { background: rgba(139,92,246,.1); color: #8B5CF6; }
+    .kmi-amber  { background: rgba(245,158,11,.1); color: #F59E0B; }
+    .kmi-val  { font-size: 1.35rem; font-weight: 900; color: #1E293B; line-height: 1; }
+    .kmi-lbl  { font-size: .68rem; font-weight: 800; color: #94A3B8; text-transform: uppercase; margin-top: 3px; }
+
     .mr-12 { margin-right: 12px; }
     .mr-8 { margin-right: 8px; }
     .mt-24 { margin-top: 24px; }
@@ -315,6 +368,9 @@ export class AdminClientsComponent implements OnInit {
   currentPage = signal(1);
   totalPages = signal(1);
   totalCount = signal(0);
+  activeThisMonth = signal(0);
+  individualCount = signal(0);
+  businessCount = signal(0);
   searchQuery = '';
   pageSize = 10;
 
@@ -333,6 +389,13 @@ export class AdminClientsComponent implements OnInit {
           this.currentPage.set(res.data.pagination.page);
           this.totalPages.set(res.data.pagination.pages);
           this.totalCount.set(res.data.pagination.total);
+          // Derive KPI counts from returned clients
+          const all = res.data.clients as any[];
+          this.individualCount.set(all.filter(c => c.type === 'individual').length);
+          this.businessCount.set(all.filter(c => c.type === 'business').length);
+          // Active this month: last_login within 30 days
+          const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
+          this.activeThisMonth.set(all.filter(c => c.last_login && new Date(c.last_login) >= cutoff).length);
         } else {
           this.error.set(res.error || 'Failed to fetch directory data.');
         }
