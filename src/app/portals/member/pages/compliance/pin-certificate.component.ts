@@ -1,10 +1,12 @@
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../core/services/auth.service';
+import { DashboardDataService } from '../../../../services/dashboard-data.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-pin-certificate',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   template: `
     <div class="page-container animate-up print-container">
@@ -15,16 +17,16 @@ import { AuthService } from '../../../../core/services/auth.service';
           <p class="premium-subtitle">Official acknowledgement of taxpayer registration with KRA.</p>
         </div>
         <div class="header-actions">
-           <button class="modern-btn primary-btn" (click)="print()">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-              Print Certificate
+           <button class="modern-btn primary-btn" (click)="downloadPdf()">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              Download PDF Certificate
            </button>
         </div>
       </header>
 
       <!-- ── Official PIN Certificate Document ──────────────── -->
       <div id="pin-cert-doc" class="official-cert-paper">
-        
+
         <!-- Hourglass Branding Bar (Left) -->
         <div id="branding-bar">
           <div class="triangle-top"></div>
@@ -38,7 +40,7 @@ import { AuthService } from '../../../../core/services/auth.service';
                 <img src="assets/logo.png" class="kra-logo-large" alt="KRA Logo">
                 <span class="kra-url">www.kra.go.ke</span>
              </div>
-             
+
              <div class="cert-title-box">
                 <div class="cert-title-bg">PIN Certificate</div>
              </div>
@@ -55,11 +57,11 @@ import { AuthService } from '../../../../core/services/auth.service';
           <div class="cert-meta">
              <div class="meta-row">
                 <span class="meta-label">Certificate Date :</span>
-                <span class="meta-value">{{ pinData.regDate | date:'dd/MM/yyyy' }}</span>
+                <span class="meta-value">{{ today | date:'dd/MM/yyyy' }}</span>
              </div>
              <div class="meta-row">
-                <span class="meta-label">Personal Identification Number</span>
-                <div class="meta-value pin-highlight">{{ pin() }}</div>
+                <span class="meta-label">Personal Identification Number :</span>
+                <div class="meta-value pin-highlight">{{ taxpayerPin() }}</div>
              </div>
           </div>
 
@@ -77,7 +79,25 @@ import { AuthService } from '../../../../core/services/auth.service';
                 </tr>
                 <tr>
                    <th>Email Address</th>
-                   <td class="text-uppercase">{{ userEmail() }}</td>
+                   <td>{{ userEmail() }}</td>
+                </tr>
+                <tr>
+                   <th>Taxpayer Type</th>
+                   <td>{{ taxpayerType() }}</td>
+                </tr>
+                <tr>
+                   <th>ID / Passport Number</th>
+                   <td>{{ profile()?.id_number || 'N.A.' }}</td>
+                </tr>
+                @if (profile()?.dob) {
+                  <tr>
+                     <th>Date of Birth</th>
+                     <td>{{ profile()?.dob | date:'dd/MM/yyyy' }}</td>
+                  </tr>
+                }
+                <tr>
+                   <th>Registration Date</th>
+                   <td>{{ registrationDate() | date:'dd/MM/yyyy' }}</td>
                 </tr>
              </table>
           </div>
@@ -88,33 +108,33 @@ import { AuthService } from '../../../../core/services/auth.service';
              <table class="cert-table grid-table">
                 <tr>
                    <th width="20%">L.R. Number :</th>
-                   <td width="30%">{{ pinData.lrNumber || 'N.A.' }}</td>
+                   <td width="30%">N.A.</td>
                    <th width="20%">Building :</th>
-                   <td width="30%">{{ pinData.building || 'N.A.' }}</td>
+                   <td width="30%">{{ profile()?.address || 'N.A.' }}</td>
                 </tr>
                 <tr>
                    <th>Street/Road :</th>
-                   <td>{{ pinData.street || 'N.A.' }}</td>
+                   <td>{{ profile()?.address || 'N.A.' }}</td>
                    <th>City/Town :</th>
-                   <td>{{ pinData.town || 'N.A.' }}</td>
+                   <td>{{ profile()?.town || 'N.A.' }}</td>
                 </tr>
                 <tr>
                    <th>County :</th>
-                   <td>{{ pinData.county || 'N.A.' }}</td>
-                   <th>District :</th>
-                   <td>{{ pinData.district || 'N.A.' }}</td>
+                   <td>{{ profile()?.county || 'N.A.' }}</td>
+                   <th>Sub-County :</th>
+                   <td>{{ profile()?.sub_county || 'N.A.' }}</td>
                 </tr>
                 <tr>
                    <th>Tax Area :</th>
-                   <td>{{ pinData.taxArea || 'N.A.' }}</td>
+                   <td>{{ profile()?.ward || 'N.A.' }}</td>
                    <th>Station :</th>
-                   <td>{{ pinData.station || 'N.A.' }}</td>
+                   <td>{{ station() }}</td>
                 </tr>
                 <tr>
                    <th>P. O. Box :</th>
-                   <td>{{ pinData.poBox || 'N.A.' }}</td>
+                   <td>{{ profile()?.postal_address || 'N.A.' }}</td>
                    <th>Postal Code :</th>
-                   <td>{{ pinData.postalCode || 'N.A.' }}</td>
+                   <td>{{ profile()?.postal_code || 'N.A.' }}</td>
                 </tr>
              </table>
           </div>
@@ -122,28 +142,37 @@ import { AuthService } from '../../../../core/services/auth.service';
           <!-- Section: Tax Obligation(s) Registration Details -->
           <div class="cert-section">
              <h3 class="section-title">Tax Obligation(s) Registration Details</h3>
-             <table class="cert-table list-table">
-                <thead class="bg-gray-light">
-                   <tr>
-                      <th width="8%">Sr. No.</th>
-                      <th width="35%">Tax Obligation(s)</th>
-                      <th width="19%">Effective From Date</th>
-                      <th width="19%">Effective Till Date</th>
-                      <th width="19%">Status</th>
-                   </tr>
-                </thead>
-                <tbody>
-                   @for (ob of pinData.obligations; track ob.name; let i = $index) {
-                      <tr>
-                         <td align="center">{{ i + 1 }}</td>
-                         <td>{{ ob.name }}</td>
-                         <td align="center">{{ ob.effectiveFrom | date:'dd/MM/yyyy' }}</td>
-                         <td align="center">{{ ob.effectiveTill || 'N.A.' }}</td>
-                         <td align="center">{{ ob.status }}</td>
-                      </tr>
-                   }
-                </tbody>
-             </table>
+             @if (obligations().length > 0) {
+               <table class="cert-table list-table">
+                  <thead>
+                     <tr>
+                        <th width="8%">Sr. No.</th>
+                        <th width="38%">Tax Obligation(s)</th>
+                        <th width="18%">Effective From Date</th>
+                        <th width="18%">Effective Till Date</th>
+                        <th width="18%">Status</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     @for (ob of obligations(); track ob.obligation_id || ob.obligation_name; let i = $index) {
+                        <tr>
+                           <td class="center">{{ i + 1 }}</td>
+                           <td>{{ ob.obligation_name }}</td>
+                           <td class="center">{{ ob.effective_from | date:'dd/MM/yyyy' }}</td>
+                           <td class="center">{{ ob.effective_to ? (ob.effective_to | date:'dd/MM/yyyy') : 'N.A.' }}</td>
+                           <td class="center">{{ ob.status | titlecase }}</td>
+                        </tr>
+                     }
+                  </tbody>
+               </table>
+             } @else {
+               <table class="cert-table list-table">
+                  <thead><tr><th>Sr. No.</th><th>Tax Obligation(s)</th><th>Effective From Date</th><th>Effective Till Date</th><th>Status</th></tr></thead>
+                  <tbody>
+                     <tr><td class="center">1</td><td>Income Tax - Resident Individual</td><td class="center">{{ registrationDate() | date:'dd/MM/yyyy' }}</td><td class="center">N.A.</td><td class="center">Active</td></tr>
+                  </tbody>
+               </table>
+             }
           </div>
 
           <!-- Section: Electronic Tax Invoicing Status -->
@@ -152,9 +181,9 @@ import { AuthService } from '../../../../core/services/auth.service';
              <table class="cert-table grid-table">
                 <tr>
                    <th width="20%">eTims Registration:</th>
-                   <td width="30%">{{ pinData.eTims || 'Inactive' }}</td>
+                   <td width="30%">Inactive</td>
                    <th width="20%">Tims Registration:</th>
-                   <td width="30%">{{ pinData.tims || 'Inactive' }}</td>
+                   <td width="30%">Inactive</td>
                 </tr>
              </table>
           </div>
@@ -166,15 +195,8 @@ import { AuthService } from '../../../../core/services/auth.service';
           <div class="cert-footer-branded">
              <div class="tagline">Tulipe Ushuru, Tujitegemee!</div>
              <div class="branding-logos">
-                <div class="branding-item">
-                   <span class="logo-text itax">iTax</span>
-                </div>
-                <div class="branding-item">
-                   <div class="v2030-box">
-                      <span class="v-text">KENYA</span>
-                      <span class="v-num">VISION 2030</span>
-                   </div>
-                </div>
+                <img src="assets/itax.jpeg" alt="iTax" class="footer-brand-img">
+                <img src="assets/vision_2030.png" alt="Vision 2030" class="footer-brand-img">
              </div>
              <div class="disclaimer-note">
                 Disclaimer: This is a system generated certificate and does not require signature.
@@ -187,10 +209,10 @@ import { AuthService } from '../../../../core/services/auth.service';
   `,
   styles: [`
     .page-container { max-width: 1200px; margin: 0 auto; padding-bottom: 50px; }
-    
+
     .official-cert-paper {
       background: #ffffff;
-      width: 210mm; 
+      width: 210mm;
       min-height: 297mm;
       margin: 20px auto;
       padding: 0;
@@ -203,21 +225,23 @@ import { AuthService } from '../../../../core/services/auth.service';
     }
 
     .cert-content-inner {
-      padding: 35px 35px 35px 65px; /* Offset for branding bar */
+      padding: 35px 35px 35px 60px;
       position: relative;
       z-index: 5;
     }
 
-    /* Hourglass Branding Bar */
+    /* ── Hourglass Branding Bar ── */
     #branding-bar {
         position: absolute;
         top: 0;
         left: 0;
         width: 15mm;
         height: 100%;
+        min-height: 297mm;
         z-index: 10;
-        background: #fff;
+        overflow: hidden;
     }
+    /* Top black triangle — fills top half */
     .triangle-top {
         position: absolute;
         top: 0;
@@ -225,9 +249,11 @@ import { AuthService } from '../../../../core/services/auth.service';
         width: 0;
         height: 0;
         border-style: solid;
-        border-width: 130mm 15mm 0 0;
-        border-color: #000 transparent transparent transparent;
+        /* right edge is the hypotenuse going from full-width (15mm) → 0 */
+        border-width: 148.5mm 15mm 0 0;
+        border-color: #000000 transparent transparent transparent;
     }
+    /* Bottom red triangle — fills bottom half, inverted */
     .triangle-bottom {
         position: absolute;
         bottom: 0;
@@ -235,124 +261,129 @@ import { AuthService } from '../../../../core/services/auth.service';
         width: 0;
         height: 0;
         border-style: solid;
-        border-width: 0 15mm 167mm 0;
+        border-width: 0 0 148.5mm 15mm;
         border-color: transparent transparent #cc0000 transparent;
     }
 
-    /* Certificate Header Styles */
+    /* Certificate Header */
     .cert-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; border-bottom: 2pt solid #000; padding-bottom: 10px; }
     .cert-header-left { display: flex; flex-direction: column; align-items: flex-start; }
     .kra-logo-large { height: 75px; object-fit: contain; margin-bottom: 5px; }
     .kra-url { font-size: 11pt; font-weight: bold; border-bottom: 2pt solid #000; padding-bottom: 1px; }
-
     .cert-title-box { flex: 1; display: flex; justify-content: center; margin-top: 15px; }
     .cert-title-bg { background: #E5E7EB; padding: 12px 50px; font-size: 18pt; font-weight: bold; text-align: center; border-radius: 2px; }
-
     .cert-contact-info { text-align: right; }
     .contact-header { font-size: 9pt; font-weight: bold; line-height: 1.2; }
     .contact-line { font-size: 9pt; margin-top: 1px; }
 
-    /* Meta Info Styles */
+    /* Meta */
     .cert-meta { display: flex; flex-direction: column; align-items: flex-end; margin: 15px 0; border-bottom: 2pt solid #000; padding-bottom: 15px; }
     .meta-row { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
     .meta-label { font-size: 11pt; font-weight: bold; }
     .meta-value { font-size: 11pt; }
     .pin-highlight { font-size: 13pt; font-weight: bold; letter-spacing: 0.5px; }
+    .cert-certify { text-align: center; font-size: 11pt; color: #000; margin: 20px 0 28px 0; }
 
-    .cert-certify { text-align: center; font-size: 11pt; color: #000; margin: 25px 0 35px 0; }
-
-    /* Section & Table Styles */
-    .cert-section { margin-bottom: 25px; }
-    .section-title { font-size: 14pt; font-weight: bold; text-align: center; margin-bottom: 12px; }
-    
+    /* Sections & Tables */
+    .cert-section { margin-bottom: 20px; }
+    .section-title { font-size: 13pt; font-weight: bold; text-align: center; margin-bottom: 10px; }
     .cert-table { width: 100%; border-collapse: collapse; border: 1.2pt solid #000; }
-    .cert-table th, .cert-table td { border: 1.2pt solid #000; padding: 8px 12px; font-size: 11pt; }
+    .cert-table th, .cert-table td { border: 1.2pt solid #000; padding: 7px 10px; font-size: 10pt; }
     .cert-table th { background: #fff; text-align: left; font-weight: bold; }
     .cert-table td { background: #fff; }
-
-    .bg-gray-light { background: #E5E7EB !important; }
-    .list-table thead th { background: #E5E7EB; text-align: center; border-bottom: 1.2pt solid #000; }
-
-    .cert-disclaimer { font-size: 9pt; line-height: 1.5; margin: 30px 0; text-align: justify; }
+    .cert-table td.center { text-align: center; }
+    .list-table thead th { background: #E5E7EB; text-align: center; font-weight: bold; }
+    .cert-disclaimer { font-size: 8.5pt; line-height: 1.5; margin: 20px 0; text-align: justify; }
 
     /* Branded Footer */
-    .cert-footer-branded { 
-        margin-top: 20px;
-        border-top: 1pt solid #000; 
-        padding-top: 15px; 
-        display: flex; 
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
+    .cert-footer-branded {
+        margin-top: 15px; border-top: 1pt solid #000; padding-top: 12px;
+        display: flex; flex-direction: column; align-items: center; gap: 12px;
     }
-    .tagline { font-size: 12pt; font-weight: bold; font-style: italic; color: #cc0000; }
-    
+    .tagline { font-size: 11pt; font-weight: bold; font-style: italic; color: #cc0000; }
     .branding-logos { display: flex; justify-content: space-between; width: 100%; align-items: center; padding: 0 10px; }
-    .logo-text.itax { font-size: 24pt; font-weight: 900; color: #cc0000; font-family: sans-serif; }
-    
-    .v2030-box { display: flex; flex-direction: column; align-items: center; }
-    .v-text { font-size: 8pt; font-weight: bold; letter-spacing: 2px; }
-    .v-num { font-size: 14pt; font-weight: 900; color: #000; }
+    .footer-brand-img { height: 36px; object-fit: contain; }
+    .disclaimer-note { font-size: 7.5pt; color: #666; font-style: italic; width: 100%; text-align: left; }
 
-    .disclaimer-note { font-size: 8pt; color: #666; font-style: italic; width: 100%; text-align: left; }
-
-    /* Print Overrides */
+    /* Print */
     @media print {
       .no-print { display: none !important; }
       @page { margin: 0; size: A4; }
       body { background: white !important; padding: 0 !important; margin: 0 !important; }
       .page-container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
-      .official-cert-paper { 
-        margin: 0 !important; 
-        box-shadow: none !important; 
-        border: none !important; 
-        width: 210mm !important;
-        height: 297mm !important;
-        position: relative !important;
+      .official-cert-paper {
+        margin: 0 !important; box-shadow: none !important; border: none !important;
+        width: 210mm !important; height: 297mm !important; position: relative !important;
       }
-      #branding-bar { height: 297mm !important; }
+      #branding-bar { height: 297mm !important; min-height: 297mm !important; }
+      .triangle-top { border-width: 148.5mm 15mm 0 0 !important; }
+      .triangle-bottom { border-width: 0 0 148.5mm 15mm !important; }
     }
 
     @media (max-width: 800px) {
       .official-cert-paper { width: auto; height: auto; padding: 0; }
       .cert-content-inner { padding: 20px 20px 20px 45px; }
-      #branding-bar { width: 10mm; }
-      .triangle-top { border-width: 80mm 10mm 0 0; }
-      .triangle-bottom { border-width: 0 10mm 100mm 0; }
+      #branding-bar { width: 10mm; min-height: 100%; }
+      .triangle-top { border-width: 148.5mm 10mm 0 0; }
+      .triangle-bottom { border-width: 0 0 148.5mm 10mm; }
     }
-  `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  `]
 })
 export class PinCertificateComponent implements OnInit {
   private authService = inject(AuthService);
+  private dashboardData = inject(DashboardDataService);
 
-  pin = input<string>('A014256803M');
+  readonly today = new Date();
+
+  // Auth signals
   userName = this.authService.userName;
   userEmail = computed(() => this.authService.currentUser()?.email || 'N.A.');
-  
-  pinData = {
-    lrNumber: 'N.A.',
-    building: 'DAIMA',
-    street: 'NAMANGA ROAD',
-    city: 'ILBISSIL',
-    town: 'ILBISSIL',
-    county: 'Kajiado',
-    district: 'Kajiado Central District',
-    taxArea: 'Ilbisil',
-    station: 'Machakos',
-    poBox: '80',
-    postalCode: '01101',
-    regDate: '2019-10-01',
-    eTims: 'Inactive',
-    tims: 'Inactive',
-    obligations: [
-       { name: 'Income Tax - Resident Individual', effectiveFrom: '2019-10-01', effectiveTill: 'N.A.', status: 'Active' }
-    ]
-  };
+  taxpayerPin = computed(() => this.authService.currentUser()?.taxpayer_id || 'N/A');
+
+  // The backend returns `registration_date` (snake_case); the User model has `registrationDate`.
+  // Using `as any` to handle both shapes safely at runtime.
+  registrationDate = computed(() => {
+    const u = this.authService.currentUser() as any;
+    return u?.registration_date ?? u?.registrationDate ?? this.today;
+  });
+
+  taxpayerType = computed(() => {
+    const type = this.authService.currentUser()?.type;
+    if (!type) return 'Individual';
+    return type === 'business' ? 'Non-Individual (Business)' : 'Individual';
+  });
+
+  // Dashboard data signals
+  profile = this.dashboardData.taxpayerProfile;
+  station = this.dashboardData.station;
+  obligations = this.dashboardData.obligations;
 
   ngOnInit() {
-    // If we have a user in session, we could fetch their actual registration details here.
-    // For now we use the sample data from the instruction image.
+    // Refresh data if not already loaded
+    if (!this.dashboardData.taxpayerProfile()) {
+      this.dashboardData.refreshData().subscribe();
+    }
+  }
+
+  downloadPdf() {
+    this.authService.isLoading.set(true);
+    // Force a fresh token before download to prevent "Invalid or expired token" errors
+    // Since access tokens expire in 15 mins but user might stay on dashboard longer.
+    this.authService.refreshToken().subscribe({
+      next: (res) => {
+        this.authService.isLoading.set(false);
+        const token = this.authService.getAuthToken();
+        const url = `${environment.apiUrl}/pin_certificate_pdf.php?token=${encodeURIComponent(token ?? '')}`;
+        window.open(url, '_blank');
+      },
+      error: () => {
+        this.authService.isLoading.set(false);
+        // Fallback: try download anyway if refresh fails
+        const token = this.authService.getAuthToken();
+        const url = `${environment.apiUrl}/pin_certificate_pdf.php?token=${encodeURIComponent(token ?? '')}`;
+        window.open(url, '_blank');
+      }
+    });
   }
 
   print() {
