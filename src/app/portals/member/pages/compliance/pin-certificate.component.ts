@@ -25,154 +25,162 @@ import { AuthService } from '../../../../core/services/auth.service';
       <!-- ── Official PIN Certificate Document ──────────────── -->
       <div id="pin-cert-doc" class="official-cert-paper">
         
-        <!-- Document Header -->
-        <div class="cert-header">
-           <div class="cert-header-left">
-              <img src="assets/logo.png" class="kra-logo-large" alt="KRA Logo">
-              <span class="kra-url">www.kra.go.ke</span>
-           </div>
-           
-           <div class="cert-title-box">
-              <div class="cert-title-bg">PIN Certificate</div>
-           </div>
-
-           <div class="cert-contact-info">
-              <div class="contact-header">For General Tax Questions</div>
-              <div class="contact-header">Contact KRA Call Centre</div>
-              <div class="contact-line">Tel: +254 (020) 4999 999</div>
-              <div class="contact-line">Cell: +254(0711)099 999</div>
-              <div class="contact-line">Email: callcentre&#64;kra.go.ke</div>
-           </div>
+        <!-- Hourglass Branding Bar (Left) -->
+        <div id="branding-bar">
+          <div class="triangle-top"></div>
+          <div class="triangle-bottom"></div>
         </div>
 
-        <div class="cert-meta">
-           <div class="meta-row">
-              <span class="meta-label">Certificate Date :</span>
-              <span class="meta-value">{{ pinData.regDate | date:'dd/MM/yyyy' }}</span>
-           </div>
-           <div class="meta-row">
-              <span class="meta-label">Personal Identification Number</span>
-              <div class="meta-value pin-highlight">{{ pin() }}</div>
-           </div>
-        </div>
+        <div class="cert-content-inner">
+          <!-- Document Header -->
+          <div class="cert-header">
+             <div class="cert-header-left">
+                <img src="assets/logo.png" class="kra-logo-large" alt="KRA Logo">
+                <span class="kra-url">www.kra.go.ke</span>
+             </div>
+             
+             <div class="cert-title-box">
+                <div class="cert-title-bg">PIN Certificate</div>
+             </div>
 
-        <div class="cert-certify">
-           This is to certify that taxpayer shown herein has been registered with Kenya Revenue Authority
-        </div>
+             <div class="cert-contact-info">
+                <div class="contact-header">For General Tax Questions</div>
+                <div class="contact-header">Contact KRA Call Centre</div>
+                <div class="contact-line">Tel: +254 (020) 4999 999</div>
+                <div class="contact-line">Cell: +254(0711)099 999</div>
+                <div class="contact-line">Email: callcentre&#64;kra.go.ke</div>
+             </div>
+          </div>
 
-        <!-- Section: Taxpayer Information -->
-        <div class="cert-section">
-           <h3 class="section-title">Taxpayer Information</h3>
-           <table class="cert-table">
-              <tr>
-                 <th width="35%">Taxpayer Name</th>
-                 <td>{{ userName() }}</td>
-              </tr>
-              <tr>
-                 <th>Email Address</th>
-                 <td class="text-uppercase">{{ userEmail() }}</td>
-              </tr>
-           </table>
-        </div>
+          <div class="cert-meta">
+             <div class="meta-row">
+                <span class="meta-label">Certificate Date :</span>
+                <span class="meta-value">{{ pinData.regDate | date:'dd/MM/yyyy' }}</span>
+             </div>
+             <div class="meta-row">
+                <span class="meta-label">Personal Identification Number</span>
+                <div class="meta-value pin-highlight">{{ pin() }}</div>
+             </div>
+          </div>
 
-        <!-- Section: Registered Address -->
-        <div class="cert-section">
-           <h3 class="section-title">Registered Address</h3>
-           <table class="cert-table grid-table">
-              <tr>
-                 <th width="20%">L.R. Number :</th>
-                 <td width="30%">{{ pinData.lrNumber || 'N.A.' }}</td>
-                 <th width="20%">Building :</th>
-                 <td width="30%">{{ pinData.building || 'N.A.' }}</td>
-              </tr>
-              <tr>
-                 <th>Street/Road :</th>
-                 <td>{{ pinData.street || 'N.A.' }}</td>
-                 <th>City/Town :</th>
-                 <td>{{ pinData.town || 'N.A.' }}</td>
-              </tr>
-              <tr>
-                 <th>County :</th>
-                 <td>{{ pinData.county || 'N.A.' }}</td>
-                 <th>District :</th>
-                 <td>{{ pinData.district || 'N.A.' }}</td>
-              </tr>
-              <tr>
-                 <th>Tax Area :</th>
-                 <td>{{ pinData.taxArea || 'N.A.' }}</td>
-                 <th>Station :</th>
-                 <td>{{ pinData.station || 'N.A.' }}</td>
-              </tr>
-              <tr>
-                 <th>P. O. Box :</th>
-                 <td>{{ pinData.poBox || 'N.A.' }}</td>
-                 <th>Postal Code :</th>
-                 <td>{{ pinData.postalCode || 'N.A.' }}</td>
-              </tr>
-           </table>
-        </div>
+          <div class="cert-certify">
+             This is to certify that taxpayer shown herein has been registered with Kenya Revenue Authority
+          </div>
 
-        <!-- Section: Tax Obligation(s) Registration Details -->
-        <div class="cert-section">
-           <h3 class="section-title">Tax Obligation(s) Registration Details</h3>
-           <table class="cert-table list-table">
-              <thead class="bg-gray-light">
-                 <tr>
-                    <th width="8%">Sr. No.</th>
-                    <th width="35%">Tax Obligation(s)</th>
-                    <th width="19%">Effective From Date</th>
-                    <th width="19%">Effective Till Date</th>
-                    <th width="19%">Status</th>
-                 </tr>
-              </thead>
-              <tbody>
-                 @for (ob of pinData.obligations; track ob.name; let i = $index) {
-                    <tr>
-                       <td align="center">{{ i + 1 }}</td>
-                       <td>{{ ob.name }}</td>
-                       <td align="center">{{ ob.effectiveFrom | date:'dd/MM/yyyy' }}</td>
-                       <td align="center">{{ ob.effectiveTill || 'N.A.' }}</td>
-                       <td align="center">{{ ob.status }}</td>
-                    </tr>
-                 }
-              </tbody>
-           </table>
-        </div>
+          <!-- Section: Taxpayer Information -->
+          <div class="cert-section">
+             <h3 class="section-title">Taxpayer Information</h3>
+             <table class="cert-table">
+                <tr>
+                   <th width="35%">Taxpayer Name</th>
+                   <td>{{ userName() }}</td>
+                </tr>
+                <tr>
+                   <th>Email Address</th>
+                   <td class="text-uppercase">{{ userEmail() }}</td>
+                </tr>
+             </table>
+          </div>
 
-        <!-- Section: Electronic Tax Invoicing Status -->
-        <div class="cert-section">
-           <h3 class="section-title">Electronic Tax Invoicing Status</h3>
-           <table class="cert-table grid-table">
-              <tr>
-                 <th width="20%">eTims Registration:</th>
-                 <td width="30%">{{ pinData.eTims || 'Inactive' }}</td>
-                 <th width="20%">Tims Registration:</th>
-                 <td width="30%">{{ pinData.tims || 'Inactive' }}</td>
-              </tr>
-           </table>
-        </div>
+          <!-- Section: Registered Address -->
+          <div class="cert-section">
+             <h3 class="section-title">Registered Address</h3>
+             <table class="cert-table grid-table">
+                <tr>
+                   <th width="20%">L.R. Number :</th>
+                   <td width="30%">{{ pinData.lrNumber || 'N.A.' }}</td>
+                   <th width="20%">Building :</th>
+                   <td width="30%">{{ pinData.building || 'N.A.' }}</td>
+                </tr>
+                <tr>
+                   <th>Street/Road :</th>
+                   <td>{{ pinData.street || 'N.A.' }}</td>
+                   <th>City/Town :</th>
+                   <td>{{ pinData.town || 'N.A.' }}</td>
+                </tr>
+                <tr>
+                   <th>County :</th>
+                   <td>{{ pinData.county || 'N.A.' }}</td>
+                   <th>District :</th>
+                   <td>{{ pinData.district || 'N.A.' }}</td>
+                </tr>
+                <tr>
+                   <th>Tax Area :</th>
+                   <td>{{ pinData.taxArea || 'N.A.' }}</td>
+                   <th>Station :</th>
+                   <td>{{ pinData.station || 'N.A.' }}</td>
+                </tr>
+                <tr>
+                   <th>P. O. Box :</th>
+                   <td>{{ pinData.poBox || 'N.A.' }}</td>
+                   <th>Postal Code :</th>
+                   <td>{{ pinData.postalCode || 'N.A.' }}</td>
+                </tr>
+             </table>
+          </div>
 
-        <div class="cert-disclaimer">
-           <p>The above PIN must appear on all your tax invoices and correspondences with Kenya Revenue Authority. Your accounting end date is 31st December as per the provisions stated in the Income Tax Act unless a change has been approved by the Commissioner-Domestic Taxes Department. The status of Tax Obligation(s) with 'Dormant' status will automatically change to 'Active' on date mentioned in "Effective Till Date" or any transaction done during the period. This certificate shall remain in force till further updated.</p>
-        </div>
+          <!-- Section: Tax Obligation(s) Registration Details -->
+          <div class="cert-section">
+             <h3 class="section-title">Tax Obligation(s) Registration Details</h3>
+             <table class="cert-table list-table">
+                <thead class="bg-gray-light">
+                   <tr>
+                      <th width="8%">Sr. No.</th>
+                      <th width="35%">Tax Obligation(s)</th>
+                      <th width="19%">Effective From Date</th>
+                      <th width="19%">Effective Till Date</th>
+                      <th width="19%">Status</th>
+                   </tr>
+                </thead>
+                <tbody>
+                   @for (ob of pinData.obligations; track ob.name; let i = $index) {
+                      <tr>
+                         <td align="center">{{ i + 1 }}</td>
+                         <td>{{ ob.name }}</td>
+                         <td align="center">{{ ob.effectiveFrom | date:'dd/MM/yyyy' }}</td>
+                         <td align="center">{{ ob.effectiveTill || 'N.A.' }}</td>
+                         <td align="center">{{ ob.status }}</td>
+                      </tr>
+                   }
+                </tbody>
+             </table>
+          </div>
 
-        <div class="cert-footer">
-           <div class="disclaimer-note">
-              Disclaimer: This is a system generated certificate and does not require signature.
-           </div>
-           <div class="verification-area">
-              <div class="verification-qr">
-                 <!-- Simple SVG QR Mockup -->
-                 <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3-6h1.5v1.5H18V13zm3 0h1.5v1.5H21V13z" />
-                 </svg>
-              </div>
-              <div class="verification-info">
-                 <div class="v-label">Verification Code:</div>
-                 <div class="v-code">{{ pin().substring(0,3) }}-{{ pin().substring(3,6) }}-{{ pin().substring(6,9) }}</div>
-              </div>
-           </div>
-        </div>
+          <!-- Section: Electronic Tax Invoicing Status -->
+          <div class="cert-section">
+             <h3 class="section-title">Electronic Tax Invoicing Status</h3>
+             <table class="cert-table grid-table">
+                <tr>
+                   <th width="20%">eTims Registration:</th>
+                   <td width="30%">{{ pinData.eTims || 'Inactive' }}</td>
+                   <th width="20%">Tims Registration:</th>
+                   <td width="30%">{{ pinData.tims || 'Inactive' }}</td>
+                </tr>
+             </table>
+          </div>
+
+          <div class="cert-disclaimer">
+             <p>The above PIN must appear on all your tax invoices and correspondences with Kenya Revenue Authority. Your accounting end date is 31st December as per the provisions stated in the Income Tax Act unless a change has been approved by the Commissioner-Domestic Taxes Department. The status of Tax Obligation(s) with 'Dormant' status will automatically change to 'Active' on date mentioned in "Effective Till Date" or any transaction done during the period. This certificate shall remain in force till further updated.</p>
+          </div>
+
+          <div class="cert-footer-branded">
+             <div class="tagline">Tulipe Ushuru, Tujitegemee!</div>
+             <div class="branding-logos">
+                <div class="branding-item">
+                   <span class="logo-text itax">iTax</span>
+                </div>
+                <div class="branding-item">
+                   <div class="v2030-box">
+                      <span class="v-text">KENYA</span>
+                      <span class="v-num">VISION 2030</span>
+                   </div>
+                </div>
+             </div>
+             <div class="disclaimer-note">
+                Disclaimer: This is a system generated certificate and does not require signature.
+             </div>
+          </div>
+        </div><!-- /cert-content-inner -->
 
       </div><!-- /official-cert-paper -->
     </div>
@@ -182,90 +190,135 @@ import { AuthService } from '../../../../core/services/auth.service';
     
     .official-cert-paper {
       background: #ffffff;
-      width: 210mm; /* A4 Width */
-      min-height: 297mm; /* A4 Height */
+      width: 210mm; 
+      min-height: 297mm;
       margin: 20px auto;
-      padding: 40px;
+      padding: 0;
       box-shadow: 0 5px 30px rgba(0,0,0,0.1);
       border: 1px solid #ddd;
       color: #000000;
       font-family: 'Arial', sans-serif;
       position: relative;
+      overflow: hidden;
+    }
+
+    .cert-content-inner {
+      padding: 35px 35px 35px 65px; /* Offset for branding bar */
+      position: relative;
+      z-index: 5;
+    }
+
+    /* Hourglass Branding Bar */
+    #branding-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 15mm;
+        height: 100%;
+        z-index: 10;
+        background: #fff;
+    }
+    .triangle-top {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 130mm 15mm 0 0;
+        border-color: #000 transparent transparent transparent;
+    }
+    .triangle-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 15mm 167mm 0;
+        border-color: transparent transparent #cc0000 transparent;
     }
 
     /* Certificate Header Styles */
-    .cert-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 15px; }
+    .cert-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; border-bottom: 2pt solid #000; padding-bottom: 10px; }
     .cert-header-left { display: flex; flex-direction: column; align-items: flex-start; }
-    .kra-logo-large { height: 80px; object-contain; margin-bottom: 10px; }
-    .kra-url { font-size: 14px; font-weight: bold; border-bottom: 3px solid #000; padding-bottom: 2px; }
+    .kra-logo-large { height: 75px; object-fit: contain; margin-bottom: 5px; }
+    .kra-url { font-size: 11pt; font-weight: bold; border-bottom: 2pt solid #000; padding-bottom: 1px; }
 
-    .cert-title-box { flex: 1; display: flex; justify-content: center; margin-top: 20px; }
-    .cert-title-bg { background: #cccccc; padding: 15px 60px; font-size: 24px; font-weight: bold; text-align: center; border-radius: 2px; }
+    .cert-title-box { flex: 1; display: flex; justify-content: center; margin-top: 15px; }
+    .cert-title-bg { background: #E5E7EB; padding: 12px 50px; font-size: 18pt; font-weight: bold; text-align: center; border-radius: 2px; }
 
     .cert-contact-info { text-align: right; }
-    .contact-header { font-size: 11px; font-weight: bold; line-height: 1.2; }
-    .contact-line { font-size: 11px; margin-top: 2px; }
+    .contact-header { font-size: 9pt; font-weight: bold; line-height: 1.2; }
+    .contact-line { font-size: 9pt; margin-top: 1px; }
 
     /* Meta Info Styles */
-    .cert-meta { display: flex; flex-direction: column; align-items: flex-end; margin: 20px 0; border-bottom: 2px solid #000; padding-bottom: 20px; }
-    .meta-row { display: flex; align-items: center; gap: 15px; margin-bottom: 5px; }
-    .meta-label { font-size: 13px; font-weight: bold; }
-    .meta-value { font-size: 13px; }
-    .pin-highlight { font-size: 16px; font-weight: bold; letter-spacing: 1px; }
+    .cert-meta { display: flex; flex-direction: column; align-items: flex-end; margin: 15px 0; border-bottom: 2pt solid #000; padding-bottom: 15px; }
+    .meta-row { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+    .meta-label { font-size: 11pt; font-weight: bold; }
+    .meta-value { font-size: 11pt; }
+    .pin-highlight { font-size: 13pt; font-weight: bold; letter-spacing: 0.5px; }
 
-    .cert-certify { text-align: center; font-size: 14px; color: #333; margin: 30px 0 40px 0; }
+    .cert-certify { text-align: center; font-size: 11pt; color: #000; margin: 25px 0 35px 0; }
 
     /* Section & Table Styles */
-    .cert-section { margin-bottom: 30px; }
-    .section-title { font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 15px; }
+    .cert-section { margin-bottom: 25px; }
+    .section-title { font-size: 14pt; font-weight: bold; text-align: center; margin-bottom: 12px; }
     
-    .cert-table { width: 100%; border-collapse: collapse; border: 1.5px solid #000; }
-    .cert-table th, .cert-table td { border: 1.5px solid #000; padding: 10px 15px; font-size: 13px; }
-    .cert-table th { background: #ffffff; text-align: left; font-weight: bold; }
-    .cert-table td { background: #ffffff; }
+    .cert-table { width: 100%; border-collapse: collapse; border: 1.2pt solid #000; }
+    .cert-table th, .cert-table td { border: 1.2pt solid #000; padding: 8px 12px; font-size: 11pt; }
+    .cert-table th { background: #fff; text-align: left; font-weight: bold; }
+    .cert-table td { background: #fff; }
 
-    .grid-table th { width: 20%; background: #ffffff; }
-    .grid-table td { width: 30%; }
+    .bg-gray-light { background: #E5E7EB !important; }
+    .list-table thead th { background: #E5E7EB; text-align: center; border-bottom: 1.2pt solid #000; }
 
-    .bg-gray-light { background: #cccccc !important; }
-    .list-table thead th { background: #cccccc; text-align: center; border-bottom: 2px solid #000; }
-    .list-table tbody td { height: 35px; }
+    .cert-disclaimer { font-size: 9pt; line-height: 1.5; margin: 30px 0; text-align: justify; }
 
-    .text-uppercase { text-transform: uppercase; }
-
-    .cert-disclaimer { font-size: 11px; line-height: 1.6; margin: 40px 0; text-align: justify; }
-
-    /* Footer Styles */
-    .cert-footer { border-top: 1px solid #000; padding-top: 15px; display: flex; justify-content: space-between; align-items: flex-end; }
-    .disclaimer-note { font-size: 10px; color: #555; }
+    /* Branded Footer */
+    .cert-footer-branded { 
+        margin-top: 20px;
+        border-top: 1pt solid #000; 
+        padding-top: 15px; 
+        display: flex; 
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    .tagline { font-size: 12pt; font-weight: bold; font-style: italic; color: #cc0000; }
     
-    .verification-area { display: flex; align-items: center; gap: 15px; }
-    .verification-qr { padding: 5px; border: 1px solid #ccc; background: white; }
-    .verification-info { display: flex; flex-direction: column; }
-    .v-label { font-size: 10px; font-weight: bold; color: #555; }
-    .v-code { font-family: monospace; font-size: 12px; font-weight: bold; color: #3b82f6; }
+    .branding-logos { display: flex; justify-content: space-between; width: 100%; align-items: center; padding: 0 10px; }
+    .logo-text.itax { font-size: 24pt; font-weight: 900; color: #cc0000; font-family: sans-serif; }
+    
+    .v2030-box { display: flex; flex-direction: column; align-items: center; }
+    .v-text { font-size: 8pt; font-weight: bold; letter-spacing: 2px; }
+    .v-num { font-size: 14pt; font-weight: 900; color: #000; }
+
+    .disclaimer-note { font-size: 8pt; color: #666; font-style: italic; width: 100%; text-align: left; }
 
     /* Print Overrides */
     @media print {
       .no-print { display: none !important; }
+      @page { margin: 0; size: A4; }
       body { background: white !important; padding: 0 !important; margin: 0 !important; }
       .page-container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
       .official-cert-paper { 
         margin: 0 !important; 
         box-shadow: none !important; 
         border: none !important; 
-        width: 100% !important;
-        position: static !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        position: relative !important;
       }
-      .dashboard-container { display: block !important; } /* Ensure it shows even in layouts that might hide main */
+      #branding-bar { height: 297mm !important; }
     }
 
     @media (max-width: 800px) {
-      .official-cert-paper { width: auto; height: auto; padding: 20px; overflow-x: auto; }
-      .cert-title-bg { padding: 10px 20px; font-size: 18px; }
-      .cert-header { flex-direction: column; align-items: center; text-align: center; }
-      .kra-logo-large { height: 60px; }
-      .cert-contact-info { text-align: center; margin-top: 15px; }
+      .official-cert-paper { width: auto; height: auto; padding: 0; }
+      .cert-content-inner { padding: 20px 20px 20px 45px; }
+      #branding-bar { width: 10mm; }
+      .triangle-top { border-width: 80mm 10mm 0 0; }
+      .triangle-bottom { border-width: 0 10mm 100mm 0; }
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush

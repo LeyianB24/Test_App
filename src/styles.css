@@ -5,7 +5,8 @@
 
 :root {
   /* --- Brand Colors (Modernized KRA) --- */
-  --kra-red: #E31E24;
+  --kra-red: #cc0000;
+  --kra-red-legacy: #E31E24;
   --kra-red-deep: #A8161A;
   --kra-gold: #D4AF37;
   --kra-gold-light: #F4E4BC;
@@ -1782,18 +1783,21 @@ svg.h-10 { height: 2.5rem; }
 .group:hover .group-hover\:opacity-100 { opacity: 1; }
 
 /* --- Missing Animation Keyframes --- */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
-}
+/* --- Standard Icon Sizing --- */
+.icon-size-standard { width: 24px; height: 24px; flex-shrink: 0; }
+.icon-size-sm { width: 18px; height: 18px; flex-shrink: 0; }
+.icon-size-lg { width: 32px; height: 32px; flex-shrink: 0; }
 
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-slide-in {
-  animation: slideIn 0.4s ease-out forwards;
+/* --- Theme Support Utilities --- */
+.light-mode-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+.dark-mode-shadow { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
+
+@media (prefers-color-scheme: light) {
+  :root:not(.dark-theme) {
+    --bg-body: #f8fafc;
+    --bg-surface: #ffffff;
+    --text-main: #0f172a;
+    --text-secondary: #475569;
+    --border-color: #e2e8f0;
+  }
 }
