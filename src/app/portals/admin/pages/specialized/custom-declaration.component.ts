@@ -8,103 +8,135 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="declaration-container p-6">
-      <header class="mb-8">
-        <h1 class="text-3xl font-black text-slate-800 tracking-tight">Customs Self-Declaration</h1>
-        <p class="text-slate-500 mt-1">Official Form-88 for declaring goods at ports of entry</p>
+    <div class="page-container p-8 animate-up">
+      <header class="page-header-elite mb-10">
+        <div class="header-info">
+          <h1 class="premium-title">Customs <span class="gradient-text">Self-Declaration</span></h1>
+          <p class="premium-subtitle">Official Form-88 Virtual Gateway for port-of-entry assets</p>
+        </div>
+        <div class="header-actions">
+           <div class="status-pill-elite active">
+              <span class="dot"></span>
+              Secure Form
+           </div>
+        </div>
       </header>
 
       <div class="max-w-4xl mx-auto">
-        <div class="stepper mb-10">
+        <!-- Elite Stepper -->
+        <div class="elite-stepper mb-12">
           @for (s of steps; track s; let i = $index) {
-            <div class="step" [class.active]="currentStep() === i" [class.done]="currentStep() > i">
-              <div class="step-circle">{{ i + 1 }}</div>
-              <span class="step-label">{{ s }}</span>
+            <div class="elite-step" [class.active]="currentStep() === i" [class.done]="currentStep() > i">
+              <div class="step-blob">
+                 @if (currentStep() > i) {
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                 } @else {
+                    {{ i + 1 }}
+                 }
+              </div>
+              <span class="step-text">{{ s }}</span>
             </div>
             @if (i < steps.length - 1) {
-              <div class="step-line" [class.done]="currentStep() > i"></div>
+              <div class="step-connector" [class.done]="currentStep() > i"></div>
             }
           }
         </div>
 
-        <div class="card p-8 animate-fade-in">
+        <div class="content-card-premium p-10 relative overflow-hidden">
+          <div class="absolute -top-20 -left-20 w-60 h-60 bg-red-50 rounded-full blur-3xl opacity-40"></div>
+          
           @if (currentStep() === 0) {
-            <div class="step-content">
-              <h3 class="text-xl font-bold text-slate-800 mb-6">Traveler Information</h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="field">
-                  <label>Full Name (as per Passport)</label>
-                  <input type="text" [(ngModel)]="formData.name" class="input" placeholder="e.g. John Doe"/>
+            <div class="step-content animate-fade-in relative z-10">
+              <div class="flex items-center gap-3 mb-8">
+                 <div class="w-1 h-6 bg-red-600 rounded-full"></div>
+                 <h3 class="text-xl font-black text-slate-800">Traveler Nexus Profile</h3>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="field-group">
+                  <label class="premium-label">Full Name (Legal Identity)</label>
+                  <input type="text" [(ngModel)]="formData.name" class="search-input-elite w-full py-4 px-6" placeholder="e.g. John Doe"/>
                 </div>
-                <div class="field">
-                  <label>Passport Number</label>
-                  <input type="text" [(ngModel)]="formData.passport" class="input" placeholder="e.g. AK1234567"/>
+                <div class="field-group">
+                  <label class="premium-label">Passport Serial</label>
+                  <input type="text" [(ngModel)]="formData.passport" class="search-input-elite w-full py-4 px-6" placeholder="e.g. AK1234567"/>
                 </div>
-                <div class="field">
-                  <label>Flight / Vessel Number</label>
-                  <input type="text" [(ngModel)]="formData.flight" class="input" placeholder="e.g. KQ101"/>
+                <div class="field-group">
+                  <label class="premium-label">Vessel/Flight Signature</label>
+                  <input type="text" [(ngModel)]="formData.flight" class="search-input-elite w-full py-4 px-6" placeholder="e.g. KQ101"/>
                 </div>
-                <div class="field">
-                  <label>Country of Origin</label>
-                  <input type="text" [(ngModel)]="formData.origin" class="input" placeholder="e.g. United Kingdom"/>
+                <div class="field-group">
+                  <label class="premium-label">Jurisdiction of Origin</label>
+                  <input type="text" [(ngModel)]="formData.origin" class="search-input-elite w-full py-4 px-6" placeholder="e.g. United Kingdom"/>
                 </div>
               </div>
             </div>
           }
 
           @if (currentStep() === 1) {
-            <div class="step-content">
-              <h3 class="text-xl font-bold text-slate-800 mb-6">Goods Declaration</h3>
-              <p class="text-slate-500 mb-6 text-sm">Please list all goods exceeding the duty-free allowance or restricted items.</p>
+            <div class="step-content animate-fade-in relative z-10">
+              <div class="flex items-center gap-3 mb-8">
+                 <div class="w-1 h-6 bg-red-600 rounded-full"></div>
+                 <h3 class="text-xl font-black text-slate-800">Asset Inventory Declaration</h3>
+              </div>
               
-              <div class="items-list mb-6">
+              <div class="space-y-4 mb-10">
                 @for (item of formData.items; track item.id; let i = $index) {
-                  <div class="item-row flex gap-4 mb-4">
-                    <input type="text" [(ngModel)]="item.description" class="input flex-[2]" placeholder="Description of goods"/>
-                    <input type="number" [(ngModel)]="item.value" class="input flex-1" placeholder="Value (USD)"/>
-                    <button (click)="removeItem(i)" class="remove-btn">✕</button>
+                  <div class="item-row-elite flex gap-4 items-center">
+                    <input type="text" [(ngModel)]="item.description" class="search-input-elite flex-[3] py-4 px-6" placeholder="Item Description"/>
+                    <div class="relative flex-1">
+                       <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                       <input type="number" [(ngModel)]="item.value" class="search-input-elite w-full py-4 pl-8 pr-4" placeholder="Value"/>
+                    </div>
+                    <button (click)="removeItem(i)" class="icon-btn-elite text-red-500">
+                       <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
                   </div>
                 }
-                <button (click)="addItem()" class="add-btn mt-2">
-                  + Add Item
+                <button (click)="addItem()" class="modern-btn-elite-sm w-full py-4 flex items-center justify-center gap-2 mt-4 hover:bg-slate-50 transition-colors">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+                  Add Declaration Item
                 </button>
               </div>
 
-              <div class="summary-box p-6 bg-slate-50 rounded-2xl">
-                <div class="flex justify-between items-center">
-                  <span class="text-slate-600 font-bold">Total Declared Value</span>
-                  <span class="text-xl font-black text-slate-800">USD {{ calculateTotal().toLocaleString() }}</span>
+              <div class="p-8 bg-slate-900 rounded-[2rem] text-white shadow-2xl relative overflow-hidden group">
+                <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-red-600 rounded-full blur-3xl opacity-20 transition-transform group-hover:scale-150"></div>
+                <div class="flex justify-between items-center relative z-10">
+                  <div>
+                     <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Aggregated Valuation</span>
+                     <p class="text-xs text-slate-500 mt-1">Calculated in real-time based on entries</p>
+                  </div>
+                  <span class="text-4xl font-black gradient-text">USD {{ calculateTotal().toLocaleString() }}</span>
                 </div>
               </div>
             </div>
           }
 
           @if (currentStep() === 2) {
-            <div class="step-content text-center py-10">
+            <div class="step-content text-center py-10 animate-fade-in relative z-10">
               @if (!isSubmitted()) {
                 <div class="confirmation">
-                  <div class="icon-box mb-6 mx-auto">
-                    <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#e31e24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <div class="w-20 h-20 bg-red-50 text-red-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-inner">
+                    <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                   </div>
-                  <h3 class="text-2xl font-black text-slate-800 mb-4">Confirm Declaration</h3>
-                  <p class="text-slate-500 mb-8 max-w-md mx-auto">
-                    By submitting this form, you certify that the information provided is true and correct to the best of your knowledge.
+                  <h3 class="text-3xl font-black text-slate-800 mb-4">Official Attestation</h3>
+                  <p class="text-slate-500 mb-10 max-w-md mx-auto leading-relaxed">
+                    By finalizing this document, you certify that the listed assets are comprehensive and accurate. Discrepancies may involve legal audit.
                   </p>
-                  <label class="flex items-center gap-3 justify-center mb-10 cursor-pointer">
-                    <input type="checkbox" [(ngModel)]="formData.agreed" class="w-5 h-5 rounded border-slate-300 text-red-600 focus:ring-red-500">
-                    <span class="text-sm font-semibold text-slate-700">I solemnly declare the above information is correct.</span>
+                  <label class="flex items-center gap-4 justify-center mb-12 cursor-pointer group p-6 rounded-3xl hover:bg-slate-50 transition-colors border-2 border-transparent hover:border-slate-100">
+                    <input type="checkbox" [(ngModel)]="formData.agreed" class="w-6 h-6 rounded-lg border-2 border-slate-300 text-red-600 focus:ring-red-500">
+                    <span class="text-sm font-black text-slate-700 uppercase tracking-wide">I attest to the integrity of this declaration</span>
                   </label>
                 </div>
               } @else {
-                <div class="success animate-fade-in">
-                  <div class="success-icon mb-6 mx-auto">
-                    <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="white"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                <div class="success-state">
+                  <div class="w-24 h-24 bg-emerald-500 text-white rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 shadow-xl shadow-emerald-200 animate-bounce">
+                    <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="4" d="M5 13l4 4L19 7"/></svg>
                   </div>
-                  <h3 class="text-2xl font-black text-slate-800 mb-2">Declaration Submitted</h3>
-                  <p class="text-slate-500 mb-8">Ref Number: KRA-CUST-88-{{ refNumber }}</p>
+                  <h3 class="text-3xl font-black text-slate-800 mb-2">Protocol Successful</h3>
+                  <p class="text-slate-500 mb-10 font-mono text-sm">TRANSACTION_REF: KRA-CUST-88-{{ refNumber }}</p>
                   <div class="flex gap-4 justify-center">
-                    <button class="btn-primary" (click)="reset()">New Declaration</button>
-                    <button class="btn-secondary">Download PDF</button>
+                    <button class="modern-btn primary-btn shadow-lg" (click)="reset()">New Entry</button>
+                    <button class="modern-btn outline-btn">Download Archive</button>
                   </div>
                 </div>
               }
@@ -113,10 +145,14 @@ import { FormsModule } from '@angular/forms';
         </div>
 
         @if (!isSubmitted()) {
-          <div class="nav-btns flex justify-between mt-8">
-            <button class="btn-secondary" [disabled]="currentStep() === 0" (click)="prev()">Back</button>
-            <button class="btn-primary" [disabled]="!canNext()" (click)="next()">
-              {{ currentStep() === 2 ? 'Submit Form-88' : 'Continue' }}
+          <div class="nav-btns flex justify-between mt-12 px-2">
+            <button class="modern-btn outline-btn" [disabled]="currentStep() === 0" (click)="prev()">
+               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mr-2"><path stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
+               Back
+            </button>
+            <button class="modern-btn primary-btn px-10" [disabled]="!canNext()" (click)="next()">
+              {{ currentStep() === 2 ? 'Finalize Attestation' : 'Next Protocol' }}
+              <svg *ngIf="currentStep() < 2" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="ml-2"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
         }
@@ -124,46 +160,34 @@ import { FormsModule } from '@angular/forms';
     </div>
   `,
   styles: [`
-    .declaration-container { max-width: 1200px; margin: 0 auto; }
-    .card { background: white; border-radius: 24px; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+    .page-container { max-width: 1200px; margin: 0 auto; }
+    .animate-up { animation: up 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Elite Stepper */
+    .elite-stepper { display: flex; align-items: center; gap: 12px; }
+    .elite-step { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; position: relative; }
+    .step-blob { 
+      width: 44px; height: 44px; border-radius: 16px; display: flex; align-items: center; justify-content: center; 
+      font-weight: 900; border: 2px solid #e2e8f0; color: #94a3b8; background: white; z-index: 2; transition: 0.3s;
+    }
+    .elite-step.active .step-blob { border-color: #e31e24; color: #e31e24; transform: scale(1.1); box-shadow: 0 8px 20px rgba(227,30,36,0.15); }
+    .elite-step.done .step-blob { background: #10b981; border-color: #10b981; color: white; }
+    .step-text { font-size: 0.6rem; font-weight: 950; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.5px; }
+    .elite-step.active .step-text { color: #1e293b; }
     
-    .stepper { display: flex; align-items: center; gap: 8px; }
-    .step { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; position: relative; }
-    .step-circle { 
-      width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-      font-weight: 800; border: 3px solid #e2e8f0; color: #94a3b8; background: white; z-index: 2;
-    }
-    .step.active .step-circle { border-color: #e31e24; color: #e31e24; }
-    .step.done .step-circle { background: #22c55e; border-color: #22c55e; color: white; }
-    .step-label { font-size: 0.7rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-    .step-line { flex: 1; height: 3px; background: #e2e8f0; margin-top: -24px; border-radius: 2px; }
-    .step-line.done { background: #22c55e; }
+    .step-connector { flex: 1; height: 3px; background: #f1f5f9; margin-top: -32px; border-radius: 10px; }
+    .step-connector.done { background: #10b981; }
 
-    .field label { display: block; font-size: 0.75rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-    .input { 
-      width: 100%; padding: 12px 16px; border-radius: 12px; border: 2px solid #f1f5f9; 
-      background: #fbfcfd; font-weight: 700; transition: 0.3s;
-    }
-    .input:focus { border-color: #e31e24; background: white; outline: none; }
-
-    .btn-primary { 
-      padding: 12px 32px; border-radius: 14px; background: #e31e24; color: white; 
-      font-weight: 800; border: none; cursor: pointer; transition: 0.3s;
-    }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-secondary { 
-      padding: 12px 32px; border-radius: 14px; background: white; color: #64748b; 
-      border: 2px solid #e2e8f0; font-weight: 800; cursor: pointer;
-    }
-
-    .add-btn { background: #f1f5f9; color: #475569; padding: 8px 16px; border-radius: 10px; font-weight: 700; border: none; cursor: pointer; }
-    .remove-btn { color: #cbd5e1; font-size: 1.2rem; border: none; background: none; cursor: pointer; }
-    .remove-btn:hover { color: #ef4444; }
-
-    .success-icon { width: 64px; height: 64px; border-radius: 50%; background: #22c55e; display: flex; align-items: center; justify-content: center; }
+    .premium-label { display: block; font-size: 0.65rem; font-weight: 950; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; padding-left: 4px; }
+    
+    .item-row-elite { animation: slideIn 0.3s ease-out; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
 
     .animate-fade-in { animation: fadeIn 0.4s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .content-card-premium { border-radius: 40px; }
   `]
 })
 export class CustomDeclarationComponent {

@@ -8,63 +8,59 @@ import { KbService, KbArticle, KbCategory } from '../../../../services/kb.servic
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="kb-container p-6 animate-fade-in">
-      @if (category()) {
-        <nav class="mb-6 flex items-center text-sm text-slate-500">
-          <a routerLink="/helpdesk/knowledge-base" class="hover:text-red-600 transition-colors">Knowledge Base</a>
-          <svg class="mx-2" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-          <span class="text-slate-800 font-medium">{{ category()?.name }}</span>
+    <div class="page-container p-8 animate-fade-in">
+      @if (category(); as cat) {
+        <nav class="mb-10 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400">
+          <a routerLink="/helpdesk/knowledge-base" class="hover:text-red-500 transition-colors">Repository</a>
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+          <span class="text-slate-800">{{ cat.name }}</span>
         </nav>
 
-        <div class="kb-header mb-8">
-          <h1 class="text-3xl font-bold text-slate-800 mb-2">{{ category()?.name }}</h1>
-          <p class="text-slate-500 max-w-2xl">{{ category()?.description }}</p>
-        </div>
+        <header class="page-header-elite mb-12">
+           <div class="header-info">
+              <h1 class="premium-title">{{ cat.name }}</h1>
+              <p class="premium-subtitle pl-0 mt-1">{{ cat.description }}</p>
+           </div>
+        </header>
 
-        <div class="articles-list space-y-4">
+        <div class="grid grid-cols-1 gap-6">
           @for (art of articles(); track art.id) {
             <div 
-              class="article-card p-5 bg-white rounded-2xl border border-slate-100 hover:border-red-500/20 hover:shadow-lg hover:shadow-red-500/5 transition-all cursor-pointer group"
+              class="content-card-premium p-8 hover:border-red-500/30 transition-all cursor-pointer group flex justify-between items-center"
               [routerLink]="['/helpdesk/knowledge-base/article', art.slug]"
             >
-              <div class="flex justify-between items-start">
-                <div class="flex-1">
-                  <h3 class="text-xl font-bold text-slate-800 group-hover:text-red-600 transition-colors mb-2">{{ art.title }}</h3>
-                  <div class="flex items-center gap-4 text-xs text-slate-400">
-                    <span class="view-count flex items-center gap-1">
-                      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2"/>
-                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2"/>
-                      </svg>
-                      {{ art.view_count }} views
-                    </span>
-                    <span>Published on {{ art.created_at | date }}</span>
-                  </div>
+              <div class="flex-1">
+                <h3 class="text-2xl font-black text-slate-800 group-hover:text-red-600 transition-colors mb-3">{{ art.title }}</h3>
+                <div class="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                  <span class="flex items-center gap-1.5">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2.5"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2.5"/></svg>
+                    {{ art.view_count | number }} Accesses
+                  </span>
+                  <span>Published {{ art.created_at | date }}</span>
                 </div>
-                <svg class="text-slate-300 group-hover:text-red-400 transform group-hover:translate-x-1 transition-all" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
+              </div>
+              <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-red-600 group-hover:text-white transition-all transform group-hover:translate-x-1">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
               </div>
             </div>
           } @empty {
-            <div class="py-12 text-center text-slate-400 italic bg-white rounded-3xl border border-dashed border-slate-200">
-              No articles found in this category.
+            <div class="py-20 text-center opacity-50 bg-white rounded-3xl border-2 border-dashed border-slate-100">
+              <p class="text-xs font-black uppercase tracking-[0.2em] text-slate-500 italic">No protocols found in this sector</p>
             </div>
           }
         </div>
       } @else {
-        <div class="flex justify-center items-center py-24">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+        <div class="flex flex-col items-center justify-center py-40">
+           <div class="w-12 h-12 border-4 border-slate-100 border-t-red-600 rounded-full animate-spin mb-4"></div>
+           <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Synchronizing Sector Data...</p>
         </div>
       }
     </div>
   `,
   styles: [`
-    .kb-container { max-width: 1000px; margin: 0 auto; }
-    .animate-fade-in { animation: fadeIn 0.4s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .page-container { max-width: 1100px; margin: 0 auto; }
+    .animate-fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
