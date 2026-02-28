@@ -37,7 +37,7 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
       <div *ngIf="error()" class="error-banner">{{ error() }}</div>
 
       <!-- ── Main Content ──────────────────────────────────── -->
-      <div *ngIf="!loading() && summary()">
+      <div *ngIf="!loading() && summary() && summary()?.stats" class="animate-fade-in">
 
         <!-- KPI Row -->
         <div class="kpi-grid">

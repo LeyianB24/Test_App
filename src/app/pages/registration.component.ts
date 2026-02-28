@@ -5,10 +5,12 @@ import { AuthService } from '../core/services/auth.service';
 import { NotificationService } from '../core/services/notification.service';
 import { Router, RouterModule } from '@angular/router';
 
+import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-certificate.component';
+
 @Component({
   selector: 'app-registration',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, NgOptimizedImage],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, NgOptimizedImage, PinCertificateComponent],
   template: `
     <div class="auth-layout login-scene">
       <!-- Fixed Background Layer -->
@@ -63,29 +65,12 @@ import { Router, RouterModule } from '@angular/router';
               
               <!-- Success Result: Digital PIN Certificate -->
               <div class="success-reveal animate-scale" *ngIf="showSuccess()">
-                <div class="cert-header">
-                   <div class="stamp-luxury">
-                      <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/></svg>
-                   </div>
-                   <h2>PIN Registration Successful</h2>
-                   <p>Official acknowledgement of taxpayer registration</p>
-                </div>
+                <app-pin-certificate [pin]="generatedPIN()"></app-pin-certificate>
 
-                <div class="pin-display-luxury">
-                   <span class="p-meta">ASSIGNED KRA P.I.N</span>
-                   <div class="p-value">{{ generatedPIN() }}</div>
-                   <div class="p-verify">
-                      <span class="v-dot"></span> Verified by Central Revenue Authority
-                   </div>
-                </div>
-
-                <div class="success-actions mt-40">
+                <div class="success-actions mt-40 max-w-md mx-auto">
                    <button class="modern-btn primary-btn full-width" routerLink="/login">
                       Login to iTax Dashboard
                       <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                   </button>
-                   <button class="modern-btn outline-btn full-width mt-12" (click)="downloadAck()">
-                      Download Acknowledgement Receipt (PDF)
                    </button>
                 </div>
               </div>
