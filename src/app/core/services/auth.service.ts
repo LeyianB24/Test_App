@@ -151,8 +151,8 @@ export class AuthService {
           if (tokens) this.setTokensInStorage(tokens, rememberMe);
           this.currentUser.set(user);
           
-          // Refresh context after login
-          this.initializeSession();
+          // Reload user pages after login (don't reset isInitialized)
+          this.fetchUserPages().subscribe();
         }
       }),
       catchError(error => {
