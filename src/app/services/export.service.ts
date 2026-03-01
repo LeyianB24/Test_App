@@ -50,13 +50,22 @@ export class ExportService {
         throw new Error('Could not open print window');
       }
 
+      // Write HTML
       printWindow.document.write(html);
+      
+      // Inject script to ensure images finish loading before the print prompt freezes the viewport
+      printWindow.document.write(`
+        <script>
+          window.onload = function() {
+            setTimeout(function() {
+              window.print();
+            }, 300);
+          };
+        </script>
+      `);
       printWindow.document.close();
-
-      setTimeout(() => {
-        printWindow.print();
-        this.notificationService.showSuccess(`PDF ready to save as ${filename}`);
-      }, 500);
+      
+      this.notificationService.showSuccess(`PDF ready to save as ${filename}`);
     } catch (error: unknown) {
       this.notificationService.showError(`Failed to export to PDF: ${(error as Error).message}`);
     }
@@ -138,7 +147,7 @@ export class ExportService {
   <title>${title}</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; color: #000; background: #fff; }
+    body { font-family: Arial, Helvetica, sans-serif; font-size: 8.5pt; line-height: 1.3; color: #000; background: #fff; }
 
     /* Hourglass branding bar — mirrors PHP template */
     #branding-bar {
@@ -148,28 +157,28 @@ export class ExportService {
     #branding-bar svg { display: block; flex: 1; width: 28px; }
 
     /* Main content offset */
-    #content { margin-left: 38px; padding: 16px 28px 16px 8px; }
+    #content { margin-left: 38px; padding: 12px 24px 12px 8px; }
 
     /* Header */
     .cert-header {
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
     
     /* Contact info */
-    .contact-hdr { font-size: 8pt; font-weight: bold; line-height: 1.3; }
-    .contact-line { font-size: 8pt; line-height: 1.4; }
+    .contact-hdr { font-size: 7.5pt; font-weight: bold; line-height: 1.2; }
+    .contact-line { font-size: 7.5pt; line-height: 1.2; }
 
     /* Data table */
-    .data-table { width: 100%; border-collapse: collapse; margin-top: 10pt; }
-    .data-table th, .data-table td { border: 1pt solid #000; padding: 5pt 7pt; font-size: 8.5pt; }
+    .data-table { width: 100%; border-collapse: collapse; margin-top: 6px; margin-bottom: 10px; table-layout: fixed; word-wrap: break-word; }
+    .data-table th, .data-table td { border: 1.2pt solid #000; padding: 4px 5px; font-size: 8.5pt; }
     .data-table th { font-weight: bold; background: #E5E7EB; text-align: left; }
     .data-table td { background: #fff; }
 
     /* Footer */
-    .cert-footer { border-top: 1px solid #000; padding-top: 10px; margin-top: 30px; text-align: center; }
-    .tagline { font-size: 11pt; font-weight: bold; font-style: italic; color: #cc0000; margin-bottom: 10px; }
-    .footer-disc { font-size: 8pt; color: #666; font-style: italic; margin-top: 10px; text-align: left; }
-    .report-meta { font-size: 8pt; color: #444; text-align: right; margin-top: 4pt; }
+    .cert-footer { border-top: 1px solid #000; padding-top: 8px; margin-top: 15px; text-align: center; }
+    .tagline { font-size: 10pt; font-weight: bold; font-style: italic; color: #cc0000; margin-bottom: 8px; }
+    .footer-disc { font-size: 7pt; color: #666; font-style: italic; margin-top: 6px; text-align: left; }
+    .report-meta { font-size: 7.5pt; color: #444; text-align: right; margin-top: 4px; }
 
     @media print {
       body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -189,32 +198,30 @@ export class ExportService {
   </div>
 
   <div id="content">
-    <!-- Header: 3-column layout -->
+    <!-- Header: Responsive Float Layout -->
     <div class="cert-header">
-      <table width="100%" border="0" cellpadding="0" cellspacing="0" style="border-bottom: 2px solid #000; padding-bottom: 8px;">
-        <tr>
-          <!-- Left: Logo & URL -->
-          <td width="30%" align="left" valign="top">
-             <img src="http://localhost:4200/assets/logo.png" style="width: 140px; height: auto;" alt="KRA Logo" onerror="this.style.display='none'"><br>
-             <div style="font-size: 10pt; font-weight: bold; border-bottom: 1px solid #000; display: inline-block; margin-top: 4px;">www.kra.go.ke</div>
-          </td>
-          
-          <!-- Center: Badge -->
-          <td width="40%" align="center" valign="top">
-             <div style="background: #E5E7EB; padding: 6px 30px; font-size: 16pt; font-weight: bold; margin-top: 15px; display: inline-block;">
-               ${title}
-             </div>
-          </td>
-          
-          <!-- Right: Contact Info -->
-          <td width="30%" align="right" valign="top" style="font-size: 8pt; line-height: 1.3;">
-             <b>For General Tax Questions<br>Contact KRA Call Centre</b><br>
-             Tel: +254 (020) 4999 999<br>
-             Cell: +254(0711)099 999<br>
-             Email: callcentre@kra.go.ke
-          </td>
-        </tr>
-      </table>
+      <div style="border-bottom: 2px solid #000; padding-bottom: 6px; overflow: hidden; height: 95px; width: 100%;">
+        <!-- Left: Logo & URL -->
+        <div style="float: left; width: 33%;">
+           <img src="${origin}/assets/logo.png" style="width: 180px; height: auto;" alt="KRA Logo"><br>
+           <div style="font-size: 9pt; font-weight: bold; border-bottom: 2.5px solid #000; display: inline-block; margin-top: 15px; padding-bottom: 2px;">www.kra.go.ke</div>
+        </div>
+        
+        <!-- Right: Contact Info (Float right first) -->
+        <div style="float: right; width: 33%; text-align: right; font-size: 8pt; line-height: 1.25;">
+           <b>For General Tax Questions<br>Contact KRA Call Centre</b><br>
+           Tel: +254 (020) 4999 999<br>
+           Cell: +254(0711)099 999<br>
+           Email: callcentre@kra.go.ke
+        </div>
+        
+        <!-- Center: Badge -->
+        <div style="float: left; width: 34%; text-align: center;">
+           <div style="background: #E5E7EB; padding: 12px 0; width: 100%; max-width: 220px; margin: 5px auto 0; font-size: 14pt; font-weight: bold;">
+             ${title}
+           </div>
+        </div>
+      </div>
     </div>
 
     <!-- Data table -->
@@ -227,23 +234,24 @@ export class ExportService {
       </tbody>
     </table>
 
-    <!-- Footer: tagline center, 3-column logos -->
+    <!-- Footer: Responsive Float Layout -->
     <div class="cert-footer">
-      <div class="tagline">Tulipe Ushuru, Tujitegemee!</div>
-      
-      <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <div style="border-top: 1px solid #000; padding-top: 8px; text-align: center; color: #cc0000; font-weight: bold; font-style: italic; font-size: 11pt; margin-bottom: 12px;">
+        Tulipe Ushuru, Tujitegemee!
+      </div>
+
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
         <tr>
-          <td width="33%" align="left" valign="middle">
-            <img src="http://localhost:4200/assets/itax.jpeg" height="40" alt="iTax" onerror="this.style.display='none'">
+          <td style="width: 50%; text-align: left; vertical-align: bottom;">
+            <img src="${origin}/assets/itax.jpeg" height="40" style="max-height: 40px; width: auto;" alt="iTax">
           </td>
-          <td width="34%" align="center" valign="middle"></td>
-          <td width="33%" align="right" valign="middle">
-            <img src="http://localhost:4200/assets/vision_2030.png" height="40" alt="Vision 2030" onerror="this.style.display='none'">
+          <td style="width: 50%; text-align: right; vertical-align: bottom;">
+            <img src="${origin}/assets/vision_2030.png" height="40" style="max-height: 40px; width: auto;" alt="Vision 2030">
           </td>
         </tr>
       </table>
       
-      <div class="footer-disc">Disclaimer: This is a system generated document and does not require signature.</div>
+      <div class="footer-disc">Disclaimer: This is a system generated certificate and does not require signature.</div>
       <div class="report-meta">Generated: ${timestamp} &nbsp;|&nbsp; Total records: ${data.length}</div>
     </div>
   </div>
