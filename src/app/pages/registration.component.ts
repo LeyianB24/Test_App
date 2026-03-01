@@ -65,7 +65,11 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
               
               <!-- Success Result: Digital PIN Certificate -->
               <div class="success-reveal animate-scale" *ngIf="showSuccess()">
-                <app-pin-certificate [pin]="generatedPIN()"></app-pin-certificate>
+                <app-pin-certificate 
+                  [pin]="generatedPIN()" 
+                  [name]="regForm.get('firstName')?.value + ' ' + regForm.get('lastName')?.value"
+                  [email]="regForm.get('email')?.value">
+                </app-pin-certificate>
 
                 <div class="success-actions mt-40 max-w-md mx-auto">
                    <button class="modern-btn primary-btn full-width" routerLink="/login">

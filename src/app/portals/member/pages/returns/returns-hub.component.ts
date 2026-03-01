@@ -135,7 +135,7 @@ import { TaxReturnService } from '../../../../services/tax-return.service';
     .status-badge { padding: 4px 12px; border-radius: 10px; font-size: 0.65rem; font-weight: 950; background: rgba(255,255,255,0.05); color: #64748B; text-transform: uppercase; }
     .status-badge.urgent { background: #E31E24; color: white; box-shadow: 0 4px 15px rgba(227, 30, 36, 0.4); }
 
-    .status-dot-elite { font-size: 0.75rem; font-weight: 900; color: #94A3B8; display: flex; items-center; gap: 10px; }
+    .status-dot-elite { font-size: 0.75rem; font-weight: 900; color: #94A3B8; display: flex; align-items: center; gap: 10px; }
     .status-dot-elite::before { content: ''; width: 8px; height: 8px; border-radius: 50%; display: inline-block; transition: 0.3s; }
     .dot-success::before { background: #10B981; box-shadow: 0 0 15px #10B981; }
     .dot-draft::before { background: #64748B; }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../core/services/auth.service';
 import { DashboardDataService } from '../../../../services/dashboard-data.service';
@@ -334,11 +334,16 @@ export class PinCertificateComponent implements OnInit {
   private dashboardData = inject(DashboardDataService);
 
   readonly today = new Date();
-
-  // Auth signals
-  userName = this.authService.userName;
-  userEmail = computed(() => this.authService.currentUser()?.email || 'N.A.');
-  taxpayerPin = computed(() => this.authService.currentUser()?.taxpayer_id || 'N/A');
+  
+  // Optional inputs for use in registration success or other flows
+  pin = input<string>();
+  name = input<string>();
+  email = input<string>();
+  
+  // Auth signals with input fallbacks
+  userName = computed(() => this.name() || this.authService.userName());
+  userEmail = computed(() => this.email() || this.authService.currentUser()?.email || 'N.A.');
+  taxpayerPin = computed(() => this.pin() || this.authService.currentUser()?.taxpayer_id || 'N/A');
 
   // The backend returns `registration_date` (snake_case); the User model has `registrationDate`.
   // Using `as any` to handle both shapes safely at runtime.

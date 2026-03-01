@@ -313,7 +313,7 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
     .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
     /* Modal Styling */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); display: flex; items-center justify-center; z-index: 1000; padding: 20px; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
     .modal-card { width: 100%; max-width: 650px; border-radius: 28px; overflow: hidden; }
     .import-card { max-width: 500px; }
     .modal-header { padding: 24px 32px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
