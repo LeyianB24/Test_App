@@ -4,7 +4,7 @@ import { NotificationService } from '../core/services/notification.service';
 export interface ExportColumn {
   key: string;
   label: string;
-  format?: (value: any) => string;
+  format?: (value: unknown) => string;
 }
 
 export interface ExportOptions {
@@ -26,27 +26,26 @@ export class ExportService {
   /**
    * Export data to Excel/CSV format
    */
-  exportToExcel(data: any[], options: ExportOptions): void {
+  exportToExcel(data: unknown[], options: ExportOptions): void {
     try {
       const filename = options.filename || 'export.csv';
       const csv = this.convertToCSV(data, options.columns);
       this.downloadFile(csv, filename, 'text/csv;charset=utf-8;');
       this.notificationService.showSuccess(`Data exported to ${filename}`);
-    } catch (error: any) {
-      this.notificationService.showError(`Failed to export to Excel: ${error.message}`);
+    } catch (error: unknown) {
+      this.notificationService.showError(`Failed to export to Excel: ${(error as Error).message}`);
     }
   }
 
   /**
-   * Export data to PDF format
+   * Export data to PDF format using KRA-branded print window
    */
-  exportToPDF(data: any[], options: ExportOptions): void {
+  exportToPDF(data: unknown[], options: ExportOptions): void {
     try {
       const filename = options.filename || 'export.pdf';
       const html = this.convertToHTML(data, options);
 
-      // Using a simple table-to-PDF approach with print styling
-      const printWindow = window.open('', '', 'width=900,height=600');
+      const printWindow = window.open('', '', 'width=900,height=700');
       if (!printWindow) {
         throw new Error('Could not open print window');
       }
@@ -56,35 +55,34 @@ export class ExportService {
 
       setTimeout(() => {
         printWindow.print();
-        // Note: File naming in save dialog happens when user saves via browser
         this.notificationService.showSuccess(`PDF ready to save as ${filename}`);
-      }, 250);
-    } catch (error: any) {
-      this.notificationService.showError(`Failed to export to PDF: ${error.message}`);
+      }, 500);
+    } catch (error: unknown) {
+      this.notificationService.showError(`Failed to export to PDF: ${(error as Error).message}`);
     }
   }
 
   /**
    * Export data to JSON format
    */
-  exportToJSON(data: any[], options: ExportOptions): void {
+  exportToJSON(data: unknown[], options: ExportOptions): void {
     try {
       const filename = options.filename || 'export.json';
       const json = JSON.stringify(data, null, 2);
       this.downloadFile(json, filename, 'application/json;charset=utf-8;');
       this.notificationService.showSuccess(`Data exported to ${filename}`);
-    } catch (error: any) {
-      this.notificationService.showError(`Failed to export to JSON: ${error.message}`);
+    } catch (error: unknown) {
+      this.notificationService.showError(`Failed to export to JSON: ${(error as Error).message}`);
     }
   }
 
   /**
    * Convert array to CSV format
    */
-  convertToCSV(data: any[], columns: ExportColumn[]): string {
+  convertToCSV(data: unknown[], columns: ExportColumn[]): string {
     const headers = columns.map(col => this.escapeCSVValue(col.label)).join(',');
 
-    const rows = data.map(row => {
+    const rows = (data as Record<string, unknown>[]).map(row => {
       return columns.map(col => {
         let value = row[col.key];
         if (col.format) {
@@ -100,139 +98,150 @@ export class ExportService {
   /**
    * Escape CSV values
    */
-  private escapeCSVValue(value: any): string {
+  private escapeCSVValue(value: unknown): string {
     if (value === null || value === undefined) {
       return '';
     }
-
     const stringValue = String(value);
-
     if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
       return `"${stringValue.replace(/"/g, '""')}"`;
     }
-
     return stringValue;
   }
 
   /**
-   * Convert array to HTML table
+   * Convert array to KRA-branded HTML table for printing.
+   * Mirrors the layout of the server-side PdfTemplate.php:
+   *   - Black/red hourglass wedges on the left
+   *   - KRA logo centered at the top
+   *   - Contact info top-right
+   *   - Footer: iTax logo left, "Tulipe Ushuru" tagline center, Vision 2030 right
    */
-  private convertToHTML(data: any[], options: ExportOptions): string {
+  private convertToHTML(data: unknown[], options: ExportOptions): string {
     const title = options.title || 'Export';
-    const timestamp = new Date().toLocaleString();
+    const timestamp = new Date().toLocaleDateString('en-GB');
 
-    let html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>${title}</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            color: #333;
-          }
-          .header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #2c3e50;
-            padding-bottom: 15px;
-          }
-          .header h1 {
-            margin: 0;
-            font-size: 24px;
-            color: #2c3e50;
-          }
-          .header p {
-            margin: 5px 0;
-            font-size: 12px;
-            color: #666;
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-          }
-          thead {
-            background-color: #34495e;
-            color: white;
-          }
-          th {
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            border: 1px solid #bdc3c7;
-          }
-          td {
-            padding: 10px 12px;
-            border: 1px solid #ecf0f1;
-          }
-          tbody tr:nth-child(even) {
-            background-color: #f8f9fa;
-          }
-          tbody tr:hover {
-            background-color: #ecf0f1;
-          }
-          .footer {
-            text-align: right;
-            font-size: 11px;
-            color: #999;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #ddd;
-          }
-          @media print {
-            body { margin: 0; }
-            .footer { page-break-inside: avoid; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>${title}</h1>
-          <p>Exported on ${timestamp}</p>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              ${options.columns.map(col => `<th>${col.label}</th>`).join('')}
-            </tr>
-          </thead>
-          <tbody>
-            ${data.map(row => `
-              <tr>
-                ${options.columns.map(col => {
-                  let value = row[col.key];
-                  if (col.format) {
-                    value = col.format(value);
-                  }
-                  return `<td>${this.escapeHTML(value)}</td>`;
-                }).join('')}
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-        <div class="footer">
-          <p>Total records: ${data.length}</p>
-        </div>
-      </body>
-      </html>
-    `;
+    const tableRows = (data as Record<string, unknown>[]).map(row => `
+      <tr>
+        ${options.columns.map(col => {
+          let value = row[col.key];
+          if (col.format) value = col.format(value);
+          const safe = String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          return `<td>${safe}</td>`;
+        }).join('')}
+      </tr>`).join('');
 
-    return html;
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${title}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; color: #000; background: #fff; }
+
+    /* Hourglass branding bar — mirrors PHP template */
+    #branding-bar {
+      position: fixed; top: 0; left: 0; width: 28px; height: 100vh;
+      overflow: hidden; z-index: 0; display: flex; flex-direction: column;
+    }
+    #branding-bar svg { display: block; flex: 1; width: 28px; }
+
+    /* Main content offset */
+    #content { margin-left: 38px; padding: 16px 28px 16px 8px; }
+
+    /* Header */
+    .cert-header {
+      text-align: center; border-bottom: 2pt solid #000;
+      padding-bottom: 10pt; margin-bottom: 14pt; position: relative;
+    }
+    .kra-logo { height: 65pt; margin-bottom: 4pt; }
+    .kra-url { font-size: 8pt; font-weight: bold; border-bottom: 1pt solid #000; display: inline-block; }
+    .cert-title-badge {
+      background: #E5E7EB; padding: 5pt 14pt; font-size: 13pt;
+      font-weight: bold; display: inline-block; margin-top: 8pt;
+    }
+    .contact-info { position: absolute; top: 0; right: 0; text-align: right; }
+    .contact-info div { font-size: 7pt; line-height: 1.4; }
+    .contact-bold { font-weight: bold; }
+
+    /* Data table */
+    .data-table { width: 100%; border-collapse: collapse; margin-top: 10pt; }
+    .data-table th, .data-table td { border: 1pt solid #000; padding: 5pt 7pt; font-size: 8.5pt; }
+    .data-table th { font-weight: bold; background: #E5E7EB; text-align: left; }
+    .data-table td { background: #fff; }
+
+    /* Footer */
+    .cert-footer { border-top: 1pt solid #000; padding-top: 8pt; margin-top: 16pt; }
+    .tagline { font-size: 10pt; font-weight: bold; font-style: italic; color: #cc0000; text-align: center; margin-bottom: 8pt; }
+    .footer-logos { display: flex; justify-content: space-between; align-items: center; }
+    .footer-img { height: 28pt; }
+    .footer-disc { font-size: 7pt; color: #666; font-style: italic; margin-top: 6pt; }
+    .report-meta { font-size: 8pt; color: #444; text-align: right; margin-top: 4pt; }
+
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      #branding-bar { position: fixed; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hourglass branding bar: black top-half, red bottom-half -->
+  <div id="branding-bar">
+    <svg viewBox="0 0 28 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="0,0 28,0 0,500" fill="#000000"/>
+    </svg>
+    <svg viewBox="0 0 28 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="28,500 0,500 28,0" fill="#cc0000"/>
+    </svg>
+  </div>
+
+  <div id="content">
+    <!-- Header: logo centered, contact top-right -->
+    <div class="cert-header">
+      <div class="contact-info">
+        <div class="contact-bold">KRA Call Centre</div>
+        <div>Tel: +254 (020) 4999 999</div>
+        <div>Cell: +254(0711)099 999</div>
+        <div>callcentre@kra.go.ke</div>
+      </div>
+      <img src="http://localhost:4200/assets/logo.png" class="kra-logo" alt="KRA Logo" onerror="this.style.display='none'"><br>
+      <span class="kra-url">www.kra.go.ke</span>
+      <div><span class="cert-title-badge">${title}</span></div>
+    </div>
+
+    <!-- Data table -->
+    <table class="data-table">
+      <thead>
+        <tr>${options.columns.map(col => `<th>${col.label}</th>`).join('')}</tr>
+      </thead>
+      <tbody>
+        ${tableRows}
+      </tbody>
+    </table>
+
+    <!-- Footer: tagline center, iTax left, Vision 2030 right -->
+    <div class="cert-footer">
+      <div class="tagline">Tulipe Ushuru, Tujitegemee!</div>
+      <div class="footer-logos">
+        <img src="http://localhost:4200/assets/itax.jpeg" class="footer-img" alt="iTax" onerror="this.style.display='none'">
+        <img src="http://localhost:4200/assets/vision_2030.png" class="footer-img" alt="Vision 2030" onerror="this.style.display='none'">
+      </div>
+      <div class="footer-disc">Disclaimer: This is a system generated document and does not require signature.</div>
+      <div class="report-meta">Generated: ${timestamp} &nbsp;|&nbsp; Total records: ${data.length}</div>
+    </div>
+  </div>
+</body>
+</html>`;
   }
 
   /**
    * Escape HTML special characters
    */
-  private escapeHTML(value: any): string {
-    if (value === null || value === undefined) {
-      return '';
-    }
-
-    const string = String(value);
+  private escapeHTML(value: unknown): string {
+    if (value === null || value === undefined) return '';
     const div = document.createElement('div');
-    div.textContent = string;
+    div.textContent = String(value);
     return div.innerHTML;
   }
 
@@ -252,183 +261,125 @@ export class ExportService {
   }
 
   /**
-   * Generate report with summary statistics
+   * Generate report with summary statistics (used in some admin views)
    */
-  generateReport(data: any[], options: {
+  generateReport(data: unknown[], options: {
     columns: ExportColumn[];
     title: string;
-    summary?: Record<string, any>;
+    summary?: Record<string, unknown>;
     groupBy?: string;
   }): string {
-    // Group data if needed
-    let groupedData: Record<string, any[]> = {};
+    const groupedData: Record<string, unknown[]> = {};
     if (options.groupBy) {
-      data.forEach(item => {
-        const key = item[options.groupBy!];
-        if (!groupedData[key]) {
-          groupedData[key] = [];
-        }
+      (data as Record<string, unknown>[]).forEach(item => {
+        const key = String(item[options.groupBy!]);
+        if (!groupedData[key]) groupedData[key] = [];
         groupedData[key].push(item);
       });
     } else {
       groupedData['All'] = data;
     }
 
-    // Generate HTML report
     const timestamp = new Date().toLocaleString();
-    let html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>${options.title} Report</title>
-        <style>
-          * { margin: 0; padding: 0; box-sizing: border-box; }
-          body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 20px;
-            background: #f5f5f5;
-          }
-          .report-container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-          }
-          .report-header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #2c3e50;
-            padding-bottom: 20px;
-          }
-          .report-header h1 {
-            font-size: 28px;
-            color: #2c3e50;
-            margin-bottom: 10px;
-          }
-          .report-meta {
-            font-size: 12px;
-            color: #666;
-          }
-          .summary-section {
-            background: #ecf0f1;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-          }
-          .summary-item {
-            display: inline-block;
-            margin-right: 30px;
-            margin-bottom: 10px;
-          }
-          .summary-item-label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-          }
-          .summary-item-value {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2c3e50;
-          }
-          .group-section {
-            margin-bottom: 30px;
-            page-break-inside: avoid;
-          }
-          .group-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #3498db;
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-          }
-          thead {
-            background: #34495e;
-            color: white;
-          }
-          th {
-            padding: 10px;
-            text-align: left;
-            font-weight: 600;
-          }
-          td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #ecf0f1;
-          }
-          tbody tr:hover {
-            background: #f8f9fa;
-          }
-          @media print {
-            body { background: white; }
-            .report-container { box-shadow: none; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="report-container">
-          <div class="report-header">
-            <h1>${options.title}</h1>
-            <div class="report-meta">
-              <p>Generated: ${timestamp}</p>
-            </div>
-          </div>
-    `;
 
-    // Add summary if provided
-    if (options.summary && Object.keys(options.summary).length > 0) {
-      html += '<div class="summary-section">';
-      Object.keys(options.summary).forEach(key => {
-        html += `
-          <div class="summary-item">
-            <div class="summary-item-label">${key}</div>
-            <div class="summary-item-value">${options.summary![key]}</div>
-          </div>
-        `;
-      });
-      html += '</div>';
-    }
-
-    // Add grouped data tables
+    let tablesSections = '';
     Object.keys(groupedData).forEach(group => {
-      const groupItems = groupedData[group];
-      html += `
+      const groupItems = groupedData[group] as Record<string, unknown>[];
+      tablesSections += `
         <div class="group-section">
           <div class="group-title">${group} (${groupItems.length} records)</div>
-          <table>
+          <table class="data-table">
             <thead>
-              <tr>
-                ${options.columns.map(col => `<th>${col.label}</th>`).join('')}
-              </tr>
+              <tr>${options.columns.map(col => `<th>${col.label}</th>`).join('')}</tr>
             </thead>
             <tbody>
               ${groupItems.map(item => `
                 <tr>
                   ${options.columns.map(col => {
                     let value = item[col.key];
-                    if (col.format) {
-                      value = col.format(value);
-                    }
+                    if (col.format) value = col.format(value);
                     return `<td>${this.escapeHTML(value)}</td>`;
                   }).join('')}
                 </tr>
               `).join('')}
             </tbody>
           </table>
-        </div>
-      `;
+        </div>`;
     });
 
-    html += `
-        </div>
-      </body>
-      </html>
-    `;
-
-    return html;
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${options.title} Report</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; color: #000; background: #fff; }
+    #branding-bar { position: fixed; top: 0; left: 0; width: 28px; height: 100vh; overflow: hidden; z-index: 0; display: flex; flex-direction: column; }
+    #branding-bar svg { display: block; flex: 1; width: 28px; }
+    #content { margin-left: 38px; padding: 16px 28px 16px 8px; }
+    .cert-header { text-align: center; border-bottom: 2pt solid #000; padding-bottom: 10pt; margin-bottom: 14pt; position: relative; }
+    .kra-logo { height: 65pt; margin-bottom: 4pt; }
+    .kra-url { font-size: 8pt; font-weight: bold; border-bottom: 1pt solid #000; display: inline-block; }
+    .cert-title-badge { background: #E5E7EB; padding: 5pt 14pt; font-size: 13pt; font-weight: bold; display: inline-block; margin-top: 8pt; }
+    .contact-info { position: absolute; top: 0; right: 0; text-align: right; }
+    .contact-info div { font-size: 7pt; line-height: 1.4; }
+    .contact-bold { font-weight: bold; }
+    .summary-section { background: #f0f0f0; padding: 10pt; margin-bottom: 12pt; border-radius: 4pt; }
+    .summary-item { display: inline-block; margin-right: 20pt; margin-bottom: 6pt; }
+    .summary-label { font-size: 8pt; color: #555; text-transform: uppercase; }
+    .summary-value { font-size: 14pt; font-weight: bold; }
+    .group-section { margin-bottom: 20pt; page-break-inside: avoid; }
+    .group-title { font-size: 11pt; font-weight: bold; margin-bottom: 6pt; padding-bottom: 4pt; border-bottom: 1pt solid #666; }
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th, .data-table td { border: 1pt solid #000; padding: 4pt 6pt; font-size: 8pt; }
+    .data-table th { font-weight: bold; background: #E5E7EB; text-align: left; }
+    .cert-footer { border-top: 1pt solid #000; padding-top: 8pt; margin-top: 16pt; }
+    .tagline { font-size: 10pt; font-weight: bold; font-style: italic; color: #cc0000; text-align: center; margin-bottom: 8pt; }
+    .footer-logos { display: flex; justify-content: space-between; align-items: center; }
+    .footer-img { height: 28pt; }
+    .footer-disc { font-size: 7pt; color: #666; font-style: italic; margin-top: 6pt; }
+    .report-meta { font-size: 8pt; color: #444; text-align: right; margin-top: 4pt; }
+    @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } #branding-bar { position: fixed; } }
+  </style>
+</head>
+<body>
+  <div id="branding-bar">
+    <svg viewBox="0 0 28 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 28,0 0,500" fill="#000000"/></svg>
+    <svg viewBox="0 0 28 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="28,500 0,500 28,0" fill="#cc0000"/></svg>
+  </div>
+  <div id="content">
+    <div class="cert-header">
+      <div class="contact-info">
+        <div class="contact-bold">KRA Call Centre</div>
+        <div>Tel: +254 (020) 4999 999</div>
+        <div>Cell: +254(0711)099 999</div>
+        <div>callcentre@kra.go.ke</div>
+      </div>
+      <img src="http://localhost:4200/assets/logo.png" class="kra-logo" alt="KRA Logo" onerror="this.style.display='none'"><br>
+      <span class="kra-url">www.kra.go.ke</span>
+      <div><span class="cert-title-badge">${options.title} Report</span></div>
+    </div>
+    ${options.summary && Object.keys(options.summary).length > 0 ? `
+    <div class="summary-section">
+      ${Object.keys(options.summary).map(key => `
+        <div class="summary-item">
+          <div class="summary-label">${key}</div>
+          <div class="summary-value">${options.summary![key]}</div>
+        </div>`).join('')}
+    </div>` : ''}
+    ${tablesSections}
+    <div class="cert-footer">
+      <div class="tagline">Tulipe Ushuru, Tujitegemee!</div>
+      <div class="footer-logos">
+        <img src="http://localhost:4200/assets/itax.jpeg" class="footer-img" alt="iTax" onerror="this.style.display='none'">
+        <img src="http://localhost:4200/assets/vision_2030.png" class="footer-img" alt="Vision 2030" onerror="this.style.display='none'">
+      </div>
+      <div class="footer-disc">Disclaimer: This is a system generated document and does not require signature.</div>
+      <div class="report-meta">Generated: ${timestamp}</div>
+    </div>
+  </div>
+</body>
+</html>`;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../core/services/auth.service';
 import { DashboardDataService } from '../../../../services/dashboard-data.service';
@@ -6,6 +6,7 @@ import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-pin-certificate',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   template: `
@@ -27,10 +28,16 @@ import { environment } from '../../../../../environments/environment';
       <!-- ── Official PIN Certificate Document ──────────────── -->
       <div id="pin-cert-doc" class="official-cert-paper">
 
-        <!-- Hourglass Branding Bar (Left) -->
+        <!-- Hourglass Branding Bar (Left) — SVG polygons for reliable rendering -->
         <div id="branding-bar">
-          <div class="triangle-top"></div>
-          <div class="triangle-bottom"></div>
+          <!-- Black top-half wedge -->
+          <svg class="wedge-top" viewBox="0 0 1 1" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="0,0 1,0 0,1" fill="#000000"/>
+          </svg>
+          <!-- Red bottom-half wedge -->
+          <svg class="wedge-bottom" viewBox="0 0 1 1" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="1,1 0,1 1,0" fill="#cc0000"/>
+          </svg>
         </div>
 
         <div class="cert-content-inner">
@@ -230,39 +237,24 @@ import { environment } from '../../../../../environments/environment';
       z-index: 5;
     }
 
-    /* ── Hourglass Branding Bar ── */
+    /* ── Hourglass Branding Bar — uses SVG polygons ── */
     #branding-bar {
         position: absolute;
         top: 0;
         left: 0;
-        width: 15mm;
+        width: 38px;
         height: 100%;
         min-height: 297mm;
         z-index: 10;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
-    /* Top black triangle — fills top half */
-    .triangle-top {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        /* right edge is the hypotenuse going from full-width (15mm) → 0 */
-        border-width: 148.5mm 15mm 0 0;
-        border-color: #000000 transparent transparent transparent;
-    }
-    /* Bottom red triangle — fills bottom half, inverted */
-    .triangle-bottom {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 0 0 148.5mm 15mm;
-        border-color: transparent transparent #cc0000 transparent;
+    /* Each SVG takes exactly half the height */
+    .wedge-top, .wedge-bottom {
+        display: block;
+        width: 38px;
+        flex: 1;
     }
 
     /* Certificate Header */
@@ -336,14 +328,14 @@ export class PinCertificateComponent implements OnInit {
   readonly today = new Date();
   
   // Optional inputs for use in registration success or other flows
-  pin = input<string>();
-  name = input<string>();
-  email = input<string>();
+  @Input() pin?: string;
+  @Input() name?: string;
+  @Input() email?: string;
   
   // Auth signals with input fallbacks
-  userName = computed(() => this.name() || this.authService.userName());
-  userEmail = computed(() => this.email() || this.authService.currentUser()?.email || 'N.A.');
-  taxpayerPin = computed(() => this.pin() || this.authService.currentUser()?.taxpayer_id || 'N/A');
+  userName = computed(() => this.name || this.authService.userName());
+  userEmail = computed(() => this.email || this.authService.currentUser()?.email || 'N.A.');
+  taxpayerPin = computed(() => this.pin || this.authService.currentUser()?.taxpayer_id || 'N/A');
 
   // The backend returns `registration_date` (snake_case); the User model has `registrationDate`.
   // Using `as any` to handle both shapes safely at runtime.
