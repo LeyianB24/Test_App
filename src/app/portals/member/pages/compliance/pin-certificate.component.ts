@@ -36,7 +36,7 @@ import { environment } from '../../../../../environments/environment';
           </svg>
           <!-- Red bottom-half wedge -->
           <svg class="wedge-bottom" viewBox="0 0 1 1" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <polygon points="1,1 0,1 1,0" fill="#cc0000"/>
+            <polygon points="0,1 1,1 0,0" fill="#cc0000"/>
           </svg>
         </div>
 

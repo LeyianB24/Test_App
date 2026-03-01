@@ -152,18 +152,12 @@ export class ExportService {
 
     /* Header */
     .cert-header {
-      text-align: center; border-bottom: 2pt solid #000;
-      padding-bottom: 10pt; margin-bottom: 14pt; position: relative;
+      margin-bottom: 20px;
     }
-    .kra-logo { height: 65pt; margin-bottom: 4pt; }
-    .kra-url { font-size: 8pt; font-weight: bold; border-bottom: 1pt solid #000; display: inline-block; }
-    .cert-title-badge {
-      background: #E5E7EB; padding: 5pt 14pt; font-size: 13pt;
-      font-weight: bold; display: inline-block; margin-top: 8pt;
-    }
-    .contact-info { position: absolute; top: 0; right: 0; text-align: right; }
-    .contact-info div { font-size: 7pt; line-height: 1.4; }
-    .contact-bold { font-weight: bold; }
+    
+    /* Contact info */
+    .contact-hdr { font-size: 8pt; font-weight: bold; line-height: 1.3; }
+    .contact-line { font-size: 8pt; line-height: 1.4; }
 
     /* Data table */
     .data-table { width: 100%; border-collapse: collapse; margin-top: 10pt; }
@@ -172,11 +166,9 @@ export class ExportService {
     .data-table td { background: #fff; }
 
     /* Footer */
-    .cert-footer { border-top: 1pt solid #000; padding-top: 8pt; margin-top: 16pt; }
-    .tagline { font-size: 10pt; font-weight: bold; font-style: italic; color: #cc0000; text-align: center; margin-bottom: 8pt; }
-    .footer-logos { display: flex; justify-content: space-between; align-items: center; }
-    .footer-img { height: 28pt; }
-    .footer-disc { font-size: 7pt; color: #666; font-style: italic; margin-top: 6pt; }
+    .cert-footer { border-top: 1px solid #000; padding-top: 10px; margin-top: 30px; text-align: center; }
+    .tagline { font-size: 11pt; font-weight: bold; font-style: italic; color: #cc0000; margin-bottom: 10px; }
+    .footer-disc { font-size: 8pt; color: #666; font-style: italic; margin-top: 10px; text-align: left; }
     .report-meta { font-size: 8pt; color: #444; text-align: right; margin-top: 4pt; }
 
     @media print {
@@ -192,22 +184,37 @@ export class ExportService {
       <polygon points="0,0 28,0 0,500" fill="#000000"/>
     </svg>
     <svg viewBox="0 0 28 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="28,500 0,500 28,0" fill="#cc0000"/>
+      <polygon points="0,500 28,500 0,0" fill="#cc0000"/>
     </svg>
   </div>
 
   <div id="content">
-    <!-- Header: logo centered, contact top-right -->
+    <!-- Header: 3-column layout -->
     <div class="cert-header">
-      <div class="contact-info">
-        <div class="contact-bold">KRA Call Centre</div>
-        <div>Tel: +254 (020) 4999 999</div>
-        <div>Cell: +254(0711)099 999</div>
-        <div>callcentre@kra.go.ke</div>
-      </div>
-      <img src="http://localhost:4200/assets/logo.png" class="kra-logo" alt="KRA Logo" onerror="this.style.display='none'"><br>
-      <span class="kra-url">www.kra.go.ke</span>
-      <div><span class="cert-title-badge">${title}</span></div>
+      <table width="100%" border="0" cellpadding="0" cellspacing="0" style="border-bottom: 2px solid #000; padding-bottom: 8px;">
+        <tr>
+          <!-- Left: Logo & URL -->
+          <td width="30%" align="left" valign="top">
+             <img src="http://localhost:4200/assets/logo.png" style="width: 140px; height: auto;" alt="KRA Logo" onerror="this.style.display='none'"><br>
+             <div style="font-size: 10pt; font-weight: bold; border-bottom: 1px solid #000; display: inline-block; margin-top: 4px;">www.kra.go.ke</div>
+          </td>
+          
+          <!-- Center: Badge -->
+          <td width="40%" align="center" valign="top">
+             <div style="background: #E5E7EB; padding: 6px 30px; font-size: 16pt; font-weight: bold; margin-top: 15px; display: inline-block;">
+               ${title}
+             </div>
+          </td>
+          
+          <!-- Right: Contact Info -->
+          <td width="30%" align="right" valign="top" style="font-size: 8pt; line-height: 1.3;">
+             <b>For General Tax Questions<br>Contact KRA Call Centre</b><br>
+             Tel: +254 (020) 4999 999<br>
+             Cell: +254(0711)099 999<br>
+             Email: callcentre@kra.go.ke
+          </td>
+        </tr>
+      </table>
     </div>
 
     <!-- Data table -->
@@ -220,13 +227,22 @@ export class ExportService {
       </tbody>
     </table>
 
-    <!-- Footer: tagline center, iTax left, Vision 2030 right -->
+    <!-- Footer: tagline center, 3-column logos -->
     <div class="cert-footer">
       <div class="tagline">Tulipe Ushuru, Tujitegemee!</div>
-      <div class="footer-logos">
-        <img src="http://localhost:4200/assets/itax.jpeg" class="footer-img" alt="iTax" onerror="this.style.display='none'">
-        <img src="http://localhost:4200/assets/vision_2030.png" class="footer-img" alt="Vision 2030" onerror="this.style.display='none'">
-      </div>
+      
+      <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="33%" align="left" valign="middle">
+            <img src="http://localhost:4200/assets/itax.jpeg" height="40" alt="iTax" onerror="this.style.display='none'">
+          </td>
+          <td width="34%" align="center" valign="middle"></td>
+          <td width="33%" align="right" valign="middle">
+            <img src="http://localhost:4200/assets/vision_2030.png" height="40" alt="Vision 2030" onerror="this.style.display='none'">
+          </td>
+        </tr>
+      </table>
+      
       <div class="footer-disc">Disclaimer: This is a system generated document and does not require signature.</div>
       <div class="report-meta">Generated: ${timestamp} &nbsp;|&nbsp; Total records: ${data.length}</div>
     </div>
@@ -346,7 +362,7 @@ export class ExportService {
 <body>
   <div id="branding-bar">
     <svg viewBox="0 0 28 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 28,0 0,500" fill="#000000"/></svg>
-    <svg viewBox="0 0 28 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="28,500 0,500 28,0" fill="#cc0000"/></svg>
+    <svg viewBox="0 0 28 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="0,500 28,500 0,0" fill="#cc0000"/></svg>
   </div>
   <div id="content">
     <div class="cert-header">
