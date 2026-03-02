@@ -9,334 +9,382 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   template: `
-    <div class="page-container animate-up">
-      <header class="page-header-elite">
+    <div class="page-container p-8 animate-up">
+      <!-- Elite Page Header -->
+      <header class="page-header-elite mb-12">
         <div class="header-info">
           <h1 class="premium-title">Taxpayer <span class="gradient-text">Directory</span></h1>
-          <p class="premium-subtitle">Manage client accounts, compliance status, and system access</p>
+          <p class="premium-subtitle">Sovereign management of client profiles & compliance metadata</p>
         </div>
-        <div class="header-actions">
-           <div class="search-box mr-12">
-             <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="search()" placeholder="Search PIN, Name, Email..." class="premium-input">
-             <button class="search-btn" (click)="search()">
-               <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-             </button>
+        <div class="header-actions flex gap-4">
+           <div class="search-premium min-w-[300px]">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="search()" placeholder="Search PIN, Name, Email..." class="search-input-elite">
            </div>
-           <button class="btn-premium mr-8" (click)="openForge()">
-             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-             Client Forge
+           <button class="modern-btn primary-btn btn-icon" (click)="openForge()">
+             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
+             <span>Client Forge</span>
            </button>
-           <button class="btn-premium-outline" (click)="showImport.set(true)">
-             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-             Bulk Ingest
+           <button class="modern-btn outline-btn btn-icon" (click)="showImport.set(true)">
+             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+             <span>Bulk Ingest</span>
            </button>
         </div>
       </header>
 
       <!-- Summary KPI Row -->
-      <div class="kpi-summary-row">
-        <div class="kpi-mini-card">
-          <div class="kpi-mini-icon kmi-blue">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div class="premium-stat-card p-6 animate-up delay-1">
+          <div class="stat-info">
+            <span class="stat-label">Total Registered</span>
+            <h3 class="stat-number">{{ totalCount() | number }}</h3>
           </div>
-          <div>
-            <div class="kmi-val">{{ totalCount() | number }}</div>
-            <div class="kmi-lbl">Total Registered</div>
-          </div>
-        </div>
-        <div class="kpi-mini-card">
-          <div class="kpi-mini-icon kmi-green">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          </div>
-          <div>
-            <div class="kmi-val">{{ activeThisMonth() | number }}</div>
-            <div class="kmi-lbl">Active This Month</div>
+          <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-blue-600">
+             <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           </div>
         </div>
-        <div class="kpi-mini-card">
-          <div class="kpi-mini-icon kmi-purple">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        
+        <div class="premium-stat-card p-6 animate-up delay-2">
+          <div class="stat-info">
+            <span class="stat-label">Active (30d)</span>
+            <h3 class="stat-number text-emerald-600">{{ activeThisMonth() | number }}</h3>
           </div>
-          <div>
-            <div class="kmi-val">{{ individualCount() | number }}</div>
-            <div class="kmi-lbl">Individuals</div>
+          <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-emerald-600">
+             <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
         </div>
-        <div class="kpi-mini-card">
-          <div class="kpi-mini-icon kmi-amber">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+
+        <div class="premium-stat-card p-6 animate-up delay-3">
+          <div class="stat-info">
+            <span class="stat-label">Individuals</span>
+            <h3 class="stat-number text-purple-600">{{ individualCount() | number }}</h3>
           </div>
-          <div>
-            <div class="kmi-val">{{ businessCount() | number }}</div>
-            <div class="kmi-lbl">Businesses</div>
+          <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-purple-600">
+             <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          </div>
+        </div>
+
+        <div class="premium-stat-card p-6 animate-up delay-4">
+          <div class="stat-info">
+            <span class="stat-label">Businesses</span>
+            <h3 class="stat-number text-amber-600">{{ businessCount() | number }}</h3>
+          </div>
+          <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-amber-600">
+             <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
           </div>
         </div>
       </div>
 
-      <div *ngIf="loading()" class="loading-state flex flex-col items-center justify-center p-12">
-        <div class="spin"></div>
-        <p class="mt-4 text-muted" style="color: var(--text-muted); margin-top: 1rem;">Loading directory...</p>
-      </div>
+      <!-- Main Directory Surface -->
+      <div class="content-card-premium relative overflow-hidden animate-up delay-2">
+         <div class="absolute -top-20 -right-20 w-80 h-80 bg-slate-50 rounded-full blur-3xl"></div>
 
-      <div *ngIf="error()" class="error-banner">
-        {{ error() }}
-      </div>
+         <div class="relative z-10">
+            @if (loading()) {
+              <div class="py-32 flex flex-col items-center">
+                <div class="w-12 h-12 border-4 border-slate-100 border-t-red-600 rounded-full animate-spin"></div>
+                <p class="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Scanning encrypted directory...</p>
+              </div>
+            }
 
-      <div *ngIf="!loading() && !error()" class="content-card-premium table-responsive-elite glassmorphism">
-        <table class="elite-table">
-          <thead>
-            <tr>
-              <th>ID / Taxpayer PIN</th>
-              <th>Name & Contact</th>
-              <th>Type / Station</th>
-              <th>Registration</th>
-              <th>Last Login</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let client of clients()">
-              <td>
-                <span class="font-bold text-main block">{{ client.taxpayer_id }}</span>
-                <span class="text-xs text-muted">ID: {{ client.id }}</span>
-              </td>
-              <td>
-                <span class="font-bold text-main block">{{ client.name }}</span>
-                <span class="text-xs text-muted block">{{ client.email }}</span>
-                <span class="text-xs text-muted" *ngIf="client.phone">{{ client.phone }}</span>
-              </td>
-              <td>
-                <span class="badge" [class.badge-blue]="client.type === 'individual'" [class.badge-purple]="client.type === 'business'">{{ client.type | uppercase }}</span>
-                <span class="text-xs text-muted block mt-1">{{ client.station || 'Unassigned' }}</span>
-              </td>
-              <td>
-                <span class="text-sm">{{ client.registration_date | date:'mediumDate' }}</span>
-              </td>
-              <td>
-                <span class="text-sm" *ngIf="client.last_login">{{ client.last_login | date:'mediumDate' }}</span>
-                <span class="text-sm text-muted" *ngIf="!client.last_login">Never</span>
-              </td>
-              <td>
-                <div class="flex gap-2">
-                  <button class="icon-btn" title="Edit Client" (click)="openForge(client)">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                  </button>
-                  <button class="icon-btn delete" title="Delete Client" (click)="confirmDelete(client)">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <tr *ngIf="clients().length === 0">
-              <td colspan="6" class="text-center p-8 text-muted">No clients found matching criteria</td>
-            </tr>
-          </tbody>
-        </table>
+            @if (error()) {
+              <div class="m-8 p-6 bg-red-50 border border-red-100 rounded-2xl text-red-600 font-bold flex items-center gap-4 animate-scale">
+                 <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                 {{ error() }}
+              </div>
+            }
 
-        <!-- Pagination Controls -->
-        <div class="pagination flex justify-between items-center mt-6 pt-4 border-t border-gray-100" *ngIf="totalPages() > 1">
-          <div class="text-sm text-muted font-bold">
-             Showing page {{ currentPage() }} of {{ totalPages() }} ({{ totalCount() }} total)
-          </div>
-          <div class="flex gap-2">
-            <button class="page-btn" [disabled]="currentPage() === 1" (click)="loadPage(currentPage() - 1)">
-               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-            </button>
-            <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="loadPage(currentPage() + 1)">
-               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </button>
-          </div>
-        </div>
+            @if (!loading() && !error()) {
+               <div class="table-responsive-elite">
+                  <table class="modern-table-elite w-full">
+                    <thead>
+                      <tr>
+                        <th class="pl-8">Taxpayer Identity</th>
+                        <th>Profile Domain</th>
+                        <th>Classification</th>
+                        <th>Registry Stream</th>
+                        <th>Last Link</th>
+                        <th class="pr-8 text-right">Admin Tactical</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (client of clients(); track client.id) {
+                        <tr class="table-row-hover group">
+                          <td class="pl-8">
+                            <span class="text-[10px] font-black text-slate-400 block mb-1 uppercase tracking-[0.15em]">Sovereign PIN</span>
+                            <span class="font-black text-slate-800 tracking-tight text-sm break-all group-hover:text-red-600 transition-colors">{{ client.taxpayer_id }}</span>
+                          </td>
+                          <td>
+                            <span class="font-black text-slate-800 block truncate max-w-[200px] mb-1 text-sm">{{ client.name }}</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ client.email }}</span>
+                          </td>
+                          <td>
+                            <div class="status-pill-elite shadow-sm" [class]="client.type === 'individual' ? 'synced' : 'pending'">
+                              <span class="dot"></span>
+                              {{ client.type | uppercase }}
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mt-2 ml-2">{{ client.station || 'Station: Unassigned' }}</span>
+                          </td>
+                          <td>
+                            <span class="text-xs font-black text-slate-700 block mb-1">{{ client.registration_date | date:'dd MMM yyyy' }}</span>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Validated</span>
+                          </td>
+                          <td>
+                            @if (client.last_login) {
+                               <span class="text-xs font-black text-slate-700 block mb-1">{{ client.last_login | date:'dd MMM yyyy' }}</span>
+                               <span class="text-[9px] font-bold text-emerald-500 uppercase tracking-[0.2em] flex items-center gap-1">
+                                  <span class="w-1 h-1 rounded-full bg-emerald-500"></span> Online
+                               </span>
+                            } @else {
+                               <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">No Protocol Link</span>
+                            }
+                          </td>
+                          <td class="pr-8 text-right">
+                             <div class="flex gap-3 justify-end">
+                               <button (click)="openForge(client)" class="icon-btn-elite hover:bg-red-50 hover:text-red-600 transition-all transform hover:scale-110" title="Modify Record">
+                                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                               </button>
+                               <button (click)="confirmDelete(client)" class="icon-btn-elite hover:bg-red-600 hover:text-white transition-all transform hover:scale-110" title="Redact Record">
+                                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                               </button>
+                             </div>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+               </div>
+
+               @if (clients().length === 0) {
+                 <div class="flex flex-col items-center justify-center py-40 animate-scale">
+                    <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mb-8">
+                       <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-800 mb-2">Null Sector Detected</h3>
+                    <p class="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-8">No sovereign records match current filtration parameters</p>
+                    <button (click)="searchQuery=''; search()" class="modern-btn primary-btn">
+                       Reset Directory
+                    </button>
+                 </div>
+               }
+
+               <!-- Pagination -->
+               @if (totalPages() > 1) {
+                  <div class="flex justify-between items-center p-8 border-t border-slate-50 bg-slate-50/30">
+                     <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        Sector {{ currentPage() }} of {{ totalPages() }} • {{ totalCount() }} Aggregates
+                     </span>
+                     <div class="flex gap-3">
+                        <button class="icon-btn-elite" [disabled]="currentPage() === 1" (click)="loadPage(currentPage() - 1)">
+                           <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path></svg>
+                        </button>
+                        <button class="icon-btn-elite" [disabled]="currentPage() === totalPages()" (click)="loadPage(currentPage() + 1)">
+                           <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                     </div>
+                  </div>
+               }
+            }
+         </div>
       </div>
 
       <!-- Client Forge Modal -->
-      <div class="modal-overlay" *ngIf="showForge()">
-        <div class="modal-card animate-scale glassmorphism">
-          <div class="modal-header">
-            <h2 class="modal-title">{{ editingClient() ? 'Edit' : 'Create' }} Taxpayer Record</h2>
-            <button class="close-btn" (click)="closeForge()">&times;</button>
+      @if (showForge()) {
+        <div class="modal-overlay">
+          <div class="modal-card animate-scale p-1 bg-gradient-to-br from-red-600 to-red-400 max-w-2xl shadow-2xl">
+            <div class="bg-white rounded-[1.8rem] overflow-hidden">
+               <div class="p-10 pb-6 border-b border-slate-50 flex justify-between items-center">
+                  <div>
+                    <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight">{{ editingClient() ? 'Modify' : 'Forge' }} Record</h2>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Sovereign Data Integrity Protocol</p>
+                  </div>
+                  <button class="w-10 h-10 rounded-full hover:bg-slate-50 text-slate-400 transition-colors flex items-center justify-center font-black text-xl" (click)="closeForge()">&times;</button>
+               </div>
+               
+               <form [formGroup]="clientForm" (ngSubmit)="saveClient()" class="p-10">
+                  <div class="grid grid-cols-2 gap-8 mb-10">
+                    <div class="space-y-3">
+                       <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Sovereign PIN</label>
+                       <input type="text" formControlName="taxpayer_id" class="search-input-elite w-full h-[3.5rem] bg-slate-50 border-slate-100 focus:bg-white" placeholder="A001234567X">
+                    </div>
+                    <div class="space-y-3">
+                       <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Legal Identity</label>
+                       <input type="text" formControlName="name" class="search-input-elite w-full h-[3.5rem] bg-slate-50 border-slate-100 focus:bg-white" placeholder="Full Registered Name">
+                    </div>
+                    <div class="space-y-3">
+                       <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Secure Email</label>
+                       <input type="email" formControlName="email" class="search-input-elite w-full h-[3.5rem] bg-slate-50 border-slate-100 focus:bg-white" placeholder="contact@sovereign.go.ke">
+                    </div>
+                    <div class="space-y-3">
+                       <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Protocol Station</label>
+                       <select formControlName="station" class="search-input-elite w-full h-[3.5rem] bg-slate-50 border-slate-100 focus:bg-white appearance-none">
+                         <option value="Nairobi North">Nairobi North</option>
+                         <option value="Nairobi South">Nairobi South</option>
+                         <option value="Mombasa">Mombasa</option>
+                         <option value="Kisumu">Kisumu</option>
+                         <option value="Eldoret">Eldoret</option>
+                       </select>
+                    </div>
+                  </div>
+                  
+                  <div class="flex justify-end gap-4 p-8 bg-slate-50/50 rounded-[2rem]">
+                    <button type="button" class="modern-btn outline-btn sm" (click)="closeForge()">Cancel</button>
+                    <button type="submit" class="modern-btn primary-btn sm" [disabled]="clientForm.invalid || saving()">
+                       {{ saving() ? 'Aggregating...' : 'Commit Record' }}
+                    </button>
+                  </div>
+               </form>
+            </div>
           </div>
-          <form [formGroup]="clientForm" (ngSubmit)="saveClient()" class="modal-body">
-             <div class="form-grid">
-               <div class="form-group">
-                 <label>Taxpayer PIN</label>
-                 <input type="text" formControlName="taxpayer_id" class="premium-input-full" placeholder="e.g. T001234567X">
-               </div>
-               <div class="form-group">
-                 <label>Full Name</label>
-                 <input type="text" formControlName="name" class="premium-input-full" placeholder="Legally Registered Name">
-               </div>
-               <div class="form-group">
-                 <label>Email Address</label>
-                 <input type="email" formControlName="email" class="premium-input-full" placeholder="contact@domain.com">
-               </div>
-               <div class="form-group">
-                 <label>Phone Number</label>
-                 <input type="text" formControlName="phone" class="premium-input-full" placeholder="+254 7XX XXX XXX">
-               </div>
-               <div class="form-group">
-                 <label>Station</label>
-                 <select formControlName="station" class="premium-input-full">
-                   <option value="Nairobi North">Nairobi North</option>
-                   <option value="Nairobi South">Nairobi South</option>
-                   <option value="Mombasa">Mombasa</option>
-                   <option value="Kisumu">Kisumu</option>
-                   <option value="Eldoret">Eldoret</option>
-                 </select>
-               </div>
-               <div class="form-group">
-                 <label>KRA PIN (Secondary Verification)</label>
-                 <input type="text" formControlName="kra_pin" class="premium-input-full" placeholder="Verify PIN">
-               </div>
-             </div>
-             
-             <div class="modal-actions mt-24">
-               <button type="button" class="btn-premium-outline" (click)="closeForge()">Cancel</button>
-               <button type="submit" class="btn-premium" [disabled]="clientForm.invalid || saving()">
-                 {{ saving() ? 'Processing...' : 'Forge Record' }}
-               </button>
-             </div>
-          </form>
         </div>
-      </div>
+      }
 
       <!-- Bulk Ingest Wizard -->
-      <div class="modal-overlay" *ngIf="showImport()">
-        <div class="modal-card import-card animate-scale glassmorphism">
-           <div class="modal-header">
-             <h2 class="modal-title">Bulk Ingest Portal</h2>
-             <button class="close-btn" (click)="showImport.set(false)">&times;</button>
-           </div>
-           <div class="modal-body">
-              <div class="upload-zone" *ngIf="!importPreview().length">
-                <input type="file" id="csvFile" (change)="onFileSelected($event)" accept=".csv" class="hidden">
-                <label for="csvFile" class="upload-label">
-                   <svg class="w-12 h-12 mb-4 text-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                   <span>Drop CSV here or click to browse</span>
-                   <p class="text-xs text-muted mt-4">Expected columns: taxpayer_id, name, email, phone, station, kra_pin</p>
-                </label>
-              </div>
-
-              <div class="preview-zone" *ngIf="importPreview().length">
-                 <h4 class="text-sm font-black mb-12 uppercase tracking-widest text-blue">Data Validation Preview ({{ importPreview().length }} records)</h4>
-                 <div class="preview-table-container custom-scrollbar">
-                    <table class="preview-table">
-                       <thead>
-                         <tr>
-                            <th>PIN</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Station</th>
-                         </tr>
-                       </thead>
-                       <tbody>
-                         @for (row of importPreview().slice(0, 5); track $index) {
-                           <tr>
-                             <td>{{ row.taxpayer_id }}</td>
-                             <td>{{ row.name }}</td>
-                             <td>{{ row.email }}</td>
-                             <td>{{ row.station }}</td>
-                           </tr>
-                         }
-                       </tbody>
-                    </table>
-                    <p class="text-xs italic mt-8" *ngIf="importPreview().length > 5">+ {{ importPreview().length - 5 }} more records...</p>
+      @if (showImport()) {
+        <div class="modal-overlay">
+           <div class="modal-card animate-scale p-1 bg-slate-900 max-w-xl shadow-2xl">
+              <div class="bg-white rounded-[1.8rem] overflow-hidden">
+                 <div class="p-10 pb-6 border-b border-slate-50 flex justify-between items-center">
+                    <div>
+                       <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight">Bulk Ingest</h2>
+                       <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">High-Volume Packet Processing</p>
+                    </div>
+                    <button class="w-10 h-10 rounded-full hover:bg-slate-50 text-slate-400 transition-colors flex items-center justify-center font-black text-xl" (click)="showImport.set(false)">&times;</button>
                  </div>
                  
-                 <div class="modal-actions mt-24">
-                    <button class="btn-premium-outline" (click)="importPreview.set([])">Clear</button>
-                    <button class="btn-premium" (click)="processImport()" [disabled]="saving()">
-                      {{ saving() ? 'Ingesting...' : 'Start Bulk Import' }}
-                    </button>
+                 <div class="p-10">
+                    @if (!importPreview().length) {
+                       <div class="border-2 border-dashed border-slate-200 rounded-[2.5rem] p-16 text-center group hover:border-red-400 transition-all bg-slate-50/50">
+                          <input type="file" id="csvFile" (change)="onFileSelected($event)" accept=".csv" class="hidden">
+                          <label for="csvFile" class="cursor-pointer flex flex-col items-center">
+                             <div class="w-20 h-20 bg-white shadow-xl rounded-[2rem] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <svg width="32" height="32" fill="none" stroke="#E31E24" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                             </div>
+                             <span class="text-sm font-black text-slate-700 uppercase tracking-widest">Drop CSV Packet</span>
+                             <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-4">Required fields: PIN, NAME, EMAIL, STATION</p>
+                          </label>
+                       </div>
+                    } @else {
+                       <div class="space-y-6">
+                          <h4 class="text-[10px] font-black text-red-600 uppercase tracking-[0.2em]">Validated Aggregate ({{ importPreview().length }} Records)</h4>
+                          <div class="max-h-60 overflow-y-auto custom-scrollbar border border-slate-100 rounded-2xl">
+                             <table class="w-full text-[11px] font-bold">
+                                <thead class="bg-slate-50 text-slate-400 uppercase text-[9px]">
+                                   <tr><th class="p-3 text-left">PIN</th><th class="p-3 text-left">IDENTITY</th></tr>
+                                </thead>
+                                <tbody class="text-slate-700">
+                                   @for (row of importPreview().slice(0, 5); track $index) {
+                                      <tr class="border-b border-slate-50 last:border-0"><td class="p-3">{{ row.taxpayer_id }}</td><td class="p-3">{{ row.name }}</td></tr>
+                                   }
+                                </tbody>
+                             </table>
+                          </div>
+                          <div class="flex justify-end gap-3 mt-10">
+                             <button class="modern-btn outline-btn sm" (click)="importPreview.set([])">Abort</button>
+                             <button class="modern-btn primary-btn sm" (click)="processImport()" [disabled]="saving()">Deploy Records</button>
+                          </div>
+                       </div>
+                    }
                  </div>
               </div>
            </div>
         </div>
-      </div>
+      }
     </div>
   `,
   styles: [`
-    .page-container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-    .glassmorphism {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    .page-container { max-width: 1600px; margin: 0 auto; }
+    
+    .search-premium {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1.5px solid rgba(226, 232, 240, 0.8);
+      border-radius: 1.2rem;
+      padding: 0 1.2rem;
+      height: 3rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+    .search-premium:focus-within {
+      border-color: #E31E24;
+      box-shadow: 0 8px 24px rgba(227, 30, 36, 0.12);
+      transform: translateY(-1px);
+      background: white;
+    }
+    .search-premium svg { color: #94A3B8; margin-right: 0.8rem; }
+    .search-input-elite {
+      background: transparent;
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #1E293B;
+    }
+    .search-input-elite::placeholder { color: #CBD5E1; font-weight: 600; }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 2rem;
+    }
+    .modal-card {
+      width: 100%;
+      border-radius: 2rem;
+      overflow: hidden;
     }
 
-    /* KPI Summary Row */
-    .kpi-summary-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
-    @media (max-width: 768px) { .kpi-summary-row { grid-template-columns: 1fr 1fr; } }
-    .kpi-mini-card { background: #fff; border: 1px solid #F1F5F9; border-radius: 18px; padding: 18px; display: flex; align-items: center; gap: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.04); transition: transform .3s,box-shadow .3s; }
-    .kpi-mini-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,.07); }
-    .kpi-mini-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .kmi-blue   { background: rgba(59,130,246,.1); color: #3B82F6; }
-    .kmi-green  { background: rgba(16,185,129,.1); color: #10B981; }
-    .kmi-purple { background: rgba(139,92,246,.1); color: #8B5CF6; }
-    .kmi-amber  { background: rgba(245,158,11,.1); color: #F59E0B; }
-    .kmi-val  { font-size: 1.35rem; font-weight: 900; color: #1E293B; line-height: 1; }
-    .kmi-lbl  { font-size: .68rem; font-weight: 800; color: #94A3B8; text-transform: uppercase; margin-top: 3px; }
+    .table-responsive-elite { overflow-x: auto; }
+    .modern-table-elite { border-collapse: separate; border-spacing: 0; }
+    .modern-table-elite th {
+      padding: 1.5rem 1rem;
+      background: #F8FAFC;
+      text-align: left;
+      font-size: 0.65rem;
+      font-weight: 900;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      border-bottom: 1px solid #F1F5F9;
+    }
+    .table-row-hover { transition: all 0.2s; cursor: default; }
+    .table-row-hover td { padding: 1.5rem 1rem; border-bottom: 1px solid #F8FAFC; }
+    .table-row-hover:hover { background: #FAFAFA; }
 
-    .mr-12 { margin-right: 12px; }
-    .mr-8 { margin-right: 8px; }
-    .mt-24 { margin-top: 24px; }
-    .mb-24 { margin-bottom: 24px; }
-    .mb-12 { margin-bottom: 12px; }
-    .mb-8 { margin-bottom: 8px; }
+    .icon-btn-elite {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.8rem;
+      background: white;
+      border: 1px solid #F1F5F9;
+      color: #94A3B8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
 
-    .search-box { display: flex; align-items: center; background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-    .premium-input { border: none; background: transparent; padding: 8px 16px; outline: none; width: 220px; color: #1E293B; font-size: 0.85rem; }
-    .premium-input-full { width: 100%; padding: 12px 16px; border: 1.5px solid #E2E8F0; border-radius: 12px; outline: none; font-size: 0.9rem; transition: border 0.2s; }
-    .premium-input-full:focus { border-color: #3B82F6; }
-    .search-btn { background: #E2E8F0; color: #64748B; border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-    .search-btn:hover { background: #3B82F6; color: white; }
-
-    .elite-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-    .elite-table th { text-align: left; padding: 12px 16px; font-size: 0.75rem; font-weight: 900; color: #94A3B8; text-transform: uppercase; letter-spacing: 1px; }
-    .elite-table tbody tr { background: white; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.01); }
-    .elite-table tbody tr:hover { transform: scale(1.005); box-shadow: 0 4px 12px rgba(0,0,0,0.04); background: #F8FAFC; }
-    .elite-table td { padding: 16px; vertical-align: middle; }
-    .elite-table td:first-child { border-radius: 12px 0 0 12px; }
-    .elite-table td:last-child { border-radius: 0 12px 12px 0; }
-
-    .badge { padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 950; letter-spacing: 0.5px; }
-    .badge-blue { background: rgba(59, 130, 246, 0.1); color: #2563EB; }
-    .badge-purple { background: rgba(139, 92, 246, 0.1); color: #7C3AED; }
-
-    .icon-btn { width: 32px; height: 32px; border-radius: 8px; border: none; background: #F1F5F9; color: #64748B; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-    .icon-btn:hover { background: #3B82F6; color: white; transform: rotate(15deg); }
-    .icon-btn.delete:hover { background: #EF4444; color: white; }
-
-    .pagination { padding: 1.5rem 0; }
-    .page-btn { width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid #E2E8F0; background: white; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748B; transition: 0.2s; }
-    .page-btn:hover:not(:disabled) { border-color: #3B82F6; color: #3B82F6; }
-    .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-    /* Modal Styling */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-    .modal-card { width: 100%; max-width: 650px; border-radius: 28px; overflow: hidden; }
-    .import-card { max-width: 500px; }
-    .modal-header { padding: 24px 32px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
-    .modal-title { font-size: 1.25rem; font-weight: 900; color: #1E293B; margin: 0; }
-    .close-btn { background: none; border: none; font-size: 1.5rem; color: #94A3B8; cursor: pointer; }
-    .modal-body { padding: 32px; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .form-group label { display: block; font-size: 0.75rem; font-weight: 900; color: #64748B; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 12px; }
-
-    /* Import Wizard */
-    .upload-zone { border: 2px dashed #CBD5E1; border-radius: 24px; padding: 48px; text-align: center; background: rgba(248, 250, 252, 0.5); transition: all 0.2s; }
-    .upload-zone:hover { border-color: #3B82F6; background: rgba(59, 130, 246, 0.05); }
-    .upload-label { cursor: pointer; display: flex; flex-direction: column; align-items: center; }
-    .upload-label span { font-weight: 800; font-size: 1rem; color: #334155; }
-    .preview-table-container { max-height: 250px; overflow-y: auto; border: 1px solid #E2E8F0; border-radius: 12px; background: white; }
-    .preview-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-    .preview-table th { background: #F8FAFC; padding: 10px; border-bottom: 1px solid #E2E8F0; text-align: left; }
-    .preview-table td { padding: 10px; border-bottom: 1px solid #F1F5F9; }
-    .hidden { display: none; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
 
     @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .animate-scale { animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .animate-scale { animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
   `]
 })
 export class AdminClientsComponent implements OnInit {

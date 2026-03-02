@@ -8,358 +8,303 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   template: `
-    <div class="admin-dash animate-up">
-
-      <!-- ── Page Header ────────────────────────────────────── -->
-      <header class="page-header-elite">
+    <div class="page-container p-8 animate-up">
+      <!-- Elite Page Header -->
+      <header class="page-header-elite mb-12">
         <div class="header-info">
-          <h1 class="premium-title">Admin <span class="gradient-text">Overview</span></h1>
-          <p class="premium-subtitle">System-wide intelligence, revenue metrics & live monitoring</p>
+          <h1 class="premium-title">Command <span class="gradient-text">Center</span></h1>
+          <p class="premium-subtitle">Sovereign oversight of system-wide intelligence & revenue kinetics</p>
         </div>
         <div class="header-actions">
-          <div class="live-badge">
-            <span class="live-dot"></span>Live
+          <div class="status-pill-elite synced mr-4">
+            <span class="dot animate-pulse"></span>System Synchronized
           </div>
-          <button class="btn-premium-outline" (click)="refresh()">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            Refresh
+          <button (click)="refresh()" class="modern-btn outline-btn btn-icon">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <span>Refresh Analytics</span>
           </button>
         </div>
       </header>
 
       <!-- ── Loading ───────────────────────────────────────── -->
-      <div *ngIf="loading()" class="loading-splash">
-        <div class="spin"></div>
-        <p>Aggregating intelligence…</p>
-      </div>
+      @if (loading()) {
+        <div class="py-32 flex flex-col items-center">
+          <div class="w-16 h-16 border-4 border-slate-100 border-t-red-600 rounded-full animate-spin"></div>
+          <p class="mt-6 text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px]">Aggregating sovereign intelligence...</p>
+        </div>
+      }
 
       <!-- ── Error ─────────────────────────────────────────── -->
-      <div *ngIf="error()" class="error-banner">{{ error() }}</div>
+      @if (error()) {
+        <div class="m-8 p-6 bg-red-50 border border-red-100 rounded-2xl text-red-600 font-bold flex items-center gap-4 animate-scale">
+           <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+           {{ error() }}
+        </div>
+      }
 
       <!-- ── Main Content ──────────────────────────────────── -->
-      <div *ngIf="!loading() && summary() && summary()?.stats" class="animate-fade-in">
+      @if (!loading() && summary() && summary()?.stats) {
+        <div class="space-y-12 animate-fade-in">
 
-        <!-- KPI Row -->
-        <div class="kpi-grid">
+          <!-- KPI Surface -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
 
-          <!-- Total Revenue -->
-          <div class="kpi-card kpi-red">
-            <div class="kpi-icon-wrap kpi-icon-red">
-              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            </div>
-            <div class="kpi-content">
-              <span class="kpi-label">Total Revenue</span>
-              <div class="kpi-value">KES {{ formatM(summary()?.stats?.totalTaxCollected) }}</div>
-              <div class="kpi-sub">
-                <span class="kpi-badge kpi-badge-green">↑ This Month: KES {{ formatM(summary()?.stats?.monthlyRevenue) }}</span>
+            <!-- Total Revenue -->
+            <div class="premium-stat-card p-6 border-l-4 border-red-600 group">
+              <div class="stat-info mb-4">
+                <span class="stat-label">Total Revenue</span>
+                <h3 class="stat-number">KES {{ formatM(summary()?.stats?.totalTaxCollected) }}</h3>
+              </div>
+              <div class="status-pill-elite active text-[9px] w-fit">
+                <span class="dot"></span>
+                Month: KES {{ formatM(summary()?.stats?.monthlyRevenue) }}
+              </div>
+              <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-red-600 group-hover:scale-[1.7] transition-transform">
+                <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
               </div>
             </div>
-            <div class="kpi-sparkline">
-              <svg viewBox="0 0 80 28" preserveAspectRatio="none">
-                <path d="M0,22 L10,18 L20,19 L30,12 L40,14 L50,8 L60,10 L70,4 L80,6" fill="none" stroke="rgba(227,30,36,0.7)" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
+
+            <!-- Total Taxpayers -->
+            <div class="premium-stat-card p-6 border-l-4 border-blue-600 group">
+              <div class="stat-info mb-4">
+                <span class="stat-label">Taxpayers</span>
+                <h3 class="stat-number">{{ (summary()?.stats?.totalTaxpayers || 0) | number }}</h3>
+              </div>
+              <div class="status-pill-elite synced text-[9px] w-fit">
+                <span class="dot"></span>
+                +{{ summary()?.stats?.newTaxpayersThisMonth || 0 }} new
+              </div>
+              <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-blue-600 group-hover:scale-[1.7] transition-transform">
+                <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </div>
             </div>
+
+            <!-- Active Returns -->
+            <div class="premium-stat-card p-6 border-l-4 border-emerald-600 group">
+              <div class="stat-info mb-4">
+                <span class="stat-label">Active Returns</span>
+                 <h3 class="stat-number">{{ (summary()?.stats?.activeReturns || 0) | number }}</h3>
+              </div>
+              <div class="status-pill-elite active text-[9px] w-fit">
+                <span class="dot"></span>
+                Last 30 Days
+              </div>
+              <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-emerald-600 group-hover:scale-[1.7] transition-transform">
+                <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </div>
+            </div>
+
+            <!-- System Health -->
+            <div class="premium-stat-card p-6 border-l-4 border-purple-600 group">
+              <div class="stat-info mb-4">
+                <span class="stat-label">System Health</span>
+                <h3 class="stat-number">{{ summary()?.stats?.systemHealth || 98 }}%</h3>
+              </div>
+              <div class="status-pill-elite synced text-[9px] w-fit">
+                <span class="dot"></span>
+                Operational Integrity
+              </div>
+              <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-purple-600 group-hover:scale-[1.7] transition-transform">
+                <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              </div>
+            </div>
+
+            <!-- Pending Payments -->
+            <div class="premium-stat-card p-6 border-l-4 border-amber-600 group">
+              <div class="stat-info mb-4">
+                <span class="stat-label">Awaiting Settlement</span>
+                <h3 class="stat-number">{{ (summary()?.stats?.pendingPayments || 0) | number }}</h3>
+              </div>
+              <div class="status-pill-elite pending text-[9px] w-fit">
+                <span class="dot"></span>
+                Pending Protocol
+              </div>
+              <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-amber-600 group-hover:scale-[1.7] transition-transform">
+                <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+            </div>
+
+            <!-- Overdue -->
+            <div class="premium-stat-card p-6 border-l-4 border-rose-600 group">
+              <div class="stat-info mb-4">
+                <span class="stat-label">Overdue Obligations</span>
+                <h3 class="stat-number text-red-600">{{ (summary()?.stats?.overdueObligations || 0) | number }}</h3>
+              </div>
+              <div class="status-pill-elite overdue text-[9px] w-fit">
+                <span class="dot"></span>
+                Action Required
+              </div>
+              <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-rose-600 group-hover:scale-[1.7] transition-transform">
+                <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              </div>
+            </div>
+
           </div>
 
-          <!-- Total Taxpayers -->
-          <div class="kpi-card kpi-blue">
-            <div class="kpi-icon-wrap kpi-icon-blue">
-              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            </div>
-            <div class="kpi-content">
-              <span class="kpi-label">Registered Taxpayers</span>
-              <div class="kpi-value">{{ (summary()?.stats?.totalTaxpayers || 0) | number }}</div>
-              <div class="kpi-sub">
-                <span class="kpi-badge kpi-badge-blue">+{{ summary()?.stats?.newTaxpayersThisMonth || 0 }} this month</span>
-              </div>
-            </div>
-            <div class="kpi-sparkline">
-              <svg viewBox="0 0 80 28" preserveAspectRatio="none">
-                <path d="M0,24 L15,20 L30,15 L45,12 L60,8 L80,4" fill="none" stroke="rgba(59,130,246,0.7)" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-          </div>
-
-          <!-- Active Returns -->
-          <div class="kpi-card kpi-green">
-            <div class="kpi-icon-wrap kpi-icon-green">
-              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            </div>
-            <div class="kpi-content">
-              <span class="kpi-label">Active Returns (30d)</span>
-              <div class="kpi-value">{{ (summary()?.stats?.activeReturns || 0) | number }}</div>
-              <div class="kpi-sub">
-                <span class="kpi-badge kpi-badge-green">Submitted / Accepted</span>
-              </div>
-            </div>
-            <div class="kpi-sparkline">
-              <svg viewBox="0 0 80 28" preserveAspectRatio="none">
-                <path d="M0,18 L10,15 L20,16 L30,10 L40,13 L50,7 L60,9 L70,5 L80,8" fill="none" stroke="rgba(16,185,129,0.7)" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-          </div>
-
-          <!-- Compliance Rate -->
-          <div class="kpi-card kpi-purple">
-            <div class="kpi-icon-wrap kpi-icon-purple">
-              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            </div>
-            <div class="kpi-content">
-              <span class="kpi-label">System Integrity</span>
-              <div class="kpi-value">{{ summary()?.stats?.systemHealth || 98 }}<span class="kpi-unit">%</span></div>
-              <div class="kpi-sub">
-                <span class="kpi-badge kpi-badge-purple">Payment Success Rate</span>
-              </div>
-            </div>
-            <div class="kpi-ring">
-              <svg viewBox="0 0 36 36">
-                <circle cx="18" cy="18" r="15" fill="none" stroke="rgba(139,92,246,0.1)" stroke-width="3"/>
-                <circle cx="18" cy="18" r="15" fill="none" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"
-                  [attr.stroke-dasharray]="(summary()?.stats?.systemHealth||98)*0.94 + ' 94'"
-                  stroke-dashoffset="23.5" transform="rotate(-90 18 18)"/>
-              </svg>
-            </div>
-          </div>
-
-          <!-- Pending Payments -->
-          <div class="kpi-card kpi-amber">
-            <div class="kpi-icon-wrap kpi-icon-amber">
-              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            </div>
-            <div class="kpi-content">
-              <span class="kpi-label">Pending Payments</span>
-              <div class="kpi-value">{{ (summary()?.stats?.pendingPayments || 0) | number }}</div>
-              <div class="kpi-sub">
-                <span class="kpi-badge kpi-badge-amber">Awaiting Settlement</span>
-              </div>
-            </div>
-            <div class="kpi-sparkline">
-              <svg viewBox="0 0 80 28" preserveAspectRatio="none">
-                <path d="M0,8 L15,12 L30,10 L45,16 L60,14 L80,18" fill="none" stroke="rgba(245,158,11,0.7)" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-          </div>
-
-          <!-- Overdue Obligations -->
-          <div class="kpi-card kpi-rose">
-            <div class="kpi-icon-wrap kpi-icon-rose">
-              <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            </div>
-            <div class="kpi-content">
-              <span class="kpi-label">Overdue Obligations</span>
-              <div class="kpi-value">{{ (summary()?.stats?.overdueObligations || 0) | number }}</div>
-              <div class="kpi-sub">
-                <span class="kpi-badge kpi-badge-rose">Requires Action</span>
-              </div>
-            </div>
-            <div class="kpi-sparkline">
-              <svg viewBox="0 0 80 28" preserveAspectRatio="none">
-                <path d="M0,10 L20,14 L40,12 L60,18 L80,22" fill="none" stroke="rgba(251,113,133,0.7)" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-          </div>
-
-        </div><!-- /kpi-grid -->
-
-        <!-- ── Main Two-Column Layout ─────────────────────── -->
-        <div class="dash-grid">
-
-          <!-- LEFT COLUMN -->
-          <div class="dash-col-main">
-
-            <!-- Revenue Bar Chart -->
-            <div class="card-glass card-red-left">
-              <div class="card-header-row">
-                <h3 class="card-title">12-Month Revenue Intelligence</h3>
-                <span class="badge-pill">KES {{ formatM(totalRevenue12M()) }} Total</span>
-              </div>
-
-              <div class="bar-chart-wrap">
-                @for (m of chartMonths(); track $index) {
-                  <div class="bar-col">
-                    <div class="bar-label-top">{{ m.amount > 0 ? formatK(m.amount) : '' }}</div>
-                    <div class="bar-container">
-                      <div class="bar-fill" [style.height.%]="getBarPct(m.amount)" [title]="'KES '+formatK(m.amount)"></div>
-                    </div>
-                    <div class="bar-month">{{ m.month }}</div>
+          <!-- Main Analytics Layout -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            
+            <!-- Revenue Intelligence -->
+            <div class="lg:col-span-2 space-y-12">
+               <div class="content-card-premium p-10 relative overflow-hidden">
+                  <div class="absolute -top-20 -right-20 w-80 h-80 bg-red-50/50 rounded-full blur-3xl"></div>
+                   
+                  <div class="flex items-center justify-between mb-12 relative z-10">
+                     <div>
+                        <h3 class="text-xl font-black text-slate-800">Revenue Kinetics</h3>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">12-Month Longitudinal Analysis</p>
+                     </div>
+                     <span class="text-[10px] font-black uppercase tracking-widest px-4 py-2 bg-slate-100 rounded-xl text-slate-500">KES {{ formatM(totalRevenue12M()) }} Aggregate</span>
                   </div>
-                }
-              </div>
 
-              <div class="chart-legend">
-                <div class="legend-item"><span class="legend-dot dot-red"></span>Monthly Collections</div>
-              </div>
-            </div>
-
-            <!-- Performance Metrics Row -->
-            <div class="perf-row">
-              <div class="perf-metric">
-                <div class="perf-icon blue">
-                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                </div>
-                <div>
-                  <div class="perf-value">{{ summary()?.metrics?.paymentSuccessRate || 0 }}%</div>
-                  <div class="perf-label">Payment Success</div>
-                  <div class="mini-bar"><div class="mini-fill blue-fill" [style.width.%]="summary()?.metrics?.paymentSuccessRate || 0"></div></div>
-                </div>
-              </div>
-              <div class="perf-metric">
-                <div class="perf-icon green">
-                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                </div>
-                <div>
-                  <div class="perf-value">KES {{ (summary()?.metrics?.avgTransactionValue || 0) | number:'1.0-0' }}</div>
-                  <div class="perf-label">Avg Transaction</div>
-                  <div class="mini-bar"><div class="mini-fill green-fill" style="width:70%"></div></div>
-                </div>
-              </div>
-              <div class="perf-metric">
-                <div class="perf-icon purple">
-                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01"/></svg>
-                </div>
-                <div>
-                  <div class="perf-value">{{ (summary()?.metrics?.totalTransactions || 0) | number }}</div>
-                  <div class="perf-label">Total Transactions</div>
-                  <div class="mini-bar"><div class="mini-fill purple-fill" style="width:85%"></div></div>
-                </div>
-              </div>
-              <div class="perf-metric">
-                <div class="perf-icon amber">
-                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-                <div>
-                  <div class="perf-value">{{ summary()?.metrics?.completedToday || 0 }}</div>
-                  <div class="perf-label">Today's Payments</div>
-                  <div class="mini-bar"><div class="mini-fill amber-fill" style="width:40%"></div></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Live System Pulse -->
-            <div class="card-glass card-blue-left">
-              <div class="card-header-row">
-                <h3 class="card-title">Live System Pulse</h3>
-                <button class="text-link" (click)="refreshLogs()">Refresh</button>
-              </div>
-              <div class="pulse-scroll">
-                @for (log of recentLogs(); track log.id) {
-                  <div class="pulse-item">
-                    <div class="pulse-dot-wrap" [class.red-dot-wrap]="isErrorAction(log.action)">
-                      <div class="pulse-dot" [class.red-dot]="isErrorAction(log.action)"></div>
-                    </div>
-                    <div class="pulse-body">
-                      <div class="pulse-row">
-                        <span class="pulse-user">{{ log.user || 'System' }}</span>
-                        <span class="pulse-time">{{ log.timestamp | date:'HH:mm' }}</span>
+                  <div class="flex items-end gap-3 h-[250px] mb-8 relative z-10 px-4">
+                    @for (m of chartMonths(); track $index) {
+                      <div class="flex-grow flex flex-col items-center group h-full justify-end">
+                        <div class="mb-3 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-[9px] font-bold px-2 py-1 rounded-md shadow-xl translate-y-2 group-hover:translate-y-0 transition-all">
+                           {{ formatK(m.amount) }}
+                        </div>
+                        <div class="w-full bg-slate-50/50 rounded-2xl overflow-hidden h-full flex items-end">
+                           <div 
+                              class="w-full bg-gradient-to-t from-red-600 to-red-400 rounded-t-2xl transition-all duration-1000 ease-out group-hover:from-red-700 group-hover:shadow-[0_0_20px_rgba(227,30,36,0.3)]"
+                              [style.height.%]="getBarPct(m.amount)"
+                           ></div>
+                        </div>
+                        <span class="text-[9px] font-black text-slate-400 mt-4 uppercase tracking-tighter">{{ m.month }}</span>
                       </div>
-                      <p class="pulse-desc">{{ log.details }}</p>
-                      <span class="pulse-tag" [class.red-tag]="isErrorAction(log.action)">{{ log.action }}</span>
-                    </div>
+                    }
                   </div>
-                }
-                @if (recentLogs().length === 0) {
-                  <p class="empty-msg">No recent activity</p>
-                }
-              </div>
-            </div>
+               </div>
 
-          </div><!-- /dash-col-main -->
-
-          <!-- RIGHT COLUMN -->
-          <div class="dash-col-side">
-
-            <!-- Compliance Radar -->
-            <div class="card-glass card-purple-left">
-              <h3 class="card-title mb-20">Compliance Radar</h3>
-
-              <div class="radar-item">
-                <div class="radar-row">
-                  <span class="radar-label">Return Filing</span>
-                  <span class="radar-val">{{ summary()?.compliance?.returnFilingRate || 0 }}%</span>
-                </div>
-                <div class="radar-track"><div class="radar-fill radar-blue" [style.width.%]="summary()?.compliance?.returnFilingRate || 0"></div></div>
-              </div>
-
-              <div class="radar-item">
-                <div class="radar-row">
-                  <span class="radar-label">Payment Compliance</span>
-                  <span class="radar-val">{{ summary()?.compliance?.paymentCompliance || 0 }}%</span>
-                </div>
-                <div class="radar-track"><div class="radar-fill radar-green" [style.width.%]="summary()?.compliance?.paymentCompliance || 0"></div></div>
-              </div>
-
-              <div class="radar-item">
-                <div class="radar-row">
-                  <span class="radar-label">Obligations</span>
-                  <span class="radar-val">{{ summary()?.compliance?.obligationComplianceRate || 0 }}%</span>
-                </div>
-                <div class="radar-track"><div class="radar-fill radar-purple" [style.width.%]="summary()?.compliance?.obligationComplianceRate || 0"></div></div>
-              </div>
-
-              <div class="audit-score">
-                <svg viewBox="0 0 80 80" class="score-ring">
-                  <circle cx="40" cy="40" r="34" fill="none" stroke="#F1F5F9" stroke-width="8"/>
-                  <circle cx="40" cy="40" r="34" fill="none" stroke="url(#scoreGrad)" stroke-width="8" stroke-linecap="round"
-                    [attr.stroke-dasharray]="(summary()?.compliance?.auditReadiness||0)*2.135+' 213.5'"
-                    stroke-dashoffset="53.4" transform="rotate(-90 40 40)"/>
-                  <defs>
-                    <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stop-color="#8B5CF6"/>
-                      <stop offset="100%" stop-color="#3B82F6"/>
-                    </linearGradient>
-                  </defs>
-                </svg>
-                <div class="score-text">
-                  <div class="score-num">{{ summary()?.compliance?.auditReadiness || 0 }}%</div>
-                  <div class="score-lbl">Audit Ready</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Tax Type Distribution -->
-            <div class="card-glass card-gold-left">
-              <h3 class="card-title mb-20">Tax Type Distribution</h3>
-              @if (taxTypes().length > 0) {
-                @for (t of taxTypes().slice(0,6); track $index) {
-                  <div class="tax-type-item">
-                    <div class="tax-type-info">
-                      <span class="tax-dot" [style.background]="taxColors[$index % taxColors.length]"></span>
-                      <span class="tax-name">{{ shortTaxType(t.type) }}</span>
-                    </div>
-                    <div class="tax-right">
-                      <span class="tax-amt">KES {{ formatK(t.amount) }}</span>
-                    </div>
+               <!-- Live System Pulse -->
+               <div class="content-card-premium p-10">
+                  <div class="flex items-center justify-between mb-10">
+                    <h3 class="text-xl font-black text-slate-800 flex items-center gap-3">
+                       <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+                       Intelligence Stream
+                    </h3>
+                    <button class="text-[10px] font-black text-red-600 uppercase tracking-[0.2em] hover:opacity-70 transition-opacity" (click)="refreshLogs()">Clear Logs</button>
                   </div>
-                }
-              } @else {
-                <p class="empty-msg">Run data seeder to populate tax breakdown</p>
-              }
-            </div>
 
-            <!-- Gov Nexus -->
-            <div class="card-glass card-slate-left">
-              <div class="card-header-row mb-16">
-                <h3 class="card-title">Gov Nexus</h3>
-                <span class="live-badge-sm"><span class="live-dot-sm"></span>Live</span>
-              </div>
-              @for (portal of portals(); track portal.name) {
-                <div class="nexus-row">
-                  <span class="nexus-name">{{ portal.name }}</span>
-                  <div class="nexus-status">
-                    <div class="nexus-dot" [class.nexus-dot-on]="portal.online"></div>
-                    <span class="nexus-txt" [class.nexus-off]="!portal.online">{{ portal.online ? 'UP' : 'DOWN' }}</span>
-                    <span class="nexus-lat" *ngIf="portal.online">{{ portal.latency }}</span>
+                  <div class="space-y-6 max-h-[500px] overflow-y-auto custom-scrollbar pr-4">
+                    @for (log of recentLogs(); track log.id) {
+                      <div class="flex gap-6 group">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-[1.2rem] flex items-center justify-center transition-all group-hover:scale-110" 
+                             [class]="isErrorAction(log.action) ? 'bg-red-50 text-red-600 shadow-red-100/50' : 'bg-slate-50 text-slate-600 shadow-slate-100/50'">
+                           @if (isErrorAction(log.action)) {
+                              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                           } @else {
+                              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                           }
+                        </div>
+                        <div class="flex-grow pb-6 border-b border-slate-50 last:border-0">
+                           <div class="flex items-center justify-between mb-2">
+                              <span class="text-[11px] font-black text-slate-800">{{ log.user || 'SYSTEM' }}</span>
+                              <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ log.timestamp | date:'HH:mm:ss' }}</span>
+                           </div>
+                           <p class="text-sm text-slate-600 font-medium leading-relaxed">{{ log.details }}</p>
+                           <div class="mt-3 inline-flex items-center px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest"
+                                [class]="isErrorAction(log.action) ? 'bg-red-50 text-red-600' : 'bg-slate-100 text-slate-500'">
+                              {{ log.action }}
+                           </div>
+                        </div>
+                      </div>
+                    } @empty {
+                      <div class="text-center py-20 bg-slate-50/50 rounded-[3rem] border border-dashed border-slate-200">
+                         <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Awaiting intelligence packet ingestion...</p>
+                      </div>
+                    }
                   </div>
-                </div>
-              }
-              @if (portals().length === 0) {
-                <p class="empty-msg">Portal status unavailable</p>
-              }
+               </div>
             </div>
 
-          </div><!-- /dash-col-side -->
-        </div><!-- /dash-grid -->
-      </div><!-- /main content -->
+            <!-- Side Intelligence -->
+            <div class="space-y-12">
+               <!-- Audit Readiness -->
+               <div class="content-card-premium p-10 relative overflow-hidden">
+                  <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-50/50 rounded-full blur-3xl"></div>
+                   <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-10">Compliance Radar</h3>
+                   
+                   <div class="space-y-8 mb-12">
+                      <div class="space-y-3">
+                         <div class="flex justify-between text-[11px] font-black text-slate-700">
+                            <span>RETURN FILING</span>
+                            <span class="text-blue-600">{{ summary()?.compliance?.returnFilingRate || 0 }}%</span>
+                         </div>
+                         <div class="h-1.5 w-full bg-slate-50 rounded-full overflow-hidden">
+                            <div class="h-full bg-blue-600 transition-all duration-1000" [style.width.%]="summary()?.compliance?.returnFilingRate || 0"></div>
+                         </div>
+                      </div>
+                      <div class="space-y-3">
+                         <div class="flex justify-between text-[11px] font-black text-slate-700">
+                            <span>PAYMENT VELOCITY</span>
+                            <span class="text-emerald-600">{{ summary()?.compliance?.paymentCompliance || 0 }}%</span>
+                         </div>
+                         <div class="h-1.5 w-full bg-slate-50 rounded-full overflow-hidden">
+                            <div class="h-full bg-emerald-600 transition-all duration-1000" [style.width.%]="summary()?.compliance?.paymentCompliance || 0"></div>
+                         </div>
+                      </div>
+                   </div>
+
+                   <div class="p-8 bg-slate-800 rounded-[2.5rem] flex items-center gap-6 relative z-10 shadow-2xl shadow-slate-900/10">
+                      <div class="relative w-20 h-20 flex-shrink-0">
+                         <svg viewBox="0 0 36 36" class="w-full h-full transform -rotate-90">
+                            <circle cx="18" cy="18" r="16" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"></circle>
+                            <circle cx="18" cy="18" r="16" fill="none" stroke="red" stroke-width="4" stroke-dasharray="100" [attr.stroke-dashoffset]="100 - (summary()?.compliance?.auditReadiness || 0)" stroke-linecap="round" class="transition-all duration-1000"></circle>
+                         </svg>
+                         <div class="absolute inset-0 flex items-center justify-center font-black text-white text-sm">
+                            {{ summary()?.compliance?.auditReadiness || 0 }}%
+                         </div>
+                      </div>
+                      <div>
+                         <span class="text-white font-black block text-sm">Audit Readiness</span>
+                         <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">System-wide score</p>
+                      </div>
+                   </div>
+               </div>
+
+               <!-- Tax Type Distribution -->
+               <div class="content-card-premium p-10">
+                  <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-10">Revenue Distribution</h3>
+                  <div class="space-y-4">
+                    @for (t of taxTypes().slice(0,6); track $index) {
+                      <div class="flex items-center justify-between p-4 bg-slate-50/50 rounded-2xl group hover:bg-white hover:shadow-xl transition-all border border-transparent hover:border-slate-100">
+                        <div class="flex items-center gap-4">
+                           <div class="w-2 h-2 rounded-full" [style.background]="taxColors[$index % taxColors.length]"></div>
+                           <span class="text-[11px] font-black text-slate-700 uppercase">{{ shortTaxType(t.type) }}</span>
+                        </div>
+                        <span class="text-xs font-black text-slate-900">KES {{ formatK(t.amount) }}</span>
+                      </div>
+                    }
+                  </div>
+               </div>
+
+               <!-- Gov Nexus -->
+               <div class="content-card-premium p-10 bg-slate-900 text-white relative overflow-hidden">
+                  <div class="absolute top-0 right-0 p-10 opacity-10">
+                     <svg width="100" height="100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+                  </div>
+                  <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-10 relative z-10">Gov Nexus Protocols</h3>
+                  <div class="space-y-4 relative z-10">
+                    @for (portal of portals(); track portal.name) {
+                      <div class="flex items-center justify-between p-5 bg-white/5 border border-white/10 rounded-[2rem] hover:bg-white/10 transition-all group">
+                        <div class="flex flex-col">
+                           <span class="text-[11px] font-black text-slate-300">{{ portal.name }}</span>
+                           <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{{ portal.online ? portal.latency : 'Protocol Offline' }}</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                           <span class="text-[9px] font-black uppercase tracking-[0.2em]" [class.text-emerald-400]="portal.online" [class.text-red-400]="!portal.online">
+                              {{ portal.online ? 'Synced' : 'Critical' }}
+                           </span>
+                           <div class="w-1.5 h-1.5 rounded-full shadow-[0_0_8px_currentColor]" [class.bg-emerald-400]="portal.online" [class.bg-red-400]="!portal.online"></div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+               </div>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   `,
   styles: [`

@@ -14,14 +14,15 @@ interface DailyItem { day: string; count: number; }
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="page-container p-8 animate-fade-in">
-      <header class="page-header-elite mb-10">
+    <div class="page-container p-8 animate-up">
+      <header class="page-header-elite mb-12">
         <div class="header-info">
           <h1 class="premium-title mb-0">Helpdesk <span class="gradient-text">Intelligence</span></h1>
           <p class="premium-subtitle pl-0 mt-1">Real-time analytical oversight of support infrastructure</p>
         </div>
         <div class="header-actions">
-           <a routerLink="/helpdesk/tickets" class="modern-btn outline-btn sm mr-2">
+           <a routerLink="/helpdesk/tickets" class="modern-btn outline-btn sm mr-3">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mr-2"><path stroke-width="2.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5z"/></svg>
               View Tickets
            </a>
            <a routerLink="/helpdesk/create" class="modern-btn primary-btn sm">
@@ -33,43 +34,43 @@ interface DailyItem { day: string; count: number; }
 
       <!-- Elite Stat Row -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-        <div class="premium-stat-card">
-           <div class="stat-icon-wrapper bg-blue-50 text-blue-600">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <div class="premium-stat-card p-6 animate-up delay-1">
+           <div class="stat-icon-wrapper blue mb-4">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
            </div>
-           <div class="stat-content">
+           <div class="stat-info">
               <div class="stat-label">Active Tickets</div>
-              <div class="stat-value">{{ openCount() | number }}</div>
+              <div class="stat-number">{{ openCount() | number }}</div>
            </div>
         </div>
 
-        <div class="premium-stat-card">
-           <div class="stat-icon-wrapper bg-amber-50 text-amber-600">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div class="premium-stat-card p-6 animate-up delay-2">
+           <div class="stat-icon-wrapper gold mb-4">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
            </div>
-           <div class="stat-content">
+           <div class="stat-info">
               <div class="stat-label">Avg Resolution</div>
-              <div class="stat-value">{{ avgResolution() }}h</div>
+              <div class="stat-number">{{ avgResolution() }}h</div>
            </div>
         </div>
 
-        <div class="premium-stat-card">
-           <div class="stat-icon-wrapper bg-emerald-50 text-emerald-600">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div class="premium-stat-card p-6 animate-up delay-3">
+           <div class="stat-icon-wrapper green mb-4">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
            </div>
-           <div class="stat-content">
+           <div class="stat-info">
               <div class="stat-label">SLA Compliance</div>
-              <div class="stat-value">{{ slaRate() }}%</div>
+              <div class="stat-number">{{ slaRate() }}%</div>
            </div>
         </div>
 
-        <div class="premium-stat-card">
-           <div class="stat-icon-wrapper bg-purple-50 text-purple-600">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        <div class="premium-stat-card p-6 animate-up delay-4">
+           <div class="stat-icon-wrapper red mb-4">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
            </div>
-           <div class="stat-content">
+           <div class="stat-info">
               <div class="stat-label">Total Resolved</div>
-              <div class="stat-value">{{ totalResolved() | number }}</div>
+              <div class="stat-number">{{ totalResolved() | number }}</div>
            </div>
         </div>
       </div>
@@ -77,15 +78,18 @@ interface DailyItem { day: string; count: number; }
       <!-- Analytical Grids -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-10">
         <!-- Status Core -->
-        <div class="content-card-premium relative overflow-hidden">
-          <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-50 rounded-full blur-3xl opacity-40"></div>
-          <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-8">Executive Status Overview</h3>
-          <div class="space-y-6">
+        <div class="content-card-premium relative overflow-hidden p-8 animate-scale delay-2">
+          <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-50/40 rounded-full blur-3xl"></div>
+          <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 flex items-center gap-2">
+             <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+             Executive Status Overview
+          </h3>
+          <div class="space-y-8">
             @for (item of statusData(); track item.status) {
-              <div class="flex items-center gap-6">
-                <span class="w-32 text-[11px] font-black text-slate-500 uppercase tracking-wide truncate">{{ item.status }}</span>
-                <div class="flex-grow h-4 bg-slate-50 rounded-full overflow-hidden border border-slate-100 p-0.5">
-                  <div class="h-full rounded-full transition-all duration-1000 ease-out" 
+              <div class="flex items-center gap-6 group">
+                <span class="w-32 text-[10px] font-black text-slate-500 uppercase tracking-widest truncate group-hover:text-blue-600 transition-colors">{{ item.status }}</span>
+                <div class="flex-grow h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200/50 p-0.5">
+                  <div class="h-full rounded-full transition-all duration-1000 ease-out shadow-sm shadow-blue-100" 
                        [style.width.%]="getPercentage(item.count, totalTickets())" 
                        [class]="'fill-' + getStatusColor(item.status)"></div>
                 </div>
@@ -96,15 +100,18 @@ interface DailyItem { day: string; count: number; }
         </div>
 
         <!-- Priority Matrix -->
-        <div class="content-card-premium relative overflow-hidden">
-          <div class="absolute -top-10 -right-10 w-40 h-40 bg-red-50 rounded-full blur-3xl opacity-40"></div>
-          <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-8">Triage Priority Matrix</h3>
-          <div class="space-y-6">
+        <div class="content-card-premium relative overflow-hidden p-8 animate-scale delay-3">
+          <div class="absolute -top-10 -right-10 w-40 h-40 bg-red-50/40 rounded-full blur-3xl"></div>
+          <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 flex items-center gap-2">
+             <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+             Triage Priority Matrix
+          </h3>
+          <div class="space-y-8">
             @for (item of priorityData(); track item.priority) {
-              <div class="flex items-center gap-6">
-                <span class="w-32 text-[11px] font-black text-slate-500 uppercase tracking-wide truncate">{{ item.priority }}</span>
-                <div class="flex-grow h-4 bg-slate-50 rounded-full overflow-hidden border border-slate-100 p-0.5">
-                  <div class="h-full rounded-full transition-all duration-1000 ease-out" 
+              <div class="flex items-center gap-6 group">
+                <span class="w-32 text-[10px] font-black text-slate-500 uppercase tracking-widest truncate group-hover:text-red-600 transition-colors">{{ item.priority }}</span>
+                <div class="flex-grow h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-200/50 p-0.5">
+                  <div class="h-full rounded-full transition-all duration-1000 ease-out shadow-sm shadow-red-100" 
                        [style.width.%]="getPercentage(item.count, totalTickets())" 
                        [class]="'fill-' + getPriorityColor(item.priority)"></div>
                 </div>
@@ -116,31 +123,40 @@ interface DailyItem { day: string; count: number; }
       </div>
 
       <!-- Sector Analysis -->
-      <div class="content-card-premium mb-10 overflow-hidden">
-        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-8">Category Sector Breakdown</h3>
+      <div class="content-card-premium mb-10 overflow-hidden p-8 animate-up delay-2">
+        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 flex items-center gap-2">
+           <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+           Category Sector Breakdown
+        </h3>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
           @for (item of categoryData(); track item.category) {
-            <div class="p-6 bg-slate-50/50 rounded-3xl border border-slate-100 hover:bg-white hover:border-red-100 transition-all group">
-              <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2 group-hover:text-red-600">{{ item.category }}</span>
-              <span class="text-2xl font-black text-slate-800">{{ item.count }}</span>
+            <div class="p-6 bg-slate-50/50 rounded-[2rem] border border-slate-100 hover:bg-white hover:border-red-200 hover:shadow-xl hover:shadow-red-500/5 transition-all group cursor-pointer">
+              <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-3 group-hover:text-red-600 transition-colors">{{ item.category }}</span>
+              <div class="flex items-baseline gap-2">
+                 <span class="text-3xl font-black text-slate-800 group-hover:scale-110 transition-transform block origin-left">{{ item.count }}</span>
+                 <span class="text-[10px] font-bold text-slate-400">cases</span>
+              </div>
             </div>
           }
         </div>
       </div>
 
       <!-- Volume Trends -->
-      <div class="content-card-premium relative overflow-hidden">
-        <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-50 rounded-full blur-3xl opacity-40"></div>
-        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-8">Temporal Volume Stream (7 Days)</h3>
-        <div class="flex items-end justify-between gap-4 h-48 relative z-10 px-4">
+      <div class="content-card-premium relative overflow-hidden p-8 animate-up delay-3">
+        <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-50/30 rounded-full blur-3xl opacity-40"></div>
+        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 flex items-center gap-2">
+           <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+           Temporal Volume Stream (Prev 7 Days)
+        </h3>
+        <div class="flex items-end justify-between gap-6 h-48 relative z-10 px-4">
           @for (d of dailyData(); track d.day) {
             <div class="flex-1 flex flex-col items-center gap-4 group">
-              <div class="text-[10px] font-black text-red-600 opacity-0 group-hover:opacity-100 transition-opacity mb-2">{{ d.count }}</div>
-              <div class="w-full bg-slate-100 rounded-2xl overflow-hidden flex flex-col justify-end p-0.5" style="height: 120px;">
-                <div class="w-full rounded-xl bg-gradient-to-t from-red-600 to-red-400 transition-all duration-1000 ease-out shadow-lg shadow-red-100" 
+              <div class="text-[10px] font-black text-red-600 opacity-0 group-hover:opacity-100 transition-all transform group-hover:-translate-y-1 mb-1">{{ d.count }}</div>
+              <div class="w-full bg-slate-100/50 rounded-2xl overflow-hidden flex flex-col justify-end p-1 border border-slate-100" style="height: 140px;">
+                <div class="w-full rounded-xl bg-gradient-to-t from-red-600 to-red-400 transition-all duration-1000 ease-out shadow-lg shadow-red-200/50" 
                      [style.height.%]="getDayHeight(d.count)"></div>
               </div>
-              <span class="text-[10px] font-black text-slate-400 uppercase">{{ formatDay(d.day) }}</span>
+              <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest group-hover:text-slate-800 transition-colors">{{ formatDay(d.day) }}</span>
             </div>
           }
         </div>
@@ -149,11 +165,6 @@ interface DailyItem { day: string; count: number; }
   `,
   styles: [`
     .page-container { max-width: 1500px; margin: 0 auto; }
-    .animate-fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-    .stat-label { font-size: 0.65rem; font-weight: 950; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
-    .stat-value { font-size: 2.2rem; font-weight: 950; color: #1e293b; line-height: 1; margin-top: 4px; }
 
     .fill-blue { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
     .fill-amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
@@ -163,6 +174,7 @@ interface DailyItem { day: string; count: number; }
     .fill-slate { background: linear-gradient(90deg, #64748b, #94a3b8); }
 
     .mr-2 { margin-right: 0.5rem; }
+    .mr-3 { margin-right: 0.75rem; }
   `]
 })
 export class HelpdeskDashboardComponent implements OnInit {
