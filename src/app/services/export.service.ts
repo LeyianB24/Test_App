@@ -200,27 +200,34 @@ export class ExportService {
   <div id="content">
     <!-- Header: Responsive Float Layout -->
     <div class="cert-header">
-      <div style="border-bottom: 2px solid #000; padding-bottom: 6px; overflow: hidden; height: 95px; width: 100%;">
+      <!-- Top row: Logo, Badge, Contacts -->
+      <div style="width: 100%; overflow: hidden; padding-bottom: 5px;">
         <!-- Left: Logo & URL -->
         <div style="float: left; width: 33%;">
-           <img src="${origin}/assets/logo.png" style="width: 180px; height: auto;" alt="KRA Logo"><br>
-           <div style="font-size: 9pt; font-weight: bold; border-bottom: 2.5px solid #000; display: inline-block; margin-top: 15px; padding-bottom: 2px;">www.kra.go.ke</div>
+           <img src="${origin}/assets/logo.png" style="width: 160px; height: auto;" alt="KRA Logo"><br>
+           <div style="font-size: 10pt; font-weight: bold; border-bottom: 3.5px solid #000; display: inline-block; margin-top: 10px; padding-bottom: 2px;">www.kra.go.ke</div>
         </div>
         
-        <!-- Right: Contact Info (Float right first) -->
-        <div style="float: right; width: 33%; text-align: right; font-size: 8pt; line-height: 1.25;">
+        <!-- Center: Badge -->
+        <div style="float: left; width: 34%; text-align: center;">
+           <div style="background: #E5E7EB; padding: 15px 5px; width: 100%; max-width: 220px; margin: 0 auto; font-size: 15pt; font-weight: bold; color: #333;">
+             ${title}
+           </div>
+        </div>
+
+        <!-- Right: Contact Info -->
+        <div style="float: right; width: 33%; text-align: right; font-size: 8.5pt; line-height: 1.2;">
            <b>For General Tax Questions<br>Contact KRA Call Centre</b><br>
            Tel: +254 (020) 4999 999<br>
            Cell: +254(0711)099 999<br>
            Email: callcentre@kra.go.ke
         </div>
-        
-        <!-- Center: Badge -->
-        <div style="float: left; width: 34%; text-align: center;">
-           <div style="background: #E5E7EB; padding: 12px 0; width: 100%; max-width: 220px; margin: 5px auto 0; font-size: 14pt; font-weight: bold;">
-             ${title}
-           </div>
-        </div>
+      </div>
+
+      <!-- Metadata row: Sandwiched between lines -->
+      <div style="border-top: 2px solid #000; border-bottom: 2px solid #000; padding: 4px 0; margin-top: 5px; text-align: right; font-size: 10pt;">
+          <b>Certificate Date :</b> <span style="margin-right: 20px;">${timestamp.split(' ')[0]}</span>
+          <b>Personal Identification Number :</b> <span style="font-weight: bold; font-size: 11pt;">P749462692W</span>
       </div>
     </div>
 
@@ -236,17 +243,22 @@ export class ExportService {
 
     <!-- Footer: Responsive Float Layout -->
     <div class="cert-footer">
-      <div style="border-top: 1px solid #000; padding-top: 8px; text-align: center; color: #cc0000; font-weight: bold; font-style: italic; font-size: 11pt; margin-bottom: 12px;">
+      <!-- Tagline above line -->
+      <div style="text-align: center; color: #cc0000; font-weight: bold; font-style: italic; font-size: 12pt; margin-bottom: 5px;">
         Tulipe Ushuru, Tujitegemee!
       </div>
-
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px;">
+      
+      <!-- Separation Line -->
+      <div style="border-top: 1px solid #000; margin-bottom: 8px;"></div>
+      
+      <!-- Logos Row -->
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 5px;">
         <tr>
           <td style="width: 50%; text-align: left; vertical-align: bottom;">
-            <img src="${origin}/assets/itax.jpeg" height="40" style="max-height: 40px; width: auto;" alt="iTax">
+            <img src="${origin}/assets/itax.jpeg" height="42" style="max-height: 42px; width: auto;" alt="iTax">
           </td>
           <td style="width: 50%; text-align: right; vertical-align: bottom;">
-            <img src="${origin}/assets/vision_2030.png" height="40" style="max-height: 40px; width: auto;" alt="Vision 2030">
+            <img src="${origin}/assets/vision_2030.png" height="42" style="max-height: 42px; width: auto;" alt="Vision 2030">
           </td>
         </tr>
       </table>
