@@ -2,6 +2,7 @@ import { Component, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PaymentService } from '../../../services/payment.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-debt',
@@ -199,7 +200,8 @@ export class DebtComponent {
 
 
   downloadStatement() {
-    alert('Generating Sovereign Ledger Statement (PDF)...');
+    const url = `${environment.apiUrl}/download.php?type=status_report&id=1&format=pdf`;
+    window.open(url, '_blank');
   }
 
   payNow() {

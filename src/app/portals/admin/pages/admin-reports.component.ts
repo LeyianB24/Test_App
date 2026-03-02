@@ -75,6 +75,10 @@ import { environment } from '../../../../environments/environment';
             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
             Export CSV
           </button>
+          <button class="rc-btn rc-btn-blue mt-2" (click)="downloadReport('clients', 'pdf')">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Export PDF
+          </button>
         </div>
 
         <div class="report-card-premium">
@@ -93,6 +97,10 @@ import { environment } from '../../../../environments/environment';
           <button class="rc-btn rc-btn-green" (click)="downloadReport('revenue', 'csv')">
             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
             Export CSV
+          </button>
+          <button class="rc-btn rc-btn-green mt-2" (click)="downloadReport('revenue', 'pdf')">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            Export PDF
           </button>
         </div>
 
@@ -230,6 +238,7 @@ import { environment } from '../../../../environments/environment';
     .rc-desc  { font-size: .85rem; color: #64748B; line-height: 1.6; margin: 0; }
     .rc-meta  { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
     .rc-tag   { font-size: .62rem; font-weight: 900; background: #F1F5F9; color: #64748B; padding: 3px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: .3px; }
+    .mt-2 { margin-top: 8px; }
 
     .rc-btn { width: 100%; padding: 12px; border-radius: 14px; border: none; font-size: .82rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all .2s; }
     .rc-btn-blue   { background: rgba(59,130,246,.1); color: #2563EB; }

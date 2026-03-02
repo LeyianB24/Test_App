@@ -3,6 +3,7 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PaymentService } from '../../../services/payment.service';
 import { ApiService } from '../../../services/api.service';
+import { environment } from '../../../../environments/environment';
 import { DataTableComponent, TableColumn, TableAction } from '../../../components/data-table/data-table.component';
 import { PaymentFormComponent } from '../../../components/payment-form/payment-form.component';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -627,18 +628,9 @@ export class PaymentsEnhancedComponent {
     const currentPayment = payment || this.selectedPayment();
     if (!currentPayment) return;
 
-    this.apiService.get<any>(`payments_enhanced_api.php?action=receipt&id=${currentPayment.id}`).subscribe({
-      next: (res) => {
-        if (res.success && res.data) {
-          // In a real app, this would use a PDF generation service
-          // For now, we'll simulate the download by creating a JSON file
-          const receiptData = JSON.stringify(res.data, null, 2);
-          this.downloadFile(receiptData, `receipt_${currentPayment.id}.json`);
-          this.showSuccess(`Receipt for payment #${currentPayment.id} downloaded`);
-        }
-      },
-      error: () => this.showError('Failed to download receipt')
-    });
+    const finalUrl = `${environment.apiUrl}/download.php?type=payment&id=${currentPayment.id}&format=pdf`;
+    window.open(finalUrl, '_blank');
+    this.showSuccess(`Receipt for payment #${currentPayment.id} initiated`);
   }
 
 

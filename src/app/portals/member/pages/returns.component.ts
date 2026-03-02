@@ -2,6 +2,7 @@ import { Component, inject, computed, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReturnsService } from '../../../services/returns.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-returns',
@@ -246,7 +247,7 @@ export class ReturnsComponent implements OnInit {
   }
 
   downloadAcknowledgement(id: string) {
-    const finalUrl = `http://localhost/itax/kra-api/download.php?type=return&id=${id}&format=pdf`;
+    const finalUrl = `${environment.apiUrl}/download.php?type=return&id=${id}&format=pdf`;
     window.open(finalUrl, '_blank');
   }
 

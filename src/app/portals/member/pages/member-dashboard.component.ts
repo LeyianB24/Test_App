@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { DashboardDataService } from '../../../services/dashboard-data.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { environment } from '../../../../environments/environment';
 
 interface DashboardStat {
   label: string;
@@ -426,6 +427,6 @@ export class MemberDashboardComponent implements OnInit {
   }
 
   downloadStatusReport() {
-    window.open('http://localhost/itax/kra-api/download.php?type=status_report&id=1&format=pdf', '_blank');
+    window.open(`${environment.apiUrl}/download.php?type=status_report&id=1&format=pdf`, '_blank');
   }
 }
