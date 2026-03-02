@@ -14,7 +14,7 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
       <header class="page-header-elite mb-12">
         <div class="header-info">
           <h1 class="premium-title">Taxpayer <span class="gradient-text">Directory</span></h1>
-          <p class="premium-subtitle">Sovereign management of client profiles & compliance metadata</p>
+          <p class="premium-subtitle">Manage taxpayer profiles and details</p>
         </div>
         <div class="header-actions flex gap-4">
            <div class="search-premium min-w-[300px]">
@@ -23,11 +23,11 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
            </div>
            <button class="modern-btn primary-btn btn-icon" (click)="openForge()">
              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
-             <span>Client Forge</span>
+             <span>Add Taxpayer</span>
            </button>
            <button class="modern-btn outline-btn btn-icon" (click)="showImport.set(true)">
              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-             <span>Bulk Ingest</span>
+             <span>Bulk Import</span>
            </button>
         </div>
       </header>
@@ -83,7 +83,7 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
             @if (loading()) {
               <div class="py-32 flex flex-col items-center">
                 <div class="w-12 h-12 border-4 border-slate-100 border-t-red-600 rounded-full animate-spin"></div>
-                <p class="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Scanning encrypted directory...</p>
+                <p class="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Loading records...</p>
               </div>
             }
 
@@ -100,18 +100,18 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
                     <thead>
                       <tr>
                         <th class="pl-8">Taxpayer Identity</th>
-                        <th>Profile Domain</th>
+                        <th>Profile Details</th>
                         <th>Classification</th>
-                        <th>Registry Stream</th>
-                        <th>Last Link</th>
-                        <th class="pr-8 text-right">Admin Tactical</th>
+                        <th>Registration Status</th>
+                        <th>Last Login</th>
+                        <th class="pr-8 text-right">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       @for (client of clients(); track client.id) {
                         <tr class="table-row-hover group">
                           <td class="pl-8">
-                            <span class="text-[10px] font-black text-slate-400 block mb-1 uppercase tracking-[0.15em]">Sovereign PIN</span>
+                            <span class="text-[10px] font-black text-slate-400 block mb-1 uppercase tracking-[0.15em]">KRA PIN</span>
                             <span class="font-black text-slate-800 tracking-tight text-sm break-all group-hover:text-red-600 transition-colors">{{ client.taxpayer_id }}</span>
                           </td>
                           <td>
@@ -127,7 +127,7 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
                           </td>
                           <td>
                             <span class="text-xs font-black text-slate-700 block mb-1">{{ client.registration_date | date:'dd MMM yyyy' }}</span>
-                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Validated</span>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Verified</span>
                           </td>
                           <td>
                             @if (client.last_login) {
@@ -136,15 +136,15 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
                                   <span class="w-1 h-1 rounded-full bg-emerald-500"></span> Online
                                </span>
                             } @else {
-                               <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">No Protocol Link</span>
+                               <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Never Logged In</span>
                             }
                           </td>
                           <td class="pr-8 text-right">
                              <div class="flex gap-3 justify-end">
-                               <button (click)="openForge(client)" class="icon-btn-elite hover:bg-red-50 hover:text-red-600 transition-all transform hover:scale-110" title="Modify Record">
+                               <button (click)="openForge(client)" class="icon-btn-elite hover:bg-red-50 hover:text-red-600 transition-all transform hover:scale-110" title="Edit Record">
                                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                </button>
-                               <button (click)="confirmDelete(client)" class="icon-btn-elite hover:bg-red-600 hover:text-white transition-all transform hover:scale-110" title="Redact Record">
+                               <button (click)="confirmDelete(client)" class="icon-btn-elite hover:bg-red-600 hover:text-white transition-all transform hover:scale-110" title="Delete Record">
                                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                </button>
                              </div>
@@ -172,7 +172,7 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
                @if (totalPages() > 1) {
                   <div class="flex justify-between items-center p-8 border-t border-slate-50 bg-slate-50/30">
                      <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                        Sector {{ currentPage() }} of {{ totalPages() }} • {{ totalCount() }} Aggregates
+                        Page {{ currentPage() }} of {{ totalPages() }} • {{ totalCount() }} Total Records
                      </span>
                      <div class="flex gap-3">
                         <button class="icon-btn-elite" [disabled]="currentPage() === 1" (click)="loadPage(currentPage() - 1)">
@@ -195,8 +195,8 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
             <div class="bg-white rounded-[1.8rem] overflow-hidden">
                <div class="p-10 pb-6 border-b border-slate-50 flex justify-between items-center">
                   <div>
-                    <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight">{{ editingClient() ? 'Modify' : 'Forge' }} Record</h2>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Sovereign Data Integrity Protocol</p>
+                    <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight">{{ editingClient() ? 'Edit' : 'Add' }} Taxpayer</h2>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Provide taxpayer details</p>
                   </div>
                   <button class="w-10 h-10 rounded-full hover:bg-slate-50 text-slate-400 transition-colors flex items-center justify-center font-black text-xl" (click)="closeForge()">&times;</button>
                </div>
@@ -204,19 +204,19 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
                <form [formGroup]="clientForm" (ngSubmit)="saveClient()" class="p-10">
                   <div class="grid grid-cols-2 gap-8 mb-10">
                     <div class="space-y-3">
-                       <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Sovereign PIN</label>
+                       <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">KRA PIN</label>
                        <input type="text" formControlName="taxpayer_id" class="search-input-elite w-full h-[3.5rem] bg-slate-50 border-slate-100 focus:bg-white" placeholder="A001234567X">
                     </div>
                     <div class="space-y-3">
-                       <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Legal Identity</label>
+                       <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Full Name</label>
                        <input type="text" formControlName="name" class="search-input-elite w-full h-[3.5rem] bg-slate-50 border-slate-100 focus:bg-white" placeholder="Full Registered Name">
                     </div>
                     <div class="space-y-3">
-                       <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Secure Email</label>
-                       <input type="email" formControlName="email" class="search-input-elite w-full h-[3.5rem] bg-slate-50 border-slate-100 focus:bg-white" placeholder="contact@sovereign.go.ke">
+                       <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Email Address</label>
+                       <input type="email" formControlName="email" class="search-input-elite w-full h-[3.5rem] bg-slate-50 border-slate-100 focus:bg-white" placeholder="contact@example.com">
                     </div>
                     <div class="space-y-3">
-                       <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Protocol Station</label>
+                       <label class="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Tax Station</label>
                        <select formControlName="station" class="search-input-elite w-full h-[3.5rem] bg-slate-50 border-slate-100 focus:bg-white appearance-none">
                          <option value="Nairobi North">Nairobi North</option>
                          <option value="Nairobi South">Nairobi South</option>
@@ -230,7 +230,7 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
                   <div class="flex justify-end gap-4 p-8 bg-slate-50/50 rounded-[2rem]">
                     <button type="button" class="modern-btn outline-btn sm" (click)="closeForge()">Cancel</button>
                     <button type="submit" class="modern-btn primary-btn sm" [disabled]="clientForm.invalid || saving()">
-                       {{ saving() ? 'Aggregating...' : 'Commit Record' }}
+                       {{ saving() ? 'Saving...' : 'Save Record' }}
                     </button>
                   </div>
                </form>
@@ -246,8 +246,8 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
               <div class="bg-white rounded-[1.8rem] overflow-hidden">
                  <div class="p-10 pb-6 border-b border-slate-50 flex justify-between items-center">
                     <div>
-                       <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight">Bulk Ingest</h2>
-                       <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">High-Volume Packet Processing</p>
+                       <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight">Bulk Import</h2>
+                       <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Upload multiple records via CSV</p>
                     </div>
                     <button class="w-10 h-10 rounded-full hover:bg-slate-50 text-slate-400 transition-colors flex items-center justify-center font-black text-xl" (click)="showImport.set(false)">&times;</button>
                  </div>
@@ -260,13 +260,13 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
                              <div class="w-20 h-20 bg-white shadow-xl rounded-[2rem] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                 <svg width="32" height="32" fill="none" stroke="#E31E24" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
                              </div>
-                             <span class="text-sm font-black text-slate-700 uppercase tracking-widest">Drop CSV Packet</span>
+                             <span class="text-sm font-black text-slate-700 uppercase tracking-widest">Select CSV File</span>
                              <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-4">Required fields: PIN, NAME, EMAIL, STATION</p>
                           </label>
                        </div>
                     } @else {
                        <div class="space-y-6">
-                          <h4 class="text-[10px] font-black text-red-600 uppercase tracking-[0.2em]">Validated Aggregate ({{ importPreview().length }} Records)</h4>
+                          <h4 class="text-[10px] font-black text-red-600 uppercase tracking-[0.2em]">Ready to Import ({{ importPreview().length }} Records)</h4>
                           <div class="max-h-60 overflow-y-auto custom-scrollbar border border-slate-100 rounded-2xl">
                              <table class="w-full text-[11px] font-bold">
                                 <thead class="bg-slate-50 text-slate-400 uppercase text-[9px]">
@@ -280,8 +280,8 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
                              </table>
                           </div>
                           <div class="flex justify-end gap-3 mt-10">
-                             <button class="modern-btn outline-btn sm" (click)="importPreview.set([])">Abort</button>
-                             <button class="modern-btn primary-btn sm" (click)="processImport()" [disabled]="saving()">Deploy Records</button>
+                             <button class="modern-btn outline-btn sm" (click)="importPreview.set([])">Cancel</button>
+                             <button class="modern-btn primary-btn sm" (click)="processImport()" [disabled]="saving()">Import Records</button>
                           </div>
                        </div>
                     }
@@ -490,7 +490,7 @@ export class AdminClientsComponent implements OnInit {
           this.loadData();
           this.closeForge();
         } else {
-          alert('Forge Failure: ' + (res.error || 'Unknown error'));
+          alert('Save Failed: ' + (res.error || 'Unknown error'));
         }
         this.saving.set(false);
       },
@@ -501,11 +501,11 @@ export class AdminClientsComponent implements OnInit {
   }
 
   confirmDelete(client: ClientData) {
-    if (confirm(`Are you certain you want to redact record ${client.taxpayer_id}? This is audited.`)) {
+    if (confirm(`Are you sure you want to delete the record for ${client.taxpayer_id}?`)) {
       this.clientsService.deleteClient(client.id).subscribe({
         next: (res) => {
           if (res.success) this.loadData();
-          else alert('Redaction Error: ' + res.error);
+          else alert('Delete Error: ' + res.error);
         }
       });
     }
@@ -549,7 +549,7 @@ export class AdminClientsComponent implements OnInit {
           this.showImport.set(false);
           this.importPreview.set([]);
         } else {
-          alert('Ingest Failure: ' + res.error);
+          alert('Import Failure: ' + res.error);
         }
         this.saving.set(false);
       }

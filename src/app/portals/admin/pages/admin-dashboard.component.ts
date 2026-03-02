@@ -12,12 +12,12 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
       <!-- Elite Page Header -->
       <header class="page-header-elite mb-12">
         <div class="header-info">
-          <h1 class="premium-title">Command <span class="gradient-text">Center</span></h1>
-          <p class="premium-subtitle">Sovereign oversight of system-wide intelligence & revenue kinetics</p>
+          <h1 class="premium-title">Dashboard</h1>
+          <p class="premium-subtitle">System overview, metrics, and revenue analytics</p>
         </div>
         <div class="header-actions">
           <div class="status-pill-elite synced mr-4">
-            <span class="dot animate-pulse"></span>System Synchronized
+            <span class="dot animate-pulse"></span>System Online
           </div>
           <button (click)="refresh()" class="modern-btn outline-btn btn-icon">
             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
@@ -30,7 +30,7 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
       @if (loading()) {
         <div class="py-32 flex flex-col items-center">
           <div class="w-16 h-16 border-4 border-slate-100 border-t-red-600 rounded-full animate-spin"></div>
-          <p class="mt-6 text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px]">Aggregating sovereign intelligence...</p>
+          <p class="mt-6 text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px]">Loading system data...</p>
         </div>
       }
 
@@ -102,7 +102,7 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
               </div>
               <div class="status-pill-elite synced text-[9px] w-fit">
                 <span class="dot"></span>
-                Operational Integrity
+                Operational
               </div>
               <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-purple-600 group-hover:scale-[1.7] transition-transform">
                 <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
@@ -117,7 +117,7 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
               </div>
               <div class="status-pill-elite pending text-[9px] w-fit">
                 <span class="dot"></span>
-                Pending Protocol
+                Awaiting Payment
               </div>
               <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-amber-600 group-hover:scale-[1.7] transition-transform">
                 <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -127,7 +127,7 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
             <!-- Overdue -->
             <div class="premium-stat-card p-6 border-l-4 border-rose-600 group">
               <div class="stat-info mb-4">
-                <span class="stat-label">Overdue Obligations</span>
+                <span class="stat-label">Overdue Payments</span>
                 <h3 class="stat-number text-red-600">{{ (summary()?.stats?.overdueObligations || 0) | number }}</h3>
               </div>
               <div class="status-pill-elite overdue text-[9px] w-fit">
@@ -151,10 +151,10 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
                    
                   <div class="flex items-center justify-between mb-12 relative z-10">
                      <div>
-                        <h3 class="text-xl font-black text-slate-800">Revenue Kinetics</h3>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">12-Month Longitudinal Analysis</p>
+                        <h3 class="text-xl font-black text-slate-800">Revenue Analytics</h3>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">12-Month Overview</p>
                      </div>
-                     <span class="text-[10px] font-black uppercase tracking-widest px-4 py-2 bg-slate-100 rounded-xl text-slate-500">KES {{ formatM(totalRevenue12M()) }} Aggregate</span>
+                     <span class="text-[10px] font-black uppercase tracking-widest px-4 py-2 bg-slate-100 rounded-xl text-slate-500">KES {{ formatM(totalRevenue12M()) }} Total</span>
                   </div>
 
                   <div class="flex items-end gap-3 h-[250px] mb-8 relative z-10 px-4">
@@ -180,7 +180,7 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
                   <div class="flex items-center justify-between mb-10">
                     <h3 class="text-xl font-black text-slate-800 flex items-center gap-3">
                        <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
-                       Intelligence Stream
+                       Recent Activity Logs
                     </h3>
                     <button class="text-[10px] font-black text-red-600 uppercase tracking-[0.2em] hover:opacity-70 transition-opacity" (click)="refreshLogs()">Clear Logs</button>
                   </div>
@@ -210,7 +210,7 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
                       </div>
                     } @empty {
                       <div class="text-center py-20 bg-slate-50/50 rounded-[3rem] border border-dashed border-slate-200">
-                         <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Awaiting intelligence packet ingestion...</p>
+                         <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">No recent activity detected.</p>
                       </div>
                     }
                   </div>
@@ -222,7 +222,7 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
                <!-- Audit Readiness -->
                <div class="content-card-premium p-10 relative overflow-hidden">
                   <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-50/50 rounded-full blur-3xl"></div>
-                   <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-10">Compliance Radar</h3>
+                   <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-10">Compliance Overview</h3>
                    
                    <div class="space-y-8 mb-12">
                       <div class="space-y-3">
@@ -256,7 +256,7 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
                          </div>
                       </div>
                       <div>
-                         <span class="text-white font-black block text-sm">Audit Readiness</span>
+                         <span class="text-white font-black block text-sm">Overall Health</span>
                          <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">System-wide score</p>
                       </div>
                    </div>
@@ -283,17 +283,17 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
                   <div class="absolute top-0 right-0 p-10 opacity-10">
                      <svg width="100" height="100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
                   </div>
-                  <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-10 relative z-10">Gov Nexus Protocols</h3>
+                  <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-10 relative z-10">System Integrations</h3>
                   <div class="space-y-4 relative z-10">
                     @for (portal of portals(); track portal.name) {
                       <div class="flex items-center justify-between p-5 bg-white/5 border border-white/10 rounded-[2rem] hover:bg-white/10 transition-all group">
                         <div class="flex flex-col">
                            <span class="text-[11px] font-black text-slate-300">{{ portal.name }}</span>
-                           <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{{ portal.online ? portal.latency : 'Protocol Offline' }}</span>
+                           <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{{ portal.online ? portal.latency : 'Offline' }}</span>
                         </div>
                         <div class="flex items-center gap-3">
                            <span class="text-[9px] font-black uppercase tracking-[0.2em]" [class.text-emerald-400]="portal.online" [class.text-red-400]="!portal.online">
-                              {{ portal.online ? 'Synced' : 'Critical' }}
+                              {{ portal.online ? 'Online' : 'Offline' }}
                            </span>
                            <div class="w-1.5 h-1.5 rounded-full shadow-[0_0_8px_currentColor]" [class.bg-emerald-400]="portal.online" [class.bg-red-400]="!portal.online"></div>
                         </div>
