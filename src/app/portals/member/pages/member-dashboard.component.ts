@@ -117,12 +117,27 @@ interface DashboardStat {
               </div>
             </div>
             <div class="chart-viz-container">
+              <!-- Premium Gradient Definitions -->
+              <svg width="0" height="0" style="position: absolute;">
+                <defs>
+                  <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:var(--red-400); stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:var(--red-600); stop-opacity:0.8" />
+                  </linearGradient>
+                  <linearGradient id="glowGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:var(--red-500); stop-opacity:0.3" />
+                    <stop offset="100%" style="stop-color:var(--red-500); stop-opacity:0" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              
               <div class="chart-surface-precision">
                 @if (chartData().length > 0) {
                   <div class="precision-bar-chart">
                     @for (bar of chartData(); track bar.month) {
-                      <div class="bar-unit-precision" [style.height.%]="bar.height" [class.active-bar]="bar.active">
-                        <div class="bar-peak"></div>
+                      <div class="bar-unit-precision" [style.height.%]="bar.height" [class.active-bar]="bar.active" 
+                           style="background: linear-gradient(180deg, var(--red-400) 0%, var(--red-600) 100%); box-shadow: 0 4px 12px rgba(218, 56, 50, 0.2);">
+                        <div class="bar-peak" style="background: white; opacity: 0.4; height: 1px; width: 100%;"></div>
                         <div class="bar-tooltip">KES {{ bar.amount / 1000 }}K</div>
                         <span class="bar-axis-label">{{ bar.month }}</span>
                       </div>

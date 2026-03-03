@@ -21,7 +21,33 @@ body {
   color: var(--text-primary);
   background-color: var(--bg-app);
   overflow-x: hidden;
+  position: relative;
 }
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-image: var(--texture-noise);
+  opacity: 0.035;
+  z-index: 1000;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* ─── Staggered Entry Utilities ─── */
+.animate-stagger > * {
+  opacity: 0;
+  animation: fadeSlideUp var(--duration-slow) var(--ease-out) forwards;
+}
+
+.animate-stagger :nth-child(1) { animation-delay: 50ms; }
+.animate-stagger :nth-child(2) { animation-delay: 100ms; }
+.animate-stagger :nth-child(3) { animation-delay: 150ms; }
+.animate-stagger :nth-child(4) { animation-delay: 200ms; }
+.animate-stagger :nth-child(5) { animation-delay: 250ms; }
 
 /* ─── Selection ─── */
 ::selection {
@@ -52,6 +78,7 @@ h1, h2, h3 {
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   color: var(--text-primary);
+  text-shadow: var(--text-shadow-premium);
 }
 h4, h5, h6 {
   font-family: var(--font-heading);
@@ -119,4 +146,14 @@ code, kbd, pre, .mono {
 @keyframes arcFill {
   from { stroke-dashoffset: 283; }
   to   { stroke-dashoffset: var(--arc-target); }
+}
+
+@keyframes ripple {
+  from { transform: scale(0); opacity: 0.5; }
+  to { transform: scale(4); opacity: 0; }
+}
+
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
 }

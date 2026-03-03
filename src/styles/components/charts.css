@@ -96,6 +96,7 @@
   opacity: 0.9;
   transform-origin: bottom;
   animation: chartBarGrow 600ms var(--ease-out) forwards;
+  filter: drop-shadow(0 0 4px rgba(218, 56, 50, 0.4));
 }
 
 .chart-bar-precision:hover {
@@ -107,9 +108,9 @@
   stroke: var(--red-500);
   stroke-width: 2;
   fill: none;
-  stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
   animation: lineTraceDraw 1000ms var(--ease-out) forwards;
+  filter: drop-shadow(0 0 6px rgba(218, 56, 50, 0.5));
 }
 
 .chart-area-precision {

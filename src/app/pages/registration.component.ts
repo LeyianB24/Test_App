@@ -96,7 +96,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                          <p class="text-sm font-medium text-white/30 uppercase tracking-widest mt-1">Foundational taxpayer attributes</p>
                       </div>
                       
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 animate-stagger">
                         <div class="form-group-precision">
                           <label class="label-precision">Taxpayer Category</label>
                           <select class="input-precision w-full" formControlName="taxpayerType">
@@ -163,7 +163,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                          <p class="text-sm font-medium text-white/30 uppercase tracking-widest mt-1">Geographical and jurisdictional parameters</p>
                       </div>
 
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 animate-stagger">
                         <div class="form-group-precision">
                           <label class="label-precision">County of Domicile</label>
                           <select class="input-precision w-full" formControlName="county" (change)="onCountyChange()">
@@ -229,7 +229,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                          <p class="text-sm font-medium text-white/30 uppercase tracking-widest mt-1">Access protocols and legal obligations</p>
                       </div>
 
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 animate-stagger">
                         <div class="form-group-precision">
                           <label class="label-precision">Operational Email</label>
                           <input type="email" class="input-precision w-full" formControlName="email" placeholder="name@domain.com">
@@ -249,9 +249,9 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                         </div>
                       </div>
 
-                      <div class="card-precision ops-card-precision mt-10 p-8 border border-white/5">
+                      <div class="card-precision ops-card-precision mt-10 p-8 border border-white/5 animate-stagger">
                          <h4 class="text-[10px] font-black uppercase text-white/40 tracking-[0.2em] mb-6">Registered Tax Mandates</h4>
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-stagger">
                             <label class="mandate-toggle-precision group" [class.checked]="regForm.get('obIncomeTax')?.value">
                                <input type="checkbox" formControlName="obIncomeTax" [disabled]="true" class="hidden">
                                <div class="content flex items-center justify-between">

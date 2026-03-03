@@ -13,13 +13,17 @@
 
 .modal-panel-precision {
   background: var(--bg-surface);
+  background-image: var(--glass-gradient);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(218, 56, 50, 0.05);
   width: 100%;
-  animation: scaleIn 250ms var(--ease-out) forwards;
+  animation: scaleIn 250ms var(--ease-tactile) forwards;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(10px) saturate(180%);
 }
 
 .modal-panel-precision.sm { max-width: 440px; }
