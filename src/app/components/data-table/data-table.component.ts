@@ -26,12 +26,12 @@ export interface TableAction {
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="card-precision dashboard-content-precision overflow-hidden border border-white/5">
+    <div class="card-precision dashboard-content-precision overflow-hidden border border-default">
       <!-- High-Authority Toolbar -->
-      <div class="table-toolbar-precision px-8 py-6 border-b border-white/5 bg-white/2 flex justify-between items-center gap-6">
+      <div class="table-toolbar-precision px-8 py-6 border-b border-default bg-surface-2 flex justify-between items-center gap-6">
         <div class="toolbar-left flex items-center gap-6">
           <div class="search-box-precision relative group">
-            <svg class="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-red-base transition-colors" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 text-tertiary group-focus-within:text-accent transition-colors" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2.5"/>
             </svg>
             <input
@@ -71,15 +71,15 @@ export interface TableAction {
             </button>
             
             @if (showExportMenu()) {
-              <div class="absolute right-0 top-full mt-2 z-50 bg-black/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-2 min-w-[200px] animate-fade-in">
-                <button (click)="exportTable('excel')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl transition-all text-xs font-bold text-white/70">
-                  <span class="text-emerald-500">📊</span> Excel Record
+              <div class="absolute right-0 top-full mt-2 z-50 bg-overlay backdrop-blur-xl border border-default rounded-2xl shadow-2xl p-2 min-w-[200px] animate-fade-in">
+                <button (click)="exportTable('excel')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-hover rounded-xl transition-all text-xs font-bold text-secondary">
+                  <span class="text-success">📊</span> Excel Record
                 </button>
-                <button (click)="exportTable('pdf')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl transition-all text-xs font-bold text-white/70">
-                  <span class="text-red-500">📄</span> PDF Document
+                <button (click)="exportTable('pdf')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-hover rounded-xl transition-all text-xs font-bold text-secondary">
+                  <span class="text-danger">📄</span> PDF Document
                 </button>
-                <button (click)="exportTable('csv')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl transition-all text-xs font-bold text-white/70">
-                  <span class="text-blue-500">📋</span> CSV Manifest
+                <button (click)="exportTable('csv')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-hover rounded-xl transition-all text-xs font-bold text-secondary">
+                  <span class="text-info">📋</span> CSV Manifest
                 </button>
               </div>
             }
@@ -102,7 +102,7 @@ export interface TableAction {
                     @if (col.sortable) {
                       <div class="sort-icon-precision opacity-20 group-hover:opacity-100 transition-opacity" [class.active-precision]="sortBy() === col.key">
                         @if (sortBy() === col.key && sortOrder() === 'desc') {
-                          <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 4L4 1L7 4" stroke="#DA3832" stroke-width="2"/></svg>
+                          <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 4L4 1L7 4" stroke="var(--color-accent)" stroke-width="2"/></svg>
                         } @else {
                           <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="2"/></svg>
                         }
@@ -118,24 +118,24 @@ export interface TableAction {
           </thead>
           <tbody>
             @for (row of paginatedData(); track $index) {
-              <tr class="hover-precision transition-all border-b border-white/5">
+              <tr class="hover-precision transition-all border-b border-default">
                 @for (col of columns; track col.key) {
                   <td [style.width]="col.width || 'auto'">
                     <div [ngSwitch]="col.type">
                       <!-- Standard Text -->
-                      <span *ngSwitchCase="'text'" class="text-white font-medium text-sm leading-none block">
+                      <span *ngSwitchCase="'text'" class="text-primary font-medium text-sm leading-none block">
                         {{ row[col.key] }}
                       </span>
 
                       <!-- Financial Intensity -->
-                      <span *ngSwitchCase="'currency'" class="text-white font-black text-sm tabular-nums tracking-tight">
+                      <span *ngSwitchCase="'currency'" class="text-primary font-black text-sm tabular-nums tracking-tight">
                         {{ row[col.key] | currency:'KES ':'code':'1.0-0' }}
                       </span>
 
                       <!-- Chronological Identity -->
                       <div *ngSwitchCase="'date'" class="date-identity">
-                        <span class="text-white/80 font-bold text-[12px] block">{{ row[col.key] | date:'dd MMM yyyy' }}</span>
-                        <span class="text-white/20 font-black text-[9px] uppercase tracking-widest block">{{ row[col.key] | date:'HH:mm' }}</span>
+                        <span class="text-secondary font-bold text-[12px] block">{{ row[col.key] | date:'dd MMM yyyy' }}</span>
+                        <span class="text-tertiary font-black text-[9px] uppercase tracking-widest block">{{ row[col.key] | date:'HH:mm' }}</span>
                       </div>
 
                       <!-- Operational Status -->
@@ -146,7 +146,7 @@ export interface TableAction {
                       </div>
 
                       <!-- Mathematical units -->
-                      <span *ngSwitchCase="'number'" class="text-white/60 font-black text-sm tabular-nums">
+                      <span *ngSwitchCase="'number'" class="text-tertiary font-black text-sm tabular-nums">
                         {{ row[col.key] | number:'1.0-0' }}
                       </span>
                     </div>
@@ -159,7 +159,7 @@ export interface TableAction {
                     <div class="flex justify-end gap-2">
                       @for (action of actions; track action.label) {
                         <button (click)="onAction(action.action, row)" 
-                                class="btn-precision btn-secondary-precision btn-sm px-2 border-white/10 hover:border-red-base/50" 
+                                class="btn-precision btn-secondary-precision btn-sm px-2 border-default hover:border-accent/50" 
                                 [title]="action.label">
                           <span class="text-xs">{{ action.icon }}</span>
                         </button>
@@ -175,11 +175,11 @@ export interface TableAction {
               <tr>
                 <td [attr.colspan]="columns.length + (actions.length > 0 ? 1 : 0)" class="py-32">
                   <div class="null-state-precision text-center max-w-sm mx-auto">
-                    <div class="icon-orb-precision w-20 h-20 bg-white/2 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/5">
-                      <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-white/10"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" stroke-width="1.5"/></svg>
+                    <div class="icon-orb-precision w-20 h-20 bg-surface-2 rounded-full flex items-center justify-center mx-auto mb-6 border border-default">
+                      <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-tertiary"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" stroke-width="1.5"/></svg>
                     </div>
-                    <h3 class="text-white font-bold text-lg mb-2">No Records Localized</h3>
-                    <p class="text-white/30 text-xs font-medium">{{ searchQuery ? 'Your search query yielded zero operational matches.' : 'Registry pipeline currently contains no synchronized data.' }}</p>
+                    <h3 class="text-primary font-bold text-lg mb-2">No Records Localized</h3>
+                    <p class="text-tertiary text-xs font-medium">{{ searchQuery ? 'Your search query yielded zero operational matches.' : 'Registry pipeline currently contains no synchronized data.' }}</p>
                   </div>
                 </td>
               </tr>
@@ -190,18 +190,18 @@ export interface TableAction {
 
       <!-- Tactical Pagination Shell -->
       @if (totalPages() > 1) {
-        <div class="pagination-shell-precision px-8 py-6 border-t border-white/5 flex justify-between items-center bg-white/2">
+        <div class="pagination-shell-precision px-8 py-6 border-t border-default flex justify-between items-center bg-surface-2">
           <div class="pagination-telemetry">
-            <span class="text-[10px] uppercase font-black tracking-widest text-white/20">Telemetry: </span>
-            <span class="text-white/60 font-bold text-xs">{{ startIndex() + 1 }} - {{ endIndex() }} of {{ filteredData().length }} Units</span>
+            <span class="text-[10px] uppercase font-black tracking-widest text-tertiary">Telemetry: </span>
+            <span class="text-secondary font-bold text-xs">{{ startIndex() + 1 }} - {{ endIndex() }} of {{ filteredData().length }} Units</span>
           </div>
           
           <div class="pagination-controls-precision flex items-center gap-2">
             <button [disabled]="currentPage() === 1" (click)="previousPage()" class="btn-precision btn-secondary-precision btn-sm px-4 disabled:opacity-20 transition-all">
               Prev Transmission
             </button>
-            <div class="page-indicator-precision px-6 py-2 bg-black border border-white/10 rounded-xl">
-               <span class="text-white font-black text-xs">Phase {{ currentPage() }} <span class="text-white/20">/ {{ totalPages() }}</span></span>
+            <div class="page-indicator-precision px-6 py-2 bg-app border border-default rounded-xl">
+               <span class="text-primary font-black text-xs">Phase {{ currentPage() }} <span class="text-tertiary">/ {{ totalPages() }}</span></span>
             </div>
             <button [disabled]="currentPage() === totalPages()" (click)="nextPage()" class="btn-precision btn-secondary-precision btn-sm px-4 disabled:opacity-20 transition-all">
               Next Transmission

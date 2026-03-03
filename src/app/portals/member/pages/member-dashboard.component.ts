@@ -25,14 +25,14 @@ interface DashboardStat {
       <header class="mb-10">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div class="header-titles-complex">
-            <h1 class="text-3xl font-black text-white tracking-tight flex items-center gap-3">
-              Wealth Terminal <span class="text-red-500">Intelligence</span>
+            <h1 class="text-3xl font-black text-primary tracking-tight flex items-center gap-3">
+              Wealth Terminal <span class="text-accent">Intelligence</span>
               <span class="status-pill-precision online">
                 <span class="status-pill-dot"></span>
                 v2.0 MASTER
               </span>
             </h1>
-            <p class="text-slate-500 mt-2 font-medium tracking-wide">Synchronized access for {{ userName() }}</p>
+            <p class="text-tertiary mt-2 font-medium tracking-wide">Synchronized access for {{ userName() }}</p>
           </div>
           <div class="flex items-center gap-4">
             <button class="btn-precision btn-secondary-precision btn-sm" (click)="downloadStatusReport()">
@@ -73,8 +73,8 @@ interface DashboardStat {
         <div class="stat-card-precision">
           <div class="flex items-center justify-between mb-8">
             <div>
-              <h3 class="text-lg font-bold text-white uppercase tracking-widest">Revenue Trajectory</h3>
-              <p class="text-xs text-slate-500 mt-1">12-month centralized performance overview</p>
+              <h3 class="text-lg font-bold text-primary uppercase tracking-widest">Revenue Trajectory</h3>
+              <p class="text-xs text-tertiary mt-1">12-month centralized performance overview</p>
             </div>
             <span class="status-pill-precision">REAL-TIME TELEMETRY</span>
           </div>
@@ -110,7 +110,7 @@ interface DashboardStat {
 
         <!-- System Load / Distribution -->
         <div class="stat-card-precision">
-          <h3 class="text-lg font-bold text-white uppercase tracking-widest mb-8">System Compliance</h3>
+          <h3 class="text-lg font-bold text-primary uppercase tracking-widest mb-8">System Compliance</h3>
           <div class="flex flex-col items-center justify-center h-full">
             <div class="gauge-container">
               <svg class="gauge-svg" viewBox="0 0 100 50">
@@ -119,7 +119,7 @@ interface DashboardStat {
                 <text x="50" y="45" class="gauge-text">84%</text>
               </svg>
             </div>
-            <p class="text-[10px] color-black-500 mt-6 uppercase tracking-widest text-center">Operational Integrity Status</p>
+            <p class="text-[10px] text-tertiary mt-6 uppercase tracking-widest text-center">Operational Integrity Status</p>
           </div>
         </div>
       </div>

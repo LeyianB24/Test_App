@@ -212,7 +212,7 @@
   --color-accent-text:         var(--red-400);
 
   /* ─── Backgrounds ─── */
-  --bg-root:          var(--neutral-000);
+  --bg-root:          var(--neutral-050);
   --bg-app:           var(--neutral-025);
   --bg-sidebar:       var(--neutral-000);
   --bg-topbar:        var(--neutral-000);
@@ -228,21 +228,27 @@
   --bg-input-hover:   var(--neutral-150);
   --bg-input-focus:   var(--neutral-050);
 
-  --bg-hover:         rgba(255, 255, 255, 0.04);
-  --bg-active:        rgba(255, 255, 255, 0.08);
-  --bg-selected:      rgba(218, 56, 50, 0.10);
-  --bg-overlay:       rgba(0, 0, 0, 0.80);
+  --bg-hover:         rgba(255, 255, 255, 0.06);
+  --bg-active:        rgba(255, 255, 255, 0.10);
+  --bg-selected:      rgba(218, 56, 50, 0.12);
+  --bg-overlay:       rgba(0, 0, 0, 0.85);
   --bg-tooltip:       var(--neutral-200);
 
-  --bg-accent-subtle: rgba(218, 56, 50, 0.07);
-  --bg-accent-panel:  rgba(218, 56, 50, 0.04);
+  --bg-accent-subtle: rgba(218, 56, 50, 0.10);
+  --bg-accent-panel:  rgba(218, 56, 50, 0.05);
   
   --bg-code:          var(--neutral-150);
   --bg-table-header:  var(--neutral-100);
   --bg-table-row:     transparent;
-  --bg-table-row-hover: rgba(255, 255, 255, 0.03);
-  --bg-table-row-selected: rgba(218, 56, 50, 0.08);
-  --bg-table-stripe:  rgba(255, 255, 255, 0.015);
+  --bg-table-row-hover: rgba(255, 255, 255, 0.04);
+  --bg-table-row-selected: rgba(218, 56, 50, 0.12);
+  --bg-table-stripe:  rgba(255, 255, 255, 0.02);
+
+  /* ─── Status Surfaces (Semantic) ─── */
+  --bg-status-success: rgba(22, 163, 74, 0.15);
+  --bg-status-warning: rgba(217, 119, 6, 0.15);
+  --bg-status-danger:  rgba(218, 56, 50, 0.15);
+  --bg-status-info:    rgba(14, 165, 233, 0.15);
 
   /* ─── Text ─── */
   --text-primary:     var(--neutral-1000);
@@ -348,6 +354,12 @@
   --bg-table-row-hover: rgba(0, 0, 0, 0.02);
   --bg-table-row-selected: rgba(218, 56, 50, 0.05);
   --bg-table-stripe:  rgba(0, 0, 0, 0.015);
+
+  /* ─── Status Surfaces (Semantic) ─── */
+  --bg-status-success: #ECFDF5;
+  --bg-status-warning: #FFF7ED;
+  --bg-status-danger:  #FEF2F2;
+  --bg-status-info:    #F0F9FF;
 
   /* ─── Text ─── */
   --text-primary:     var(--neutral-025);
