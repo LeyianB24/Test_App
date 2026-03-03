@@ -23,14 +23,14 @@ interface AuctionItem {
       <header class="mb-12 flex justify-between items-end">
         <div>
           <div class="flex items-center gap-4 mb-2">
-            <span class="px-4 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-black text-[10px] uppercase tracking-widest">Asset Liquidation Nexus</span>
+            <span class="px-4 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-black text-[10px] uppercase tracking-widest">Asset Liquidation</span>
           </div>
           <h1 class="text-6xl font-black text-white tracking-tighter mb-4">iBid <span class="text-amber-500">Auctions</span></h1>
-          <p class="text-slate-400 font-medium text-lg max-w-2xl">Premier bidding portal for government assets, seized inventory, and public liquidations.</p>
+          <p class="text-slate-400 font-medium text-lg max-w-2xl">Bidding portal for government assets and public liquidations.</p>
         </div>
         <div class="flex gap-4">
            <div class="p-6 bg-white/5 rounded-3xl border border-white/5 text-right">
-              <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Liquid Capital</span>
+              <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Available Funds</span>
               <span class="text-2xl font-black text-emerald-400 tabular-nums">KES 4,250,000</span>
            </div>
         </div>

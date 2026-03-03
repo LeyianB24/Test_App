@@ -21,15 +21,15 @@ import { NotificationService, Notification } from '../../core/services/notificat
           </button>
 
           <div class="page-context hide-mobile">
-            <span class="context-tag">KRA SMART PORTAL</span>
-            <h1 class="context-title">iTax <span class="gradient-text">Executive</span></h1>
+            <span class="context-tag">KRA PORTAL</span>
+            <h1 class="context-title">iTax <span class="gradient-text">Portal</span></h1>
           </div>
         </div>
 
         <div class="header-center hide-mobile">
           <div class="luxury-search">
             <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" placeholder="Search revenue services, forms or PINs..." (keyup.enter)="handleSearch($event)" />
+            <input type="text" placeholder="Search for forms, services, or PINs..." (keyup.enter)="handleSearch($event)" />
             <div class="kbd-hint">ENTER</div>
           </div>
         </div>
@@ -52,14 +52,14 @@ import { NotificationService, Notification } from '../../core/services/notificat
               <div class="panel-header-elite">
                 <div class="p-title-box">
                    <h3>Notifications</h3>
-                   <span class="p-count">{{ unreadCount() }} NEW ALERTS</span>
+                   <span class="p-count">{{ unreadCount() }} NEW</span>
                 </div>
-                <button class="p-action-btn" (click)="markAllRead()">Archive All</button>
+                <button class="p-action-btn" (click)="markAllRead()">Mark All as Read</button>
               </div>
               <div class="panel-body-elite custom-scrollbar">
                 <div *ngIf="notifications().length === 0" class="notif-empty">
                   <div class="empty-icon">✓</div>
-                  <p>Compliance system clear. No pending alerts.</p>
+                  <p>You have no new notifications.</p>
                 </div>
                 <div *ngFor="let note of notifications()" 
                      class="notif-item-elite" 
@@ -76,7 +76,7 @@ import { NotificationService, Notification } from '../../core/services/notificat
                 </div>
               </div>
               <div class="panel-footer-elite">
-                 <button class="view-all-btn" (click)="clearAll()">Purge Notification Cache</button>
+                 <button class="view-all-btn" (click)="clearAll()">Clear Notifications</button>
               </div>
             </div>
           </div>
@@ -106,20 +106,20 @@ import { NotificationService, Notification } from '../../core/services/notificat
                 <li>
                   <a [routerLink]="portalPrefix() + '/profile'" (click)="isMenuOpen.set(false)">
                     <div class="m-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></div>
-                    <span>Authorized Profile</span>
+                    <span>My Profile</span>
                   </a>
                 </li>
                 <li>
                   <a [routerLink]="portalPrefix() + '/settings'" (click)="isMenuOpen.set(false)">
                     <div class="m-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg></div>
-                    <span>Gateway Settings</span>
+                    <span>Settings</span>
                   </a>
                 </li>
                 <li class="m-divider"></li>
                 <li>
                   <button (click)="logout.emit(); isMenuOpen.set(false)" class="m-logout-btn">
                     <div class="m-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg></div>
-                    <span>Terminate Session</span>
+                    <span>Logout</span>
                   </button>
                 </li>
               </ul>
@@ -304,6 +304,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   handleSearch(event: any) {
     const query = event.target.value;
-    if (query) alert(`Executing sovereign search sequence for: ${query}`);
+    if (query) alert(`Searching for: ${query}`);
   }
 }

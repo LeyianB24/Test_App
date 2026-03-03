@@ -37,7 +37,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
       @if (helpdeskService.isLoading()) {
         <div class="py-20 flex flex-col items-center">
           <div class="w-12 h-12 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
-          <p class="mt-4 text-slate-500 font-bold uppercase tracking-widest text-[10px]">Loading secure record...</p>
+          <p class="mt-4 text-slate-500 font-bold uppercase tracking-widest text-[10px]">Loading ticket details...</p>
         </div>
       } @else if (ticket()) {
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -87,7 +87,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
                          <div class="max-w-[80%] p-6 rounded-[2rem] border shadow-sm" 
                               [class]="reply.is_internal ? 'bg-white border-slate-200 text-slate-700' : 'bg-red-50 border-red-100 text-slate-800 rounded-tr-none'">
                             @if (reply.is_internal) {
-                               <span class="text-[9px] font-black uppercase tracking-widest text-red-500 block mb-2">Official Response</span>
+                               <span class="text-[9px] font-black uppercase tracking-widest text-red-500 block mb-2">Support Team</span>
                             }
                             <p class="font-medium text-sm leading-relaxed whitespace-pre-wrap flex-grow">{{ reply.reply_text }}</p>
                             <span class="text-[9px] font-bold opacity-50 block mt-4">{{ reply.created_at | date:'short' }}</span>
@@ -95,7 +95,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
                       </div>
                    } @empty {
                       <div class="text-center py-10 opacity-60">
-                         <p class="text-sm font-bold uppercase tracking-widest text-slate-500">No replies yet. Awaiting official review.</p>
+                         <p class="text-sm font-bold uppercase tracking-widest text-slate-500">No replies yet. We will respond shortly.</p>
                       </div>
                    }
                 </div>
@@ -147,7 +147,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
               </div>
 
               <div class="content-card-premium">
-                 <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Internal History</h3>
+                 <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Ticket History</h3>
                  <div class="space-y-4">
                     @for (event of ticket()!.history; track event.id) {
                        <div class="flex gap-3 text-[11px]">

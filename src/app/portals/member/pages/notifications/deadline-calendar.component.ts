@@ -19,10 +19,10 @@ interface Deadline {
       <header class="mb-12 flex justify-between items-end">
         <div>
           <div class="flex items-center gap-4 mb-2">
-            <span class="px-4 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 font-black text-[10px] uppercase tracking-widest">Compliance Chronology</span>
+            <span class="px-4 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 font-black text-[10px] uppercase tracking-widest">Tax Calendar</span>
           </div>
-          <h1 class="text-5xl font-black text-white tracking-tighter mb-2">Deadline <span class="text-red-500">Navigator</span></h1>
-          <p class="text-slate-400 font-medium text-lg">Statutory filing calendar and mission-critical compliance markers for 2026.</p>
+          <h1 class="text-5xl font-black text-white tracking-tighter mb-2">Tax <span class="text-red-500">Deadlines</span></h1>
+          <p class="text-slate-400 font-medium text-lg">Important dates for your tax filings in 2026.</p>
         </div>
       </header>
 
@@ -97,10 +97,10 @@ interface Deadline {
                    <div class="flex justify-between items-start mb-2">
                       <div class="flex items-center gap-3">
                          <span class="px-4 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-black text-[9px] uppercase tracking-widest">
-                            {{ dl.category }} Directive
+                            {{ dl.category }} Deadline
                          </span>
                          @if (dl.daysRemaining <= 5) {
-                            <span class="text-red-500 font-black text-[9px] uppercase tracking-widest animate-pulse">Critical Phase</span>
+                            <span class="text-red-500 font-black text-[9px] uppercase tracking-widest animate-pulse">Urgent</span>
                          }
                       </div>
                       <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest tabular-nums">{{ dl.daysRemaining }} Days to Lock</span>
@@ -110,7 +110,7 @@ interface Deadline {
                 </div>
 
                 <button class="bg-red-600 hover:bg-red-700 text-white px-10 py-5 rounded-3xl font-black text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-red-600/20">
-                   Initiate Filing
+                   File Now
                 </button>
              </div>
            }
@@ -137,10 +137,10 @@ export class DeadlineCalendarComponent {
   daysInMonth = Array.from({ length: 31 }, (_, i) => i + 1);
 
   deadlines = signal<Deadline[]>([
-    { id: 1, date: '2026-01-09', category: 'PAYE', title: 'PAYE Statutory Lockdown', description: 'Final deadline for P10 returns and payroll-based tax remittances.', daysRemaining: 3 },
-    { id: 2, date: '2026-01-20', category: 'VAT', title: 'VAT Transmission Terminal', description: 'Mandatory filing of VAT P30 returns for the previous assessment period.', daysRemaining: 14 },
-    { id: 3, date: '2026-01-20', category: 'MRI', title: 'Rental Income Clearance', description: 'Statutory declaration of gross residential rental income yields.', daysRemaining: 14 },
-    { id: 4, date: '2026-01-30', category: 'Income Tax', title: 'Instalment Phase Alpha', description: 'First critical instalment phase for Individual/Corporate Income Tax.', daysRemaining: 24 }
+    { id: 1, date: '2026-01-09', category: 'PAYE', title: 'PAYE Return Deadline', description: 'Deadline to file PAYE returns and make payments.', daysRemaining: 3 },
+    { id: 2, date: '2026-01-20', category: 'VAT', title: 'VAT Return Deadline', description: 'Deadline to file VAT returns.', daysRemaining: 14 },
+    { id: 3, date: '2026-01-20', category: 'MRI', title: 'Rental Income Deadline', description: 'Deadline to file rental income returns.', daysRemaining: 14 },
+    { id: 4, date: '2026-01-30', category: 'Income Tax', title: 'First Instalment Tax', description: 'First instalment deadline for Income Tax.', daysRemaining: 24 }
   ]);
 
   hasDeadline(day: number) {

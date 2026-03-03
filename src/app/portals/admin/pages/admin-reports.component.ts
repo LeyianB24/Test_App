@@ -11,13 +11,13 @@ import { environment } from '../../../../environments/environment';
       <!-- Elite Header -->
       <header class="page-header-elite mb-12">
         <div class="header-info">
-          <h1 class="premium-title">Intelligence <span class="gradient-text">Reports</span></h1>
-          <p class="premium-subtitle">Executive orchestration of compliance telemetry & revenue forensics</p>
+          <h1 class="premium-title">System <span class="gradient-text">Reports</span></h1>
+          <p class="premium-subtitle">View and export system reports</p>
         </div>
         <div class="header-actions">
            <div class="premium-stat-card px-6 py-3 border-none shadow-none bg-slate-50/50">
-              <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Available Profiles</span>
-              <span class="text-xl font-black text-red-600 tracking-tight">6 Master Extracts</span>
+              <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Available Reports</span>
+              <span class="text-xl font-black text-red-600 tracking-tight">6 Reports</span>
            </div>
         </div>
       </header>
@@ -26,8 +26,8 @@ import { environment } from '../../../../environments/environment';
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         <div class="premium-stat-card p-6 animate-up delay-1">
           <div class="stat-info">
-            <span class="stat-label">Active Protocols</span>
-            <h3 class="stat-number">Live Sync</h3>
+            <span class="stat-label">System Status</span>
+            <h3 class="stat-number">Online</h3>
           </div>
           <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-emerald-600">
              <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
@@ -74,17 +74,17 @@ import { environment } from '../../../../environments/environment';
               <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 transform group-hover:rotate-6">
                 <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
               </div>
-              <h3 class="text-lg font-black text-slate-800 mb-3 uppercase tracking-tight">Client Master Directory</h3>
-              <p class="text-[11px] font-bold text-slate-500 leading-relaxed mb-8 flex-grow">A high-fidelity extract of the sovereign taxpayer registry. Includes PIN metadata, station dynamics, and contact vectors.</p>
+              <h3 class="text-lg font-black text-slate-800 mb-3 uppercase tracking-tight">Client Directory</h3>
+              <p class="text-[11px] font-bold text-slate-500 leading-relaxed mb-8 flex-grow">A complete list of registered taxpayers, including PINs, stations, and contact details.</p>
               
               <div class="flex flex-col gap-3">
                 <button class="modern-btn primary-btn btn-sm" (click)="downloadReport('clients', 'csv')">
                   <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                  <span>Export CSV Directory</span>
+                  <span>Export CSV</span>
                 </button>
                 <button class="modern-btn outline-btn btn-sm" (click)="downloadReport('clients', 'pdf')">
                   <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                  <span>Generate PDF Dossier</span>
+                  <span>Generate PDF</span>
                 </button>
               </div>
            </div>
@@ -96,17 +96,17 @@ import { environment } from '../../../../environments/environment';
               <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 transform group-hover:rotate-6">
                 <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
               </div>
-              <h3 class="text-lg font-black text-slate-800 mb-3 uppercase tracking-tight">Revenue Kinetics Extract</h3>
-              <p class="text-[11px] font-bold text-slate-500 leading-relaxed mb-8 flex-grow">Real-time ledger of all successful fiscal transactions. Analyzes PRN utilization and payment mode distribution.</p>
+              <h3 class="text-lg font-black text-slate-800 mb-3 uppercase tracking-tight">Revenue Report</h3>
+              <p class="text-[11px] font-bold text-slate-500 leading-relaxed mb-8 flex-grow">A detailed log of all successful payments and transactions.</p>
               
               <div class="flex flex-col gap-3">
                 <button class="modern-btn primary-btn btn-sm" style="--btn-primary-bg: #10B981" (click)="downloadReport('revenue', 'csv')">
                   <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                  <span>Export Financial CSV</span>
+                  <span>Export CSV</span>
                 </button>
                 <button class="modern-btn outline-btn btn-sm" (click)="downloadReport('revenue', 'pdf')">
                   <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                  <span>Fiscal PDF Summary</span>
+                  <span>Generate PDF</span>
                 </button>
               </div>
            </div>
@@ -118,13 +118,13 @@ import { environment } from '../../../../environments/environment';
               <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-6 group-hover:bg-amber-600 group-hover:text-white transition-all duration-300 transform group-hover:rotate-6">
                 <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               </div>
-              <h3 class="text-lg font-black text-slate-800 mb-3 uppercase tracking-tight">Filing Protocol Summary</h3>
-              <p class="text-[11px] font-bold text-slate-500 leading-relaxed mb-8 flex-grow">Comprehensive matrix of filed returns. Tracks submission velocity, acceptance rates, and amendment trajectories.</p>
+              <h3 class="text-lg font-black text-slate-800 mb-3 uppercase tracking-tight">Returns Summary</h3>
+              <p class="text-[11px] font-bold text-slate-500 leading-relaxed mb-8 flex-grow">A summary of filed tax returns and their statuses.</p>
               
               <div class="flex flex-col gap-3">
                 <button class="modern-btn primary-btn btn-sm" style="--btn-primary-bg: #F59E0B" (click)="downloadReport('returns', 'csv')">
                   <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                  <span>Export Filing CSV</span>
+                  <span>Export CSV</span>
                 </button>
               </div>
            </div>
@@ -136,13 +136,13 @@ import { environment } from '../../../../environments/environment';
               <div class="w-14 h-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mb-6 group-hover:bg-red-600 group-hover:text-white transition-all duration-300 transform group-hover:rotate-6">
                 <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
               </div>
-              <h3 class="text-lg font-black text-slate-800 mb-3 uppercase tracking-tight">Liability Audit Stream</h3>
-              <p class="text-[11px] font-bold text-slate-500 leading-relaxed mb-8 flex-grow">Identifies overdue tax protocols and penalty accruals. Essential for debt management and escalation workflows.</p>
+              <h3 class="text-lg font-black text-slate-800 mb-3 uppercase tracking-tight">Overdue Obligations</h3>
+              <p class="text-[11px] font-bold text-slate-500 leading-relaxed mb-8 flex-grow">A list of overdue tax obligations and penalties.</p>
               
               <div class="flex flex-col gap-3">
                 <button class="modern-btn primary-btn btn-sm" style="--btn-primary-bg: #E31E24" (click)="downloadReport('obligations', 'csv')">
                   <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                  <span>Export Liability CSV</span>
+                  <span>Export CSV</span>
                 </button>
               </div>
            </div>
@@ -154,8 +154,8 @@ import { environment } from '../../../../environments/environment';
               <div class="w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mb-6 group-hover:bg-slate-800 group-hover:text-white transition-all duration-300">
                 <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
               </div>
-              <h3 class="text-lg font-black text-slate-400 mb-3 uppercase tracking-tight">AI Compliance Matrix</h3>
-              <p class="text-[11px] font-bold text-slate-300 leading-relaxed mb-8 flex-grow">Deep-learning audit readiness scores and risk classifications per taxpayer node.</p>
+              <h3 class="text-lg font-black text-slate-400 mb-3 uppercase tracking-tight">Compliance Matrix</h3>
+              <p class="text-[11px] font-bold text-slate-300 leading-relaxed mb-8 flex-grow">Audit readiness scores and risk classifications.</p>
               
               <div class="flex flex-col gap-3">
                 <button class="modern-btn btn-sm cursor-not-allowed bg-slate-100 text-slate-400" disabled>
@@ -171,13 +171,13 @@ import { environment } from '../../../../environments/environment';
               <div class="w-14 h-14 rounded-2xl bg-slate-800 text-white flex items-center justify-center mb-6 group-hover:bg-red-600 transition-all duration-300 transform group-hover:rotate-6">
                 <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
               </div>
-              <h3 class="text-lg font-black text-slate-800 mb-3 uppercase tracking-tight">Full System Audit Trail</h3>
-              <p class="text-[11px] font-bold text-slate-500 leading-relaxed mb-8 flex-grow">Total chronological log of administrative actions, secure logins, and systemic protocol changes.</p>
+              <h3 class="text-lg font-black text-slate-800 mb-3 uppercase tracking-tight">System Audit Trail</h3>
+              <p class="text-[11px] font-bold text-slate-500 leading-relaxed mb-8 flex-grow">A chronological log of administrative actions and logins.</p>
               
               <div class="flex flex-col gap-3">
                 <button class="modern-btn primary-btn btn-sm bg-slate-800 hover:bg-slate-900" (click)="downloadReport('audit', 'csv')">
                   <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                  <span>Export Forensic CSV</span>
+                  <span>Export CSV</span>
                 </button>
               </div>
            </div>

@@ -25,8 +25,8 @@ interface DashboardStat {
       <!-- Elite Page Header -->
       <header class="page-header-elite">
         <div class="header-info">
-          <h1 class="premium-title">Portal <span class="gradient-text">Executive</span></h1>
-          <p class="premium-subtitle">System Hub Overseeing Revenue & Compliance for {{ userName() }}</p>
+          <h1 class="premium-title">Member <span class="gradient-text">Dashboard</span></h1>
+          <p class="premium-subtitle">Welcome back, {{ userName() }}</p>
         </div>
         <div class="header-actions">
            <button class="modern-btn outline-btn sm" (click)="downloadStatusReport()">
@@ -39,7 +39,7 @@ interface DashboardStat {
            </button>
            <button class="modern-btn primary-btn" (click)="router.navigate(['/payments'])">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="3"/></svg>
-              Immediate Payment
+              Make Payment
            </button>
         </div>
       </header>
@@ -54,8 +54,8 @@ interface DashboardStat {
            <div class="compliance-card-luxury animate-up delay-1">
               <div class="compliance-glass">
                  <div class="c-header">
-                    <div class="c-badge">TAX COMPLIANCE SCORE</div>
-                    <div class="c-status" [class.danger]="complianceScore() < 80">Excellent Resilience</div>
+                    <div class="c-badge">COMPLIANCE SCORE</div>
+                    <div class="c-status" [class.danger]="complianceScore() < 80">Status: Good</div>
                  </div>
                  
                  <div class="c-body">
@@ -79,13 +79,13 @@ interface DashboardStat {
 
                  <div class="c-footer">
                     <div class="footer-stat">
-                       <span class="fs-label">Next Obligation</span>
+                       <span class="fs-label">Next Return Due</span>
                        <span class="fs-val">Jan 20, 2026</span>
                     </div>
                     <div class="fs-divider"></div>
                     <div class="footer-stat">
-                       <span class="fs-label">Audit Status</span>
-                       <span class="fs-val">Verified Seal</span>
+                       <span class="fs-label">Account Status</span>
+                       <span class="fs-val">Verified</span>
                     </div>
                  </div>
               </div>
@@ -123,8 +123,8 @@ interface DashboardStat {
            <div class="content-card-premium mt-32 animate-up delay-2">
               <div class="card-p-header">
                  <div class="p-title-group">
-                    <h3 class="card-p-title">Fiscal Contribution Analytics</h3>
-                    <p class="card-p-subtitle">Historical revenue transmission over the current fiscal cycle</p>
+                    <h3 class="card-p-title">Revenue Overview</h3>
+                    <p class="card-p-subtitle">Your payments over the current year</p>
                  </div>
                  <div class="p-actions">
                     <button class="icon-btn-elite active"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-width="2"/></svg></button>
@@ -158,7 +158,7 @@ interface DashboardStat {
         <div class="elite-sidebar-hub">
            
            <div class="control-panel-luxury animate-up delay-2">
-              <h4 class="luxury-widget-title">Command Center</h4>
+              <h4 class="luxury-widget-title">Quick Links</h4>
               <div class="command-grid">
                  <button class="cmd-tile" (click)="router.navigate(['/returns'])">
                     <div class="cmd-icon-box blue"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg></div>
@@ -206,7 +206,7 @@ interface DashboardStat {
                   }
                </div>
               <button class="upgrade-ad-btn mt-32">
-                 ⚡ Switch to Advance Portal
+                 ⚡ View All Transactions
               </button>
            </div>
 
@@ -354,7 +354,7 @@ export class MemberDashboardComponent implements OnInit {
     const s = this.dashboardData.statistics();
     const data: any[] = [
       { 
-        label: 'Fiscal revenue (YTD)', 
+        label: 'Total Paid (YTD)', 
         value: s.total_revenue || 0, 
         type: 'currency', 
         trend: '+12.5% Gain', 
@@ -366,7 +366,7 @@ export class MemberDashboardComponent implements OnInit {
         label: 'Pending Obligations', 
         value: s.count_pending_obligations || 0, 
         type: 'count', 
-        trend: s.count_pending_obligations > 0 ? 'Critical Task' : 'All Clear', 
+        trend: s.count_pending_obligations > 0 ? 'Action Needed' : 'All Clear', 
         trendDirection: s.count_pending_obligations > 0 ? 'down' : 'up', 
         color: 'red', 
         icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' 

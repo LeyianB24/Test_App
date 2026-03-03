@@ -14,13 +14,13 @@ import { environment } from '../../../../environments/environment';
       <!-- Elite Page Header -->
       <header class="page-header-elite">
         <div class="header-info">
-          <h1 class="premium-title">Liability <span class="gradient-text">Portfolio</span></h1>
-          <p class="premium-subtitle">Strategic overview and liquidation of outstanding fiscal obligations</p>
+          <h1 class="premium-title">My <span class="gradient-text">Debts</span></h1>
+          <p class="premium-subtitle">View and pay your outstanding tax balances</p>
         </div>
         <div class="header-actions">
            <button class="modern-btn outline-btn sm" (click)="downloadStatement()">
               <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2.5"/></svg>
-              Tax Ledger Extract
+              Download Statement
            </button>
         </div>
       </header>
@@ -33,10 +33,10 @@ import { environment } from '../../../../environments/environment';
                <svg class="ripple-glow" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-width="3"/></svg>
             </div>
             <div class="alert-message-elite">
-               <h3 class="alert-title-luxury">Compliance Protocol Breach</h3>
-               <p class="alert-desc-luxury">Strategic settling of <strong>{{ totalDebt() | currency:'KES ':'symbol':'1.0-0' }}</strong> is required to restore full sovereign compliance status.</p>
+               <h3 class="alert-title-luxury">Outstanding Balance Detected</h3>
+               <p class="alert-desc-luxury">A payment of <strong>{{ totalDebt() | currency:'KES ':'symbol':'1.0-0' }}</strong> is required to clear your account.</p>
             </div>
-            <button class="modern-btn primary-btn elite-glow" (click)="payNow()">Liquidation Portal</button>
+            <button class="modern-btn primary-btn elite-glow" (click)="payNow()">Pay Now</button>
          </div>
       </div>
 
@@ -59,10 +59,10 @@ import { environment } from '../../../../environments/environment';
             <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-width="2.2"/></svg>
           </div>
           <div class="stat-info">
-            <span class="stat-label">Integrity Status</span>
+            <span class="stat-label">Account Status</span>
             <div class="stat-value-group">
                <h3 class="stat-number" [class.text-danger]="totalDebt() > 0" [class.text-success]="totalDebt() === 0">
-                 {{ totalDebt() > 0 ? 'Protocol Offline' : 'Verified Secure' }}
+                 {{ totalDebt() > 0 ? 'Action Required' : 'All Clear' }}
                </h3>
             </div>
           </div>
@@ -73,7 +73,7 @@ import { environment } from '../../../../environments/environment';
              <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4M7.835 4.697a.75.75 0 00-1.282.645A12.01 12.01 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016a.75.75 0 00-1.094-.571 12.002 12.002 0 01-8.69 0z" stroke-width="2.2"/></svg>
           </div>
           <div class="stat-info">
-            <span class="stat-label">Compliance Integrity Score</span>
+            <span class="stat-label">Compliance Score</span>
             <div class="stat-value-group">
                <h3 class="stat-number">{{ complianceScore() }}% <span class="unit-text">VERIFIED</span></h3>
             </div>
@@ -86,8 +86,8 @@ import { environment } from '../../../../environments/environment';
       <div class="content-card-premium mt-32 animate-up delay-2">
          <div class="card-p-header">
             <div class="p-title-group">
-               <h3 class="card-p-title">Sovereign Liability Decomposition</h3>
-               <p class="card-p-subtitle">Systematic audit of principal, retroactive interest and statutory penalties</p>
+               <h3 class="card-p-title">Debt Breakdown</h3>
+               <p class="card-p-subtitle">Details of your principal, interest, and penalties</p>
             </div>
             <div class="p-actions">
                <button class="icon-btn-elite active"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2.5"/></svg></button>
@@ -101,11 +101,11 @@ import { environment } from '../../../../environments/environment';
                 <tr>
                   <th>Revenue Head</th>
                   <th>Fiscal Period</th>
-                  <th>Core Principal</th>
-                  <th>Accrued Interest</th>
-                  <th>Statutory Penalty</th>
-                  <th>Consolidated Balance</th>
-                  <th class="text-center">Protocol</th>
+                  <th>Principal</th>
+                  <th>Interest</th>
+                  <th>Penalty</th>
+                  <th>Total Balance</th>
+                  <th class="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -121,7 +121,7 @@ import { environment } from '../../../../environments/environment';
                     </td>
                     <td class="text-center">
                       <button class="modern-btn primary-btn sm" (click)="payItem(debt)">
-                         Liquidate
+                         Pay
                       </button>
                     </td>
                   </tr>
@@ -130,7 +130,7 @@ import { environment } from '../../../../environments/environment';
                     <td colspan="7" class="empty-placeholder">
                        <div class="empty-state-luxury">
                           <div class="e-icon">✓</div>
-                          <p>Registry Purged. No pending liabilities detected.</p>
+                          <p>No pending debts found.</p>
                        </div>
                     </td>
                   </tr>

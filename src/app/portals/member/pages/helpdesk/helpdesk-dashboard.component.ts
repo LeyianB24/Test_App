@@ -17,8 +17,8 @@ interface DailyItem { day: string; count: number; }
     <div class="hd-dash p-6">
       <header class="mb-8 flex items-center justify-between">
         <div>
-          <h1 class="text-3xl font-black text-slate-800 tracking-tight">Helpdesk Command Center</h1>
-          <p class="text-slate-500 mt-1">Real-time ticket analytics &amp; SLA performance</p>
+          <h1 class="text-3xl font-black text-slate-800 tracking-tight">Helpdesk Dashboard</h1>
+          <p class="text-slate-500 mt-1">Overview of your support tickets and performance</p>
         </div>
         <a routerLink="/helpdesk/create" class="btn-create flex items-center gap-2">
           <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>

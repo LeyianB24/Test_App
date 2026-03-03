@@ -105,16 +105,16 @@ import { HelpdeskService, Ticket } from '../../../services/helpdesk.service';
         @if (helpdeskService.isLoading()) {
           <div class="py-20 flex flex-col items-center">
             <div class="w-12 h-12 border-4 border-slate-200 border-t-red-600 rounded-full animate-spin"></div>
-            <p class="mt-4 text-slate-500 font-bold uppercase tracking-widest text-[10px]">Retrieving secure records...</p>
+            <p class="mt-4 text-slate-500 font-bold uppercase tracking-widest text-[10px]">Loading tickets...</p>
           </div>
         } @else if (helpdeskService.tickets().length === 0) {
           <div class="py-20 text-center">
             <div class="text-slate-400 mb-6 flex justify-center">
                <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             </div>
-            <p class="text-slate-600 font-black text-xl mb-2">No Support History</p>
+            <p class="text-slate-600 font-black text-xl mb-2">No Support Tickets</p>
             <p class="text-slate-500 text-sm mb-8">You haven't filed any tickets yet. Need help?</p>
-            <button [routerLink]="['/helpdesk/create']" class="modern-btn outline-btn">Submit Inquiry</button>
+            <button [routerLink]="['/helpdesk/create']" class="modern-btn outline-btn">Submit Ticket</button>
           </div>
         } @else {
           @if (viewMode() === 'list') {

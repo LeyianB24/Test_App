@@ -13,13 +13,13 @@ import { EtimsService } from '../../../services/etims.service';
       <!-- Elite Page Header -->
       <header class="page-header-elite">
         <div class="header-info">
-          <h1 class="premium-title">Digital <span class="gradient-text">e-TIMS</span> Hub</h1>
-          <p class="premium-subtitle">Authorized electronic tax invoice transmission and synchronization terminal</p>
+          <h1 class="premium-title">e-TIMS <span class="gradient-text">Invoicing</span></h1>
+          <p class="premium-subtitle">Create and manage your electronic tax invoices</p>
         </div>
         <div class="header-actions">
            <button class="modern-btn primary-btn" (click)="showInvoiceDialog.set(true)">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="3"/></svg>
-              Generate Smart Invoice
+              Create Invoice
            </button>
         </div>
       </header>
@@ -31,7 +31,7 @@ import { EtimsService } from '../../../services/etims.service';
             <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2.2"/></svg>
           </div>
           <div class="stat-info">
-            <span class="stat-label">Total Invoices Dispatched</span>
+            <span class="stat-label">Total Invoices</span>
             <div class="stat-value-group">
                <h3 class="stat-number">{{ allInvoices().length }}</h3>
             </div>
@@ -43,7 +43,7 @@ import { EtimsService } from '../../../services/etims.service';
             <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2.2"/></svg>
           </div>
           <div class="stat-info">
-            <span class="stat-label">Gross Revenue Verified</span>
+            <span class="stat-label">Total Revenue</span>
             <div class="stat-value-group">
                <h3 class="stat-number">KES {{ totalRevenue() | number:'1.0-0' }}</h3>
             </div>
@@ -55,7 +55,7 @@ import { EtimsService } from '../../../services/etims.service';
              <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-width="2.2"/></svg>
           </div>
           <div class="stat-info">
-            <span class="stat-label">VAT Component Secured</span>
+            <span class="stat-label">Total VAT</span>
             <div class="stat-value-group">
                <h3 class="stat-number">KES {{ totalTax() | number:'1.0-0' }}</h3>
             </div>
@@ -68,9 +68,9 @@ import { EtimsService } from '../../../services/etims.service';
              <div class="pulse-dot"></div>
           </div>
           <div class="stat-info">
-            <span class="stat-label">Service Connectivity</span>
+            <span class="stat-label">System Status</span>
             <div class="stat-value-group">
-               <h3 class="stat-number status-online" style="font-size: 0.95rem;">COMPLIANCE ACTIVE</h3>
+               <h3 class="stat-number status-online" style="font-size: 0.95rem;">ONLINE</h3>
             </div>
           </div>
         </div>
@@ -80,18 +80,18 @@ import { EtimsService } from '../../../services/etims.service';
       <div class="action-bar-glass mt-32 animate-up delay-2">
         <div class="filter-pills-elite">
            <button class="pill-btn" [class.active]="activeFilter === 'all'" (click)="activeFilter = 'all'">
-              Full Registry <span class="badge">{{ allInvoices().length }}</span>
+              All Invoices <span class="badge">{{ allInvoices().length }}</span>
            </button>
            <button class="pill-btn" [class.active]="activeFilter === 'synced'" (click)="activeFilter = 'synced'">
-              Verified Sync
+              Synced
            </button>
            <button class="pill-btn" [class.active]="activeFilter === 'pending'" (click)="activeFilter = 'pending'">
-              Pending Transmission
+              Pending
            </button>
         </div>
         <div class="search-premium">
            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2.5"/></svg>
-           <input type="text" placeholder="Trace invoice #, customer or fiscal value..." class="search-input-elite" [(ngModel)]="searchQuery" (input)="onSearch()">
+           <input type="text" placeholder="Search invoice number or customer..." class="search-input-elite" [(ngModel)]="searchQuery" (input)="onSearch()">
         </div>
       </div>
 
@@ -101,13 +101,13 @@ import { EtimsService } from '../../../services/etims.service';
             <table class="modern-table-elite">
               <thead>
                 <tr>
-                  <th>Invoice Sequence</th>
-                  <th>Transmission Date</th>
-                  <th>Counterparty Entity</th>
-                  <th>Gross Capital</th>
-                  <th>Tax Element</th>
-                  <th>Sync Protocol</th>
-                  <th class="text-center">Directive</th>
+                  <th>Invoice Number</th>
+                  <th>Date</th>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Tax Amount</th>
+                  <th>Status</th>
+                  <th class="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -133,14 +133,14 @@ import { EtimsService } from '../../../services/etims.service';
                       <div class="action-center">
                         @if (invoice.status === 'pending') {
                           <button class="modern-btn primary-btn sm" (click)="syncInvoice(invoice.id)" [disabled]="syncing() === invoice.id">
-                            {{ syncing() === invoice.id ? 'TRANSMITTING' : 'SYNC NOW' }}
+                            {{ syncing() === invoice.id ? 'SYNCING' : 'SYNC NOW' }}
                           </button>
                         } @else if (invoice.status === 'error') {
                           <button class="modern-btn outline-btn sm danger" (click)="retrySync(invoice.id)">
-                            RETRY HANDOFF
+                            RETRY SYNC
                           </button>
                         } @else {
-                          <button class="icon-btn-elite" title="Download Official Invoice">
+                          <button class="icon-btn-elite" title="Download Invoice">
                             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2.2"/></svg>
                           </button>
                         }
@@ -152,8 +152,8 @@ import { EtimsService } from '../../../services/etims.service';
                     <td colspan="7" class="empty-placeholder">
                        <div class="empty-state-luxury">
                           <div class="e-icon">∅</div>
-                          <p>Invoice Registry Purged. Initiate a new session below.</p>
-                          <button class="modern-btn outline-btn sm mt-16" (click)="showInvoiceDialog.set(true)">Initialize First Sequence</button>
+                          <p>No invoices found. Create a new one below.</p>
+                          <button class="modern-btn outline-btn sm mt-16" (click)="showInvoiceDialog.set(true)">Create First Invoice</button>
                        </div>
                     </td>
                   </tr>
@@ -171,8 +171,8 @@ import { EtimsService } from '../../../services/etims.service';
                   <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="white"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="3"/></svg>
                </div>
                <div class="header-text-v">
-                  <h3>Sovereign Invoice Generation</h3>
-                  <p>Issue an eTIMS compliant electronic transmission</p>
+                  <h3>Create New Invoice</h3>
+                  <p>Fill out the details to generate an eTIMS invoice</p>
                </div>
                <button class="close-luxury-circular" (click)="cancelInvoiceDialog()">✕</button>
             </div>
@@ -180,23 +180,23 @@ import { EtimsService } from '../../../services/etims.service';
             <div class="dialog-content-luxury">
                <div class="luxury-form-stack">
                   <div class="form-item-elite">
-                     <label>Authorized Counterparty / Recipient</label>
-                     <input type="text" [(ngModel)]="newInvoice.customerName" placeholder="e.g. Strategic Resources Ltd" class="luxury-input-elite">
+                     <label>Customer Name</label>
+                     <input type="text" [(ngModel)]="newInvoice.customerName" placeholder="Customer Name" class="luxury-input-elite">
                   </div>
                   <div class="form-row-elite">
                     <div class="form-item-elite">
-                       <label>Capital Value (Gross KES)</label>
+                       <label>Amount (KES)</label>
                        <div class="luxury-input-wrapper">
                           <span class="currency-tag">KES</span>
                           <input type="number" [(ngModel)]="newInvoice.amount" placeholder="0.00" class="luxury-input-elite with-tag">
                        </div>
                     </div>
                     <div class="form-item-elite">
-                       <label>Statutory VAT Rate</label>
+                       <label>VAT Rate</label>
                        <select class="luxury-select-elite" [(ngModel)]="newInvoice.taxRate">
-                          <option [ngValue]="0.16">16% STANDARD REVENUE</option>
-                          <option [ngValue]="0">0% ZERO RATED / EXEMPT</option>
-                          <option [ngValue]="0.08">8% REDUCED COEFFICIENT</option>
+                          <option [ngValue]="0.16">16% Standard Rate</option>
+                          <option [ngValue]="0">0% Zero Rated</option>
+                          <option [ngValue]="0.08">8% Reduced Rate</option>
                        </select>
                     </div>
                   </div>
@@ -204,14 +204,14 @@ import { EtimsService } from '../../../services/etims.service';
                
                <div class="policy-notice-luxury">
                   <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-width="2.5"/></svg>
-                  <span>Real-time handoff sequence will be initiated upon authorization.</span>
+                  <span>The invoice will be synced with KRA immediately.</span>
                </div>
             </div>
 
             <div class="dialog-footer-luxury">
-               <button class="modern-btn outline-btn sm" (click)="cancelInvoiceDialog()">Discard Draft</button>
+               <button class="modern-btn outline-btn sm" (click)="cancelInvoiceDialog()">Cancel</button>
                <button class="modern-btn primary-btn" (click)="createInvoice()" [disabled]="!newInvoice.customerName || !newInvoice.amount">
-                Authorize & Sync Sequence
+                Create & Sync
                </button>
             </div>
          </div>
@@ -297,10 +297,10 @@ export class EtimsComponent {
     if (!this.newInvoice.customerName || !this.newInvoice.amount) return;
     this.etimsService.createInvoice(this.newInvoice.customerName, this.newInvoice.amount, this.newInvoice.taxRate).subscribe({
       next: () => {
-        alert('Strategic Transmission: Smart invoice successfully queued for handoff.');
+        alert('Invoice created and synced successfully.');
         this.cancelInvoiceDialog();
       },
-      error: () => alert('Handoff Protocol Error: Failed to initialize digital transmission.')
+      error: () => alert('Error: Failed to create invoice.')
     });
   }
 

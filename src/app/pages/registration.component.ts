@@ -28,7 +28,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                 <img ngSrc="assets/logo.png" width="100" height="100" alt="KRA Logo" priority>
               </div>
               <div class="brand-info-elite">
-                <span class="hub-tag">Taxpayer Enrolment Portal</span>
+                <span class="hub-tag">Registration Portal</span>
                 <h1 class="auth-title-elite">Resident <span class="gradient-text">Registration</span></h1>
               </div>
             </div>
@@ -85,8 +85,8 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                 <!-- Stage 01: Bio-Data Intelligence -->
                 <div class="form-stage" *ngIf="currentStep === 1">
                   <div class="stage-intro">
-                     <h3>Identity & Legal Classification</h3>
-                     <p>Primary data used for official identification</p>
+                     <h3>Personal Details</h3>
+                     <p>Your basic identification information</p>
                   </div>
                   
                   <div class="form-grid-elite">
@@ -98,7 +98,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                       </select>
                     </div>
                     <div class="form-group-luxury">
-                      <label>Residency Protocol</label>
+                      <label>Residency Status</label>
                       <select class="elite-select-luxury" formControlName="residentStatus">
                         <option value="resident">Resident of Kenya</option>
                         <option value="non-resident">Non-Resident</option>
@@ -106,7 +106,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                     </div>
 
                     <div class="form-group-luxury">
-                      <label>Official First Name</label>
+                      <label>First Name</label>
                       <input type="text" class="elite-input-luxury" formControlName="firstName" placeholder="As per ID/Passport">
                     </div>
                     <div class="form-group-luxury">
@@ -116,7 +116,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
 
                     <div class="form-group-luxury">
                       <label>National ID Number / Passport</label>
-                      <input type="text" class="elite-input-luxury" formControlName="idNumber" placeholder="Verification string">
+                      <input type="text" class="elite-input-luxury" formControlName="idNumber" placeholder="ID/Passport Number">
                     </div>
                     <div class="form-group-luxury">
                       <label>Date of Birth</label>
@@ -124,12 +124,12 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                     </div>
 
                     <div class="form-group-luxury full-width">
-                      <label>Primary Economic Activity</label>
+                      <label>Main Occupation/Business</label>
                       <select class="elite-select-luxury" formControlName="economicActivity">
                         <option value="">Select principal activity...</option>
-                        <option value="employment">Employment / Salaried Executive</option>
+                        <option value="employment">Employed</option>
                         <option value="business">Wholesale / Trade / Retail</option>
-                        <option value="professional">Professional Consultant</option>
+                        <option value="professional">Professional</option>
                         <option value="farming">Agro-Business / Farming</option>
                       </select>
                     </div>
@@ -141,7 +141,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                        <span>Ensure data matches your ID for automatic validation.</span>
                     </div>
                     <button type="button" class="modern-btn primary-btn" (click)="goToStep(2)" [disabled]="isStep1Invalid()">
-                      Proceed to Location
+                      Next Step
                       <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
                   </div>
@@ -150,15 +150,15 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                 <!-- Stage 02: Geocoding & Jurisdiction -->
                 <div class="form-stage" *ngIf="currentStep === 2">
                   <div class="stage-intro">
-                     <h3>Geographical Domicile</h3>
-                     <p>Define your principal place of residence or business</p>
+                     <h3>Contact Information</h3>
+                     <p>Provide your address and location</p>
                   </div>
 
                   <div class="form-grid-elite">
                     <div class="form-group-luxury">
                       <label>County of Residence</label>
                       <select class="elite-select-luxury" formControlName="county" (change)="onCountyChange()">
-                        <option value="">Select Domain...</option>
+                        <option value="">Select County...</option>
                         <option *ngFor="let c of counties" [value]="c.name">{{ c.name }}</option>
                       </select>
                     </div>
@@ -172,12 +172,12 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                       <input type="text" class="elite-input-luxury" formControlName="subCounty" placeholder="e.g. Dagoretti">
                     </div>
                     <div class="form-group-luxury">
-                      <label>Standard Ward</label>
+                      <label>Ward</label>
                       <input type="text" class="elite-input-luxury" formControlName="ward" placeholder="e.g. Kilimani">
                     </div>
 
                     <div class="form-group-luxury">
-                      <label>Target KRA Station</label>
+                      <label>Nearest KRA Station</label>
                       <select class="elite-select-luxury" formControlName="kraStation">
                         <option value="">Select nearest center...</option>
                         <option value="Nairobi North">Nairobi North</option>
@@ -203,7 +203,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                       Back
                     </button>
                     <button type="button" class="modern-btn primary-btn" (click)="goToStep(3)" [disabled]="isStep2Invalid()">
-                      Security Protocols
+                      Next Step
                       <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
                   </div>
@@ -212,26 +212,26 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                 <!-- Stage 03: Safety & Compliance -->
                 <div class="form-stage" *ngIf="currentStep === 3">
                   <div class="stage-intro">
-                     <h3>Security & Mandates</h3>
-                     <p>Finalize your access credentials and tax obligations</p>
+                     <h3>Account Security</h3>
+                     <p>Set up your password and tax obligations</p>
                   </div>
 
                   <div class="form-grid-elite">
                     <div class="form-group-luxury">
-                      <label>Primary Secure Email</label>
+                      <label>Email Address</label>
                       <input type="email" class="elite-input-luxury" formControlName="email" placeholder="name@agency.com">
                     </div>
                     <div class="form-group-luxury">
-                      <label>Authorized Mobile</label>
+                      <label>Phone Number</label>
                       <input type="tel" class="elite-input-luxury" formControlName="phone" placeholder="+254 7XX XXX XXX">
                     </div>
 
                     <div class="form-group-luxury">
-                      <label>Access Password</label>
-                      <input type="password" class="elite-input-luxury" formControlName="password" placeholder="Entropy-guarded password">
+                      <label>Password</label>
+                      <input type="password" class="elite-input-luxury" formControlName="password" placeholder="Password">
                     </div>
                     <div class="form-group-luxury">
-                      <label>Confirm Cipher</label>
+                      <label>Confirm Password</label>
                       <input type="password" class="elite-input-luxury" formControlName="confirmPassword" placeholder="Repeat for verification">
                     </div>
                   </div>
@@ -259,17 +259,17 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                   <div class="agreement-surface mt-32">
                      <label class="agreement-luxury">
                         <input type="checkbox" formControlName="terms">
-                        <span class="agreement-text">I solemnly declare that the information registered is exhaustive and compliant with the laws of Kenya.</span>
+                        <span class="agreement-text">I declare that the information provided is correct and complete.</span>
                      </label>
                   </div>
 
                   <div class="stage-footer mt-48">
                     <button type="button" class="modern-btn outline-btn" (click)="goToStep(2)">Back</button>
                     <button type="submit" class="modern-btn primary-btn elite-glow" [disabled]="regForm.invalid || isSubmitting()">
-                      <span *ngIf="!isSubmitting()">Finalize PIN Generation</span>
+                      <span *ngIf="!isSubmitting()">Submit Registration</span>
                       <span *ngIf="isSubmitting()" class="loader-flex">
                         <div class="mini-spinner"></div>
-                        Encrypting & Registering...
+                        Registering...
                       </span>
                     </button>
                   </div>
@@ -283,7 +283,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
                <p>Already have an active KRA PIN? <a routerLink="/login" class="login-link-elite">Authenticate Here</a></p>
                <div class="security-seal">
                   <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.946-2.597 9.289-6.5 11.534-3.903-2.245-6.5-6.588-6.5-11.534 0-.68.056-1.35.166-2.001zm8.334 1.5a1 1 0 10-2 0V9H7a1 1 0 100 2h1.5v2.5a1 1 0 102 0V11H12a1 1 0 100-2h-1.5V6.499z" clip-rule="evenodd"/></svg>
-                  <span>AES-256 SSL Encrypted Enrolment Session</span>
+                  <span>Secure Registration</span>
                </div>
             </div>
 
@@ -562,12 +562,12 @@ export class RegistrationComponent {
             const scroller = document.querySelector('.registration-view-scroller');
             if (scroller) scroller.scrollTo({ top: 0, behavior: 'smooth' });
           } else {
-            alert(response.message || 'Verification Error: ID number already indexed.');
+            alert(response.message || 'Error: ID number already registered.');
           }
         },
         error: () => {
           this.isSubmitting.set(false);
-          alert('Network synchronization error. Primary gateway unresponsive.');
+          alert('Error connecting to the server. Please try again later.');
         }
       });
     } else {

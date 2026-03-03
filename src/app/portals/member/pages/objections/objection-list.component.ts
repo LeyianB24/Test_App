@@ -17,7 +17,7 @@ import { RouterModule } from '@angular/router';
         <div class="header-actions">
            <button routerLink="/member/objections/create" class="modern-btn primary-btn">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-              Lodge New Objection
+              File New Objection
            </button>
         </div>
       </header>
@@ -44,8 +44,8 @@ import { RouterModule } from '@angular/router';
       <div class="content-card-premium mt-4 animate-up delay-2">
          <div class="card-p-header">
             <div class="p-title-group">
-               <h3 class="card-p-title">Active Objections</h3>
-               <p class="card-p-subtitle">Your recently submitted cases and currently progressing appeals</p>
+               <h3 class="card-p-title">My Objections</h3>
+               <p class="card-p-subtitle">Your recent and ongoing objections</p>
             </div>
          </div>
          <div class="p-4">
@@ -71,7 +71,7 @@ import { RouterModule } from '@angular/router';
                       <div class="flex flex-col items-end gap-3 min-w-[200px]">
                          <span class="px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5" [class.text-blue-400]="item.status === 'UNDER REVIEW'" [class.text-amber-400]="item.status === 'PENDING DOCUMENTS'" [class.text-emerald-400]="item.status === 'RESOLVED'">{{ item.status }}</span>
                          <div class="flex gap-4">
-                            <button class="text-xs font-bold text-slate-400 hover:text-white">View Case</button>
+                            <button class="text-xs font-bold text-slate-400 hover:text-white">View Details</button>
                             <button class="text-xs font-bold text-blue-400 hover:underline">Track Progress</button>
                          </div>
                       </div>
@@ -83,7 +83,7 @@ import { RouterModule } from '@angular/router';
                       <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
                    </div>
                    <h3 class="text-xl font-bold text-slate-300 mb-2">No Objections Found</h3>
-                   <p class="text-slate-500 text-sm max-w-xs">You haven't filed any objections to tax assessments yet.</p>
+                   <p class="text-slate-500 text-sm max-w-xs">You have not filed any objections.</p>
                 </div>
               }
             </div>

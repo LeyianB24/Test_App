@@ -22,7 +22,7 @@ import { takeUntil } from 'rxjs/operators';
            <div>
               <h1 class="premium-title mb-0">Case <span class="gradient-text">Management</span></h1>
               @if (ticket) {
-                 <p class="premium-subtitle pl-0 mt-1">Ref: {{ ticket.ticket_number }} • System Integrity Protocol</p>
+                 <p class="premium-subtitle pl-0 mt-1">Ref: {{ ticket.ticket_number }} • Support Case</p>
               }
            </div>
         </div>
@@ -31,7 +31,7 @@ import { takeUntil } from 'rxjs/operators';
            @if (ticket && !['Resolved', 'Closed'].includes(ticket.status)) {
               <button (click)="updateStatus('Resolved')" class="modern-btn primary-btn sm">
                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mr-2"><path stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                 Finalize Case
+                 Resolve Case
               </button>
            }
         </div>
@@ -40,7 +40,7 @@ import { takeUntil } from 'rxjs/operators';
       @if (helpdeskService.isLoading()) {
         <div class="py-32 flex flex-col items-center">
           <div class="w-16 h-16 border-4 border-slate-100 border-t-red-600 rounded-full animate-spin"></div>
-          <p class="mt-6 text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px]">Retrieving secure intelligence records...</p>
+          <p class="mt-6 text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px]">Loading ticket details...</p>
         </div>
       } @else if (ticket) {
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -71,15 +71,15 @@ import { takeUntil } from 'rxjs/operators';
 
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-10 border-t border-slate-100">
                    <div>
-                      <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Ingestion Stream</span>
+                      <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Created On</span>
                       <span class="text-slate-800 font-black text-xs">{{ ticket.created_at | date:'medium' }}</span>
                    </div>
                    <div>
-                      <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Originator PIN</span>
+                      <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Created By</span>
                       <span class="text-slate-800 font-black text-xs">{{ ticket.created_by }}</span>
                    </div>
                    <div>
-                      <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Tactical ID</span>
+                      <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 block mb-2">Ticket ID</span>
                       <span class="text-slate-800 font-black text-xs">#{{ ticket.ticket_number }}</span>
                    </div>
                 </div>
@@ -90,7 +90,7 @@ import { takeUntil } from 'rxjs/operators';
                 <div class="flex items-center justify-between px-4">
                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
                       <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
-                      Intervention Thread
+                      Conversation Thread
                    </h3>
                    <span class="text-[10px] font-bold text-slate-400 italic">{{ ticket.replies?.length || 0 }} entries recorded</span>
                 </div>
@@ -104,12 +104,12 @@ import { takeUntil } from 'rxjs/operators';
                             @if (reply.is_internal) {
                                <div class="flex items-center gap-2 mb-3">
                                   <div class="w-1.5 h-1.5 rounded-full bg-red-600"></div>
-                                  <span class="text-[9px] font-black uppercase tracking-[0.15em] text-red-600">Authority Response</span>
+                                  <span class="text-[9px] font-black uppercase tracking-[0.15em] text-red-600">Admin Reply</span>
                                </div>
                             } @else {
                                <div class="flex items-center gap-2 mb-3">
                                   <div class="w-1.5 h-1.5 rounded-full bg-blue-400"></div>
-                                  <span class="text-[9px] font-black uppercase tracking-[0.15em] text-blue-400">Originator Statement</span>
+                                  <span class="text-[9px] font-black uppercase tracking-[0.15em] text-blue-400">User Reply</span>
                                </div>
                             }
                             
@@ -123,7 +123,7 @@ import { takeUntil } from 'rxjs/operators';
                       </div>
                    } @empty {
                       <div class="text-center py-20 bg-slate-50/50 rounded-[3rem] border border-dashed border-slate-200 animate-pulse">
-                         <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Awaiting tactical intervention stream</p>
+                         <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">No replies yet</p>
                       </div>
                    }
                 </div>
@@ -136,13 +136,13 @@ import { takeUntil } from 'rxjs/operators';
                             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                          </div>
                          <div>
-                            <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Intervention Terminal</h4>
-                            <p class="text-[11px] font-bold text-slate-800">Dispatch official directive or internal metadata</p>
+                            <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Add Reply</h4>
+                            <p class="text-[11px] font-bold text-slate-800">Send a reply or write an internal note</p>
                          </div>
                       </div>
                       <textarea
                          [(ngModel)]="newReply"
-                         placeholder="Synthesize official resolution or enter secure internal briefing..."
+                         placeholder="Write your reply here..."
                          rows="5"
                          class="search-input-elite w-full resize-none p-8 font-medium bg-slate-50/50 border-slate-100 focus:bg-white transition-all rounded-[2rem]"
                       ></textarea>
@@ -154,7 +154,7 @@ import { takeUntil } from 'rxjs/operators';
                             <input type="checkbox" class="sr-only peer" [(ngModel)]="isInternalOnly">
                             <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all peer-checked:translate-x-4 peer-checked:bg-red-600 shadow-sm"></div>
                          </div>
-                         <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest group-hover:text-red-600 transition-colors">Internal Directive Only</span>
+                         <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest group-hover:text-red-600 transition-colors">Internal Note Only</span>
                       </label>
                       
                       <button
@@ -163,7 +163,7 @@ import { takeUntil } from 'rxjs/operators';
                          class="modern-btn primary-btn"
                       >
                          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" [class.animate-pulse]="isSubmitting"><path stroke-width="3" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-                         {{ isSubmitting ? 'Transmitting Data...' : 'Dispatch Action' }}
+                         {{ isSubmitting ? 'Sending...' : 'Send Reply' }}
                       </button>
                    </div>
                 </div>
@@ -178,7 +178,7 @@ import { takeUntil } from 'rxjs/operators';
                      <svg width="80" height="80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                   </div>
                   <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-8 flex items-center gap-2">
-                     Operational Protocols
+                     Quick Actions
                   </h3>
                   <div class="space-y-4">
                     @if (ticket.status !== 'In Progress') {
@@ -187,8 +187,8 @@ import { takeUntil } from 'rxjs/operators';
                             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                          </div>
                          <div>
-                            <span class="text-[11px] font-black text-slate-800 block">Escalate to Active</span>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Mark as tactical priority</p>
+                            <span class="text-[11px] font-black text-slate-800 block">Start Progress</span>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Mark as in progress</p>
                          </div>
                       </button>
                     }
@@ -199,7 +199,7 @@ import { takeUntil } from 'rxjs/operators';
                          </div>
                          <div>
                             <span class="text-[11px] font-black text-slate-800 block">Request Feedback</span>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Awaiting origin data</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Waiting for customer response</p>
                          </div>
                       </button>
                     }
@@ -208,8 +208,8 @@ import { takeUntil } from 'rxjs/operators';
                           <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                        </div>
                        <div>
-                          <span class="text-[11px] font-black text-red-600 block">Redact Record</span>
-                          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Audit-tracked closure</p>
+                          <span class="text-[11px] font-black text-red-600 block">Delete Ticket</span>
+                          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Permanently delete this ticket</p>
                        </div>
                     </button>
                   </div>
@@ -220,7 +220,7 @@ import { takeUntil } from 'rxjs/operators';
               <div class="content-card-premium p-8 relative overflow-hidden">
                  <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-emerald-50/50 rounded-full blur-3xl"></div>
                  <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8 flex items-center gap-2">
-                    SLA Compliance Metrics
+                    SLA Metrics
                  </h3>
                  <div class="space-y-8">
                     <div class="flex items-center gap-5 group">
@@ -248,7 +248,7 @@ import { takeUntil } from 'rxjs/operators';
               <!-- Event Log -->
               @if (ticket.history && ticket.history.length > 0) {
               <div class="content-card-premium p-8">
-                 <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8">System Audit Log</h3>
+                 <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8">Audit Log</h3>
                  <div class="space-y-6 max-h-[450px] overflow-y-auto custom-scrollbar pr-2">
                     @for (event of ticket.history; track event.id) {
                        <div class="flex gap-4 relative group">

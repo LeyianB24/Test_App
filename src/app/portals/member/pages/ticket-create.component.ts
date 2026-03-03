@@ -18,8 +18,8 @@ import { HelpdeskService } from '../../../services/helpdesk.service';
            </a>
            <div>
               <span class="text-slate-500 font-black uppercase text-[10px] tracking-widest pl-1 block mb-1">Support Portal</span>
-              <h1 class="premium-title mb-0">Initialize <span class="gradient-text">Service Request</span></h1>
-              <p class="premium-subtitle pl-0 mt-1">Detailed documentation ensures rapid escalation and resolution</p>
+              <h1 class="premium-title mb-0">Create <span class="gradient-text">Ticket</span></h1>
+              <p class="premium-subtitle pl-0 mt-1">Provide details about your issue for quick resolution</p>
            </div>
         </div>
       </header>
@@ -31,13 +31,13 @@ import { HelpdeskService } from '../../../services/helpdesk.service';
               
               <!-- Subject -->
               <div class="space-y-3">
-                <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Inquiry Subject *</label>
+                <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Subject *</label>
                 <input
                   type="text"
                   [(ngModel)]="formData.subject"
                   name="subject"
                   required
-                  placeholder="e.g., Transaction timeout on PRN 2026..."
+                  placeholder="Briefly describe the issue..."
                   class="search-input-elite w-full font-bold text-lg"
                 />
               </div>
@@ -45,14 +45,14 @@ import { HelpdeskService } from '../../../services/helpdesk.service';
               <!-- Category & Priority Row -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="space-y-3">
-                  <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Inquiry Category *</label>
+                  <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Category *</label>
                   <select
                     [(ngModel)]="formData.category"
                     name="category"
                     required
                     class="search-input-elite w-full font-bold appearance-none py-4"
                   >
-                    <option value="" disabled selected>Classification...</option>
+                    <option value="" disabled selected>Select Category...</option>
                     @for (cat of helpdeskService.categories(); track cat) {
                       <option [value]="cat">{{ cat }}</option>
                     }
@@ -60,7 +60,7 @@ import { HelpdeskService } from '../../../services/helpdesk.service';
                 </div>
 
                 <div class="space-y-3">
-                  <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Operational Priority *</label>
+                  <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Priority *</label>
                   <select
                     [(ngModel)]="formData.priority"
                     name="priority"
@@ -77,12 +77,12 @@ import { HelpdeskService } from '../../../services/helpdesk.service';
 
               <!-- Description -->
               <div class="space-y-3">
-                <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Comprehensive Description *</label>
+                <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Description *</label>
                 <textarea
                   [(ngModel)]="formData.description"
                   name="description"
                   required
-                  placeholder="Describe the issue, including sequence of events and any error codes displayed."
+                  placeholder="Describe the issue in detail..."
                   rows="6"
                   class="search-input-elite w-full font-medium text-base resize-none"
                 ></textarea>
@@ -119,7 +119,7 @@ import { HelpdeskService } from '../../../services/helpdesk.service';
                 [disabled]="isSubmitting() || !ticketForm.valid"
                 class="modern-btn primary-btn uppercase tracking-widest text-xs py-4 px-10"
               >
-                {{ isSubmitting() ? 'Transmitting...' : 'Initialize Secure Request' }}
+                {{ isSubmitting() ? 'Submitting...' : 'Create Ticket' }}
               </button>
             </div>
           </form>
@@ -128,8 +128,8 @@ import { HelpdeskService } from '../../../services/helpdesk.service';
         <!-- Sidebar Guidelines -->
         <div class="space-y-8">
            <div class="content-card-premium space-y-6">
-              <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-6">Operational protocol</h3>
-              <p class="text-slate-600 text-sm font-medium leading-relaxed mb-6">Ensure all sensitive data is redacted from screenshots. Support response times are governed by the Tier-1 SLA Agreement.</p>
+              <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-6">Support Guidelines</h3>
+              <p class="text-slate-600 text-sm font-medium leading-relaxed mb-6">Please provide as much clear information as possible to help us resolve your issue quickly.</p>
               
               <div class="space-y-4">
                  <div class="p-4 bg-red-50 rounded-2xl border border-red-100">
@@ -180,7 +180,7 @@ export class TicketCreateComponent {
 
   submitForm(): void {
     if (!this.formData.subject || !this.formData.category || !this.formData.description) {
-      this.errorMessage.set('MANDATORY: Fill in all required fields.');
+      this.errorMessage.set('Error: Please fill in all required fields.');
       return;
     }
 
@@ -190,13 +190,13 @@ export class TicketCreateComponent {
 
     this.helpdeskService.createTicket(this.formData).subscribe({
       next: (response) => {
-        this.successMessage.set(`SUCCESS: Ticket ${response.ticket_number} created in the master ledger.`);
+        this.successMessage.set(`Success: Ticket ${response.ticket_number} created.`);
         setTimeout(() => {
           this.router.navigate(['/helpdesk', response.ticket_id]);
         }, 1500);
       },
       error: (err) => {
-        this.errorMessage.set(err || 'TRANSMISSION FAILED: Could not initiate request.');
+        this.errorMessage.set(err || 'Error: Could not create ticket.');
         this.isSubmitting.set(false);
       }
     });

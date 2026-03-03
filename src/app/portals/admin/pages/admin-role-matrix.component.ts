@@ -20,8 +20,8 @@ interface RolePermission {
       <!-- Elite Header -->
       <header class="page-header-elite mb-12">
         <div class="header-info">
-          <h1 class="premium-title">Security <span class="gradient-text">Matrix</span></h1>
-          <p class="premium-subtitle">Sovereign orchestration of system-wide access protocols</p>
+          <h1 class="premium-title">Role <span class="gradient-text">Management</span></h1>
+          <p class="premium-subtitle">Manage system roles and permissions</p>
         </div>
         <div class="header-actions flex gap-6" *ngIf="!loading()">
            <div class="premium-stat-card px-6 py-3 border-none shadow-none bg-slate-50/50">
@@ -29,7 +29,7 @@ interface RolePermission {
               <span class="text-xl font-black text-red-600 tracking-tight">{{ totalRolesCount() }}</span>
            </div>
            <div class="premium-stat-card px-6 py-3 border-none shadow-none bg-slate-50/50">
-              <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Protected Nodes</span>
+              <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Protected Pages</span>
               <span class="text-xl font-black text-slate-700 tracking-tight">{{ totalPagesCount() }}</span>
            </div>
         </div>
@@ -38,7 +38,7 @@ interface RolePermission {
       @if (loading()) {
         <div class="py-32 flex flex-col items-center">
           <div class="w-12 h-12 border-4 border-slate-100 border-t-red-600 rounded-full animate-spin"></div>
-          <p class="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Scanning permissions registry...</p>
+          <p class="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Loading permissions...</p>
         </div>
       }
 
@@ -54,7 +54,7 @@ interface RolePermission {
           
           <!-- Role Identities -->
           <div class="lg:col-span-4 space-y-6">
-            <h3 class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 mb-6">Sovereign Identities</h3>
+            <h3 class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 mb-6">User Roles</h3>
             <div class="flex flex-col gap-4">
               @for (role of roles(); track role.id) {
                 <button (click)="selectedRoleId.set(role.id)" 
@@ -85,18 +85,18 @@ interface RolePermission {
                     <header class="flex justify-between items-center mb-10 border-b border-slate-50 pb-8">
                       <div>
                         <h2 class="text-xl font-black text-slate-800 uppercase tracking-tight">Protocols: <span class="text-red-600">{{ selectedRole().name }}</span></h2>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Configure module encryption & link capability</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Configure role permissions</p>
                       </div>
                       <div class="flex gap-2">
                         <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
-                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Live Link</span>
+                        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Live</span>
                       </div>
                     </header>
 
                     <div class="space-y-12">
                       @for (module of modules(); track module.name) {
                         <div class="module-section">
-                          <h4 class="text-[10px] font-black text-red-600 uppercase tracking-[0.25em] mb-6 bg-red-50 inline-block px-3 py-1 rounded-md">{{ module.name }} Territory</h4>
+                          <h4 class="text-[10px] font-black text-red-600 uppercase tracking-[0.25em] mb-6 bg-red-50 inline-block px-3 py-1 rounded-md">{{ module.name }} Module</h4>
                           
                           <div class="space-y-3">
                             @for (page of module.pages; track page.slug) {
@@ -117,7 +117,7 @@ interface RolePermission {
                                             *ngIf="getPermission(selectedRoleId(), page.slug, 'can_view')"
                                             class="advanced-toggle" [class.active]="expandedPage() === page.slug">
                                       <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-                                      <span class="text-[9px] font-black uppercase tracking-widest ml-2 hidden sm:inline">Tactical</span>
+                                      <span class="text-[9px] font-black uppercase tracking-widest ml-2 hidden sm:inline">Advanced</span>
                                     </button>
 
                                     <!-- Elite Toggle -->
@@ -131,29 +131,29 @@ interface RolePermission {
                                   </div>
                                 </div>
 
-                                <!-- Tactical Matrix -->
+                                <!-- Advanced Matrix -->
                                 @if (expandedPage() === page.slug && getPermission(selectedRoleId(), page.slug, 'can_view')) {
                                   <div class="tactical-panel bg-slate-50/50 p-6 rounded-b-[1.2rem] border-t border-slate-100 animate-slide-down">
                                     <div class="grid grid-cols-3 gap-4">
                                       <label class="tactical-card">
                                         <input type="checkbox" [checked]="getPermission(selectedRoleId(), page.slug, 'can_edit')" (change)="togglePermission(selectedRoleId(), page.slug, 'can_edit', $any($event.target).checked)">
                                         <div class="tactical-box">
-                                          <span class="t-label">Mutation</span>
-                                          <span class="t-sub text-[9px]">Edit Authority</span>
+                                          <span class="t-label">Edit</span>
+                                          <span class="t-sub text-[9px]">Can Edit</span>
                                         </div>
                                       </label>
                                       <label class="tactical-card">
                                         <input type="checkbox" [checked]="getPermission(selectedRoleId(), page.slug, 'can_delete')" (change)="togglePermission(selectedRoleId(), page.slug, 'can_delete', $any($event.target).checked)">
                                         <div class="tactical-box">
-                                          <span class="t-label">Redaction</span>
-                                          <span class="t-sub text-[9px]">Delete Access</span>
+                                          <span class="t-label">Delete</span>
+                                          <span class="t-sub text-[9px]">Can Delete</span>
                                         </div>
                                       </label>
                                       <label class="tactical-card">
                                         <input type="checkbox" [checked]="getPermission(selectedRoleId(), page.slug, 'can_export')" (change)="togglePermission(selectedRoleId(), page.slug, 'can_export', $any($event.target).checked)">
                                         <div class="tactical-box">
-                                          <span class="t-label">Relocation</span>
-                                          <span class="t-sub text-[9px]">Export Protocol</span>
+                                          <span class="t-label">Export</span>
+                                          <span class="t-sub text-[9px]">Can Export</span>
                                         </div>
                                       </label>
                                     </div>
@@ -178,7 +178,7 @@ interface RolePermission {
         <div class="relative z-10">
           <div class="flex items-center gap-3 mb-6">
             <div class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></div>
-            <h5 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Integrity Breach & Link Stream</h5>
+            <h5 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Recent Permission Changes</h5>
           </div>
           <div class="space-y-2">
             @for (change of recentChanges().slice(0, 3); track $index) {
@@ -187,7 +187,7 @@ interface RolePermission {
               </div>
             }
             @if (recentChanges().length === 0) {
-              <div class="text-[11px] font-bold text-slate-500 uppercase tracking-widest pl-6">Sector clear • No protocol deviations detected</div>
+              <div class="text-[11px] font-bold text-slate-500 uppercase tracking-widest pl-6">No recent changes detected</div>
             }
           </div>
         </div>

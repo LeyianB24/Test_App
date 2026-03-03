@@ -27,14 +27,14 @@ import { KbService, KbArticle } from '../../../../services/kb.service';
                  <span class="dot"></span>
                  {{ art.category_name }}
               </span>
-              <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Released {{ art.created_at | date }}</span>
+              <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Published {{ art.created_at | date }}</span>
             </div>
             <h1 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight">{{ art.title }}</h1>
             
             <div class="mt-8 flex items-center gap-8 text-[11px] font-black uppercase tracking-widest text-slate-400">
               <span class="flex items-center gap-2">
                 <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2.5"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2.5"/></svg>
-                {{ art.view_count | number }} Official Accesses
+                {{ art.view_count | number }} Views
               </span>
             </div>
           </header>
@@ -43,7 +43,7 @@ import { KbService, KbArticle } from '../../../../services/kb.service';
 
           <footer class="mt-20 pt-12 border-t border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-10 relative z-10">
             <div class="feedback-sector">
-              <h4 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-6">Article Utility Assessment</h4>
+              <h4 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-6">Was this article helpful?</h4>
               @if (!feedbackSent()) {
                 <div class="flex gap-4">
                   <button 
@@ -58,13 +58,13 @@ import { KbService, KbArticle } from '../../../../services/kb.service';
                     class="modern-btn-elite-sm px-6 py-3 flex items-center gap-2 hover:bg-red-50 hover:text-red-700 hover:border-red-200"
                   >
                     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="transform: scaleY(-1)"><path d="M14 10h4.708c.954 0 1.708.754 1.708 1.708 0 .153-.021.304-.061.448l-1.444 5.278c-.287 1.05-1.238 1.774-2.324 1.774H7V10l3-5c.5-.5 1.5-.5 1.5 1v4h2.5z" stroke-width="2.5"/></svg>
-                    Insufficient
+                    Not Helpful
                   </button>
                 </div>
               } @else {
                 <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-3 text-emerald-700 font-black text-xs animate-up">
                   <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                  Operational Intelligence Received
+                  Thank you for your feedback
                 </div>
               }
             </div>
@@ -83,7 +83,7 @@ import { KbService, KbArticle } from '../../../../services/kb.service';
       } @else {
         <div class="flex flex-col items-center justify-center py-40">
            <div class="w-12 h-12 border-4 border-slate-100 border-t-red-600 rounded-full animate-spin mb-4"></div>
-           <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Retrieving Protocol Data...</p>
+           <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Loading Article...</p>
         </div>
       }
     </div>

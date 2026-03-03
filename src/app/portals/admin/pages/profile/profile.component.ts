@@ -14,17 +14,17 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
       <!-- Elite Page Header -->
       <header class="page-header-elite">
         <div class="header-info">
-          <h1 class="premium-title">Taxpayer <span class="gradient-text">Identity</span></h1>
-          <p class="premium-subtitle">Official sovereign records and verified registration intelligence</p>
+          <h1 class="premium-title">User <span class="gradient-text">Profile</span></h1>
+          <p class="premium-subtitle">Manage your account details and preferences</p>
         </div>
         <div class="header-actions">
            <button class="modern-btn outline-btn sm" (click)="downloadCertificate()">
               <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16h16M4 12h16M4 18h16" stroke-width="2.5"/></svg>
-              PIN Certificate
+              Download PIN Certificate
            </button>
            <button class="modern-btn primary-btn" (click)="showEditModal.set(true)">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="3"/></svg>
-              Update Credentials
+              Edit Profile
            </button>
         </div>
       </header>
@@ -44,29 +44,29 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
                     </div>
                     <div class="id-title-v">
                        <h2 class="id-name-elite">{{ user()?.name }}</h2>
-                       <span class="id-type-tag">{{ user()?.type }} Resident Taxpayer</span>
+                       <span class="id-type-tag">{{ user()?.type }} Resident</span>
                     </div>
                  </div>
 
                  <div class="compliance-pulse-v mt-32">
                     <div class="p-labels">
-                       <span class="p-tag">KYC COMPLIANCE PROTOCOL</span>
+                       <span class="p-tag">PROFILE COMPLETENESS</span>
                        <span class="p-val">{{ complianceProgress() }}%</span>
                     </div>
                     <div class="p-track-lux">
                        <div class="p-fill-lux" [style.width.%]="complianceProgress()"></div>
                     </div>
-                    <p class="p-hint-v">{{ complianceProgress() === 100 ? 'Core identity mandates satisfied' : 'Update physical domicile to reach 100%' }}</p>
+                    <p class="p-hint-v">{{ complianceProgress() === 100 ? 'Profile is complete' : 'Update your address to reach 100%' }}</p>
                  </div>
 
                  <div class="id-footer-v mt-40">
                     <div class="id-stat-unit">
-                       <span class="isu-label">RECORD PIN</span>
+                       <span class="isu-label">KRA PIN</span>
                        <span class="isu-val mono">{{ user()?.taxpayer_id }}</span>
                     </div>
                     <div class="isu-divider"></div>
                     <div class="id-stat-unit">
-                       <span class="isu-label">GENESIS DATE</span>
+                       <span class="isu-label">REGISTERED ON</span>
                        <span class="isu-val">{{ user()?.registrationDate | date:'MMM yyyy' }}</span>
                     </div>
                  </div>
@@ -80,24 +80,24 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
                     <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-width="2.2"/></svg>
                  </div>
                  <div class="p-title-group">
-                    <h3 class="card-p-title">Communication Domicile</h3>
-                    <p class="card-p-subtitle">Verified systematic contact channels</p>
+                    <h3 class="card-p-title">Contact Information</h3>
+                    <p class="card-p-subtitle">Your verified contact details</p>
                  </div>
               </div>
               <div class="luxury-info-stack p-32">
                  <div class="li-item">
-                    <span class="li-label">Authorized Electronic Address</span>
+                    <span class="li-label">Email Address</span>
                     <div class="li-val-row">
                        <span class="li-val">{{ user()?.email }}</span>
-                       <span class="verify-status">SECURED</span>
+                       <span class="verify-status">VERIFIED</span>
                     </div>
                  </div>
                  <div class="li-item">
-                    <span class="li-label">Verified Mobile Channel</span>
+                    <span class="li-label">Phone Number</span>
                     <span class="li-val">{{ taxpayer()?.phone || '07XXXXXXXX' }}</span>
                  </div>
                  <div class="li-item full">
-                    <span class="li-label">Primary Physical Domicile</span>
+                    <span class="li-label">Physical Address</span>
                     <span class="li-val">{{ taxpayer()?.address || 'Nairobi Sovereign District, Kenya' }}</span>
                  </div>
               </div>
@@ -112,8 +112,8 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
                     <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2.2"/></svg>
                  </div>
                  <div class="p-title-group">
-                    <h3 class="card-p-title">Sovereign Obligations</h3>
-                    <p class="card-p-subtitle">Active tax mandates synchronized with your PIN</p>
+                    <h3 class="card-p-title">Tax Obligations</h3>
+                    <p class="card-p-subtitle">Active tax obligations linked to your account</p>
                  </div>
               </div>
               <div class="luxury-mandate-list p-32">
@@ -125,7 +125,7 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
                       <div class="m-content">
                          <h4 class="m-title">{{ ob.obligation_name }}</h4>
                          <div class="m-meta-stack">
-                            <span>Genesis: {{ ob.effective_from }}</span>
+                            <span>Effective From: {{ ob.effective_from }}</span>
                             <span class="m-sep">|</span>
                             <span>Cycle: Monthly</span>
                          </div>
@@ -138,7 +138,7 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
                    </div>
                  } @empty {
                    <div class="empty-placeholder" style="padding: 40px 0;">
-                      <p>No active obligations traced in current registry.</p>
+                      <p>No active obligations found.</p>
                    </div>
                  }
               </div>
@@ -147,23 +147,23 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
            <div class="content-card-premium mt-32 animate-up delay-3">
               <div class="card-p-header">
                  <div class="p-title-group">
-                    <h3 class="card-p-title">Account Integrity</h3>
-                    <p class="card-p-subtitle">Systematic verification status</p>
+                    <h3 class="card-p-title">Verification Status</h3>
+                    <p class="card-p-subtitle">Account verification timeline</p>
                  </div>
               </div>
               <div class="integrity-timeline p-32">
                  <div class="it-unit">
                     <div class="it-dot active"></div>
                     <div class="it-text">
-                       <span class="it-title">iPRS Identity Harmonization</span>
-                       <span class="it-desc">Systematic verification complete via national ID registry</span>
+                       <span class="it-title">National ID Verification</span>
+                       <span class="it-desc">Verified successfully against the national ID database</span>
                     </div>
                  </div>
                  <div class="it-unit">
                     <div class="it-dot active"></div>
                     <div class="it-text">
-                       <span class="it-title">PIN Protocol Authorization</span>
-                       <span class="it-desc">Verified as an authorized representative for this PIN</span>
+                       <span class="it-title">PIN Verification</span>
+                       <span class="it-desc">Verified as the authorized owner of this PIN</span>
                     </div>
                  </div>
               </div>
@@ -180,8 +180,8 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
                   <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="white"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="3"/></svg>
                </div>
                <div class="header-text-v">
-                  <h3>Identity Harmonization</h3>
-                  <p>Update systematic communication and domicile data</p>
+                  <h3>Update Profile</h3>
+                  <p>Update your contact and address information</p>
                </div>
                <button class="close-luxury-circular" (click)="showEditModal.set(false)">✕</button>
             </div>
@@ -189,25 +189,25 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
             <div class="dialog-content-luxury">
                <div class="luxury-form-stack">
                   <div class="form-item-elite">
-                     <label>Mobile Transmission Channel</label>
+                     <label>Phone Number</label>
                      <input type="text" [(ngModel)]="editData.phone" placeholder="+254 XXX XXX XXX" class="luxury-input-elite">
                   </div>
                   <div class="form-item-elite">
-                     <label>Authorized Physical Domicile</label>
-                     <textarea rows="3" [(ngModel)]="editData.address" placeholder="Enter full sovereign address" class="luxury-input-elite"></textarea>
+                     <label>Physical Address</label>
+                     <textarea rows="3" [(ngModel)]="editData.address" placeholder="Enter full address" class="luxury-input-elite"></textarea>
                   </div>
                </div>
                
                <div class="policy-notice-luxury">
                   <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2.5"/></svg>
-                  <span>MFA verification code will be dispatched to your registered address.</span>
+                  <span>A verification code will be sent to your email.</span>
                </div>
             </div>
 
             <div class="dialog-footer-luxury">
-               <button class="modern-btn outline-btn sm" (click)="showEditModal.set(false)">Abort Changes</button>
+               <button class="modern-btn outline-btn sm" (click)="showEditModal.set(false)">Cancel</button>
                <button class="modern-btn primary-btn" (click)="saveProfile()" [disabled]="isSaving()">
-                  {{ isSaving() ? 'SYNCHRONIZING...' : 'COMMIT CHANGES' }}
+                  {{ isSaving() ? 'SAVING...' : 'SAVE CHANGES' }}
                </button>
             </div>
          </div>
@@ -342,12 +342,12 @@ export class ProfileComponent {
     setTimeout(() => {
       this.isSaving.set(false);
       this.showEditModal.set(false);
-      alert('Strategic Update: Taxpayer communication parameters successfully synchronized.');
+      alert('Profile updated successfully.');
     }, 1500);
   }
 
   downloadCertificate() {
-    alert('Generating Sovereign PIN Certificate (PDF)...');
+    alert('Downloading PIN Certificate (PDF)...');
   }
 
   getInitials(name: string | undefined): string {

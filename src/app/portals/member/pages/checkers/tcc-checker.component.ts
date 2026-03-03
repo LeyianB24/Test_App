@@ -81,7 +81,7 @@ interface TccResult {
             <div class="disclaimer p-8 rounded-[2rem] bg-indigo-500/5 border border-indigo-500/10 flex items-start gap-4">
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-indigo-400 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               <p class="text-[10px] font-medium text-slate-500 leading-relaxed uppercase tracking-widest">
-                VERIFICATION PROTOCOL: This data fragment is retrieved from the centralized taxation nexus. While accurate at the time of transmission, official hard-copies remain the primary source of truth for jurisdictional audits.
+                VERIFICATION NOTICE: This data is retrieved from the KRA system. While accurate at the time of inquiry, official physical certificates remain the primary source of truth for compliance purposes.
               </p>
             </div>
           </div>
@@ -129,7 +129,7 @@ export class TccCheckerComponent {
           expiryDate: '2025-05-15'
         });
       } else {
-        this.error.set('VERIFICATION REJECTED: TERMINAL COULD NOT LOCATE REQUESTED CERTIFICATE INDEX.');
+        this.error.set('VERIFICATION FAILED: Could not locate requested certificate.');
       }
     }, 1400);
   }

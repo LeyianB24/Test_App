@@ -11,8 +11,8 @@ import { FormsModule } from '@angular/forms';
     <div class="page-container p-8 animate-up">
       <header class="page-header-elite mb-10">
         <div class="header-info">
-          <h1 class="premium-title">Customs <span class="gradient-text">Self-Declaration</span></h1>
-          <p class="premium-subtitle">Official Form-88 Virtual Gateway for port-of-entry assets</p>
+          <h1 class="premium-title">Customs <span class="gradient-text">Declaration</span></h1>
+          <p class="premium-subtitle">Declare goods and assets at the port of entry</p>
         </div>
         <div class="header-actions">
            <div class="status-pill-elite active">
@@ -49,23 +49,23 @@ import { FormsModule } from '@angular/forms';
             <div class="step-content animate-fade-in relative z-10">
               <div class="flex items-center gap-3 mb-8">
                  <div class="w-1 h-6 bg-red-600 rounded-full"></div>
-                 <h3 class="text-xl font-black text-slate-800">Traveler Nexus Profile</h3>
+                 <h3 class="text-xl font-black text-slate-800">Traveler Details</h3>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="field-group">
-                  <label class="premium-label">Full Name (Legal Identity)</label>
+                  <label class="premium-label">Full Name</label>
                   <input type="text" [(ngModel)]="formData.name" class="search-input-elite w-full py-4 px-6" placeholder="e.g. John Doe"/>
                 </div>
                 <div class="field-group">
-                  <label class="premium-label">Passport Serial</label>
+                  <label class="premium-label">Passport Number</label>
                   <input type="text" [(ngModel)]="formData.passport" class="search-input-elite w-full py-4 px-6" placeholder="e.g. AK1234567"/>
                 </div>
                 <div class="field-group">
-                  <label class="premium-label">Vessel/Flight Signature</label>
+                  <label class="premium-label">Flight/Vessel Number</label>
                   <input type="text" [(ngModel)]="formData.flight" class="search-input-elite w-full py-4 px-6" placeholder="e.g. KQ101"/>
                 </div>
                 <div class="field-group">
-                  <label class="premium-label">Jurisdiction of Origin</label>
+                  <label class="premium-label">Country of Origin</label>
                   <input type="text" [(ngModel)]="formData.origin" class="search-input-elite w-full py-4 px-6" placeholder="e.g. United Kingdom"/>
                 </div>
               </div>
@@ -76,7 +76,7 @@ import { FormsModule } from '@angular/forms';
             <div class="step-content animate-fade-in relative z-10">
               <div class="flex items-center gap-3 mb-8">
                  <div class="w-1 h-6 bg-red-600 rounded-full"></div>
-                 <h3 class="text-xl font-black text-slate-800">Asset Inventory Declaration</h3>
+                 <h3 class="text-xl font-black text-slate-800">Declare Goods</h3>
               </div>
               
               <div class="space-y-4 mb-10">
@@ -94,7 +94,7 @@ import { FormsModule } from '@angular/forms';
                 }
                 <button (click)="addItem()" class="modern-btn-elite-sm w-full py-4 flex items-center justify-center gap-2 mt-4 hover:bg-slate-50 transition-colors">
                   <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M12 4v16m8-8H4"/></svg>
-                  Add Declaration Item
+                  Add Item
                 </button>
               </div>
 
@@ -102,8 +102,8 @@ import { FormsModule } from '@angular/forms';
                 <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-red-600 rounded-full blur-3xl opacity-20 transition-transform group-hover:scale-150"></div>
                 <div class="flex justify-between items-center relative z-10">
                   <div>
-                     <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Aggregated Valuation</span>
-                     <p class="text-xs text-slate-500 mt-1">Calculated in real-time based on entries</p>
+                     <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Total Value</span>
+                     <p class="text-xs text-slate-500 mt-1">Total value of declared items</p>
                   </div>
                   <span class="text-4xl font-black gradient-text">USD {{ calculateTotal().toLocaleString() }}</span>
                 </div>
@@ -118,13 +118,13 @@ import { FormsModule } from '@angular/forms';
                   <div class="w-20 h-20 bg-red-50 text-red-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-inner">
                     <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                   </div>
-                  <h3 class="text-3xl font-black text-slate-800 mb-4">Official Attestation</h3>
+                  <h3 class="text-3xl font-black text-slate-800 mb-4">Declaration Summary</h3>
                   <p class="text-slate-500 mb-10 max-w-md mx-auto leading-relaxed">
-                    By finalizing this document, you certify that the listed assets are comprehensive and accurate. Discrepancies may involve legal audit.
+                    Please confirm that all information is complete and correct. False declarations may result in penalties.
                   </p>
                   <label class="flex items-center gap-4 justify-center mb-12 cursor-pointer group p-6 rounded-3xl hover:bg-slate-50 transition-colors border-2 border-transparent hover:border-slate-100">
                     <input type="checkbox" [(ngModel)]="formData.agreed" class="w-6 h-6 rounded-lg border-2 border-slate-300 text-red-600 focus:ring-red-500">
-                    <span class="text-sm font-black text-slate-700 uppercase tracking-wide">I attest to the integrity of this declaration</span>
+                    <span class="text-sm font-black text-slate-700 uppercase tracking-wide">I confirm that this declaration is correct</span>
                   </label>
                 </div>
               } @else {
@@ -132,11 +132,11 @@ import { FormsModule } from '@angular/forms';
                   <div class="w-24 h-24 bg-emerald-500 text-white rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 shadow-xl shadow-emerald-200 animate-bounce">
                     <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="4" d="M5 13l4 4L19 7"/></svg>
                   </div>
-                  <h3 class="text-3xl font-black text-slate-800 mb-2">Protocol Successful</h3>
+                  <h3 class="text-3xl font-black text-slate-800 mb-2">Declaration Submitted</h3>
                   <p class="text-slate-500 mb-10 font-mono text-sm">TRANSACTION_REF: KRA-CUST-88-{{ refNumber }}</p>
                   <div class="flex gap-4 justify-center">
                     <button class="modern-btn primary-btn shadow-lg" (click)="reset()">New Entry</button>
-                    <button class="modern-btn outline-btn">Download Archive</button>
+                    <button class="modern-btn outline-btn">Download PDF</button>
                   </div>
                 </div>
               }
@@ -151,7 +151,7 @@ import { FormsModule } from '@angular/forms';
                Back
             </button>
             <button class="modern-btn primary-btn px-10" [disabled]="!canNext()" (click)="next()">
-              {{ currentStep() === 2 ? 'Finalize Attestation' : 'Next Protocol' }}
+              {{ currentStep() === 2 ? 'Submit Declaration' : 'Next' }}
               <svg *ngIf="currentStep() < 2" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="ml-2"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>

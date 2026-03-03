@@ -17,8 +17,8 @@ interface DailyItem { day: string; count: number; }
     <div class="page-container p-8 animate-up">
       <header class="page-header-elite mb-12">
         <div class="header-info">
-          <h1 class="premium-title mb-0">Helpdesk <span class="gradient-text">Intelligence</span></h1>
-          <p class="premium-subtitle pl-0 mt-1">Real-time analytical oversight of support infrastructure</p>
+          <h1 class="premium-title mb-0">Helpdesk <span class="gradient-text">Dashboard</span></h1>
+          <p class="premium-subtitle pl-0 mt-1">Overview of support tickets</p>
         </div>
         <div class="header-actions">
            <a routerLink="/helpdesk/tickets" class="modern-btn outline-btn sm mr-3">
@@ -27,7 +27,7 @@ interface DailyItem { day: string; count: number; }
            </a>
            <a routerLink="/helpdesk/create" class="modern-btn primary-btn sm">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mr-2"><path stroke-width="3" d="M12 4v16m8-8H4"/></svg>
-              New Intervention
+              New Ticket
            </a>
         </div>
       </header>
@@ -82,7 +82,7 @@ interface DailyItem { day: string; count: number; }
           <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-50/40 rounded-full blur-3xl"></div>
           <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 flex items-center gap-2">
              <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-             Executive Status Overview
+             Tickets by Status
           </h3>
           <div class="space-y-8">
             @for (item of statusData(); track item.status) {
@@ -104,7 +104,7 @@ interface DailyItem { day: string; count: number; }
           <div class="absolute -top-10 -right-10 w-40 h-40 bg-red-50/40 rounded-full blur-3xl"></div>
           <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 flex items-center gap-2">
              <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-             Triage Priority Matrix
+             Tickets by Priority
           </h3>
           <div class="space-y-8">
             @for (item of priorityData(); track item.priority) {
@@ -126,7 +126,7 @@ interface DailyItem { day: string; count: number; }
       <div class="content-card-premium mb-10 overflow-hidden p-8 animate-up delay-2">
         <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 flex items-center gap-2">
            <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-           Category Sector Breakdown
+           Tickets by Category
         </h3>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
           @for (item of categoryData(); track item.category) {
@@ -146,7 +146,7 @@ interface DailyItem { day: string; count: number; }
         <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-50/30 rounded-full blur-3xl opacity-40"></div>
         <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 flex items-center gap-2">
            <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
-           Temporal Volume Stream (Prev 7 Days)
+           Ticket Volume (Last 7 Days)
         </h3>
         <div class="flex items-end justify-between gap-6 h-48 relative z-10 px-4">
           @for (d of dailyData(); track d.day) {

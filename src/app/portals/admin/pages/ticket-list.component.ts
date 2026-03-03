@@ -16,12 +16,12 @@ import { takeUntil } from 'rxjs/operators';
       <header class="page-header-elite mb-12">
         <div class="header-info">
           <h1 class="premium-title">Support <span class="gradient-text">Tickets</span></h1>
-          <p class="premium-subtitle">Comprehensive management and oversight of support interventions</p>
+          <p class="premium-subtitle">Manage your support tickets</p>
         </div>
         <div class="header-actions">
           <button [routerLink]="['/helpdesk/create']" class="modern-btn primary-btn btn-icon">
             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
-            <span>New Case</span>
+            <span>New Ticket</span>
           </button>
         </div>
       </header>
@@ -68,7 +68,7 @@ import { takeUntil } from 'rxjs/operators';
           <div class="flex flex-wrap gap-4 items-center">
             <div class="search-premium flex-grow max-w-md">
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-              <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearch()" placeholder="Search cases, subjects, or PINs..." class="search-input-elite">
+              <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearch()" placeholder="Search tickets..." class="search-input-elite">
             </div>
             
             <div class="flex gap-3">
@@ -101,7 +101,7 @@ import { takeUntil } from 'rxjs/operators';
           @if (helpdeskService.isLoading()) {
             <div class="py-32 flex flex-col items-center">
               <div class="w-12 h-12 border-4 border-slate-100 border-t-red-600 rounded-full animate-spin"></div>
-              <p class="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Filtering secure channel...</p>
+              <p class="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Loading tickets...</p>
             </div>
           }
 
@@ -117,12 +117,12 @@ import { takeUntil } from 'rxjs/operators';
               <table class="modern-table-elite w-full">
                 <thead>
                   <tr>
-                    <th class="pl-8">Case ID</th>
-                    <th>Intelligence Domain</th>
-                    <th>Tactical Status</th>
-                    <th>Triage Priority</th>
-                    <th>Timeline</th>
-                    <th class="pr-8 text-right">Intervention</th>
+                    <th class="pl-8">Ticket ID</th>
+                    <th>Ticket Subject</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Date</th>
+                    <th class="pr-8 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -169,10 +169,10 @@ import { takeUntil } from 'rxjs/operators';
                <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mb-8">
                   <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                </div>
-               <h3 class="text-xl font-black text-slate-800 mb-2">Zero Interventions Found</h3>
-               <p class="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-8">System reflects no cases matching current parameters</p>
+               <h3 class="text-xl font-black text-slate-800 mb-2">No Tickets Found</h3>
+               <p class="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-8">No tickets match your search criteria</p>
                <button (click)="clearFilters()" class="modern-btn primary-btn btn-icon">
-                  Reset Analytics
+                  Clear Filters
                </button>
             </div>
           }

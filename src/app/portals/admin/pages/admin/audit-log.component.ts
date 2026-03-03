@@ -12,8 +12,8 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
       <!-- Elite Page Header -->
       <header class="page-header-elite mb-12">
         <div class="header-info">
-          <h1 class="premium-title">System <span class="gradient-text">Audit Log</span></h1>
-          <p class="premium-subtitle">Full traceability & forensic monitoring of administrative orchestration</p>
+          <h1 class="premium-title">Audit <span class="gradient-text">Log</span></h1>
+          <p class="premium-subtitle">Track and monitor all system actions</p>
         </div>
         <div class="header-actions flex gap-4">
            <div class="search-premium min-w-[300px]">
@@ -22,7 +22,7 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
            </div>
            <button class="modern-btn outline-btn btn-icon" (click)="loadData()">
              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-             <span>Sync Logs</span>
+             <span>Refresh</span>
            </button>
         </div>
       </header>
@@ -31,7 +31,7 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         <div class="premium-stat-card p-6 animate-up delay-1">
           <div class="stat-info">
-            <span class="stat-label">Total Aggregates</span>
+            <span class="stat-label">Total Logs</span>
             <h3 class="stat-number">{{ totalCount() | number }}</h3>
           </div>
           <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-slate-600">
@@ -41,7 +41,7 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
         
         <div class="premium-stat-card p-6 animate-up delay-2">
           <div class="stat-info">
-            <span class="stat-label">Validated Actions</span>
+            <span class="stat-label">Successful Actions</span>
             <h3 class="stat-number text-emerald-600">{{ successLogs() | number }}</h3>
           </div>
           <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-emerald-600">
@@ -51,7 +51,7 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
 
         <div class="premium-stat-card p-6 animate-up delay-3">
           <div class="stat-info">
-            <span class="stat-label">Security Exceptions</span>
+            <span class="stat-label">Errors</span>
             <h3 class="stat-number text-red-600">{{ failedLogs() | number }}</h3>
           </div>
           <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-red-600">
@@ -61,7 +61,7 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
 
         <div class="premium-stat-card p-6 animate-up delay-4">
           <div class="stat-info">
-            <span class="stat-label">Active Terminals</span>
+            <span class="stat-label">Active IP Addresses</span>
             <h3 class="stat-number text-blue-600">{{ uniqueIPs() | number }}</h3>
           </div>
           <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-blue-600">
@@ -78,7 +78,7 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
             @if (loading()) {
               <div class="py-32 flex flex-col items-center">
                 <div class="w-12 h-12 border-4 border-slate-100 border-t-red-600 rounded-full animate-spin"></div>
-                <p class="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Streaming forensic metadata...</p>
+                <p class="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Loading audit log...</p>
               </div>
             }
 
@@ -94,11 +94,11 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
                   <table class="modern-table-elite w-full">
                     <thead>
                       <tr>
-                        <th class="pl-8">Temporal Vector</th>
-                        <th>Identity</th>
-                        <th>Protocol Action</th>
-                        <th>Terminal IP</th>
-                        <th class="pr-8">Payload Summary</th>
+                        <th class="pl-8">Date & Time</th>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>IP Address</th>
+                        <th class="pr-8">Details</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -144,10 +144,10 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
                     <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mb-8">
                        <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                     </div>
-                    <h3 class="text-xl font-black text-slate-800 mb-2">Null Trajectory</h3>
-                    <p class="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-8">No forensic records match current filtration parameters</p>
+                    <h3 class="text-xl font-black text-slate-800 mb-2">No Logs Found</h3>
+                    <p class="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-8">No audit logs match your search criteria</p>
                     <button (click)="searchQuery=''; search()" class="modern-btn primary-btn">
-                       Reset Stream
+                       Clear Search
                     </button>
                  </div>
                }
@@ -156,7 +156,7 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
                @if (totalPages() > 1) {
                   <div class="flex justify-between items-center p-8 border-t border-slate-50 bg-slate-50/30">
                      <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                        Vector Block {{ currentPage() }} of {{ totalPages() }} • {{ totalCount() }} Actions
+                        Page {{ currentPage() }} of {{ totalPages() }} • {{ totalCount() }} Actions
                      </span>
                      <div class="flex gap-3">
                         <button class="icon-btn-elite" [disabled]="currentPage() === 1" (click)="loadPage(currentPage() - 1)">
@@ -291,12 +291,12 @@ export class AuditLogComponent implements OnInit {
           const ips = new Set(logList.map((l: any) => l.ip).filter(Boolean));
           this.uniqueIPs.set(ips.size);
         } else {
-          this.error.set(res.error || 'Failed to sync with Audit Nexus.');
+          this.error.set(res.error || 'Failed to load audit logs.');
         }
         this.loading.set(false);
       },
       error: () => {
-        this.error.set('Terminal comms failure: Audit stream disconnected.');
+        this.error.set('Failed to connect to the server.');
         this.loading.set(false);
       }
     });
