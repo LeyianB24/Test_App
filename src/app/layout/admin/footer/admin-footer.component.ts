@@ -58,8 +58,8 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
   `,
   styles: [`
     .admin-footer {
-      border-top: 1.5px solid var(--kra-blue);
-      background: var(--bg-surface);
+      border-top: 1.5px solid var(--red-500);
+      background: var(--bg-footer);
       padding: 60px 0 20px 0;
     }
     .footer-content {
@@ -67,25 +67,25 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
       display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px;
       margin-bottom: 40px;
     }
-    .footer-col h4 { color: var(--kra-blue); font-size: 1rem; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-    .slogan { color: var(--text-main); font-weight: 700; margin-bottom: 8px; }
-    .mission { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
+    .footer-col h4 { color: var(--text-primary); font-size: 1rem; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--red-500); display: inline-block; padding-bottom: 4px; }
+    .slogan { color: var(--text-primary); font-weight: 700; margin-bottom: 8px; }
+    .mission { color: var(--text-tertiary); font-size: 0.85rem; line-height: 1.6; }
     
     .footer-links { list-style: none; padding: 0; margin: 0; }
     .footer-links li { margin-bottom: 12px; }
     .footer-links a { color: var(--text-secondary); text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
-    .footer-links a:hover { color: var(--kra-blue); padding-left: 4px; }
+    .footer-links a:hover { color: var(--red-500); padding-left: 4px; }
     
     .contact-list li { display: flex; align-items: center; gap: 12px; color: var(--text-secondary); font-weight: 600; font-size: 0.9rem; }
     
-    .footer-bottom { border-top: 1px solid var(--border-light); padding: 20px 40px; }
+    .footer-bottom { border-top: 1px solid var(--border-subtle); padding: 20px 40px; }
     .footer-baseline { max-width: 1600px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-    .footer-baseline p { font-size: 0.8rem; color: var(--text-muted); font-weight: 700; }
+    .footer-baseline p { font-size: 0.8rem; color: var(--text-tertiary); font-weight: 700; }
     
     .system-status { display: flex; align-items: center; gap: 8px; }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .status-dot.online { background: #10B981; box-shadow: 0 0 10px rgba(16,185,129,0.4); }
-    .status-label { font-size: 0.7rem; font-weight: 800; color: #10B981; text-transform: uppercase; }
+    .status-dot.online { background: var(--status-success-text); box-shadow: 0 0 10px rgba(16,185,129,0.4); }
+    .status-label { font-size: 0.7rem; font-weight: 800; color: var(--status-success-text); text-transform: uppercase; }
 
     @media (max-width: 991px) {
       .footer-content { grid-template-columns: 1fr 1fr; }

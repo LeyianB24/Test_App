@@ -7,7 +7,7 @@
 
 .role-matrix-header {
   padding: var(--space-6);
-  border-bottom: 1px solid var(--black-800);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .role- матрица-tabs {
@@ -18,7 +18,7 @@
 }
 
 .role-tab-item {
-  color: var(--black-400);
+  color: var(--text-tertiary);
   font-family: var(--font-heading);
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
@@ -29,7 +29,7 @@
 }
 
 .role-tab-item:hover {
-  color: var(--color-white);
+  color: var(--text-primary);
 }
 
 .role-tab-item.active {

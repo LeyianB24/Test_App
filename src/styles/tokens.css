@@ -49,6 +49,7 @@
   --bg-surface:             var(--color-white);
   --bg-surface-elevated:    var(--black-050);
   --bg-surface-sunken:      var(--black-100);
+  --bg-footer:              var(--black-050);
   --bg-overlay:             rgba(0, 0, 0, 0.4);
 
   /* Text */
@@ -243,6 +244,7 @@
   --bg-surface:             var(--black-900);
   --bg-surface-elevated:    var(--black-850);
   --bg-surface-sunken:      var(--black-800);
+  --bg-footer:              var(--black-900);
   --bg-overlay:             rgba(0, 0, 0, 0.8);
 
   /* Text */

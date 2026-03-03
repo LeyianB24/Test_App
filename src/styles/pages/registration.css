@@ -1,7 +1,7 @@
 .registration-scene {
   min-height: 100vh;
   position: relative;
-  background: var(--black-950);
+  background: var(--bg-app);
   overflow: hidden;
 }
 
@@ -33,11 +33,11 @@
 }
 
 .reg-card-precision {
-  background: rgba(10, 10, 12, 0.85);
+  background: var(--bg-surface-glass);
   -webkit-backdrop-filter: blur(40px);
   backdrop-filter: blur(40px);
   padding: var(--space-16);
-  border: 1px solid var(--black-800);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-2xl);
 }
@@ -63,13 +63,13 @@
 .step-blob {
   width: 44px;
   height: 44px;
-  background: var(--black-900);
-  border: 2px solid var(--black-700);
+  background: var(--bg-surface-sunken);
+  border: 2px solid var(--border-default);
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--black-500);
+  color: var(--text-tertiary);
   font-weight: 800;
   font-size: var(--text-sm);
   transition: all var(--duration-base) var(--ease-out);
@@ -78,7 +78,7 @@
 .step-label {
   font-size: 10px;
   font-weight: var(--weight-black);
-  color: var(--black-500);
+  color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
   transition: color var(--duration-base);
@@ -109,7 +109,7 @@
 .step-line {
   flex: 1;
   height: 1px;
-  background: var(--black-800);
+  background: var(--border-subtle);
   margin-top: -32px;
   z-index: 1;
 }
@@ -121,9 +121,9 @@
 .mandate-toggle-precision {
   display: block;
   padding: var(--space-6);
-  background: var(--black-900);
+  background: var(--bg-surface-sunken);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--black-800);
+  border: 1px solid var(--border-subtle);
   transition: all var(--duration-base);
 }
 
