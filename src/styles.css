@@ -27,6 +27,7 @@
 @import './styles/pages/role-matrix.css';
 @import './styles/pages/tax-engine.css';
 @import './styles/pages/checkers.css';
+@import './styles/pages/registration.css';
 
 :root {
   /* --- Brand Colors (Modernized KRA) --- */

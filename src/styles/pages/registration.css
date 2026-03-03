@@ -1,0 +1,140 @@
+.registration-scene {
+  min-height: 100vh;
+  position: relative;
+  background: var(--black-950);
+  overflow: hidden;
+}
+
+.registration-bg-container {
+  position: fixed;
+  inset: 0;
+  background-image: var(--texture-noise);
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  opacity: 0.1;
+}
+
+.registration-view-scroller {
+  position: relative;
+  z-index: 10;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.registration-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.reg-card-precision {
+  background: rgba(10, 10, 12, 0.85);
+  -webkit-backdrop-filter: blur(40px);
+  backdrop-filter: blur(40px);
+  padding: var(--space-16);
+  border: 1px solid var(--black-800);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-2xl);
+}
+
+/* Stepper Precision System */
+.stepper-precision {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-16);
+}
+
+.step-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  position: relative;
+  z-index: 5;
+  flex: 1;
+}
+
+.step-blob {
+  width: 44px;
+  height: 44px;
+  background: var(--black-900);
+  border: 2px solid var(--black-700);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--black-500);
+  font-weight: 800;
+  font-size: var(--text-sm);
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.step-label {
+  font-size: 10px;
+  font-weight: var(--weight-black);
+  color: var(--black-500);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  transition: color var(--duration-base);
+}
+
+.step-unit.active .step-blob {
+  border-color: var(--red-500);
+  background: var(--red-500);
+  color: white;
+  box-shadow: 0 0 20px rgba(218, 56, 50, 0.4);
+  transform: scale(1.1);
+}
+
+.step-unit.active .step-label {
+  color: white;
+}
+
+.step-unit.done .step-blob {
+  border-color: var(--status-success-text);
+  background: var(--status-success-text);
+  color: white;
+}
+
+.step-unit.done .step-label {
+  color: var(--status-success-text);
+}
+
+.step-line {
+  flex: 1;
+  height: 1px;
+  background: var(--black-800);
+  margin-top: -32px;
+  z-index: 1;
+}
+
+.step-line.done {
+  background: var(--status-success-text);
+}
+
+.mandate-toggle-precision {
+  display: block;
+  padding: var(--space-6);
+  background: var(--black-900);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--black-800);
+  transition: all var(--duration-base);
+}
+
+.mandate-toggle-precision.checked {
+  border-color: var(--red-500);
+  background: rgba(218, 56, 50, 0.05);
+}
+
+@media (max-width: 768px) {
+  .registration-view-scroller { padding: 20px 10px; }
+  .reg-card-precision { padding: var(--space-8) var(--space-4); }
+  .stepper-precision { gap: 10px; }
+  .step-label { font-size: 8px; }
+}

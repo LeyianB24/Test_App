@@ -20,7 +20,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
       
       <div class="registration-view-scroller">
         <div class="registration-container animate-slide-up">
-          <div class="card-precision auth-card-precision">
+          <div class="reg-card-precision">
             
             <!-- Strategic Header -->
             <div class="reg-header-precision border-b border-white/5 pb-10 mb-10 flex items-center gap-8">
@@ -326,63 +326,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
     </div>
 
   `,
-  styles: [`
-    .login-scene { 
-      min-height: 100vh; position: relative; background: var(--black-950); overflow: hidden;
-    }
-    .bg-image-container {
-      position: fixed; inset: 0;
-      background-image: url('/assets/kra_background.png');
-      background-size: cover; background-position: center; z-index: 1; filter: grayscale(1) brightness(0.2);
-    }
-    .bg-overlay {
-      position: absolute; inset: 0;
-      background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.9) 100%);
-    }
-
-    .registration-view-scroller {
-      position: relative; z-index: 10; height: 100vh; overflow-y: auto; display: flex; align-items: flex-start; justify-content: center; padding: 60px 20px;
-    }
-    .registration-container { width: 100%; max-width: 900px; margin: 0 auto; }
-
-    .auth-card-precision {
-      background: rgba(10, 10, 12, 0.8);
-      backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
-      padding: 60px;
-    }
-
-    /* Stepper Precision System */
-    .stepper-precision { display: flex; align-items: center; justify-content: space-between; }
-    .step-unit { display: flex; flex-direction: column; align-items: center; gap: 12px; position: relative; z-index: 5; flex: 1; }
-    .step-blob { 
-      width: 44px; height: 44px; background: var(--black-900); border: 2px solid var(--white-10);
-      border-radius: 14px; display: flex; align-items: center; justify-content: center;
-      color: var(--white-20); font-weight: 900; font-size: 0.9rem; transition: all 0.4s var(--ease-out);
-    }
-    .step-label { font-[9px] font-black color: var(--white-20); text-transform: uppercase; tracking-widest transition: color 0.4s; }
-    
-    .step-unit.active .step-blob { border-color: var(--red-500); background: var(--red-500); color: white; box-shadow: var(--shadow-glow-red); transform: scale(1.1); }
-    .step-unit.active .step-label { color: white; }
-    .step-unit.done .step-blob { border-color: #10B981; background: #10B981; color: white; }
-    .step-unit.done .step-label { color: #10B981; }
-
-    .step-line { flex: 1; height: 1px; background: var(--white-10); margin-top: -32px; z-index: 1; }
-    .step-line.done { background: #10B981; }
-
-    .mandate-toggle-precision {
-       display: block; padding: 24px; background: var(--white-02); border-radius: 16px; border: 1px solid var(--white-05); transition: all 0.3s;
-    }
-    .mandate-toggle-precision.checked { border-color: var(--red-500); background: rgba(218, 56, 50, 0.05); }
-
-    .sequence-fade { animation: fadeSlideUp 0.6s var(--ease-out); }
-
-    @media (max-width: 768px) {
-      .registration-view-scroller { padding: 20px 10px; }
-      .auth-card-precision { padding: 40px 20px; }
-      .stepper-precision { gap: 10px; }
-      .step-label { font-size: 8px; }
-    }
-  `]
+  styles: [``],
 })
 export class RegistrationComponent {
   private fb = inject(FormBuilder);
