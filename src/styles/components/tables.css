@@ -1,9 +1,10 @@
 .table-container-precision {
-  background: var(--bg-surface);
+  background: var(--bg-surface-1);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
   overflow: hidden;
   margin-bottom: var(--space-8);
+  box-shadow: var(--shadow-sm);
 }
 
 .table-precision {
@@ -12,9 +13,8 @@
   border-spacing: 0;
 }
 
-/* Header */
 .table-precision thead {
-  background: var(--bg-surface-elevated);
+  background: var(--bg-table-header);
 }
 
 .table-precision th {
@@ -29,7 +29,7 @@
   border-bottom: 1px solid var(--border-default);
   user-select: none;
   cursor: pointer;
-  transition: color var(--duration-base) ease;
+  transition: color var(--duration-200) ease;
 }
 
 .table-precision th:hover {
@@ -53,7 +53,7 @@
 }
 
 .sorted .sort-indicator {
-  border-top-color: var(--red-500);
+  border-top-color: var(--color-accent);
 }
 
 .sorted.desc .sort-indicator {
@@ -63,26 +63,24 @@
 /* Body */
 .table-precision tbody tr {
   border-bottom: 1px solid var(--border-subtle);
-  transition: background var(--duration-fast) ease;
-  animation: fadeSlideUp 300ms var(--ease-out) forwards;
-  opacity: 0;
+  transition: background var(--duration-200) ease;
 }
 
 .table-precision tbody tr:hover {
-  background: var(--bg-surface-sunken);
+  background: var(--bg-table-row-hover);
   cursor: pointer;
 }
 
 .table-precision tbody tr.selected {
-  background: rgba(218, 56, 50, 0.08);
-  border-left: 3px solid var(--red-500);
+  background: var(--bg-table-row-selected);
+  border-left: 3px solid var(--color-accent);
 }
 
 .table-precision td {
   font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: var(--weight-regular);
-  color: var(--text-primary);
+  color: var(--text-secondary);
   padding: var(--space-4) var(--space-5);
   border-bottom: 1px solid var(--border-subtle);
 }
@@ -94,7 +92,7 @@
 
 /* Toolbar */
 .table-toolbar-precision {
-  background: var(--bg-surface);
+  background: var(--bg-surface-1);
   border-bottom: 1px solid var(--border-subtle);
   padding: var(--space-4) var(--space-5);
   display: flex;
@@ -103,21 +101,21 @@
 }
 
 .table-search-precision {
-  background: var(--bg-surface-sunken);
-  border: 1px solid var(--border-default);
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
   border-radius: var(--radius-md);
   font-family: var(--font-body);
   font-size: var(--text-sm);
   color: var(--text-primary);
   padding: var(--space-2) var(--space-4);
   width: 280px;
-  transition: all var(--duration-base) ease;
+  transition: all var(--duration-200) ease;
 }
 
 .table-search-precision:focus {
-  border-color: var(--red-500);
-  box-shadow: 0 0 0 3px rgba(218, 56, 50, 0.15);
-  background: var(--bg-surface);
+  border-color: var(--border-input-focus);
+  box-shadow: var(--shadow-focus);
+  background: var(--bg-input-focus);
   outline: none;
 }
 
@@ -128,7 +126,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--bg-surface-elevated);
+  background: var(--bg-surface-1);
 }
 
 .page-btn-precision {
@@ -148,9 +146,9 @@
 }
 
 .page-btn-precision.active {
-  background: var(--red-500);
-  border-color: var(--red-500);
-  color: var(--color-white);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--text-on-accent);
 }
 
 .page-btn-precision:disabled {

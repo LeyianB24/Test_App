@@ -1,34 +1,58 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, effect } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+export type Theme = 'dark' | 'light';
+
+@Injectable({ providedIn: 'root' })
 export class ThemeService {
-  // Use Angular Signals for reactive state
-  darkMode = signal<boolean>(false);
+
+  private readonly STORAGE_KEY = 'kra_theme';
+  private readonly HTML_ATTR = 'data-theme';
+
+  /* Signal — the single reactive source of truth */
+  readonly theme = signal<Theme>(this.resolveInitialTheme());
 
   constructor() {
-    // Check localStorage or System Preference on load
-    const savedTheme = localStorage.getItem('theme');
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    /* Apply theme to DOM whenever signal changes */
+    effect(() => {
+      this.applyTheme(this.theme());
+    });
 
-    if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
-      this.setDarkMode(true);
-    }
+    /* Listen for OS preference changes */
+    window.matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', (e) => {
+        if (!localStorage.getItem(this.STORAGE_KEY)) {
+          this.setTheme(e.matches ? 'dark' : 'light');
+        }
+      });
   }
 
-  toggleTheme() {
-    this.setDarkMode(!this.darkMode());
+  toggleTheme(): void {
+    this.theme.update(t => t === 'dark' ? 'light' : 'dark');
   }
 
-  private setDarkMode(isDark: boolean) {
-    this.darkMode.set(isDark);
-    if (isDark) {
-      document.body.classList.add('dark-theme');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.body.classList.remove('dark-theme');
-      localStorage.setItem('theme', 'light');
+  setTheme(theme: Theme): void {
+    this.theme.set(theme);
+  }
+
+  private resolveInitialTheme(): Theme {
+    /* 1. Check localStorage */
+    const stored = localStorage.getItem(this.STORAGE_KEY) as Theme | null;
+    if (stored === 'dark' || stored === 'light') return stored;
+
+    /* 2. Fall back to system preference */
+    return window.matchMedia('(prefers-color-scheme: light)').matches
+      ? 'light'
+      : 'dark';
+  }
+
+  private applyTheme(theme: Theme): void {
+    document.documentElement.setAttribute(this.HTML_ATTR, theme);
+    localStorage.setItem(this.STORAGE_KEY, theme);
+
+    /* Update meta theme-color for browser chrome */
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+      meta.setAttribute('content', theme === 'dark' ? '#000000' : '#F6F6F6');
     }
   }
 }

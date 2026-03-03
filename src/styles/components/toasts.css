@@ -12,17 +12,17 @@
 .toast-precision {
   min-width: 320px;
   max-width: 480px;
-  background: var(--bg-surface-elevated);
+  background: var(--bg-surface-2);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
   padding: var(--space-4) var(--space-5);
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-lg);
   display: flex;
   align-items: flex-start;
   gap: var(--space-3);
   position: relative;
   overflow: hidden;
-  animation: slideInRight 300ms var(--ease-out) forwards;
+  animation: slideInRight var(--duration-300) var(--ease-out) forwards;
   pointer-events: auto;
 }
 
@@ -35,9 +35,9 @@
   background: var(--text-tertiary);
 }
 
-.toast-precision.success .toast-accent-precision { background: var(--status-success-text); }
-.toast-precision.warning .toast-accent-precision { background: var(--status-warning-text); }
-.toast-precision.error .toast-accent-precision { background: var(--red-500); }
+.toast-precision.success .toast-accent-precision { background: var(--text-success); }
+.toast-precision.warning .toast-accent-precision { background: var(--text-warning); }
+.toast-precision.error .toast-accent-precision { background: var(--text-danger); }
 .toast-precision.info .toast-accent-precision { background: var(--text-tertiary); }
 
 .toast-content-precision {
@@ -63,7 +63,7 @@
   bottom: 0;
   left: 0;
   height: 2px;
-  background: var(--red-500);
+  background: var(--color-accent);
   width: 100%;
   animation: toastProgress 4s linear forwards;
 }

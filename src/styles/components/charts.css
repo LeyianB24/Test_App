@@ -1,5 +1,5 @@
 .chart-card-precision {
-  background: var(--bg-surface);
+  background: var(--bg-surface-1);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
   padding: var(--space-6);
@@ -32,8 +32,8 @@
 .chart-badge-precision {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--red-400);
-  border: 1px solid var(--red-500);
+  color: var(--color-accent-text);
+  border: 1px solid var(--color-accent);
   border-radius: var(--radius-full);
   padding: 2px 8px;
 }
@@ -42,13 +42,12 @@
 .chart-tooltip-precision {
   position: absolute;
   pointer-events: none;
-  background: var(--bg-surface-elevated);
+  background: var(--bg-surface-2);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
   padding: var(--space-3) var(--space-4);
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-lg);
   transform: translateY(-8px);
-  animation: scaleIn 150ms var(--ease-out) forwards;
   z-index: var(--z-tooltip);
 }
 
@@ -92,25 +91,23 @@
 
 /* Specific SVG Chart Elements */
 .chart-bar-precision {
-  fill: var(--red-500);
+  fill: var(--color-accent);
   opacity: 0.9;
   transform-origin: bottom;
   animation: chartBarGrow 600ms var(--ease-out) forwards;
-  filter: drop-shadow(0 0 4px rgba(218, 56, 50, 0.4));
 }
 
 .chart-bar-precision:hover {
-  fill: var(--red-400);
-  filter: brightness(1.1);
+  fill: var(--color-accent-hover);
 }
 
 .chart-line-precision {
-  stroke: var(--red-500);
+  stroke: var(--color-accent);
   stroke-width: 2;
   fill: none;
   stroke-dashoffset: 1000;
   animation: lineTraceDraw 1000ms var(--ease-out) forwards;
-  filter: drop-shadow(0 0 6px rgba(218, 56, 50, 0.5));
+  filter: drop-shadow(0 0 6px var(--bg-accent-subtle));
 }
 
 .chart-area-precision {

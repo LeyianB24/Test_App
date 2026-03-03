@@ -2,28 +2,24 @@
   position: fixed;
   inset: 0;
   background: var(--bg-overlay);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
   z-index: var(--z-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--space-6);
-  animation: fadeIn 200ms ease forwards;
+  animation: fadeIn var(--duration-200) var(--ease-out) forwards;
 }
 
 .modal-panel-precision {
-  background: var(--bg-surface);
-  background-image: var(--glass-gradient);
+  background: var(--bg-surface-2);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-xl);
-  box-shadow: 
-    var(--shadow-xl),
-    0 0 30px rgba(218, 56, 50, 0.05);
+  box-shadow: var(--shadow-xl);
   width: 100%;
-  animation: scaleIn 250ms var(--ease-tactile) forwards;
+  animation: scaleIn var(--duration-300) var(--ease-out) forwards;
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(10px) saturate(180%);
 }
 
 .modal-panel-precision.sm { max-width: 440px; }
@@ -31,9 +27,8 @@
 .modal-panel-precision.lg { max-width: 760px; }
 
 .modal-header-precision {
-  padding: var(--space-6) var(--space-6) 0;
+  padding: var(--space-6) var(--space-6) var(--space-5);
   border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: var(--space-5);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -55,7 +50,7 @@
 
 .modal-footer-precision {
   padding: var(--space-4) var(--space-6);
-  background: var(--bg-surface-elevated);
+  background: var(--bg-surface-1);
   border-top: 1px solid var(--border-subtle);
   display: flex;
   justify-content: flex-end;
