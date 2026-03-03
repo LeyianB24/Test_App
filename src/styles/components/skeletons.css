@@ -1,9 +1,9 @@
 .skeleton-precision {
   background: linear-gradient(
     90deg,
-    var(--black-800) 25%,
-    var(--black-700) 50%,
-    var(--black-800) 75%
+    var(--bg-surface-sunken) 25%,
+    var(--border-default) 50%,
+    var(--bg-surface-sunken) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;

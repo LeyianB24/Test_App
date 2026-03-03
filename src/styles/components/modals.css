@@ -1,7 +1,7 @@
 .modal-backdrop-precision {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: var(--bg-overlay);
   backdrop-filter: blur(4px);
   z-index: var(--z-overlay);
   display: flex;
@@ -17,7 +17,7 @@
   border: 1px solid var(--border-default);
   border-radius: var(--radius-xl);
   box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.7),
+    var(--shadow-xl),
     0 0 30px rgba(218, 56, 50, 0.05);
   width: 100%;
   animation: scaleIn 250ms var(--ease-tactile) forwards;
@@ -32,7 +32,7 @@
 
 .modal-header-precision {
   padding: var(--space-6) var(--space-6) 0;
-  border-bottom: 1px solid var(--black-800);
+  border-bottom: 1px solid var(--border-subtle);
   padding-bottom: var(--space-5);
   display: flex;
   justify-content: space-between;
@@ -55,8 +55,8 @@
 
 .modal-footer-precision {
   padding: var(--space-4) var(--space-6);
-  background: var(--black-850);
-  border-top: 1px solid var(--black-800);
+  background: var(--bg-surface-elevated);
+  border-top: 1px solid var(--border-subtle);
   display: flex;
   justify-content: flex-end;
   gap: var(--space-3);

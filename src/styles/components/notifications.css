@@ -3,9 +3,9 @@
   width: 36px;
   height: 36px;
   padding: 0;
-  background: var(--black-850);
-  border: 1px solid var(--black-700);
-  color: var(--black-300);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-default);
+  color: var(--text-tertiary);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -50,7 +50,7 @@
 
 .notifications-header-precision {
   padding: var(--space-4) var(--space-5);
-  border-bottom: 1px solid var(--black-800);
+  border-bottom: 1px solid var(--border-subtle);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -60,7 +60,7 @@
   font-family: var(--font-heading);
   font-size: var(--text-sm);
   font-weight: var(--weight-bold);
-  color: var(--color-white);
+  color: var(--text-primary);
 }
 
 .mark-read-link-precision {
@@ -72,7 +72,7 @@
 
 .notification-item-precision {
   padding: var(--space-4) var(--space-5);
-  border-bottom: 1px solid var(--black-800);
+  border-bottom: 1px solid var(--border-subtle);
   display: flex;
   gap: var(--space-3);
   transition: background 150ms ease;
@@ -99,7 +99,7 @@
 
 .notif-icon-box-precision.danger { background: var(--red-500); color: white; }
 .notif-icon-box-precision.success { background: var(--status-success); color: white; }
-.notif-icon-box-precision.info { background: var(--black-800); color: var(--black-300); }
+.notif-icon-box-precision.info { background: var(--bg-surface-sunken); color: var(--text-secondary); }
 
 .notif-content-precision {
   flex: 1;
@@ -116,17 +116,17 @@
   font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
-  color: var(--color-white);
+  color: var(--text-primary);
 }
 
 .notif-time-precision {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--black-400);
+  color: var(--text-tertiary);
 }
 
 .notif-body-precision {
   font-family: var(--font-body);
   font-size: var(--text-xs);
-  color: var(--black-300);
+  color: var(--text-secondary);
 }

@@ -96,13 +96,13 @@
 /* Secondary */
 .btn-secondary-precision {
   background: transparent;
-  border: 1px solid var(--black-600);
+  border: 1px solid var(--border-default);
   color: var(--text-primary);
 }
 
 .btn-secondary-precision:hover:not(:disabled) {
-  border-color: var(--black-400);
-  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--text-tertiary);
+  background: var(--bg-surface-elevated);
 }
 
 /* Ghost */
@@ -112,7 +112,7 @@
 }
 
 .btn-ghost-precision:hover:not(:disabled) {
-  background: var(--black-800);
+  background: var(--bg-surface-elevated);
   color: var(--text-primary);
 }
 
@@ -133,15 +133,15 @@
   width: 36px;
   height: 36px;
   padding: 0;
-  background: var(--black-850);
-  border: 1px solid var(--black-700);
-  color: var(--black-300);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
 }
 
 .btn-icon-precision:hover:not(:disabled) {
-  border-color: var(--black-500);
-  background: var(--black-800);
-  color: var(--color-white);
+  border-color: var(--text-primary);
+  background: var(--bg-surface-sunken);
+  color: var(--text-primary);
 }
 
 /* Loading State */

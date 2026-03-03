@@ -32,13 +32,13 @@
   top: 0;
   bottom: 0;
   width: 3px;
-  background: var(--black-400);
+  background: var(--text-tertiary);
 }
 
 .toast-precision.success .toast-accent-precision { background: var(--status-success-text); }
 .toast-precision.warning .toast-accent-precision { background: var(--status-warning-text); }
 .toast-precision.error .toast-accent-precision { background: var(--red-500); }
-.toast-precision.info .toast-accent-precision { background: var(--black-400); }
+.toast-precision.info .toast-accent-precision { background: var(--text-tertiary); }
 
 .toast-content-precision {
   flex: 1;
@@ -48,7 +48,7 @@
   font-family: var(--font-heading);
   font-size: var(--text-sm);
   font-weight: var(--weight-bold);
-  color: var(--color-white);
+  color: var(--text-primary);
   margin-bottom: 2px;
 }
 

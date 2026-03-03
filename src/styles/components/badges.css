@@ -46,9 +46,9 @@
 }
 
 .badge-active {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--black-200);
-  border: 1px solid var(--black-600);
+  background: var(--bg-surface-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-default);
 }
 
 .badge-critical {
