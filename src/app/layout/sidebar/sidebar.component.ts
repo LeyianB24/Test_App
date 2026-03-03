@@ -181,7 +181,7 @@ const NAV_MAP: { slug: string; route: string; label: string; iconPath: string }[
 
       <!-- Branding -->
       <div class="sidebar-logo-precision">
-        <img src="assets/img/kra-logo-white.png" class="sidebar-logo-img" alt="KRA Logo">
+        <img src="assets/logo.png" class="sidebar-logo-img" alt="KRA Logo">
         <span class="sidebar-logo-text">iTax<span class="logo-accent-dot"></span></span>
       </div>
 

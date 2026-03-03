@@ -1,7 +1,32 @@
-/* =========================================
-   1. VARIABLES & THEME CONFIGURATION
-   ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+
+/* Brand Design System: Precision Red */
+@import './styles/tokens.css';
+@import './styles/base.css';
+@import './styles/layout.css';
+
+/* Component Styles */
+@import './styles/components/sidebar.css';
+@import './styles/components/topbar.css';
+@import './styles/components/cards.css';
+@import './styles/components/buttons.css';
+@import './styles/components/forms.css';
+@import './styles/components/tables.css';
+@import './styles/components/badges.css';
+@import './styles/components/charts.css';
+@import './styles/components/modals.css';
+@import './styles/components/wizard.css';
+@import './styles/components/skeletons.css';
+@import './styles/components/toasts.css';
+@import './styles/components/notifications.css';
+
+/* Page Styles */
+@import './styles/pages/login.css';
+@import './styles/pages/dashboard.css';
+@import './styles/pages/role-matrix.css';
+@import './styles/pages/tax-engine.css';
+@import './styles/pages/checkers.css';
 
 :root {
   /* --- Brand Colors (Modernized KRA) --- */

@@ -90,7 +90,7 @@ const ADMIN_NAV_MAP: MenuItem[] = [
 
       <!-- Branding -->
       <div class="sidebar-logo-precision">
-        <img src="assets/img/kra-logo-white.png" class="sidebar-logo-img" alt="KRA Logo">
+        <img src="assets/logo.png" class="sidebar-logo-img" alt="KRA Logo">
         <span class="sidebar-logo-text">Staff Portal<span class="logo-accent-dot"></span></span>
       </div>
 
