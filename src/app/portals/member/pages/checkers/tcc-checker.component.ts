@@ -16,94 +16,88 @@ interface TccResult {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="page-container p-8 animate-fade-in">
-      <header class="mb-12">
-        <h1 class="text-5xl font-black text-white tracking-tighter mb-2">TCC <span class="text-emerald-500">Verification</span></h1>
-        <p class="text-slate-400 font-medium text-lg">Validate Tax Compliance Certificate clearance and expiry</p>
+    <div class="dashboard-precision animate-fade-in">
+      
+      <header class="header-precision">
+        <div class="header-titles">
+          <h1 class="title-primary">TCC <span class="title-accent">Intelligence</span></h1>
+          <p class="subtitle-secondary">Verify Tax Compliance Certificate clearance and authenticity</p>
+        </div>
       </header>
 
-      <div class="max-w-3xl mx-auto">
-        <div class="card-glass p-10 rounded-[3rem] border border-white/5 shadow-2xl mb-12">
-          <div class="space-y-6">
-            <div class="space-y-3">
-              <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">TCC Reference Number</label>
-              <div class="flex gap-4">
-                <input 
-                  type="text" 
-                  [(ngModel)]="tccNumber" 
-                  class="flex-1 bg-white/5 border border-white/10 text-white px-8 py-5 rounded-3xl focus:border-emerald-500 outline-none font-black text-xl tracking-[0.1em] uppercase placeholder:text-slate-600 transition-all" 
-                  placeholder="KRAW0012345678"
-                />
-                <button 
-                  class="bg-emerald-600 text-white px-10 py-5 rounded-3xl font-black text-xs uppercase tracking-widest hover:bg-emerald-700 disabled:bg-slate-800 transition-all shadow-xl shadow-emerald-600/20" 
-                  [disabled]="!tccNumber() || isLoading()" 
-                  (click)="checkTcc()"
-                >
-                  @if (isLoading()) {
-                    <div class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
-                  } @else {
-                    Authorize
-                  }
-                </button>
-              </div>
+      <div class="dashboard-content-precision">
+        <div class="max-w-xl">
+          <!-- Search Identity -->
+          <div class="card-precision search-card-precision mb-10">
+            <div class="card-header-precision">
+              <h3>Target Certificate Registry</h3>
+            </div>
+            <div class="search-input-group mt-6">
+              <input 
+                type="text" 
+                [(ngModel)]="tccNumber" 
+                class="input-precision input-xl-precision" 
+                placeholder="KRAW0012345678"
+                maxlength="20"
+              />
+              <button 
+                class="btn-precision btn-primary-precision btn-lg mt-4 w-full" 
+                [disabled]="!tccNumber() || isLoading()" 
+                (click)="checkTcc()"
+              >
+                @if (isLoading()) {
+                  <div class="loader-spinner-precision sm"></div>
+                } @else {
+                  Authorize Verification
+                }
+              </button>
             </div>
           </div>
+
+          @if (error()) {
+            <div class="error-state-precision animate-shake mb-10">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              <span>{{ error() }}</span>
+            </div>
+          }
+
+          @if (result()) {
+            <div class="card-precision result-card-precision animate-slide-up">
+              <div class="result-identity-precision overflow-hidden">
+                <div class="identity-header">
+                  <span class="badge-precision badge-success-precision">
+                    VERIFIED: {{ result()?.status }}
+                  </span>
+                  <p class="pin-id-precision">{{ result()?.tccNumber }}</p>
+                </div>
+                <h2 class="name-display-precision">{{ result()?.name }}</h2>
+                <p class="subtitle-secondary text-white/40 mt-1 uppercase tracking-widest text-[10px]">PIN ASSOCIATED: {{ result()?.pin }}</p>
+              </div>
+
+              <div class="result-grid-precision grid-cols-2 mt-10">
+                <div class="result-item-precision bg-dark-complex p-6 rounded-2xl border border-white/5">
+                  <span class="label text-[10px] uppercase text-white/30 font-black block mb-2 tracking-widest">Issue Clearance</span>
+                  <span class="value text-lg font-black text-white">{{ result()?.issueDate | date:'dd MMM yyyy' }}</span>
+                </div>
+                <div class="result-item-precision bg-red-base/10 p-6 rounded-2xl border border-red-base/20">
+                  <span class="label text-[10px] uppercase text-red-base/50 font-black block mb-2 tracking-widest">Expiration Deadline</span>
+                  <span class="value text-lg font-black text-red-base">{{ result()?.expiryDate | date:'dd MMM yyyy' }}</span>
+                </div>
+              </div>
+
+              <div class="disclaimer-precision mt-10 p-6 bg-white/5 rounded-2xl border border-white/5 flex gap-4">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-white/20 shrink-0 mt-1"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <p class="text-[10px] font-medium text-white/30 leading-relaxed uppercase tracking-widest">
+                  VERIFICATION NOTICE: This data is retrieved from the KRA system. While accurate at the time of inquiry, official physical certificates remain the primary source of truth.
+                </p>
+              </div>
+            </div>
+          }
         </div>
-
-        @if (result()) {
-          <div class="card-glass p-10 rounded-[4rem] border border-white/5 animate-fade-in relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 blur-[120px] -mr-40 -mt-40"></div>
-            
-            <div class="text-center space-y-4 mb-12">
-              <div class="inline-flex items-center gap-2 px-6 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 font-black text-[10px] uppercase tracking-widest">
-                 <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="3"/></svg>
-                 Signal: {{ result()?.status }}
-              </div>
-              <h3 class="text-4xl font-black text-white tracking-tighter leading-none">{{ result()?.name }}</h3>
-              <p class="text-slate-500 font-bold uppercase text-[10px] tracking-widest">PIN ASSOCIATED: <span class="text-white font-mono ml-2">{{ result()?.pin }}</span></p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-               <div class="p-8 bg-white/5 rounded-[2.5rem] border border-white/5">
-                  <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Certificate Reference</span>
-                  <span class="text-lg font-black text-white font-mono">{{ result()?.tccNumber }}</span>
-               </div>
-               <div class="p-8 bg-white/5 rounded-[2.5rem] border border-white/5">
-                  <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Issue Clearance</span>
-                  <span class="text-lg font-black text-white">{{ result()?.issueDate | date:'dd MMM yyyy' }}</span>
-               </div>
-               <div class="p-8 bg-emerald-500/10 rounded-[2.5rem] border border-emerald-500/20">
-                  <span class="text-[10px] font-black text-emerald-600 uppercase tracking-widest block mb-2">Expiration Deadline</span>
-                  <span class="text-lg font-black text-emerald-400">{{ result()?.expiryDate | date:'dd MMM yyyy' }}</span>
-               </div>
-            </div>
-
-            <div class="disclaimer p-8 rounded-[2rem] bg-indigo-500/5 border border-indigo-500/10 flex items-start gap-4">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-indigo-400 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              <p class="text-[10px] font-medium text-slate-500 leading-relaxed uppercase tracking-widest">
-                VERIFICATION NOTICE: This data is retrieved from the KRA system. While accurate at the time of inquiry, official physical certificates remain the primary source of truth for compliance purposes.
-              </p>
-            </div>
-          </div>
-        }
-
-        @if (error()) {
-          <div class="mt-8 p-8 bg-red-500/10 border border-red-500/20 text-red-500 rounded-[2rem] font-black text-xs uppercase tracking-widest flex items-center justify-center gap-4 animate-shake">
-             <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="shrink-0"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-width="2.5"/></svg>
-             {{ error() }}
-          </div>
-        }
       </div>
     </div>
   `,
-  styles: [`
-    .page-container { max-width: 1200px; margin: 0 auto; }
-    .card-glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); }
-    .animate-fade-in { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-    .animate-shake { animation: shake 0.5s; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-  `]
+  styles: [``]
 })
 export class TccCheckerComponent {
   tccNumber = signal('');

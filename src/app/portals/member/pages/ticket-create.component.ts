@@ -9,143 +9,155 @@ import { HelpdeskService } from '../../../services/helpdesk.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <div class="page-container p-8 animate-fade-in">
-      <!-- Elite Header -->
-      <header class="page-header-elite items-center mb-8">
-        <div class="header-info flex items-center gap-4">
-           <a routerLink="/helpdesk" class="icon-btn-elite">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-           </a>
-           <div>
-              <span class="text-slate-500 font-black uppercase text-[10px] tracking-widest pl-1 block mb-1">Support Portal</span>
-              <h1 class="premium-title mb-0">Create <span class="gradient-text">Ticket</span></h1>
-              <p class="premium-subtitle pl-0 mt-1">Provide details about your issue for quick resolution</p>
-           </div>
+    <div class="dashboard-precision animate-fade-in">
+      
+      <header class="header-precision mb-10">
+        <div class="header-titles flex items-center gap-6">
+          <a routerLink="/helpdesk" class="btn-precision btn-secondary-precision btn-sm px-3">
+             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+          </a>
+          <div>
+            <h1 class="title-primary">New <span class="title-accent">Directive</span></h1>
+            <p class="subtitle-secondary uppercase tracking-[0.2em] text-white/40">Initiate technical support sequence</p>
+          </div>
         </div>
       </header>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div class="dashboard-content-precision grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div class="lg:col-span-2">
-          <form (ngSubmit)="submitForm()" #ticketForm="ngForm" class="space-y-8">
-            <div class="content-card-premium shadow-xl space-y-8">
+          <form (ngSubmit)="submitForm()" #ticketForm="ngForm" class="space-y-10">
+            <div class="card-precision main-record-card-precision p-10">
               
-              <!-- Subject -->
-              <div class="space-y-3">
-                <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Subject *</label>
-                <input
-                  type="text"
-                  [(ngModel)]="formData.subject"
-                  name="subject"
-                  required
-                  placeholder="Briefly describe the issue..."
-                  class="search-input-elite w-full font-bold text-lg"
-                />
-              </div>
-
-              <!-- Category & Priority Row -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="space-y-3">
-                  <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Category *</label>
-                  <select
-                    [(ngModel)]="formData.category"
-                    name="category"
+              <div class="form-stack-precision space-y-10">
+                <!-- Subject -->
+                <div class="form-group-precision">
+                  <label class="label-precision">Operation Subject *</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="formData.subject"
+                    name="subject"
                     required
-                    class="search-input-elite w-full font-bold appearance-none py-4"
-                  >
-                    <option value="" disabled selected>Select Category...</option>
-                    @for (cat of helpdeskService.categories(); track cat) {
-                      <option [value]="cat">{{ cat }}</option>
-                    }
-                  </select>
+                    placeholder="Brief objective summary..."
+                    class="input-precision input-xl-precision w-full"
+                  />
                 </div>
 
-                <div class="space-y-3">
-                  <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Priority *</label>
-                  <select
-                    [(ngModel)]="formData.priority"
-                    name="priority"
+                <!-- Category & Priority -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  <div class="form-group-precision">
+                    <label class="label-precision">Registry Category *</label>
+                    <div class="input-wrapper-precision relative">
+                      <select
+                        [(ngModel)]="formData.category"
+                        name="category"
+                        required
+                        class="input-precision w-full appearance-none"
+                      >
+                        <option value="" disabled selected>Select Registry...</option>
+                        @for (cat of helpdeskService.categories(); track cat) {
+                          <option [value]="cat">{{ cat }}</option>
+                        }
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group-precision">
+                    <label class="label-precision">Tactical Priority *</label>
+                    <div class="input-wrapper-precision relative">
+                      <select
+                        [(ngModel)]="formData.priority"
+                        name="priority"
+                        required
+                        class="input-precision w-full appearance-none"
+                      >
+                        <option value="Low">Low - Baseline</option>
+                        <option value="Medium">Medium - Standard</option>
+                        <option value="High">High - Degraded</option>
+                        <option value="Critical">Critical - Outage</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group-precision">
+                  <label class="label-precision">Objective Details *</label>
+                  <textarea
+                    [(ngModel)]="formData.description"
+                    name="description"
                     required
-                    class="search-input-elite w-full font-bold appearance-none py-4"
-                  >
-                    <option value="Low">Low - Informational</option>
-                    <option value="Medium">Medium - Standard Inquiry</option>
-                    <option value="High">High - System Degradation</option>
-                    <option value="Critical">Critical - Full Outage / Data Loss</option>
-                  </select>
+                    placeholder="Provide full technical context..."
+                    rows="6"
+                    class="input-precision w-full resize-none pt-4"
+                  ></textarea>
+                  <div class="character-count-precision flex justify-end mt-2">
+                     <span class="text-[9px] font-black text-white/20 uppercase tracking-widest">{{ formData.description.length }} / 5000 Units</span>
+                  </div>
                 </div>
+
+                <!-- Status Feedback -->
+                @if (errorMessage()) {
+                  <div class="error-state-precision animate-shake mt-4">
+                     <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                     <span>{{ errorMessage() }}</span>
+                  </div>
+                }
+
+                @if (successMessage()) {
+                  <div class="success-state-precision animate-fade-in mt-4">
+                     <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                     <span>{{ successMessage() }}</span>
+                  </div>
+                }
               </div>
-
-              <!-- Description -->
-              <div class="space-y-3">
-                <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Description *</label>
-                <textarea
-                  [(ngModel)]="formData.description"
-                  name="description"
-                  required
-                  placeholder="Describe the issue in detail..."
-                  rows="6"
-                  class="search-input-elite w-full font-medium text-base resize-none"
-                ></textarea>
-                <div class="flex justify-end pr-4">
-                   <span class="text-[10px] font-bold text-slate-400">{{ formData.description.length }}/5000 characters</span>
-                </div>
-              </div>
-
-              @if (errorMessage()) {
-                <div class="p-6 bg-red-50 border border-red-200 text-red-600 rounded-2xl font-bold flex items-center gap-3 animate-shake">
-                   <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                   {{ errorMessage() }}
-                </div>
-              }
-
-              @if (successMessage()) {
-                <div class="p-6 bg-emerald-50 border border-emerald-200 text-emerald-600 rounded-2xl font-bold flex items-center gap-3 animate-fade-in">
-                   <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7"/></svg>
-                   {{ successMessage() }}
-                </div>
-              }
             </div>
 
-            <div class="flex justify-end gap-4 pt-6">
+            <div class="form-actions-precision flex justify-end gap-6 pt-6">
               <button
                 type="button"
                 routerLink="/helpdesk"
-                class="modern-btn outline-btn uppercase tracking-widest text-xs"
+                class="btn-precision btn-secondary-precision px-10"
               >
-                Cancel
+                Abort
               </button>
               <button
                 type="submit"
                 [disabled]="isSubmitting() || !ticketForm.valid"
-                class="modern-btn primary-btn uppercase tracking-widest text-xs py-4 px-10"
+                class="btn-precision btn-primary-precision px-12"
               >
-                {{ isSubmitting() ? 'Submitting...' : 'Create Ticket' }}
+                @if (isSubmitting()) {
+                  <div class="loader-spinner-precision sm"></div>
+                } @else {
+                  Execute Request
+                }
               </button>
             </div>
           </form>
         </div>
 
-        <!-- Sidebar Guidelines -->
+        <!-- Ops Guidelines Sidebar -->
         <div class="space-y-8">
-           <div class="content-card-premium space-y-6">
-              <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-6">Support Guidelines</h3>
-              <p class="text-slate-600 text-sm font-medium leading-relaxed mb-6">Please provide as much clear information as possible to help us resolve your issue quickly.</p>
+           <div class="card-precision ops-card-precision">
+              <div class="card-header-precision border-b border-white/5 pb-4 mb-6">
+                 <h3 class="text-[10px] font-black uppercase tracking-widest text-red-base">Service Protocol</h3>
+              </div>
+              <p class="text-white/40 text-xs font-medium leading-relaxed mb-8">Ensure all mission-critical data is included to maintain operational velocity.</p>
               
-              <div class="space-y-4">
-                 <div class="p-4 bg-red-50 rounded-2xl border border-red-100">
-                    <span class="badge-elite badge-critical mb-2">Critical</span>
-                    <p class="text-xs font-bold text-red-800 mb-1">1 Hour Response</p>
-                    <p class="text-[10px] text-red-600">Total system failure or severe financial risk.</p>
+              <div class="protocol-stack-precision space-y-4">
+                 <div class="protocol-item-precision bg-red-base/10 p-5 rounded-2xl border border-red-base/20">
+                    <span class="badge-precision badge-danger-precision mb-3">CRITICAL</span>
+                    <p class="text-[11px] font-black text-white mb-1">Response: 60 MIN</p>
+                    <p class="text-[9px] text-white/40 uppercase tracking-widest leading-tight">Total system failure or severe financial risk.</p>
                  </div>
-                 <div class="p-4 bg-orange-50 rounded-2xl border border-orange-100">
-                    <span class="badge-elite badge-high mb-2">High</span>
-                    <p class="text-xs font-bold text-orange-800 mb-1">4 Hour Response</p>
-                    <p class="text-[10px] text-orange-600">Major feature degradation or filing blockages.</p>
+                 <div class="protocol-item-precision bg-white/5 p-5 rounded-2xl border border-white/10">
+                    <span class="badge-precision badge-warning-precision mb-3">HIGH</span>
+                    <p class="text-[11px] font-black text-white mb-1">Response: 04 HR</p>
+                    <p class="text-[9px] text-white/40 uppercase tracking-widest leading-tight">Major feature degradation or filing blockages.</p>
                  </div>
-                 <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100">
-                    <span class="badge-elite badge-progress mb-2">Medium</span>
-                    <p class="text-xs font-bold text-blue-800 mb-1">24 Hour Response</p>
-                    <p class="text-[10px] text-blue-600">Standard business inquiries or non-critical bugs.</p>
+                 <div class="protocol-item-precision bg-white/2 p-5 rounded-2xl border border-white/5">
+                    <span class="badge-precision badge-blue-precision mb-3">BASELINE</span>
+                    <p class="text-[11px] font-black text-white mb-1">Response: 24 HR</p>
+                    <p class="text-[9px] text-white/40 uppercase tracking-widest leading-tight">Inquiries and non-critical optimizations.</p>
                  </div>
               </div>
            </div>

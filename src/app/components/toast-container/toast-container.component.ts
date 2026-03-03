@@ -21,180 +21,57 @@ export interface Toast {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="toast-container" role="region" aria-label="Notifications" aria-live="polite">
-      <div *ngFor="let toast of toasts()"
-           [ngClass]="'toast-elite ' + toast.type"
-           [@slideIn]
-           role="alert"
-           [attr.aria-live]="toast.type === 'error' ? 'assertive' : 'polite'">
+    <div class="toast-container-precision" role="region" aria-label="Notifications" aria-live="polite">
+      @for (toast of toasts(); track toast.id) {
+        <div class="toast-precision animate-slide-in-right"
+             [class.success]="toast.type === 'success'"
+             [class.error]="toast.type === 'error'"
+             [class.warning]="toast.type === 'warning'"
+             [class.info]="toast.type === 'info'"
+             role="alert"
+             [attr.aria-live]="toast.type === 'error' ? 'assertive' : 'polite'">
+          
+          <div class="toast-accent-precision"></div>
+          
+          <!-- Tactical Icon -->
+          <div class="toast-icon-precision flex-shrink-0 w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/5">
+            <span class="text-sm">{{ toast.icon }}</span>
+          </div>
 
-        <!-- Toast Icon -->
-        <span class="toast-icon">{{ toast.icon }}</span>
+          <!-- Content Sequence -->
+          <div class="toast-content-precision">
+            <h4 class="toast-title-precision">{{ toast.title }}</h4>
+            <p class="toast-message-precision">{{ toast.message }}</p>
+          </div>
 
-        <!-- Toast Content -->
-        <div class="toast-content">
-          <div class="toast-title">{{ toast.title }}</div>
-          <div class="toast-message">{{ toast.message }}</div>
+          <!-- Abort Interaction -->
+          @if (toast.dismissible !== false) {
+            <button type="button"
+                    class="btn-precision btn-secondary-precision btn-sm px-2 border-none opacity-40 hover:opacity-100"
+                    (click)="removeToast(toast.id)"
+                    aria-label="Dismiss">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          }
+
+          <!-- Depletion Gauge -->
+          @if (toast.duration) {
+            <div class="toast-progress-precision"
+                 [style.animationDuration]="toast.duration + 'ms'">
+            </div>
+          }
         </div>
-
-        <!-- Close Button -->
-        <button *ngIf="toast.dismissible !== false"
-                type="button"
-                class="toast-close"
-                (click)="removeToast(toast.id)"
-                aria-label="Close notification">
-          ✕
-        </button>
-
-        <!-- Progress Bar -->
-        <div *ngIf="toast.duration"
-             class="toast-progress"
-             [style.animation]="'progress-bar ' + (toast.duration / 1000) + 's linear'">
-        </div>
-      </div>
+      }
     </div>
   `,
   styles: [`
-    .toast-container {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      max-width: 420px;
-      z-index: 2000;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    :host { display: block; }
+    .animate-slide-in-right {
+      animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-
-    .toast-elite {
-      background: var(--bg-surface);
-      border: 1.5px solid var(--border-color);
-      border-radius: 16px;
-      padding: 16px 20px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-      animation: slideInUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-      border-left: 4px solid var(--kra-red);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .toast-elite.success {
-      border-left-color: #10B981;
-    }
-
-    .toast-elite.warning {
-      border-left-color: #F59E0B;
-    }
-
-    .toast-elite.info {
-      border-left-color: #3B82F6;
-    }
-
-    .toast-elite.error {
-      border-left-color: #EF4444;
-    }
-
-    .toast-icon {
-      font-size: 1.5rem;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
-    }
-
-    .toast-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .toast-title {
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: var(--text-main);
-    }
-
-    .toast-message {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      line-height: 1.4;
-    }
-
-    .toast-close {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 1.2rem;
-      padding: 0;
-      transition: color 0.3s;
-      flex-shrink: 0;
-      margin-left: auto;
-    }
-
-    .toast-close:hover {
-      color: var(--text-main);
-    }
-
-    .toast-close:focus {
-      outline: 2px solid var(--kra-red);
-      outline-offset: 2px;
-    }
-
-    .toast-progress {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 3px;
-      background: var(--kra-red);
-      border-radius: 0 0 12px 0;
-    }
-
-    .toast-elite.success .toast-progress {
-      background: #10B981;
-    }
-
-    .toast-elite.warning .toast-progress {
-      background: #F59E0B;
-    }
-
-    .toast-elite.info .toast-progress {
-      background: #3B82F6;
-    }
-
-    .toast-elite.error .toast-progress {
-      background: #EF4444;
-    }
-
-    @keyframes slideInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .toast-container {
-        bottom: 12px;
-        right: 12px;
-        left: 12px;
-        max-width: none;
-      }
-
-      .toast-elite {
-        border-radius: 12px;
-        padding: 12px 16px;
-      }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to { opacity: 1; transform: translateX(0); }
     }
   `]
 })

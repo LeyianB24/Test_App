@@ -1,0 +1,148 @@
+/* Input Fields */
+.kra-input-precision {
+  background: var(--bg-surface-sunken);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-4);
+  width: 100%;
+  transition: border-color var(--duration-fast), 
+              box-shadow var(--duration-fast), 
+              background var(--duration-fast);
+}
+
+.kra-input-precision::placeholder {
+  color: var(--black-500);
+  font-style: italic;
+}
+
+.kra-input-precision:hover {
+  border-color: var(--black-500);
+  background: var(--bg-surface);
+}
+
+.kra-input-precision:focus {
+  border-color: var(--red-500);
+  background: var(--bg-surface);
+  box-shadow: 0 0 0 3px rgba(218, 56, 50, 0.15);
+  outline: none;
+}
+
+.kra-input-precision.invalid {
+  border-color: var(--red-500);
+  background: rgba(218, 56, 50, 0.04);
+}
+
+.kra-input-precision.valid {
+  border-color: var(--status-success-text);
+}
+
+/* Error Text */
+.kra-error-text {
+  color: var(--red-400);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  margin-top: var(--space-1);
+  animation: fadeSlideUp 200ms var(--ease-out);
+}
+
+/* Form Label */
+.kra-label-precision {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--black-200);
+  margin-bottom: var(--space-2);
+  display: block;
+}
+
+.kra-label-precision .required {
+  color: var(--red-500);
+  margin-left: 2px;
+}
+
+/* Select */
+.kra-select-precision {
+  background: var(--bg-surface-sunken);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-4);
+  width: 100%;
+  transition: border-color var(--duration-fast), 
+              box-shadow var(--duration-fast), 
+              background var(--duration-fast);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23DA3832' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-4) center;
+  padding-right: var(--space-10);
+}
+
+/* Textarea */
+.kra-textarea-precision {
+  background: var(--bg-surface-sunken);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-4);
+  width: 100%;
+  transition: border-color var(--duration-fast), 
+              box-shadow var(--duration-fast), 
+              background var(--duration-fast);
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Toggle / Switch */
+.kra-toggle-precision {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+}
+
+.kra-toggle-precision input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.kra-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--black-700);
+  transition: background-color 200ms var(--ease-out);
+  border-radius: var(--radius-full);
+}
+
+.kra-toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: transform 200ms var(--ease-spring);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+input:checked + .kra-toggle-slider {
+  background-color: var(--red-500);
+}
+
+input:checked + .kra-toggle-slider::before {
+  transform: translateX(18px);
+}

@@ -16,101 +16,97 @@ interface PinDetails {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="page-container p-8 animate-fade-in">
-      <header class="mb-12">
-        <h1 class="text-5xl font-black text-white tracking-tighter mb-2">PIN <span class="text-blue-500">Validation</span></h1>
-        <p class="text-slate-400 font-medium text-lg">Verify KRA PIN authenticity and operational directives</p>
+    <div class="dashboard-precision animate-fade-in">
+      
+      <header class="header-precision">
+        <div class="header-titles">
+          <h1 class="title-primary">PIN <span class="title-accent">Intelligence</span></h1>
+          <p class="subtitle-secondary">Verify taxpayer registry and compliance status</p>
+        </div>
       </header>
 
-      <div class="max-w-3xl mx-auto">
-        <div class="card-glass p-10 rounded-[3rem] border border-white/5 shadow-2xl mb-12">
-          <div class="space-y-6">
-            <div class="space-y-3">
-              <label class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 ml-4">Registry PIN Number</label>
-              <div class="flex gap-4">
-                <input 
-                  type="text" 
-                  [(ngModel)]="pin" 
-                  class="flex-1 bg-white/5 border border-white/10 text-white px-8 py-5 rounded-3xl focus:border-blue-500 outline-none font-black text-xl tracking-[0.2em] uppercase placeholder:text-slate-600 transition-all" 
-                  placeholder="A001234567X"
-                  maxlength="11"
-                />
-                <button 
-                  class="bg-blue-600 text-white px-10 py-5 rounded-3xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 disabled:bg-slate-800 transition-all shadow-xl shadow-blue-600/20" 
-                  [disabled]="!pin() || isLoading()" 
-                  (click)="checkPin()"
-                >
-                  @if (isLoading()) {
-                    <div class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
-                  } @else {
-                    Validate
-                  }
-                </button>
-              </div>
+      <div class="dashboard-content-precision">
+        <div class="max-w-xl">
+          <!-- Search Identity -->
+          <div class="card-precision search-card-precision mb-10">
+            <div class="card-header-precision">
+              <h3>Target Identity Registry</h3>
             </div>
-          </div>
-        </div>
-
-        @if (result()) {
-          <div class="card-glass p-10 rounded-[3rem] border border-white/5 animate-fade-in relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[100px] -mr-32 -mt-32"></div>
-            
-            <div class="text-center space-y-4 mb-12">
-              <span class="badge-elite" [class]="result()?.pinStatus === 'Active' ? 'badge-active' : 'badge-inactive'">
-                {{ result()?.pinStatus }}
-              </span>
-              <h3 class="text-3xl font-black text-white tracking-tight leading-none">{{ result()?.taxpayerName }}</h3>
-              <p class="text-blue-500 font-black text-lg tracking-[0.3em] font-mono">{{ result()?.pin }}</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-               <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
-                  <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">iTax Registration</span>
-                  <span class="text-sm font-bold text-white">{{ result()?.iTaxStatus }}</span>
-               </div>
-               <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
-                  <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Status Classification</span>
-                  <span class="text-sm font-bold text-white">Consolidated</span>
-               </div>
-            </div>
-
-            <div class="space-y-4">
-              <h4 class="text-[10px] font-black tracking-[0.2em] text-slate-500 uppercase ml-4">Tax Obligations Registry</h4>
-              <div class="space-y-3">
-                @for (ob of result()?.obligations; track ob.name) {
-                  <div class="flex justify-between items-center p-6 bg-white/5 rounded-[1.5rem] border border-white/5 group hover:bg-white/10 transition-all">
-                    <span class="text-sm font-bold text-slate-300 group-hover:text-white transition-colors">{{ ob.name }}</span>
-                    <span class="text-[10px] font-black uppercase tracking-widest" [class]="ob.status === 'Active' ? 'text-emerald-500' : 'text-slate-600'">
-                       {{ ob.status }}
-                    </span>
-                  </div>
+            <div class="search-input-group mt-6">
+              <input 
+                type="text" 
+                [(ngModel)]="pin" 
+                class="input-precision input-xl-precision" 
+                placeholder="A001234567X"
+                maxlength="11"
+              />
+              <button 
+                class="btn-precision btn-primary-precision btn-lg mt-4 w-full" 
+                [disabled]="!pin() || isLoading()" 
+                (click)="checkPin()"
+              >
+                @if (isLoading()) {
+                  <div class="loader-spinner-precision sm"></div>
+                } @else {
+                  Execute Validation
                 }
-              </div>
+              </button>
             </div>
           </div>
-        }
 
-        @if (error()) {
-          <div class="mt-8 p-6 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl font-bold flex items-center gap-3 animate-shake">
-             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-width="2"/></svg>
-             {{ error() }}
-          </div>
-        }
+          @if (error()) {
+            <div class="error-state-precision animate-shake mb-10">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              <span>{{ error() }}</span>
+            </div>
+          }
+
+          @if (result()) {
+            <div class="card-precision result-card-precision animate-slide-up">
+              <div class="result-identity-precision overflow-hidden">
+                <div class="identity-header">
+                  <span class="badge-precision" [class]="result()?.pinStatus === 'Active' ? 'badge-success-precision' : 'badge-danger-precision'">
+                    {{ result()?.pinStatus }}
+                  </span>
+                  <p class="pin-id-precision">{{ result()?.pin }}</p>
+                </div>
+                <h2 class="name-display-precision">{{ result()?.taxpayerName }}</h2>
+              </div>
+
+              <div class="result-grid-precision mt-10">
+                <div class="result-item-precision bg-dark-complex">
+                  <span class="label">iTax Status</span>
+                  <span class="value">{{ result()?.iTaxStatus }}</span>
+                </div>
+                <div class="result-item-precision bg-dark-complex">
+                  <span class="label">Last Validated</span>
+                  <span class="value">Instant Access</span>
+                </div>
+              </div>
+
+              <div class="obligations-section-precision mt-10 border-t border-white/5 pt-10">
+                <h4 class="section-title-precision">Tax Obligations Registry</h4>
+                <div class="obligations-stack-precision mt-6">
+                  @for (ob of result()?.obligations; track ob.name) {
+                    <div class="obligation-tile-precision group">
+                      <div class="ob-info">
+                        <span class="ob-name">{{ ob.name }}</span>
+                      </div>
+                      <div class="ob-status">
+                        <span class="status-tag" [class.status-active]="ob.status === 'Active'">{{ ob.status }}</span>
+                        <div class="status-dot" [class.active]="ob.status === 'Active'"></div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
       </div>
     </div>
   `,
-  styles: [`
-    .page-container { max-width: 1200px; margin: 0 auto; }
-    .card-glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); }
-    .animate-fade-in { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-    .animate-shake { animation: shake 0.5s; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-
-    .badge-elite { display: inline-block; padding: 4px 12px; border-radius: 8px; font-size: 0.65rem; font-weight: 950; text-transform: uppercase; letter-spacing: 1px; }
-    .badge-active { background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.2); }
-    .badge-inactive { background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.2); }
-  `]
+  styles: [``]
 })
 export class PinCheckerComponent {
   private http = inject(HttpClient);

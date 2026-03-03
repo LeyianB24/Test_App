@@ -98,7 +98,7 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
                  </div>
                  <div class="li-item full">
                     <span class="li-label">Physical Address</span>
-                    <span class="li-val">{{ taxpayer()?.address || 'Nairobi Sovereign District, Kenya' }}</span>
+                     <span class="li-val">{{ taxpayer()?.address || 'Nairobi, Kenya' }}</span>
                  </div>
               </div>
            </div>
@@ -125,7 +125,7 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
                       <div class="m-content">
                          <h4 class="m-title">{{ ob.obligation_name }}</h4>
                          <div class="m-meta-stack">
-                            <span>Effective From: {{ ob.effective_from }}</span>
+                             <span>Effective Date: {{ ob.effective_from }}</span>
                             <span class="m-sep">|</span>
                             <span>Cycle: Monthly</span>
                          </div>
@@ -334,7 +334,7 @@ export class ProfileComponent {
 
   editData = {
     phone: this.taxpayer()?.phone || '0700123456',
-    address: this.taxpayer()?.address || 'Nairobi Sovereign District, Kenya'
+    address: this.taxpayer()?.address || 'Nairobi, Kenya'
   };
 
   saveProfile() {

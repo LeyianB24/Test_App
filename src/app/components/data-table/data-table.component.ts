@@ -26,514 +26,200 @@ export interface TableAction {
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="data-table-wrapper">
-      <!-- Toolbar -->
-      <div class="table-toolbar">
-        <div class="toolbar-left">
-          <div class="search-box">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2"/>
+    <div class="card-precision dashboard-content-precision overflow-hidden border border-white/5">
+      <!-- High-Authority Toolbar -->
+      <div class="table-toolbar-precision px-8 py-6 border-b border-white/5 bg-white/2 flex justify-between items-center gap-6">
+        <div class="toolbar-left flex items-center gap-6">
+          <div class="search-box-precision relative group">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-red-base transition-colors" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2.5"/>
             </svg>
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Filter Registry..."
               [(ngModel)]="searchQuery"
               (input)="onSearch()"
-              class="search-input">
+              class="input-precision sm pl-10 w-[280px]">
           </div>
 
-          <select [(ngModel)]="selectedStatus" (change)="onFilter()" class="filter-select">
-            <option value="">All Status</option>
-            <option value="completed">Completed</option>
-            <option value="pending">Pending</option>
-            <option value="failed">Failed</option>
-          </select>
+          <div class="filter-wrapper-precision relative">
+            <select [(ngModel)]="selectedStatus" (change)="onFilter()" class="input-precision sm appearance-none pr-10">
+              <option value="">Operational Status</option>
+              <option value="completed">Verified</option>
+              <option value="pending">Synchronizing</option>
+              <option value="failed">Halted</option>
+            </select>
+            <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20">
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+          </div>
         </div>
 
-        <div class="toolbar-right">
-          <button class="icon-btn" (click)="refreshData()" title="Refresh">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="toolbar-right flex items-center gap-4">
+          <button (click)="refreshData()" class="btn-precision btn-secondary-precision btn-sm px-3" title="Refresh Feed">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 5H15" stroke-width="2.5"/>
             </svg>
           </button>
 
-          <button class="icon-btn export-btn" [class.expanded]="showExportMenu()">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2.2"/>
-            </svg>
-            <div class="export-menu" *ngIf="showExportMenu()">
-              <button (click)="exportTable('excel')" class="export-option">
-                <span>📊</span> Export to Excel
-              </button>
-              <button (click)="exportTable('pdf')" class="export-option">
-                <span>📄</span> Export to PDF
-              </button>
-              <button (click)="exportTable('csv')" class="export-option">
-                <span>📋</span> Export to CSV
-              </button>
-              <button (click)="exportTable('json')" class="export-option">
-                <span>{{ '{' }} {{ '}' }}</span> Export to JSON
-              </button>
-            </div>
-          </button>
+          <div class="relative">
+            <button (click)="showExportMenu.set(!showExportMenu())" class="btn-precision btn-secondary-precision btn-sm gap-2" [class.active-precision]="showExportMenu()">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/>
+              </svg>
+              <span>Export</span>
+            </button>
+            
+            @if (showExportMenu()) {
+              <div class="absolute right-0 top-full mt-2 z-50 bg-black/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-2 min-w-[200px] animate-fade-in">
+                <button (click)="exportTable('excel')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl transition-all text-xs font-bold text-white/70">
+                  <span class="text-emerald-500">📊</span> Excel Record
+                </button>
+                <button (click)="exportTable('pdf')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl transition-all text-xs font-bold text-white/70">
+                  <span class="text-red-500">📄</span> PDF Document
+                </button>
+                <button (click)="exportTable('csv')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl transition-all text-xs font-bold text-white/70">
+                  <span class="text-blue-500">📋</span> CSV Manifest
+                </button>
+              </div>
+            }
+          </div>
         </div>
       </div>
 
-      <!-- Table -->
-      <div class="table-container">
-        <table class="modern-table">
+      <!-- High-Precision Data Grid -->
+      <div class="table-container-precision overflow-x-auto scrollbar-thin">
+        <table class="table-precision w-full">
           <thead>
             <tr>
-              <th *ngFor="let col of columns"
-                  [style.width]="col.width || 'auto'"
-                  [class.sortable]="col.sortable"
-                  (click)="col.sortable && toggleSort(col.key)">
-                <div class="th-content">
-                  <span>{{ col.label }}</span>
-                  <span *ngIf="col.sortable" class="sort-indicator"
-                        [class.active]="sortBy() === col.key">
-                    {{ sortOrder() === 'asc' ? '▲' : '▼' }}
-                  </span>
-                </div>
-              </th>
-              <th *ngIf="actions.length > 0" style="width: 120px;">Actions</th>
+              @for (col of columns; track col.key) {
+                <th [style.width]="col.width || 'auto'"
+                    [class.sortable-precision]="col.sortable"
+                    (click)="col.sortable && toggleSort(col.key)"
+                    class="group">
+                  <div class="flex items-center justify-between gap-4">
+                    <span class="label-master uppercase tracking-[0.2em] font-black pointer-events-none">{{ col.label }}</span>
+                    @if (col.sortable) {
+                      <div class="sort-icon-precision opacity-20 group-hover:opacity-100 transition-opacity" [class.active-precision]="sortBy() === col.key">
+                        @if (sortBy() === col.key && sortOrder() === 'desc') {
+                          <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 4L4 1L7 4" stroke="#DA3832" stroke-width="2"/></svg>
+                        } @else {
+                          <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="2"/></svg>
+                        }
+                      </div>
+                    }
+                  </div>
+                </th>
+              }
+              @if (actions.length > 0) {
+                <th style="width: 140px;" class="text-right">Actions</th>
+              }
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let row of filteredData()" class="table-row-hover">
-              <td *ngFor="let col of columns" [style.width]="col.width || 'auto'">
-                <div [ngSwitch]="col.type">
-                  <!-- Text -->
-                  <span *ngSwitchCase="'text'" class="cell-value">
-                    {{ row[col.key] }}
-                  </span>
+            @for (row of paginatedData(); track $index) {
+              <tr class="hover-precision transition-all border-b border-white/5">
+                @for (col of columns; track col.key) {
+                  <td [style.width]="col.width || 'auto'">
+                    <div [ngSwitch]="col.type">
+                      <!-- Standard Text -->
+                      <span *ngSwitchCase="'text'" class="text-white font-medium text-sm leading-none block">
+                        {{ row[col.key] }}
+                      </span>
 
-                  <!-- Currency -->
-                  <span *ngSwitchCase="'currency'" class="cell-value currency">
-                    {{ row[col.key] | currency:'KES ':'symbol':'1.0-2' }}
-                  </span>
+                      <!-- Financial Intensity -->
+                      <span *ngSwitchCase="'currency'" class="text-white font-black text-sm tabular-nums tracking-tight">
+                        {{ row[col.key] | currency:'KES ':'code':'1.0-0' }}
+                      </span>
 
-                  <!-- Date -->
-                  <span *ngSwitchCase="'date'" class="cell-value date">
-                    {{ row[col.key] | date:'short' }}
-                  </span>
+                      <!-- Chronological Identity -->
+                      <div *ngSwitchCase="'date'" class="date-identity">
+                        <span class="text-white/80 font-bold text-[12px] block">{{ row[col.key] | date:'dd MMM yyyy' }}</span>
+                        <span class="text-white/20 font-black text-[9px] uppercase tracking-widest block">{{ row[col.key] | date:'HH:mm' }}</span>
+                      </div>
 
-                  <!-- Status -->
-                  <span *ngSwitchCase="'status'"
-                        class="status-badge"
-                        [class]="getStatusClass(row[col.key])">
-                    {{ row[col.key] }}
-                  </span>
+                      <!-- Operational Status -->
+                      <div *ngSwitchCase="'status'">
+                        <span class="badge-precision" [class]="getStatusClass(row[col.key])">
+                          {{ row[col.key] }}
+                        </span>
+                      </div>
 
-                  <!-- Number -->
-                  <span *ngSwitchCase="'number'" class="cell-value number">
-                    {{ row[col.key] | number:'1.0-2' }}
-                  </span>
-                </div>
-              </td>
+                      <!-- Mathematical units -->
+                      <span *ngSwitchCase="'number'" class="text-white/60 font-black text-sm tabular-nums">
+                        {{ row[col.key] | number:'1.0-0' }}
+                      </span>
+                    </div>
+                  </td>
+                }
 
-              <!-- Actions -->
-              <td *ngIf="actions.length > 0" class="actions-cell">
-                <div class="action-buttons">
-                  <button *ngFor="let action of actions"
-                          class="action-btn"
-                          [class]="'action-' + action.color"
-                          (click)="onAction(action.action, row)"
-                          [title]="action.label">
-                    {{ action.icon }}
-                  </button>
-                </div>
-              </td>
-            </tr>
+                <!-- Reactive Actions -->
+                @if (actions.length > 0) {
+                  <td class="text-right">
+                    <div class="flex justify-end gap-2">
+                      @for (action of actions; track action.label) {
+                        <button (click)="onAction(action.action, row)" 
+                                class="btn-precision btn-secondary-precision btn-sm px-2 border-white/10 hover:border-red-base/50" 
+                                [title]="action.label">
+                          <span class="text-xs">{{ action.icon }}</span>
+                        </button>
+                      }
+                    </div>
+                  </td>
+                }
+              </tr>
+            }
 
-            <!-- Empty State -->
-            <tr *ngIf="filteredData().length === 0" class="empty-state">
-              <td [attr.colspan]="columns.length + (actions.length > 0 ? 1 : 0)">
-                <div class="empty-message">
-                  <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" stroke-width="2"/>
-                  </svg>
-                  <p>{{ searchQuery ? 'No results found' : 'No data available' }}</p>
-                </div>
-              </td>
-            </tr>
+            <!-- Null State Matrix -->
+            @if (filteredData().length === 0) {
+              <tr>
+                <td [attr.colspan]="columns.length + (actions.length > 0 ? 1 : 0)" class="py-32">
+                  <div class="null-state-precision text-center max-w-sm mx-auto">
+                    <div class="icon-orb-precision w-20 h-20 bg-white/2 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/5">
+                      <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-white/10"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" stroke-width="1.5"/></svg>
+                    </div>
+                    <h3 class="text-white font-bold text-lg mb-2">No Records Localized</h3>
+                    <p class="text-white/30 text-xs font-medium">{{ searchQuery ? 'Your search query yielded zero operational matches.' : 'Registry pipeline currently contains no synchronized data.' }}</p>
+                  </div>
+                </td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
 
-      <!-- Pagination -->
-      <div class="table-footer" *ngIf="totalPages() > 1">
-        <div class="pagination-info">
-          Showing {{ startIndex() + 1 }} to {{ endIndex() }} of {{ filteredData().length }} entries
+      <!-- Tactical Pagination Shell -->
+      @if (totalPages() > 1) {
+        <div class="pagination-shell-precision px-8 py-6 border-t border-white/5 flex justify-between items-center bg-white/2">
+          <div class="pagination-telemetry">
+            <span class="text-[10px] uppercase font-black tracking-widest text-white/20">Telemetry: </span>
+            <span class="text-white/60 font-bold text-xs">{{ startIndex() + 1 }} - {{ endIndex() }} of {{ filteredData().length }} Units</span>
+          </div>
+          
+          <div class="pagination-controls-precision flex items-center gap-2">
+            <button [disabled]="currentPage() === 1" (click)="previousPage()" class="btn-precision btn-secondary-precision btn-sm px-4 disabled:opacity-20 transition-all">
+              Prev Transmission
+            </button>
+            <div class="page-indicator-precision px-6 py-2 bg-black border border-white/10 rounded-xl">
+               <span class="text-white font-black text-xs">Phase {{ currentPage() }} <span class="text-white/20">/ {{ totalPages() }}</span></span>
+            </div>
+            <button [disabled]="currentPage() === totalPages()" (click)="nextPage()" class="btn-precision btn-secondary-precision btn-sm px-4 disabled:opacity-20 transition-all">
+              Next Transmission
+            </button>
+          </div>
         </div>
-        <div class="pagination">
-          <button [disabled]="currentPage() === 1" (click)="previousPage()" class="pagination-btn">
-            Previous
-          </button>
-          <span class="page-info">
-            Page {{ currentPage() }} of {{ totalPages() }}
-          </span>
-          <button [disabled]="currentPage() === totalPages()" (click)="nextPage()" class="pagination-btn">
-            Next
-          </button>
-        </div>
-      </div>
+      }
     </div>
   `,
   styles: [`
-    .data-table-wrapper {
-      background: white;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
-      overflow: hidden;
-    }
-
-    /* Toolbar */
-    .table-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 20px;
-      border-bottom: 1px solid #e5e7eb;
-      background: #f9fafb;
-      gap: 12px;
-    }
-
-    .toolbar-left,
-    .toolbar-right {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .search-box {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .search-box svg {
-      position: absolute;
-      left: 12px;
-      color: #9ca3af;
-      pointer-events: none;
-    }
-
-    .search-input {
-      padding: 8px 12px 8px 36px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 14px;
-      width: 250px;
-      transition: border-color 0.2s;
-    }
-
-    .search-input:focus {
-      outline: none;
-      border-color: #667eea;
-      background: #f8f9ff;
-    }
-
-    .filter-select {
-      padding: 8px 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 14px;
-      background: white;
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
-
-    .filter-select:focus {
-      outline: none;
-      border-color: #667eea;
-    }
-
-    .icon-btn {
-      background: none;
-      border: none;
-      padding: 8px;
-      cursor: pointer;
-      color: #6b7280;
-      border-radius: 6px;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .icon-btn:hover {
-      background: #e5e7eb;
-      color: #1f2937;
-    }
-
-    .icon-btn.export-btn {
-      position: relative;
-    }
-
-    .export-menu {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      z-index: 100;
-      min-width: 160px;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-
-    .export-option {
-      width: 100%;
-      padding: 10px 16px;
-      border: none;
-      background: none;
-      text-align: left;
-      cursor: pointer;
-      font-size: 14px;
-      color: #374151;
-      transition: background 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .export-option:hover {
-      background: #f3f4f6;
-      color: #667eea;
-    }
-
-    /* Table */
-    .table-container {
-      overflow-x: auto;
-    }
-
-    .modern-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-
-    .modern-table thead th {
-      background: #f9fafb;
-      padding: 12px 16px;
-      text-align: left;
-      font-weight: 600;
-      color: #1f2937;
-      border-bottom: 2px solid #e5e7eb;
-      user-select: none;
-    }
-
-    .modern-table th.sortable {
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .modern-table th.sortable:hover {
-      background: #f3f4f6;
-    }
-
-    .th-content {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      justify-content: space-between;
-    }
-
-    .sort-indicator {
-      font-size: 12px;
-      color: #d1d5db;
-      transition: color 0.2s;
-    }
-
-    .sort-indicator.active {
-      color: #667eea;
-      font-weight: bold;
-    }
-
-    .modern-table tbody td {
-      padding: 14px 16px;
-      border-bottom: 1px solid #f3f4f6;
-      color: #374151;
-    }
-
-    .table-row-hover:hover {
-      background: #f9fafb;
-    }
-
-    .cell-value {
-      display: block;
-    }
-
-    .cell-value.currency {
-      font-weight: 600;
-      color: #059669;
-    }
-
-    .cell-value.date {
-      color: #6b7280;
-      font-size: 13px;
-    }
-
-    .cell-value.number {
-      text-align: right;
-      font-family: 'Monaco', 'Menlo', monospace;
-    }
-
-    /* Status Badge */
-    .status-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 12px;
-    }
-
-    .status-badge.completed {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .status-badge.pending {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .status-badge.failed {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .status-badge.cancelled {
-      background: #f3f4f6;
-      color: #374151;
-    }
-
-    /* Actions */
-    .actions-cell {
-      text-align: center;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-    }
-
-    .action-btn {
-      background: none;
-      border: none;
-      padding: 6px 10px;
-      cursor: pointer;
-      font-size: 16px;
-      border-radius: 4px;
-      transition: all 0.2s;
-      opacity: 0.7;
-    }
-
-    .action-btn:hover {
-      opacity: 1;
-      background: #f3f4f6;
-    }
-
-    /* Empty State */
-    .empty-state {
-      background: #f9fafb;
-    }
-
-    .empty-message {
-      padding: 48px 20px;
-      text-align: center;
-      color: #9ca3af;
-    }
-
-    .empty-message svg {
-      opacity: 0.5;
-      margin-bottom: 16px;
-    }
-
-    .empty-message p {
-      margin: 0;
-      font-size: 16px;
-    }
-
-    /* Footer */
-    .table-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 20px;
-      border-top: 1px solid #e5e7eb;
-      background: #f9fafb;
-      font-size: 13px;
-      color: #6b7280;
-    }
-
-    .pagination-info {
-      flex: 1;
-    }
-
-    .pagination {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .pagination-btn {
-      padding: 6px 12px;
-      border: 1px solid #d1d5db;
-      background: white;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-      transition: all 0.2s;
-    }
-
-    .pagination-btn:hover:not(:disabled) {
-      border-color: #667eea;
-      color: #667eea;
-    }
-
-    .pagination-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .page-info {
-      min-width: 120px;
-      text-align: center;
-    }
-
-    @media (max-width: 768px) {
-      .table-toolbar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .toolbar-left,
-      .toolbar-right {
-        width: 100%;
-      }
-
-      .search-input {
-        width: 100%;
-      }
-
-      .modern-table {
-        font-size: 12px;
-      }
-
-      .modern-table thead th,
-      .modern-table tbody td {
-        padding: 8px 12px;
-      }
-
-      .table-footer {
-        flex-direction: column;
-        gap: 12px;
-      }
+    :host { display: block; width: 100%; }
+    .scrollbar-thin::-webkit-scrollbar { width: 4px; height: 4px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #DA3832; }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   `]
 })

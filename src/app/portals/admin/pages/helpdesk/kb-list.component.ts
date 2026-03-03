@@ -12,7 +12,7 @@ import { KbService, KbCategory } from '../../../../services/kb.service';
     <div class="page-container p-8 animate-fade-in">
       <header class="page-header-elite mb-10">
         <div class="header-info text-center w-full">
-          <h1 class="premium-title">Knowledge <span class="gradient-text">Repository</span></h1>
+          <h1 class="premium-title">Knowledge <span class="gradient-text">Base</span></h1>
           <p class="premium-subtitle pl-0 mt-1">Institutional wisdom and protocol documentation</p>
           
           <div class="mt-8 max-w-2xl mx-auto relative group">

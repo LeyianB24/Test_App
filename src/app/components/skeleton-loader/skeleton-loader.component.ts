@@ -11,175 +11,89 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="skeleton-container">
-      <!-- Card Skeleton -->
-      <div *ngIf="type === 'card'" class="skeleton-card">
-        <div [style.width]="width" class="skeleton-loading skeleton-title"></div>
-        <div class="skeleton-loading skeleton-text" [style.width]="'90%'"></div>
-        <div class="skeleton-loading skeleton-text" [style.width]="'80%'"></div>
-      </div>
-
-      <!-- Stat Card Skeleton -->
-      <div *ngIf="type === 'stat'" class="skeleton-stat-card">
-        <div class="skeleton-stat-icon skeleton-loading skeleton-avatar"></div>
-        <div class="skeleton-stat-content">
-          <div class="skeleton-loading skeleton-text" [style.width]="'70%'"></div>
-          <div class="skeleton-loading skeleton-title" [style.width]="'90%'"></div>
+    <div class="skeleton-shell animate-fade-in">
+      <!-- High-Precision Card Skeleton -->
+      @if (type === 'card') {
+        <div class="skeleton-card-precision">
+          <div class="skeleton-precision skeleton-title-precision"></div>
+          <div class="skeleton-precision skeleton-text-precision" style="width: 90%"></div>
+          <div class="skeleton-precision skeleton-text-precision" style="width: 75%"></div>
         </div>
-      </div>
+      }
 
-      <!-- Table Row Skeleton -->
-      <div *ngIf="type === 'table'" class="skeleton-table-row">
-        <div class="skeleton-cell skeleton-loading" [style.width]="'15%'"></div>
-        <div class="skeleton-cell skeleton-loading" [style.width]="'25%'"></div>
-        <div class="skeleton-cell skeleton-loading" [style.width]="'20%'"></div>
-        <div class="skeleton-cell skeleton-loading" [style.width]="'25%'"></div>
-        <div class="skeleton-cell skeleton-loading" [style.width]="'15%'"></div>
-      </div>
-
-      <!-- List Item Skeleton -->
-      <div *ngIf="type === 'list'" class="skeleton-list-item">
-        <div class="skeleton-loading skeleton-avatar"></div>
-        <div style="flex: 1;">
-          <div class="skeleton-loading skeleton-text" [style.width]="'60%'"></div>
-          <div class="skeleton-loading skeleton-text" [style.width]="'40%'"></div>
-        </div>
-      </div>
-
-      <!-- Form Field Skeleton -->
-      <div *ngIf="type === 'form'">
-        <div class="skeleton-loading skeleton-text" [ngStyle]="{'width': '30%', 'margin-bottom': '8px'}"></div>
-        <div class="skeleton-loading skeleton-loading" [ngStyle]="{'height': '40px', 'border-radius': '12px'}"></div>
-      </div>
-
-      <!-- Chart/Bar Skeleton -->
-      <div *ngIf="type === 'chart'" class="skeleton-bar-chart">
-        <div *ngFor="let i of [1,2,3,4,5]" class="skeleton-bar-item">
-          <div class="skeleton-bar skeleton-loading" [style.height]="getRandomHeight()"></div>
-        </div>
-      </div>
-
-      <!-- Multiple Skeletons -->
-      <ng-container *ngIf="type === 'list-multiple'">
-        <div *ngFor="let i of [1,2,3]" class="skeleton-list-item" style="margin-bottom: 16px;">
-          <div class="skeleton-loading skeleton-avatar"></div>
-          <div style="flex: 1;">
-            <div class="skeleton-loading skeleton-text" [style.width]="'60%'"></div>
-            <div class="skeleton-loading skeleton-text" [style.width]="'40%'"></div>
+      <!-- Operational Stat Skeleton -->
+      @if (type === 'stat') {
+        <div class="skeleton-card-precision flex-row items-center gap-6">
+          <div class="skeleton-precision skeleton-avatar-precision flex-shrink-0"></div>
+          <div class="flex-1 space-y-3">
+            <div class="skeleton-precision skeleton-text-precision" style="width: 40%"></div>
+            <div class="skeleton-precision skeleton-title-precision" style="width: 80%"></div>
           </div>
         </div>
-      </ng-container>
+      }
+
+      <!-- Registry Table Skeleton -->
+      @if (type === 'table') {
+        <div class="skeleton-card-precision p-0 border-white/5 bg-transparent overflow-hidden">
+          @for (i of [1,2,3,4,5]; track i) {
+            <div class="skeleton-table-row-precision flex items-center gap-8 px-8 border-b border-white/5">
+              <div class="skeleton-precision" style="width: 15%"></div>
+              <div class="skeleton-precision" style="width: 30%"></div>
+              <div class="skeleton-precision" style="width: 20%"></div>
+              <div class="skeleton-precision" style="width: 15%"></div>
+              <div class="skeleton-precision" style="width: 10%"></div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Protocol List Skeleton -->
+      @if (type === 'list') {
+        <div class="skeleton-card-precision flex-row gap-4 p-4 border-white/5 mb-4">
+          <div class="skeleton-precision h-10 w-10 rounded-xl"></div>
+          <div class="flex-1 space-y-2">
+            <div class="skeleton-precision h-3 w-1/3"></div>
+            <div class="skeleton-precision h-2 w-1/2"></div>
+          </div>
+        </div>
+      }
+
+      <!-- Directive Form Skeleton -->
+      @if (type === 'form') {
+        <div class="space-y-6">
+          <div class="skeleton-precision h-3 w-24"></div>
+          <div class="skeleton-precision h-12 w-full rounded-2xl"></div>
+        </div>
+      }
+
+      <!-- Data Transmission (Chart) Skeleton -->
+      @if (type === 'chart') {
+        <div class="skeleton-card-precision h-[240px] flex items-end justify-between gap-4 py-8">
+          @for (i of [1,2,3,4,5,6,7,8]; track i) {
+            <div class="skeleton-precision rounded-t-xl" [style.height]="getRandomHeight()" style="width: 8%"></div>
+          }
+        </div>
+      }
+
+      <!-- Recursive List Sequence -->
+      @if (type === 'list-multiple') {
+        <div class="space-y-4">
+          @for (i of [1,2,3,4]; track i) {
+            <div class="skeleton-card-precision flex-row gap-4 p-4 border-white/5">
+              <div class="skeleton-precision h-10 w-10 rounded-xl"></div>
+              <div class="flex-1 space-y-2">
+                <div class="skeleton-precision h-3 w-1/4"></div>
+                <div class="skeleton-precision h-2 w-1/3"></div>
+              </div>
+            </div>
+          }
+        </div>
+      }
     </div>
   `,
   styles: [`
-    .skeleton-container {
-      width: 100%;
-    }
-
-    .skeleton-card {
-      padding: 24px;
-      background: var(--bg-surface);
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-    }
-
-    .skeleton-stat-card {
-      padding: 24px;
-      display: flex;
-      gap: 16px;
-      background: var(--bg-surface);
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-    }
-
-    .skeleton-stat-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: 12px;
-      flex-shrink: 0;
-    }
-
-    .skeleton-stat-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .skeleton-bar-chart {
-      display: flex;
-      gap: 12px;
-      align-items: flex-end;
-      justify-content: space-between;
-      height: 200px;
-      padding: 20px 0;
-    }
-
-    .skeleton-bar-item {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-    }
-
-    .skeleton-bar {
-      width: 100%;
-      border-radius: 8px;
-      min-width: 20px;
-    }
-
-    .skeleton-text {
-      height: 16px;
-      width: 100%;
-      margin-bottom: 8px;
-      border-radius: 8px;
-    }
-
-    .skeleton-title {
-      height: 24px;
-      width: 100%;
-      margin-bottom: 12px;
-      border-radius: 8px;
-    }
-
-    .skeleton-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .skeleton-table-row {
-      display: flex;
-      gap: 20px;
-      padding: 20px 24px;
-      background: var(--bg-surface);
-      border-radius: 12px;
-      margin-bottom: 12px;
-    }
-
-    .skeleton-cell {
-      flex: 1;
-      height: 16px;
-    }
-
-    .skeleton-list-item {
-      display: flex;
-      gap: 16px;
-      padding: 16px;
-      background: var(--bg-surface);
-      border-radius: 12px;
-    }
-
-    @keyframes shimmer {
-      0% { background-position: -1000px 0; }
-      100% { background-position: 1000px 0; }
-    }
-
-    .skeleton-loading {
-      background: linear-gradient(90deg, var(--bg-hover) 25%, var(--bg-surface) 50%, var(--bg-hover) 75%);
-      background-size: 1000px 100%;
-      animation: shimmer 2s infinite;
-    }
+    :host { display: block; width: 100%; }
+    .skeleton-shell { width: 100%; }
   `]
 })
 export class SkeletonLoaderComponent {

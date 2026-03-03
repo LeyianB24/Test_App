@@ -167,179 +167,73 @@ const NAV_MAP: { slug: string; route: string; label: string; iconPath: string }[
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, RouterModule, LogoComponent],
+  imports: [CommonModule, RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="mobile-backdrop-elite"
+    <div class="modal-backdrop-precision"
          *ngIf="isMobileOpen()"
          (click)="closeMobileMenu()">
     </div>
 
-    <aside class="sidebar-elite"
+    <aside class="sidebar-precision"
            [class.collapsed]="collapsed()"
            [class.mobile-open]="isMobileOpen()">
 
-      <!-- Premium Branding -->
-      <div class="sidebar-brand-elite">
-        <div class="logo-sphere">
-             <app-logo [height]="collapsed() ? '80%' : '100%'"></app-logo>
-        </div>
+      <!-- Branding -->
+      <div class="sidebar-logo-precision">
+        <img src="assets/img/kra-logo-white.png" class="sidebar-logo-img" alt="KRA Logo">
+        <span class="sidebar-logo-text">iTax<span class="logo-accent-dot"></span></span>
       </div>
 
-      <div class="nav-scroller-elite custom-scrollbar">
-        <nav class="sidebar-nav-elite">
+      <div class="nav-scroller-precision custom-scrollbar">
+        <nav class="sidebar-nav-precision">
           @if (!collapsed()) {
-            <p class="nav-domain-label">Operational Hub</p>
+            <p class="nav-section-label-precision">Operational Hub</p>
           }
 
           @for (item of menuItems(); track item.route) {
             <a [routerLink]="item.route"
                routerLinkActive="active"
-               class="nav-link-elite"
+               class="nav-link-precision"
                [title]="item.label"
                (click)="closeMobileMenu()">
 
-              <div class="icon-frame">
-                <svg class="nav-icon-elite" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" [attr.d]="item.iconPath" />
-                </svg>
-              </div>
+              <svg class="nav-link-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" [attr.d]="item.iconPath" />
+              </svg>
 
-              @if (!collapsed()) {
-                <span class="link-label-elite">{{ item.label }}</span>
-              }
+              <span class="nav-link-label">{{ item.label }}</span>
 
               @if (item.notification && !collapsed()) {
-                <div class="badge-ring" [class.danger]="item.variant === 'danger'">
-                   <span class="badge-text">{{ item.notification }}</span>
-                </div>
+                <span class="nav-link-badge">{{ item.notification }}</span>
               }
             </a>
           }
 
           @if (menuItems().length === 0) {
-            <p class="nav-empty-msg">No pages assigned to your role.</p>
+            <p class="nav-empty-msg p-5 text-xs color-black-500">No pages assigned to your role.</p>
           }
         </nav>
       </div>
 
-      <!-- Sophisticated Footer -->
-      <div class="sidebar-footer-elite">
-        <div class="footer-actions-elite">
-          <button class="footer-btn-elite" (click)="themeService.toggleTheme()" [title]="isDarkMode() ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
-            <div class="f-icon-box">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path *ngIf="isDarkMode()" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                <path *ngIf="!isDarkMode()" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-              </svg>
-            </div>
-            <span class="f-label" *ngIf="!collapsed()">{{ isDarkMode() ? 'Light Mode' : 'Dark Mode' }}</span>
+      <!-- Footer -->
+      <div class="sidebar-footer-precision">
+          <button class="btn-precision btn-ghost-precision w-full justify-start mb-2" (click)="themeService.toggleTheme()">
+             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path *ngIf="isDarkMode()" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                <path *ngIf="!isDarkMode()" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+             </svg>
+             <span class="nav-link-label">{{ isDarkMode() ? 'Light Mode' : 'Dark Mode' }}</span>
           </button>
 
-          <button class="footer-btn-elite logout" (click)="handleLogout()" title="Terminate Session">
-            <div class="f-icon-box">
-               <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-            </div>
-            <span class="f-label" *ngIf="!collapsed()">Logout</span>
+          <button class="btn-precision btn-ghost-precision w-full justify-start text-red-400" (click)="handleLogout()">
+             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+             <span class="nav-link-label">Logout</span>
           </button>
-        </div>
-
-        <div class="system-seal-elite" *ngIf="!collapsed()">
-           <span class="s-ver">v2.4.0-elite</span>
-           <span class="s-sep">|</span>
-           <span class="s-sec">AES-X</span>
-        </div>
       </div>
     </aside>
   `,
-  styles: [`
-    .sidebar-elite {
-      position: fixed; top: 0; left: 0; bottom: 0; width: 300px;
-      background: var(--bg-surface);
-      border-right: 1px solid var(--border-color);
-      display: flex; flex-direction: column;
-      z-index: 1000; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .sidebar-elite.collapsed { width: 90px; }
-
-    .sidebar-brand-elite {
-      height: 90px;
-      display: flex; align-items: center; justify-content: center;
-      padding: 10px 20px;
-      border-bottom: 1px solid var(--border-light);
-      background: var(--bg-surface);
-      transition: all 0.3s ease;
-    }
-    .logo-sphere {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .nav-scroller-elite { flex: 1; padding: 12px; overflow-y: auto; }
-    .nav-domain-label { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; padding: 0 16px; margin: 16px 0 12px 0; }
-    .nav-empty-msg { font-size: 0.8rem; color: var(--text-muted); padding: 16px; text-align: center; }
-
-    .nav-link-elite {
-      display: flex; align-items: center; gap: 16px; padding: 14px 16px;
-      border-radius: 16px; color: var(--text-secondary); text-decoration: none;
-      font-weight: 700; font-size: 0.95rem; transition: 0.3s; margin-bottom: 4px;
-    }
-    .nav-link-elite:hover { background: rgba(0,0,0,0.03); color: var(--text-main); }
-    .nav-link-elite.active { background: var(--bg-active); color: var(--kra-red); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-
-    .icon-frame {
-      width: 40px; height: 40px; border-radius: 12px; background: transparent;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-      transition: 0.3s;
-    }
-    .nav-link-elite.active .icon-frame { background: rgba(227,30,36,0.08); color: var(--kra-red); }
-    .nav-icon-elite { width: 22px; height: 22px; }
-    .link-label-elite { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    .badge-ring {
-      margin-left: auto; padding: 2px 8px; border-radius: 8px;
-      background: var(--bg-hover); color: var(--text-secondary); font-size: 0.7rem; font-weight: 900;
-    }
-    .badge-ring.danger { background: #FEE2E2; color: #EF4444; }
-
-    .sidebar-footer-elite { padding: 20px; border-top: 1px solid var(--border-light); }
-    .footer-actions-elite { display: flex; flex-direction: column; gap: 8px; }
-    .footer-btn-elite {
-      display: flex; align-items: center; gap: 14px; padding: 12px 16px;
-      border-radius: 14px; border: none; background: transparent;
-      color: var(--text-secondary); font-weight: 700; font-size: 0.9rem;
-      cursor: pointer; transition: 0.3s; text-align: left;
-      font-family: inherit;
-    }
-    .footer-btn-elite:hover { background: rgba(0,0,0,0.03); color: var(--text-main); }
-    .footer-btn-elite.logout:hover { color: var(--kra-red); background: #FEF2F2; }
-    .f-icon-box { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
-
-    .system-seal-elite {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      margin-top: 20px; font-size: 0.65rem; color: var(--text-muted);
-      font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .s-sep { opacity: 0.3; }
-
-    /* Collapsed adjustments */
-    .collapsed .nav-domain-label, .collapsed .link-label-elite, .collapsed .f-label { display: none; }
-    .collapsed .nav-link-elite { justify-content: center; padding: 14px 0; }
-    .collapsed .footer-btn-elite { justify-content: center; padding: 12px 0; }
-
-    @media (max-width: 991px) {
-      .sidebar-elite { transform: translateX(-100%); width: 280px; }
-      .sidebar-elite.mobile-open { transform: translateX(0); }
-      .sidebar-elite.collapsed { transform: translateX(-100%); }
-    }
-    .mobile-backdrop-elite {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999;
-      -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
-    }
-  `]
+  styles: [``]
 })
 export class SidebarComponent {
   authService = inject(AuthService);

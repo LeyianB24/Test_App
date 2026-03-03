@@ -37,7 +37,7 @@ import { map, tap } from 'rxjs/operators';
                 <div class="flex items-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-500">
                   <span class="flex items-center gap-2">
                     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                    {{ article()?.view_count }} Expeditions
+                    {{ article()?.view_count }} Views
                   </span>
                   <span>Documented: {{ article()?.created_at | date:'dd MMM yyyy' }}</span>
                 </div>
@@ -62,7 +62,7 @@ import { map, tap } from 'rxjs/operators';
                   } @else {
                     <div class="flex items-center gap-3 text-emerald-500 font-black text-[10px] uppercase tracking-widest animate-fade-in">
                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/></svg>
-                       Signal Received. Thank you.
+                       Feedback received. Thank you.
                     </div>
                   }
                 </div>
@@ -78,7 +78,7 @@ import { map, tap } from 'rxjs/operators';
           <!-- Sidebar Context -->
           <div class="space-y-8">
              <div class="card-glass p-8 rounded-[3rem] border border-white/5 space-y-6">
-                <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500">Related Directives</h3>
+                <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500">Related Articles</h3>
                 <div class="space-y-4">
                    <!-- This could be populated with other articles from the same category -->
                    <div class="text-[10px] font-bold text-slate-500 flex items-center gap-2 py-2 border-b border-white/5 cursor-pointer hover:text-white transition-colors">

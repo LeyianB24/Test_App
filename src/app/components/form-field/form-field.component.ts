@@ -12,68 +12,80 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="form-group-enhanced">
-      <!-- Label with Required Indicator -->
-      <label *ngIf="label" class="form-label-enhanced" [for]="fieldId">
-        {{ label }}
-        <span *ngIf="required" class="label-required"></span>
-      </label>
+    <div class="form-group-precision animate-fade-in">
+      <!-- Label with Tactical Indicator -->
+      @if (label) {
+        <label class="label-precision" [for]="fieldId">
+          {{ label }}
+          @if (required) {
+            <span class="text-red-base ml-1">*</span>
+          }
+        </label>
+      }
 
-      <!-- Input Field Wrapper -->
-      <div class="input-icon-wrapper">
+      <!-- High-Precision Input Wrapper -->
+      <div class="input-wrapper-precision relative group">
         <input
           [id]="fieldId"
           [type]="type"
-          class="form-control-enhanced"
-          [ngClass]="{'error': isError(), 'success': isSuccess()}"
+          class="input-precision w-full"
+          [class.input-error-precision]="isError()"
+          [class.input-success-precision]="isSuccess()"
           [placeholder]="placeholder"
           [disabled]="disabled"
           [value]="value()"
           (input)="onInputChange($event)"
           (blur)="onBlur()"
+          (focus)="onFocus()"
           [attr.aria-label]="label"
           [attr.aria-describedby]="helpId"
           [attr.aria-invalid]="isError()">
         
-        <!-- Icon Display (when provided) -->
-        <span *ngIf="icon" class="input-icon">{{ icon }}</span>
+        <!-- Tactical Icon Display -->
+        @if (icon) {
+          <span class="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-red-base transition-colors pointer-events-none">
+            {{ icon }}
+          </span>
+        }
+
+        <!-- Focus Ring / Border Pulse -->
+        <div class="input-focus-pulse-precision"></div>
       </div>
 
-      <!-- Help Text -->
-      <p *ngIf="helpText && !isError()" [id]="helpId" class="form-help-text">
-        {{ helpText }}
-      </p>
-
-      <!-- Error Text -->
-      <p *ngIf="isError()" [id]="helpId" class="form-error-text">
-        {{ errorMessage() }}
-      </p>
-
-      <!-- Success Text -->
-      <p *ngIf="isSuccess()" class="form-success-text">
-        {{ successMessage || 'Looks good!' }}
-      </p>
+      <!-- Tactical Feedback Pipeline -->
+      <div class="feedback-pipeline-precision mt-2">
+        @if (isError()) {
+          <p [id]="helpId" class="error-state-precision flex items-center gap-2 text-[10px] font-bold">
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <span class="uppercase tracking-wider">{{ errorMessage() }}</span>
+          </p>
+        } @else if (isSuccess()) {
+          <p class="success-state-precision flex items-center gap-2 text-[10px] font-bold">
+             <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="4" d="M5 13l4 4L19 7"/></svg>
+             <span class="uppercase tracking-wider">{{ successMessage || 'Validation Sequence Clear' }}</span>
+          </p>
+        } @else if (helpText) {
+          <p [id]="helpId" class="text-white/20 text-[9px] font-black uppercase tracking-widest pl-1">
+            {{ helpText }}
+          </p>
+        }
+      </div>
     </div>
   `,
   styles: [`
-    :host {
-      display: block;
-      width: 100%;
+    :host { display: block; width: 100%; }
+    .input-focus-pulse-precision {
+      position: absolute;
+      inset: -2px;
+      border: 2px solid var(--red-base);
+      border-radius: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    .form-group-enhanced {
-      margin-bottom: 24px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .form-control-enhanced.success {
-      border-color: var(--success);
-      background: rgba(16, 185, 129, 0.02);
-    }
-
-    .form-control-enhanced.success:focus {
-      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    .group-focus-within .input-focus-pulse-precision {
+      opacity: 0.1;
+      transform: scale(1.02);
     }
   `]
 })

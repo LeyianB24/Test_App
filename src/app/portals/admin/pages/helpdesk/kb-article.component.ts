@@ -11,7 +11,7 @@ import { KbService, KbArticle } from '../../../../services/kb.service';
     <div class="page-container p-8 animate-fade-in">
       @if (article(); as art) {
         <nav class="mb-10 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400">
-          <a routerLink="/helpdesk/knowledge-base" class="hover:text-red-500 transition-colors">Repository</a>
+          <a routerLink="/helpdesk/knowledge-base" class="hover:text-red-500 transition-colors">Knowledge Base</a>
           <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
           <a [routerLink]="['/helpdesk/knowledge-base/category', art.category_id]" class="hover:text-red-500 transition-colors">{{ art.category_name }}</a>
           <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
@@ -76,7 +76,7 @@ import { KbService, KbArticle } from '../../../../services/kb.service';
               <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mr-2">
                 <path stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
-              Return to Repository
+              Return to Knowledge Base
             </button>
           </footer>
         </article>

@@ -1,0 +1,75 @@
+.role-matrix-container {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.role-matrix-header {
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--black-800);
+}
+
+.role- матрица-tabs {
+  display: flex;
+  gap: var(--space-8);
+  margin-top: var(--space-4);
+  position: relative;
+}
+
+.role-tab-item {
+  color: var(--black-400);
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  padding-bottom: var(--space-2);
+  transition: color var(--duration-base) ease;
+  position: relative;
+}
+
+.role-tab-item:hover {
+  color: var(--color-white);
+}
+
+.role-tab-item.active {
+  color: var(--red-500);
+}
+
+.role-tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--red-500);
+  animation: borderDraw 300ms var(--ease-out) forwards;
+}
+
+.role-matrix-table-row:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.role-matrix-cell-flash {
+  animation: cellFlash 400ms ease;
+}
+
+@keyframes cellFlash {
+  0% { background: transparent; }
+  50% { background: rgba(46, 204, 113, 0.2); }
+  100% { background: transparent; }
+}
+
+.unsaved-changes-banner {
+  position: sticky;
+  top: var(--topbar-height);
+  background: var(--status-warning-bg);
+  border-bottom: 1px solid var(--status-warning-text);
+  padding: var(--space-3) var(--space-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: var(--z-sticky);
+  animation: fadeSlideUp 300ms var(--ease-out);
+}

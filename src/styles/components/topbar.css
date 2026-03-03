@@ -1,0 +1,111 @@
+.topbar-precision {
+  height: var(--topbar-height);
+  background: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-6);
+  gap: var(--space-4);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+}
+
+/* Breadcrumbs */
+.breadcrumb-container-precision {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  flex: 1;
+}
+
+.breadcrumb-parent {
+  color: var(--black-400);
+  text-decoration: none;
+  transition: color var(--duration-fast) ease;
+}
+
+.breadcrumb-parent:hover {
+  color: var(--black-200);
+}
+
+.breadcrumb-separator {
+  color: var(--black-700);
+  font-weight: var(--weight-bold);
+}
+
+.breadcrumb-current {
+  color: var(--color-white);
+  font-weight: var(--weight-semibold);
+}
+
+/* Portal Status Pills */
+.status-pills-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.status-pill-precision {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--black-700);
+  background: var(--black-900);
+  color: var(--black-300);
+}
+
+.status-pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--black-600);
+}
+
+.status-pill-precision.online { color: var(--black-300); }
+.status-pill-precision.online .status-pill-dot { background: var(--status-success-text); animation: pulse 2s infinite; }
+
+.status-pill-precision.offline { color: var(--red-400); border-color: var(--red-500); }
+.status-pill-precision.offline .status-pill-dot { background: var(--red-500); }
+
+/* Right Zone */
+.topbar-right-zone {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.user-trigger-precision {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+  padding: var(--space-1);
+  border-radius: var(--radius-full);
+  transition: background var(--duration-fast) ease;
+}
+
+.user-trigger-precision:hover {
+  background: var(--black-800);
+}
+
+.avatar-circle-precision {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(var(--red-700), var(--red-500));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}

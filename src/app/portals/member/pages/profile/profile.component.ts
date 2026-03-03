@@ -125,7 +125,7 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
                       <div class="m-content">
                          <h4 class="m-title">{{ ob.obligation_name }}</h4>
                          <div class="m-meta-stack">
-                            <span>Genesis: {{ ob.effective_from }}</span>
+                            <span>Effective Date: {{ ob.effective_from }}</span>
                             <span class="m-sep">|</span>
                             <span>Cycle: Monthly</span>
                          </div>

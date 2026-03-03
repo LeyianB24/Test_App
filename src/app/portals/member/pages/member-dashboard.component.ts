@@ -20,314 +20,175 @@ interface DashboardStat {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="page-container animate-up">
+    <div class="dashboard-precision animate-fade-in">
       
-      <!-- Elite Page Header -->
-      <header class="page-header-elite">
-        <div class="header-info">
-          <h1 class="premium-title">Member <span class="gradient-text">Dashboard</span></h1>
-          <p class="premium-subtitle">Welcome back, {{ userName() }}</p>
-        </div>
-        <div class="header-actions">
-           <button class="modern-btn outline-btn sm" (click)="downloadStatusReport()">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2.5"/></svg>
-              Status Report
-           </button>
-           <button class="modern-btn outline-btn sm" (click)="router.navigate(['/member/compliance/pin-certificate'])">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg>
-              PIN Certificate
-           </button>
-           <button class="modern-btn primary-btn" (click)="router.navigate(['/payments'])">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="3"/></svg>
-              Make Payment
-           </button>
+      <!-- Top Intelligence Bar -->
+      <header class="header-precision">
+        <div class="header-content-complex">
+          <div class="header-titles">
+            <h1 class="title-primary">Wealth Terminal <span class="title-accent">Intelligence</span></h1>
+            <p class="subtitle-secondary">Synchronized access for {{ userName() }}</p>
+          </div>
+          <div class="header-actions-precision">
+            <button class="btn-precision btn-secondary-precision btn-sm" (click)="downloadStatusReport()">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2"/></svg>
+              Intelligence Report
+            </button>
+            <button class="btn-precision btn-primary-precision btn-sm" (click)="router.navigate(['/payments'])">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="2.5"/></svg>
+              Execute Payment
+            </button>
+          </div>
         </div>
       </header>
 
-      <!-- Elite Dashboard Content -->
-      <div class="elite-grid">
+      <div class="dashboard-grid-precision">
         
-        <!-- Left Section: Main Intelligence -->
-        <div class="elite-main-hub">
-           
-           <!-- Identity & Compliance Pulse -->
-           <div class="compliance-card-luxury animate-up delay-1">
-              <div class="compliance-glass">
-                 <div class="c-header">
-                    <div class="c-badge">COMPLIANCE SCORE</div>
-                    <div class="c-status" [class.danger]="complianceScore() < 80">Status: Good</div>
-                 </div>
-                 
-                 <div class="c-body">
-                    <div class="c-viz">
-                       <svg class="c-ring" viewBox="0 0 100 100">
-                          <circle class="c-bg" cx="50" cy="50" r="45"></circle>
-                          <circle class="c-fill" cx="50" cy="50" r="45" [style.stroke-dashoffset]="dashOffset()"></circle>
-                       </svg>
-                       <span class="c-val-text">{{ complianceScore() }}%</span>
-                    </div>
-                    <div class="c-info">
-                       <h2 class="u-display-name">{{ userName() }}</h2>
-                       <p class="u-display-meta">STATION: {{ dashboardData.station() }} | ID: {{ dashboardData.taxpayerProfile()?.id_number }}</p>
-                        <div class="u-obligations">
-                           @for (ob of dashboardData.obligations(); track ob.obligation_id) {
-                             <span class="ob-chip">{{ ob.obligation_name }}</span>
-                           }
-                        </div>
-                    </div>
-                 </div>
-
-                 <div class="c-footer">
-                    <div class="footer-stat">
-                       <span class="fs-label">Next Return Due</span>
-                       <span class="fs-val">Jan 20, 2026</span>
-                    </div>
-                    <div class="fs-divider"></div>
-                    <div class="footer-stat">
-                       <span class="fs-label">Account Status</span>
-                       <span class="fs-val">Verified</span>
-                    </div>
-                 </div>
+        <!-- Left Column: Core Metrics & Visuals -->
+        <div class="dashboard-main-area">
+          
+          <!-- Compliance Identity Card -->
+          <div class="card-precision card-red-accent compliance-hero-precision animate-slide-up">
+            <div class="compliance-layout">
+              <div class="compliance-viz-box">
+                <svg class="compliance-ring-svg" viewBox="0 0 100 100">
+                  <circle class="ring-track" cx="50" cy="50" r="45"></circle>
+                  <circle class="ring-fill" cx="50" cy="50" r="45" [style.stroke-dashoffset]="dashOffset()"></circle>
+                </svg>
+                <div class="compliance-score-text">
+                  <span class="score-num">{{ complianceScore() }}%</span>
+                  <span class="score-lbl">PRECISION</span>
+                </div>
               </div>
-           </div>
-
-           <!-- Stats Intelligence Grids -->
-            <div class="row g-4 mt-3">
-               @for (stat of stats(); track stat.label; let i = $index) {
-                 <div class="col-xl-3 col-md-6">
-                    <div class="premium-stat-card d-flex align-items-center p-4 animate-up" [class]="'delay-' + (i+1)">
-                      <div class="stat-icon-wrapper me-3" [class]="stat.color">
-                         <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" [attr.d]="stat.icon" />
-                         </svg>
-                      </div>
-                      <div class="stat-info flex-grow-1">
-                         <span class="stat-label text-uppercase text-muted fw-bold d-block mb-1" style="font-size: 0.75rem; letter-spacing: 0.5px;">{{ stat.label }}</span>
-                         <div class="d-flex align-items-baseline justify-content-between">
-                            <h3 class="stat-number mb-0 fw-bolder">{{ stat.formattedValue }}</h3>
-                            <span class="stat-trend badge rounded-pill" 
-                                  [class.bg-success-subtle]="stat.trendDirection === 'up'" 
-                                  [class.text-success]="stat.trendDirection === 'up'"
-                                  [class.bg-danger-subtle]="stat.trendDirection === 'down'"
-                                  [class.text-danger]="stat.trendDirection === 'down'">
-                              {{ stat.trend }}
-                            </span>
-                         </div>
-                      </div>
-                    </div>
-                 </div>
-               }
-            </div>
-
-           <!-- Revenue Flow Analytics -->
-           <div class="content-card-premium mt-32 animate-up delay-2">
-              <div class="card-p-header">
-                 <div class="p-title-group">
-                    <h3 class="card-p-title">Revenue Overview</h3>
-                    <p class="card-p-subtitle">Your payments over the current year</p>
-                 </div>
-                 <div class="p-actions">
-                    <button class="icon-btn-elite active"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-width="2"/></svg></button>
-                    <button class="icon-btn-elite"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M7 12l3-3 3 3 4-4M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-width="2"/></svg></button>
-                 </div>
-              </div>
-               <div class="luxury-chart-surface">
-                 @if (chartData().length > 0) {
-                    <div class="chart-bars-elite">
-                      @for (bar of chartData(); track bar.month) {
-                        <div class="bar-elite-wrapper">
-                           <div class="bar-elite" [style.height.%]="bar.height" [class.active]="bar.active">
-                              <div class="bar-value-hint">KES {{ bar.amount / 1000 }}K</div>
-                           </div>
-                           <span class="bar-name">{{ bar.month }}</span>
-                        </div>
-                      }
-                    </div>
-                 } @else {
-                    <div class="no-data-placeholder">No revenue data available for this period.</div>
-                 }
-                 <div class="chart-grid-lines">
-                    <span></span><span></span><span></span><span></span>
-                 </div>
-               </div>
-           </div>
-
-        </div>
-
-        <!-- Right Section: Executive Widgets -->
-        <div class="elite-sidebar-hub">
-           
-           <div class="control-panel-luxury animate-up delay-2">
-              <h4 class="luxury-widget-title">Quick Links</h4>
-              <div class="command-grid">
-                 <button class="cmd-tile" (click)="router.navigate(['/returns'])">
-                    <div class="cmd-icon-box blue"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg></div>
-                    <span>File Returns</span>
-                 </button>
-                 <button class="cmd-tile" (click)="router.navigate(['/etims'])">
-                    <div class="cmd-icon-box gold"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-width="2"/></svg></div>
-                    <span>e-TIMS Portal</span>
-                 </button>
-                 <button class="cmd-tile" (click)="router.navigate(['/debt'])">
-                    <div class="cmd-icon-box red"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/></svg></div>
-                    <span>Clear Debt</span>
-                 </button>
-                  <button class="cmd-tile" (click)="router.navigate(['/settings'])">
-                    <div class="cmd-icon-box grey"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-width="2"/></svg></div>
-                    <span>Settings</span>
-                  </button>
-              </div>
-           </div>
-
-           <div class="activity-card-luxury mt-32 animate-up delay-3">
-              <div class="card-p-header">
-                 <h3 class="card-p-title">Recent Transactions</h3>
-                 <a href="#" class="view-link">See Archive</a>
-              </div>
-               <div class="refined-timeline mt-24">
-                  @for (act of activities(); track act.timestamp) {
-                    <div class="timeline-unit">
-                       <div class="unit-icon" [class]="act.status">
-                          @if (act.status === 'success') {
-                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                          }
-                          @if (act.status === 'warning') {
-                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-                          }
-                       </div>
-                       <div class="unit-details">
-                          <p class="u-action">{{ act.action }}</p>
-                          <span class="u-date">{{ act.date }}</span>
-                       </div>
-                       <div class="unit-extra">
-                          <span class="u-badge" [class]="act.status">{{ act.statusLabel }}</span>
-                       </div>
-                    </div>
+              <div class="compliance-info-box">
+                <div class="user-identity-precision">
+                  <span class="id-tag">OPERATIONAL IDENTITY</span>
+                  <h2>{{ userName() }}</h2>
+                  <p>STATION: {{ dashboardData.station() }} | PIN: {{ dashboardData.taxpayerProfile()?.id_number }}</p>
+                </div>
+                <div class="obligation-chips-row">
+                  @for (ob of dashboardData.obligations(); track ob.obligation_id) {
+                    <span class="precision-chip">{{ ob.obligation_name }}</span>
                   }
-               </div>
-              <button class="upgrade-ad-btn mt-32">
-                 ⚡ View All Transactions
-              </button>
-           </div>
+                </div>
+              </div>
+              <div class="compliance-status-footer">
+                <div class="footer-metric">
+                  <span class="f-lbl">Next Filing Deadline</span>
+                  <span class="f-val">Jan 20, 2026</span>
+                </div>
+                <div class="footer-metric">
+                  <span class="f-lbl">Account Integrity</span>
+                  <span class="f-val badge-precision badge-success-precision">VERIFIED</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
+          <!-- KPI Stats Grid -->
+          <div class="stats-matrix-precision">
+            @for (stat of stats(); track stat.label) {
+              <div class="card-precision stat-card-precision">
+                <div class="stat-icon-precision" [class]="stat.color">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-width="2" [attr.d]="stat.icon" />
+                  </svg>
+                </div>
+                <div class="stat-content-precision">
+                  <span class="stat-label-precision text-uppercase">{{ stat.label }}</span>
+                  <h3 class="stat-value-precision">{{ stat.formattedValue }}</h3>
+                  <div class="stat-trend-precision" [class]="stat.trendDirection === 'up' ? 'trend-up' : 'trend-down'">
+                    {{ stat.trend }}
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Revenue Analytics Surface -->
+          <div class="card-precision analytics-card-precision animate-scale">
+            <div class="card-header-precision">
+              <div class="chart-titles">
+                <h3>Revenue Trajectory</h3>
+                <p>12-month centralized performance overview</p>
+              </div>
+              <div class="chart-legend-precision">
+                <span class="legend-unit"><span class="dot-red"></span> Revenue Flow (KES)</span>
+              </div>
+            </div>
+            <div class="chart-viz-container">
+              <div class="chart-surface-precision">
+                @if (chartData().length > 0) {
+                  <div class="precision-bar-chart">
+                    @for (bar of chartData(); track bar.month) {
+                      <div class="bar-unit-precision" [style.height.%]="bar.height" [class.active-bar]="bar.active">
+                        <div class="bar-peak"></div>
+                        <div class="bar-tooltip">KES {{ bar.amount / 1000 }}K</div>
+                        <span class="bar-axis-label">{{ bar.month }}</span>
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <div class="data-null-state">No telemetry data for this sequence.</div>
+                }
+                <div class="chart-grid-precision">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
+        <!-- Right Column: Operational Controls -->
+        <div class="dashboard-sidebar-area">
+          
+          <div class="card-precision controls-card-precision">
+            <span class="widget-heading-precision">Operational Command</span>
+            <div class="command-tiles-grid">
+              <button class="cmd-tile-precision" (click)="router.navigate(['/returns'])">
+                <div class="tile-icon icon-blue"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg></div>
+                <span>File Returns</span>
+              </button>
+              <button class="cmd-tile-precision" (click)="router.navigate(['/etims'])">
+                <div class="tile-icon icon-gold"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-width="2"/></svg></div>
+                <span>e-TIMS Portal</span>
+              </button>
+              <button class="cmd-tile-precision" (click)="router.navigate(['/debt'])">
+                <div class="tile-icon icon-red"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/></svg></div>
+                <span>Clear Arrears</span>
+              </button>
+              <button class="cmd-tile-precision" (click)="router.navigate(['/settings'])">
+                <div class="tile-icon icon-grey"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-width="2"/></svg></div>
+                <span>Preferences</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card-precision activity-card-precision">
+            <div class="card-header-precision compact-header">
+              <h3>Live Activity Loop</h3>
+              <a href="#" class="link-precision">ARCHIVE</a>
+            </div>
+            <div class="timeline-precision">
+              @for (act of activities(); track act.timestamp) {
+                <div class="timeline-event-precision">
+                  <div class="event-marker" [class]="act.status"></div>
+                  <div class="event-details">
+                    <p class="event-action">{{ act.action }}</p>
+                    <span class="event-meta">{{ act.date }}</span>
+                  </div>
+                  <div class="event-status-tag" [class]="'tag-' + act.status">{{ act.statusLabel }}</div>
+                </div>
+              }
+            </div>
+            <button class="btn-precision btn-secondary-precision w-full mt-6" (click)="router.navigate(['/statements'])">View Full Log</button>
+          </div>
+
+        </div>
       </div>
     </div>
   `,
-  styles: [`
-    .elite-grid { display: grid; grid-template-columns: 1fr 400px; gap: 40px; }
-    
-    /* Compliance Card Luxury */
-    .compliance-card-luxury {
-      background: var(--kra-gradient); border-radius: 40px; padding: 1px;
-      box-shadow: 0 30px 60px rgba(227, 30, 36, 0.2); margin-bottom: 40px;
-    }
-    .compliance-glass {
-      background: rgba(10, 34, 61, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-radius: 39px; padding: 40px; color: white;
-    }
-    .c-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-    .c-badge { font-size: 0.75rem; font-weight: 900; background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 12px; letter-spacing: 1px; }
-    .c-status { font-size: 0.85rem; font-weight: 800; color: #10B981; text-transform: uppercase; letter-spacing: 1.5px; }
-    .c-status.danger { color: #f87171; }
-
-    .c-body { display: flex; gap: 40px; align-items: center; }
-    .c-viz { position: relative; width: 120px; height: 120px; flex-shrink: 0; }
-    .c-ring { width: 100%; height: 100%; transform: rotate(-90deg); }
-    .c-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 10; }
-    .c-fill { fill: none; stroke: white; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 283; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
-    .c-val-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; font-weight: 900; }
-    
-    .u-display-name { font-size: 2.2rem; font-weight: 900; margin: 0; letter-spacing: -1.5px; }
-    .u-display-meta { font-size: 0.95rem; color: rgba(255,255,255,0.6); font-weight: 600; margin-top: 4px; }
-    .u-obligations { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
-    .ob-chip { background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 4px 12px; font-size: 0.75rem; font-weight: 800; }
-
-    .c-footer { display: flex; gap: 50px; margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); }
-    .fs-label { display: block; font-size: 0.8rem; font-weight: 800; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-bottom: 4px; }
-    .fs-val { font-size: 1.1rem; font-weight: 800; }
-    .fs-divider { width: 1px; background: rgba(255,255,255,0.1); height: 40px; }
-
-    /* Analytics Chart */
-    .card-p-header { padding: 32px; display: flex; justify-content: space-between; align-items: center; }
-    .card-p-title { font-size: 1.25rem; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px; }
-    .card-p-subtitle { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; margin-top: 4px; }
-    .luxury-chart-surface { padding: 0 40px 40px 40px; height: 280px; display: flex; flex-direction: column; position: relative; }
-    .chart-bars-elite { height: 100%; display: flex; align-items: flex-end; justify-content: space-between; z-index: 2; gap: 20px; }
-    .bar-elite-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 16px; }
-    .bar-elite { width: 100%; max-width: 50px; background: #E2E8F0; border-radius: 12px 12px 6px 6px; position: relative; transition: 0.4s; }
-    .bar-elite.active { background: var(--kra-gradient); box-shadow: 0 10px 20px rgba(227, 30, 36, 0.15); }
-    .bar-value-hint { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); background: #1a202c; color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; opacity: 0; transition: 0.3s; pointer-events: none; }
-    .bar-elite:hover { transform: scaleX(1.1); }
-    .bar-elite:hover .bar-value-hint { opacity: 1; top: -45px; }
-    .bar-name { font-size: 0.8rem; font-weight: 800; color: var(--text-muted); }
-    .chart-grid-lines { position: absolute; inset: 40px 40px 85px 40px; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
-    .chart-grid-lines span { height: 1px; background: #F1F5F9; width: 100%; }
-
-    /* Control Panel */
-    .control-panel-luxury { background: var(--kra-blue); border-radius: 32px; padding: 32px; color: white; }
-    .luxury-widget-title { font-size: 1rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 24px 0; color: rgba(255,255,255,0.6); }
-    .command-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .cmd-tile { 
-      background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 24px; color: white; cursor: pointer; transition: 0.3s;
-      display: flex; flex-direction: column; align-items: center; gap: 14px; font-family: inherit;
-    }
-    .cmd-tile:hover { background: white; color: var(--kra-blue); transform: translateY(-4px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
-    .cmd-icon-box { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-    .cmd-icon-box.blue { background: rgba(59, 130, 246, 0.2); color: #60A5FA; }
-    .cmd-icon-box.gold { background: rgba(212, 175, 55, 0.2); color: #FCD34D; }
-    .cmd-icon-box.red { background: rgba(239, 68, 68, 0.2); color: #F87171; }
-    .cmd-icon-box.grey { background: rgba(255, 255, 255, 0.1); color: white; }
-    .cmd-tile:hover .cmd-icon-box { background: rgba(10, 34, 61, 0.05); color: inherit; }
-    .cmd-tile span { font-weight: 800; font-size: 0.9rem; }
-
-    /* Refined Timeline */
-    .refined-timeline { display: flex; flex-direction: column; gap: 20px; }
-    .timeline-unit { display: flex; align-items: center; gap: 16px; padding: 12px; border-radius: 16px; transition: 0.3s; }
-    .timeline-unit:hover { background: #F8FAFC; }
-    .unit-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .unit-icon.success { background: #ECFDF5; color: #10B981; }
-    .unit-icon.warning { background: #FFF7ED; color: #F59E0B; }
-    .u-action { font-weight: 800; color: var(--text-main); margin: 0; font-size: 0.95rem; }
-    .u-date { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
-    .u-badge { margin-left: auto; font-size: 0.65rem; font-weight: 900; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; }
-    .u-badge.success { background: #ECFDF5; color: #059669; }
-    .u-badge.warning { background: #FFF7ED; color: #D97706; }
-    .upgrade-ad-btn { width: 100%; padding: 16px; background: #F1F5F9; border: none; border-radius: 16px; color: var(--text-secondary); font-weight: 800; cursor: pointer; transition: 0.3s; font-family: inherit; }
-    .upgrade-ad-btn:hover { background: var(--kra-blue); color: white; }
-
-    @media (max-width: 1400px) {
-       .elite-grid { grid-template-columns: 1fr; }
-       .elite-sidebar-hub { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-    }
-    @media (max-width: 900px) {
-       .elite-sidebar-hub { grid-template-columns: 1fr; }
-       .u-display-name { font-size: 1.5rem; }
-       .c-body { flex-direction: column; align-items: flex-start; }
-    }
-    @media (max-width: 768px) {
-       .compliance-glass { padding: 24px; }
-       .u-display-name { font-size: 1.3rem; letter-spacing: -0.5px; }
-       .c-body { gap: 24px; }
-       .c-footer { gap: 24px; flex-wrap: wrap; }
-       .luxury-chart-surface { padding: 0 20px 30px 20px; }
-       .chart-bars-elite { gap: 8px; }
-       .command-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-       .cmd-tile { padding: 16px; }
-       .bar-elite { max-width: 36px; }
-    }
-    @media (max-width: 480px) {
-       .compliance-glass { padding: 20px 16px; }
-       .c-header { flex-direction: column; align-items: flex-start; gap: 8px; }
-       .c-footer { gap: 16px; }
-       .u-display-name { font-size: 1.2rem; }
-       .command-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-       .cmd-tile { padding: 14px 10px; gap: 8px; }
-       .cmd-tile span { font-size: 0.8rem; }
-       .luxury-chart-surface { height: 200px; }
-    }
-  `]
+  styles: [``]
 })
 export class MemberDashboardComponent implements OnInit {
   authService = inject(AuthService);

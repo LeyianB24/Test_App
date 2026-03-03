@@ -10,152 +10,159 @@ import { toSignal } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <div class="page-container p-8 animate-fade-in">
-      <!-- Elite Header -->
-      <header class="page-header-elite items-center mb-8">
-        <div class="header-info flex items-center gap-4">
-           <a routerLink="/helpdesk" class="icon-btn-elite">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-           </a>
-           <div>
-              <h1 class="premium-title mb-0">Ticket Details</h1>
-              @if (ticket()) {
-                 <p class="premium-subtitle pl-0 mt-1">Ref: {{ ticket()?.ticket_number }}</p>
-              }
-           </div>
+    <div class="dashboard-precision animate-fade-in">
+      
+      <header class="header-precision mb-10">
+        <div class="header-titles flex items-center gap-6">
+          <a routerLink="/helpdesk" class="btn-precision btn-secondary-precision btn-sm px-3">
+             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+          </a>
+          <div>
+            <h1 class="title-primary">Ticket <span class="title-accent">Intelligence</span></h1>
+            @if (ticket()) {
+               <p class="subtitle-secondary uppercase tracking-[0.2em] text-white/40">Ref: {{ ticket()?.ticket_number }}</p>
+            }
+          </div>
         </div>
         
         <div class="header-actions">
            @if (ticket() && !['Resolved', 'Closed'].includes(ticket()!.status)) {
-              <button (click)="updateStatus('Resolved')" class="modern-btn primary-btn sm">
-                 Mark as Resolved
+              <button (click)="updateStatus('Resolved')" class="btn-precision btn-primary-precision">
+                 Finalize Resolution
               </button>
            }
         </div>
       </header>
 
       @if (helpdeskService.isLoading()) {
-        <div class="py-20 flex flex-col items-center">
-          <div class="w-12 h-12 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
-          <p class="mt-4 text-slate-500 font-bold uppercase tracking-widest text-[10px]">Loading ticket details...</p>
+        <div class="loader-container-precision py-20">
+          <div class="loader-spinner-precision"></div>
         </div>
       } @else if (ticket()) {
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <!-- Main Thread -->
+        <div class="dashboard-content-precision grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <!-- Intelligence Thread -->
           <div class="lg:col-span-2 space-y-10">
-              <!-- Ticket Master Card -->
-             <div class="content-card-premium relative overflow-hidden mb-8">
-                <div class="absolute -top-10 -right-10 w-40 h-40 bg-red-100 rounded-full blur-3xl opacity-50"></div>
-                
-                <div class="flex flex-wrap gap-4 mb-8 relative z-10">
-                   <div class="status-pill-elite" [class]="getStatusClass(ticket()!.status)">
-                     <span class="dot"></span>
-                     {{ ticket()!.status }}
+              <!-- Master Directive Card -->
+             <div class="card-precision main-record-card-precision overflow-hidden pb-10">
+                <div class="card-header-precision border-b border-white/5 pb-6 flex justify-between items-center bg-white/2 px-8 py-6">
+                   <div class="header-identity">
+                      <h2 class="text-2xl font-black text-white leading-tight">{{ ticket()!.subject }}</h2>
+                      <span class="label-secondary text-[10px] uppercase text-white/30 tracking-widest font-black mt-1 block">{{ ticket()!.category }}</span>
                    </div>
-                   <div class="status-pill-elite" [class]="getPriorityClass(ticket()!.priority)">
-                     <span class="dot"></span>
-                     {{ ticket()!.priority }}
+                   <div class="header-status flex gap-3">
+                     <span class="badge-precision" [class]="getStatusClass(ticket()!.status)">
+                       {{ ticket()!.status }}
+                     </span>
+                     <span class="badge-precision" [class]="getPriorityClass(ticket()!.priority)">
+                       {{ ticket()!.priority }}
+                     </span>
                    </div>
-                   <span class="badge-elite bg-slate-100 text-slate-500 border-none">{{ ticket()!.category }}</span>
                 </div>
-
-                <h2 class="text-3xl font-black text-slate-800 mb-6 leading-tight">{{ ticket()!.subject }}</h2>
                 
-                <div class="p-8 bg-slate-50/80 rounded-3xl border border-slate-200 mb-10">
-                   <p class="text-slate-700 font-medium leading-relaxed whitespace-pre-wrap">{{ ticket()!.description }}</p>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-slate-200">
-                   <div>
-                      <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 block mb-1">Created</span>
-                      <span class="text-slate-800 font-bold text-sm">{{ ticket()!.created_at | date:'medium' }}</span>
+                <div class="card-body-precision px-8 pt-8">
+                   <div class="record-description-box bg-dark-complex p-8 rounded-3xl border border-white/5 mb-10">
+                      <p class="text-white/70 font-medium leading-relaxed whitespace-pre-wrap">{{ ticket()!.description }}</p>
                    </div>
-                   <div>
-                      <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 block mb-1">Last Update</span>
-                      <span class="text-slate-800 font-bold text-sm">{{ ticket()!.updated_at | date:'medium' }}</span>
+
+                   <div class="record-meta-grid-precision grid grid-cols-2 md:grid-cols-3 gap-6 pt-8 border-t border-white/5">
+                      <div class="meta-item">
+                         <span class="label text-[10px] font-black uppercase tracking-widest text-white/30 block mb-1">Created</span>
+                         <span class="value text-white font-bold text-sm">{{ ticket()!.created_at | date:'dd MMM yyyy HH:mm' }}</span>
+                      </div>
+                      <div class="meta-item">
+                         <span class="label text-[10px] font-black uppercase tracking-widest text-white/30 block mb-1">Last Transmission</span>
+                         <span class="value text-white font-bold text-sm">{{ ticket()!.updated_at | date:'dd MMM yyyy HH:mm' }}</span>
+                      </div>
+                      <div class="meta-item">
+                         <span class="label text-[10px] font-black uppercase tracking-widest text-white/30 block mb-1">Origin</span>
+                         <span class="value text-white font-bold text-sm">Portal Core</span>
+                      </div>
                    </div>
                 </div>
              </div>
 
-             <!-- Conversation Thread -->
-             <div class="space-y-6">
-                <h3 class="text-xl font-black text-slate-800 px-4">Communication History</h3>
+             <!-- Transmission Thread -->
+             <div class="thread-section-precision space-y-6">
+                <h3 class="section-title-precision px-4">Communication Synchrony</h3>
                 
-                <div class="thread px-4 space-y-6">
+                <div class="thread-stack-precision space-y-6">
                    @for (reply of ticket()!.replies; track reply.id) {
-                      <div class="flex gap-4" [class.justify-end]="!reply.is_internal">
-                         <div class="max-w-[80%] p-6 rounded-[2rem] border shadow-sm" 
-                              [class]="reply.is_internal ? 'bg-white border-slate-200 text-slate-700' : 'bg-red-50 border-red-100 text-slate-800 rounded-tr-none'">
-                            @if (reply.is_internal) {
-                               <span class="text-[9px] font-black uppercase tracking-widest text-red-500 block mb-2">Support Team</span>
-                            }
-                            <p class="font-medium text-sm leading-relaxed whitespace-pre-wrap flex-grow">{{ reply.reply_text }}</p>
-                            <span class="text-[9px] font-bold opacity-50 block mt-4">{{ reply.created_at | date:'short' }}</span>
+                      <div class="transmission-tile flex" [class.justify-end]="!reply.is_internal">
+                         <div class="transmission-bubble max-w-[85%] p-6 rounded-[1.5rem] border" 
+                              [class]="reply.is_internal ? 'bg-white/5 border-white/10 text-white/90' : 'bg-red-base/5 border-red-base/20 text-white rounded-tr-none'">
+                            <div class="bubble-header flex justify-between items-center mb-3">
+                                <span class="origin-tag text-[9px] font-black uppercase tracking-widest" [class.text-red-base]="reply.is_internal">
+                                   {{ reply.is_internal ? 'Support Authority' : 'You' }}
+                                </span>
+                                <span class="time-tag text-[9px] font-bold text-white/30">{{ reply.created_at | date:'shortTime' }}</span>
+                            </div>
+                            <p class="transmission-text font-medium text-sm leading-relaxed whitespace-pre-wrap">{{ reply.reply_text }}</p>
+                            <span class="date-tag text-[8px] font-bold text-white/10 block mt-4">{{ reply.created_at | date:'dd MMM yyyy' }}</span>
                          </div>
                       </div>
                    } @empty {
-                      <div class="text-center py-10 opacity-60">
-                         <p class="text-sm font-bold uppercase tracking-widest text-slate-500">No replies yet. We will respond shortly.</p>
+                      <div class="empty-thread-precision py-20 text-center opacity-30">
+                         <p class="text-xs font-black uppercase tracking-widest">Awaiting primary transmission response.</p>
                       </div>
                    }
                 </div>
 
-                <!-- Reply Composer -->
-                <div class="content-card-premium mt-8 shadow-md">
-                   <h4 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 pl-2">Add Reply</h4>
+                <!-- Response Interface -->
+                <div class="card-precision response-interface-precision mt-8 p-8 border-t-2 border-red-base/20">
+                   <h4 class="text-[10px] font-black text-white/30 uppercase tracking-widest mb-6">Transmit Response</h4>
                    <textarea
                       [(ngModel)]="newReply"
-                      placeholder="Type your message to the support team..."
+                      placeholder="Compose secure message..."
                       rows="4"
-                      class="search-input-elite w-full resize-none p-6 font-medium mb-6 transition-all"
+                      class="input-precision w-full resize-none p-6 text-white mb-6"
                    ></textarea>
                    <div class="flex justify-end">
                       <button
                          (click)="submitReply()"
                          [disabled]="!newReply.trim() || isSubmitting()"
-                         class="modern-btn primary-btn"
+                         class="btn-precision btn-primary-precision"
                       >
-                         {{ isSubmitting() ? 'Transmitting...' : 'Send Message' }}
+                         @if (isSubmitting()) {
+                           <div class="loader-spinner-precision sm"></div>
+                         } @else {
+                           Execute Transmission
+                         }
                       </button>
                    </div>
                 </div>
              </div>
           </div>
 
-          <!-- Sidebar Analytics -->
+          <!-- Ops Analytics Sidebar -->
           <div class="space-y-8">
-              <div class="content-card-premium">
-                 <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Service Level Agreement</h3>
+              <div class="card-precision ops-card-precision">
+                 <div class="card-header-precision border-b border-white/5 pb-4 mb-6">
+                    <h3 class="text-[10px] font-black uppercase tracking-widest text-white/40">SLA Matrix</h3>
+                 </div>
                  @if (slaInfo()) {
-                    <div class="space-y-6">
-                       <div class="flex items-center gap-4">
-                          <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-black text-xs">RT</div>
-                          <div>
-                             <span class="text-[9px] font-black uppercase text-slate-500 block">Response Target</span>
-                             <span class="text-slate-800 font-black">{{ slaInfo()!.response_time_hours }} Hours</span>
-                          </div>
+                    <div class="sla-metrics-precision space-y-6">
+                       <div class="sla-item-precision bg-dark-complex p-5 rounded-2xl border border-white/5">
+                          <span class="label text-[9px] font-black uppercase text-white/30 block mb-1">Response Threshold</span>
+                          <span class="value text-white font-black text-lg">{{ slaInfo()!.response_time_hours }} Hours</span>
                        </div>
-                       <div class="flex items-center gap-4">
-                          <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-black text-xs">RS</div>
-                          <div>
-                             <span class="text-[9px] font-black uppercase text-slate-500 block">Resolution Target</span>
-                             <span class="text-slate-800 font-black">{{ slaInfo()!.resolution_time_hours }} Hours</span>
-                          </div>
+                       <div class="sla-item-precision bg-dark-complex p-5 rounded-2xl border border-white/5">
+                          <span class="label text-[9px] font-black uppercase text-white/30 block mb-1">Resolution Deadline</span>
+                          <span class="value text-white font-black text-lg">{{ slaInfo()!.resolution_time_hours }} Hours</span>
                        </div>
                     </div>
                  }
               </div>
 
-              <div class="content-card-premium">
-                 <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">Ticket History</h3>
-                 <div class="space-y-4">
+              <div class="card-precision history-card-precision">
+                 <div class="card-header-precision border-b border-white/5 pb-4 mb-6">
+                    <h3 class="text-[10px] font-black uppercase tracking-widest text-white/40">Operation Ledger</h3>
+                 </div>
+                 <div class="ledger-stack-precision space-y-6 relative pl-4 border-l border-white/5 ml-2">
                     @for (event of ticket()!.history; track event.id) {
-                       <div class="flex gap-3 text-[11px]">
-                          <div class="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5"></div>
-                          <div>
-                             <p class="text-slate-700 font-bold leading-tight mb-1">{{ event.description }}</p>
-                             <span class="text-slate-500 font-medium">{{ event.changed_at | date:'short' }}</span>
-                          </div>
+                       <div class="ledger-entry-precision relative">
+                          <div class="ledger-dot bg-red-base absolute -left-[21px] top-1.5 w-2 h-2 rounded-full shadow-[0_0_8px_rgba(218,56,50,0.5)]"></div>
+                          <p class="ledger-text text-white/70 font-bold text-[11px] leading-tight mb-2">{{ event.description }}</p>
+                          <span class="ledger-time text-white/20 font-black text-[9px] uppercase tracking-widest">{{ event.changed_at | date:'dd MMM, HH:mm' }}</span>
                        </div>
                     }
                  </div>
@@ -165,21 +172,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
       }
     </div>
   `,
-  styles: [`
-    .page-container { max-width: 1500px; margin: 0 auto; }
-    .animate-fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-    .card-glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(20px); }
-    
-    .badge-elite { padding: 4px 12px; border-radius: 8px; font-size: 0.65rem; font-weight: 950; text-transform: uppercase; border: 1px solid transparent; }
-    .badge-open { color: #3B82F6; background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.2); }
-    .badge-progress { color: #F59E0B; background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.2); }
-    .badge-waiting { color: #F97316; background: rgba(249, 115, 22, 0.1); border-color: rgba(249, 115, 22, 0.2); }
-    .badge-resolved { color: #10B981; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); }
-    .badge-critical { color: white; background: #E31E24; }
-    .badge-high { color: #E31E24; background: rgba(227, 30, 36, 0.1); border-color: rgba(227, 30, 36, 0.2); }
-  `]
+  styles: [``]
 })
 export class TicketDetailComponent {
   private route = inject(ActivatedRoute);

@@ -11,7 +11,7 @@ import { KbService, KbArticle, KbCategory } from '../../../../services/kb.servic
     <div class="page-container p-8 animate-fade-in">
       @if (category(); as cat) {
         <nav class="mb-10 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400">
-          <a routerLink="/helpdesk/knowledge-base" class="hover:text-red-500 transition-colors">Repository</a>
+          <a routerLink="/helpdesk/knowledge-base" class="hover:text-red-500 transition-colors">Knowledge Base</a>
           <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
           <span class="text-slate-800">{{ cat.name }}</span>
         </nav>

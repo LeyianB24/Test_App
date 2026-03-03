@@ -1,0 +1,217 @@
+:root {
+
+  /* ═══════════════════════════════
+     CORE BRAND PALETTE
+  ═══════════════════════════════ */
+  --color-black:          #000000;
+  --color-white:          #FFFFFF;
+  --color-red:            #DA3832;
+
+  /* ═══════════════════════════════
+     EXTENDED SEMANTIC PALETTE
+     (ALL derived from the 3 core colours — no external colours)
+  ═══════════════════════════════ */
+
+  /* Black scale — depth and structure */
+  --black-950:   #000000;   /* pure black — page backgrounds, sidebar */
+  --black-900:   #0A0A0A;   /* card surfaces on dark background */
+  --black-850:   #111111;   /* elevated cards */
+  --black-800:   #1A1A1A;   /* nested card surfaces */
+  --black-700:   #2A2A2A;   /* dividers, borders on dark */
+  --black-600:   #3A3A3A;   /* disabled states */
+  --black-500:   #555555;   /* placeholder text */
+  --black-400:   #777777;   /* secondary text */
+  --black-300:   #999999;   /* tertiary text / timestamps */
+  --black-200:   #BBBBBB;   /* subtle labels */
+  --black-100:   #DDDDDD;   /* borders on light backgrounds */
+  --black-050:   #F0F0F0;   /* light surface */
+  --black-025:   #F8F8F8;   /* page background light mode */
+
+  /* Red scale — alerts, accents, CTAs */
+  --red-900:     #5C0F0C;   /* critical alert background */
+  --red-800:     #8B1A15;   /* deep danger states */
+  --red-700:     #B5221C;   /* dark red hover */
+  --red-600:     #C72D27;   /* hover state for primary red */
+  --red-500:     #DA3832;   /* PRIMARY BRAND RED — active states, CTAs */
+  --red-400:     #E5524D;   /* lighter red — tags, labels */
+  --red-300:     #ED7A76;   /* soft alert text */
+  --red-200:     #F4A8A5;   /* very light red tint */
+  --red-100:     #FAD8D7;   /* red tint surface */
+  --red-050:     #FDF1F1;   /* red wash — alert backgrounds */
+
+  /* ═══════════════════════════════
+     SEMANTIC COLOUR ASSIGNMENTS
+  ═══════════════════════════════ */
+
+  /* Portal themes */
+  --admin-primary:          var(--red-500);
+  --admin-primary-hover:    var(--red-600);
+  --admin-primary-active:   var(--red-700);
+  --member-primary:         var(--red-500);
+  --member-primary-hover:   var(--red-600);
+
+  /* Backgrounds */
+  --bg-app:                 var(--black-950);   /* dark: full app background */
+  --bg-sidebar:             var(--black-950);
+  --bg-surface:             var(--black-900);   /* dark: primary card background */
+  --bg-surface-elevated:    var(--black-850);   /* dark: modals, dropdowns */
+  --bg-surface-sunken:      var(--black-800);   /* dark: inputs, code blocks */
+  --bg-overlay:             rgba(0, 0, 0, 0.7); /* modal overlay */
+
+  /* Light mode variants (for content areas on white) */
+  --bg-page-light:          var(--black-025);
+  --bg-card-light:          var(--color-white);
+  --bg-card-light-hover:    var(--black-050);
+
+  /* Text */
+  --text-primary:           var(--color-white);     /* headings on dark */
+  --text-secondary:         var(--black-300);        /* body text on dark */
+  --text-tertiary:          var(--black-400);        /* timestamps, hints */
+  --text-disabled:          var(--black-600);
+  --text-on-red:            var(--color-white);
+  --text-primary-light:     var(--black-950);       /* headings on light bg */
+  --text-secondary-light:   var(--black-600);       /* body on light bg */
+  --text-red:               var(--red-500);          /* accent text */
+  --text-muted:             var(--black-400);
+
+  /* Borders */
+  --border-default:         var(--black-700);        /* dark mode borders */
+  --border-subtle:          var(--black-800);
+  --border-light:           var(--black-100);        /* light mode borders */
+  --border-red:             var(--red-500);
+  --border-red-subtle:      var(--red-200);
+  --border-focus:           var(--red-500);          /* all :focus-visible outlines */
+
+  /* Status colours — ONLY derived from the 3 core colours + neutral */
+  --status-success:         #1A7A4A;   /* green — kept minimal, used only for ✓ */
+  --status-success-text:    #2ECC71;
+  --status-success-bg:      rgba(26, 122, 74, 0.12);
+  --status-warning:         #B87A00;   /* amber — warnings */
+  --status-warning-text:    #F0A500;
+  --status-warning-bg:      rgba(184, 122, 0, 0.12);
+  --status-danger:          var(--red-500);
+  --status-danger-text:     var(--red-400);
+  --status-danger-bg:       var(--red-050);
+  --status-info:            var(--black-400);
+  --status-info-bg:         var(--black-800);
+
+  /* ═══════════════════════════════
+     TYPOGRAPHY
+  ═══════════════════════════════ */
+
+  /* Font families */
+  --font-display:    'DM Serif Display', 'Georgia', serif;
+    /* Used for: hero headings, large KPI numbers, dramatic labels */
+  --font-heading:    'Space Grotesk', 'system-ui', sans-serif;
+    /* Used for: section headings, card titles, nav items */
+  --font-body:       'Inter', 'system-ui', sans-serif;
+    /* Used for: body text, form labels, table data */
+  --font-mono:       'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    /* Used for: KRA PINs, PRN numbers, tax amounts, code */
+
+  /* Type scale (Major Third — 1.25 ratio) */
+  --text-xs:    0.64rem;    /* 10.24px — fine print, timestamps */
+  --text-sm:    0.8rem;     /* 12.8px  — labels, badges */
+  --text-base:  1rem;       /* 16px    — body text */
+  --text-md:    1.25rem;    /* 20px    — sub-headings */
+  --text-lg:    1.563rem;   /* 25px    — section titles */
+  --text-xl:    1.953rem;   /* 31.25px — page headings */
+  --text-2xl:   2.441rem;   /* 39px    — hero numbers, KPI values */
+  --text-3xl:   3.052rem;   /* 48.8px  — dashboard hero stat */
+  --text-4xl:   3.815rem;   /* 61px    — login headline */
+
+  /* Font weights */
+  --weight-regular:   400;
+  --weight-medium:    500;
+  --weight-semibold:  600;
+  --weight-bold:      700;
+  --weight-black:     900;
+
+  /* Line heights */
+  --leading-tight:    1.2;   /* headings */
+  --leading-snug:     1.4;   /* subheadings */
+  --leading-normal:   1.6;   /* body */
+  --leading-relaxed:  1.8;   /* long-form text */
+
+  /* Letter spacing */
+  --tracking-tight:   -0.03em;  /* large display numbers */
+  --tracking-normal:   0em;
+  --tracking-wide:     0.05em;  /* uppercase labels */
+  --tracking-widest:   0.12em;  /* small caps, badge text */
+
+  /* ═══════════════════════════════
+     SPACING SYSTEM (8pt grid)
+  ═══════════════════════════════ */
+  --space-1:    4px;
+  --space-2:    8px;
+  --space-3:    12px;
+  --space-4:    16px;
+  --space-5:    20px;
+  --space-6:    24px;
+  --space-8:    32px;
+  --space-10:   40px;
+  --space-12:   48px;
+  --space-16:   64px;
+  --space-20:   80px;
+  --space-24:   96px;
+
+  /* ═══════════════════════════════
+     BORDER RADIUS
+  ═══════════════════════════════ */
+  --radius-sm:    4px;
+  --radius-md:    8px;
+  --radius-lg:    12px;
+  --radius-xl:    16px;
+  --radius-2xl:   24px;
+  --radius-full:  9999px;
+
+  /* ═══════════════════════════════
+     SHADOWS
+  ═══════════════════════════════ */
+  --shadow-sm:      0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md:      0 4px 12px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3);
+  --shadow-lg:      0 12px 40px rgba(0,0,0,0.6), 0 4px 8px rgba(0,0,0,0.3);
+  --shadow-xl:      0 24px 64px rgba(0,0,0,0.7);
+  --shadow-red:     0 0 0 1px var(--red-500), 0 4px 20px rgba(218, 56, 50, 0.25);
+  --shadow-red-lg:  0 0 0 2px var(--red-500), 0 8px 32px rgba(218, 56, 50, 0.35);
+  --shadow-inset:   inset 0 1px 3px rgba(0,0,0,0.5);
+  --shadow-glow-red: 0 0 24px rgba(218, 56, 50, 0.4);
+
+  /* ═══════════════════════════════
+     TRANSITIONS & ANIMATIONS
+  ═══════════════════════════════ */
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:       cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out:   cubic-bezier(0.45, 0, 0.55, 1);
+  --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);  /* slight overshoot */
+  --ease-bounce:   cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  --duration-instant:  50ms;
+  --duration-fast:     100ms;
+  --duration-base:     200ms;
+  --duration-slow:     350ms;
+  --duration-slower:   500ms;
+  --duration-page:     700ms;
+
+  /* ═══════════════════════════════
+     Z-INDEX SCALE
+  ═══════════════════════════════ */
+  --z-base:         0;
+  --z-raised:       10;
+  --z-dropdown:     100;
+  --z-sticky:       200;
+  --z-overlay:      300;
+  --z-modal:        400;
+  --z-toast:        500;
+  --z-tooltip:      600;
+
+  /* ═══════════════════════════════
+     LAYOUT
+  ═══════════════════════════════ */
+  --sidebar-width:          260px;
+  --sidebar-collapsed-width: 68px;
+  --topbar-height:          64px;
+  --footer-height:          52px;
+  --content-max-width:      1440px;
+  --content-padding:        var(--space-8);
+}

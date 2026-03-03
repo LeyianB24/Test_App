@@ -1,0 +1,46 @@
+.checker-page-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.checker-form-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+
+.checker-actions-precision {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+
+.checker-input-group {
+    margin-bottom: var(--space-6);
+}
+
+/* Shake animation for invalid fields */
+.shake-error {
+  animation: shake 0.5s var(--ease-out);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.open-itax-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--black-300);
+    text-decoration: none;
+    transition: color var(--duration-fast) ease;
+}
+
+.open-itax-btn:hover {
+    color: var(--red-500);
+}

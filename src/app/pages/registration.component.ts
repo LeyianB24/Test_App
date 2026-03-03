@@ -280,7 +280,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
 
             <!-- Footer Meta -->
             <div class="reg-footer-meta mt-48" *ngIf="!showSuccess()">
-               <p>Already have an active KRA PIN? <a routerLink="/login" class="login-link-elite">Authenticate Here</a></p>
+               <p>Already have an active KRA PIN? <a routerLink="/login" class="login-link-elite">Login Here</a></p>
                <div class="security-seal">
                   <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.946-2.597 9.289-6.5 11.534-3.903-2.245-6.5-6.588-6.5-11.534 0-.68.056-1.35.166-2.001zm8.334 1.5a1 1 0 10-2 0V9H7a1 1 0 100 2h1.5v2.5a1 1 0 102 0V11H12a1 1 0 100-2h-1.5V6.499z" clip-rule="evenodd"/></svg>
                   <span>Secure Registration</span>
