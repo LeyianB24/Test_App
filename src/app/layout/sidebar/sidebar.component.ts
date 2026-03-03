@@ -246,7 +246,7 @@ export class SidebarComponent {
   closeMobile = output<void>();
   logout = output<void>();
 
-  isDarkMode = this.themeService.darkMode;
+  isDarkMode = computed(() => this.themeService.theme() === 'dark');
   userName = this.authService.userName;
   userType = this.authService.userType;
 
