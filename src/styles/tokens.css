@@ -40,60 +40,55 @@
   --red-050:     #FDF1F1;   /* red wash — alert backgrounds */
 
   /* ═══════════════════════════════
-     SEMANTIC COLOUR ASSIGNMENTS
-  ═══════════════════════════════ */
-
-  /* Portal themes */
-  --admin-primary:          var(--red-500);
-  --admin-primary-hover:    var(--red-600);
-  --admin-primary-active:   var(--red-700);
-  --member-primary:         var(--red-500);
-  --member-primary-hover:   var(--red-600);
+     SEMANTIC THEME TOKENS (LIGHT MODE DEFAULT)
+     ═══════════════════════════════ */
 
   /* Backgrounds */
-  --bg-app:                 var(--black-950);   /* dark: full app background */
-  --bg-sidebar:             var(--black-950);
-  --bg-surface:             var(--black-900);   /* dark: primary card background */
-  --bg-surface-elevated:    var(--black-850);   /* dark: modals, dropdowns */
-  --bg-surface-sunken:      var(--black-800);   /* dark: inputs, code blocks */
-  --bg-overlay:             rgba(0, 0, 0, 0.7); /* modal overlay */
-
-  /* Light mode variants (for content areas on white) */
-  --bg-page-light:          var(--black-025);
-  --bg-card-light:          var(--color-white);
-  --bg-card-light-hover:    var(--black-050);
+  --bg-app:                 var(--black-025);
+  --bg-sidebar:             var(--color-white);
+  --bg-surface:             var(--color-white);
+  --bg-surface-elevated:    var(--black-050);
+  --bg-surface-sunken:      var(--black-100);
+  --bg-overlay:             rgba(0, 0, 0, 0.4);
 
   /* Text */
-  --text-primary:           var(--color-white);     /* headings on dark */
-  --text-secondary:         var(--black-300);        /* body text on dark */
-  --text-tertiary:          var(--black-400);        /* timestamps, hints */
-  --text-disabled:          var(--black-600);
+  --text-primary:           var(--black-950);
+  --text-secondary:         var(--black-600);
+  --text-tertiary:          var(--black-400);
+  --text-disabled:          var(--black-200);
   --text-on-red:            var(--color-white);
-  --text-primary-light:     var(--black-950);       /* headings on light bg */
-  --text-secondary-light:   var(--black-600);       /* body on light bg */
-  --text-red:               var(--red-500);          /* accent text */
+  --text-red:               var(--red-500);
   --text-muted:             var(--black-400);
 
   /* Borders */
-  --border-default:         var(--black-700);        /* dark mode borders */
-  --border-subtle:          var(--black-800);
-  --border-light:           var(--black-100);        /* light mode borders */
+  --border-default:         var(--black-100);
+  --border-subtle:          var(--black-050);
   --border-red:             var(--red-500);
-  --border-red-subtle:      var(--red-200);
-  --border-focus:           var(--red-500);          /* all :focus-visible outlines */
+  --border-red-subtle:      var(--red-100);
+  --border-focus:           var(--red-500);
 
-  /* Status colours — ONLY derived from the 3 core colours + neutral */
-  --status-success:         #1A7A4A;   /* green — kept minimal, used only for ✓ */
-  --status-success-text:    #2ECC71;
-  --status-success-bg:      rgba(26, 122, 74, 0.12);
-  --status-warning:         #B87A00;   /* amber — warnings */
-  --status-warning-text:    #F0A500;
-  --status-warning-bg:      rgba(184, 122, 0, 0.12);
-  --status-danger:          var(--red-500);
-  --status-danger-text:     var(--red-400);
-  --status-danger-bg:       var(--red-050);
-  --status-info:            var(--black-400);
-  --status-info-bg:         var(--black-800);
+  /* Shadows */
+  --shadow-sm:      0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:      0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg:      0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --shadow-xl:      0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+  --shadow-red:     0 0 0 1px var(--red-500), 0 4px 20px rgba(218, 56, 50, 0.15);
+  --shadow-glow-red: 0 0 20px rgba(218, 56, 50, 0.2);
+
+  /* Satin & Glass effects for Light Mode */
+  --satin-gradient: linear-gradient(
+    135deg,
+    rgba(218, 56, 50, 0.03) 0%,
+    rgba(218, 56, 50, 0.01) 50%,
+    rgba(218, 56, 50, 0.02) 100%
+  );
+  --glass-gradient: radial-gradient(
+    circle at 50% -20%,
+    rgba(218, 56, 50, 0.08) 0%,
+    rgba(218, 56, 50, 0.01) 40%,
+    transparent 100%
+  );
+  --ripple-color: rgba(218, 56, 50, 0.1);
 
   /* ═══════════════════════════════
      TYPOGRAPHY
@@ -235,4 +230,52 @@
   --footer-height:          52px;
   --content-max-width:      1440px;
   --content-padding:        var(--space-8);
+  /* ═══════════════════════════════ */
+}
+
+/* ═══════════════════════════════
+   DARK MODE OVERRIDES
+   ═══════════════════════════════ */
+.dark-theme {
+  /* Backgrounds */
+  --bg-app:                 var(--black-950);
+  --bg-sidebar:             var(--black-950);
+  --bg-surface:             var(--black-900);
+  --bg-surface-elevated:    var(--black-850);
+  --bg-surface-sunken:      var(--black-800);
+  --bg-overlay:             rgba(0, 0, 0, 0.8);
+
+  /* Text */
+  --text-primary:           var(--color-white);
+  --text-secondary:         var(--black-300);
+  --text-tertiary:          var(--black-400);
+  --text-disabled:          var(--black-600);
+
+  /* Borders */
+  --border-default:         var(--black-700);
+  --border-subtle:          var(--black-800);
+  --border-red-subtle:      var(--red-900);
+
+  /* Shadows */
+  --shadow-sm:      0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md:      0 4px 12px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3);
+  --shadow-lg:      0 12px 40px rgba(0,0,0,0.6), 0 4px 8px rgba(0,0,0,0.3);
+  --shadow-xl:      0 24px 64px rgba(0,0,0,0.7);
+  --shadow-red:     0 0 0 1px var(--red-500), 0 4px 20px rgba(218, 56, 50, 0.25);
+  --shadow-glow-red: 0 0 24px rgba(218, 56, 50, 0.4);
+
+  /* Satin & Glass effects for Dark Mode */
+  --satin-gradient: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  --glass-gradient: radial-gradient(
+    circle at 50% -20%,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.02) 40%,
+    transparent 100%
+  );
+  --ripple-color: rgba(255, 255, 255, 0.2);
 }

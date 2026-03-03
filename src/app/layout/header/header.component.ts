@@ -80,8 +80,8 @@ import { NotificationService, Notification } from '../../core/services/notificat
           <div class="user-trigger-precision" (click)="toggleMenu($event)">
             <div class="avatar-circle-precision">{{ getInitials(userName()) }}</div>
             <div class="hidden sm:block">
-              <div class="text-[12px] font-bold text-white leading-none">{{ userName() }}</div>
-              <div class="text-[10px] text-slate-500 mt-1 uppercase tracking-widest">{{ userPin() }}</div>
+              <div class="text-[12px] font-bold text-[var(--text-primary)] leading-none">{{ userName() }}</div>
+              <div class="text-[10px] text-[var(--text-secondary)] mt-1 uppercase tracking-widest">{{ userPin() }}</div>
             </div>
           </div>
 

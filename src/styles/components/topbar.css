@@ -22,22 +22,22 @@
 }
 
 .breadcrumb-parent {
-  color: var(--black-400);
+  color: var(--text-secondary);
   text-decoration: none;
   transition: color var(--duration-fast) ease;
 }
 
 .breadcrumb-parent:hover {
-  color: var(--black-200);
+  color: var(--text-primary);
 }
 
 .breadcrumb-separator {
-  color: var(--black-700);
+  color: var(--border-default);
   font-weight: var(--weight-bold);
 }
 
 .breadcrumb-current {
-  color: var(--color-white);
+  color: var(--text-primary);
   font-weight: var(--weight-semibold);
 }
 
@@ -56,19 +56,19 @@
   font-size: var(--text-xs);
   padding: 4px 10px;
   border-radius: var(--radius-full);
-  border: 1px solid var(--black-700);
-  background: var(--black-900);
-  color: var(--black-300);
+  border: 1px solid var(--border-default);
+  background: var(--bg-surface-sunken);
+  color: var(--text-secondary);
 }
 
 .status-pill-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--black-600);
+  background: var(--text-disabled);
 }
 
-.status-pill-precision.online { color: var(--black-300); }
+.status-pill-precision.online { color: var(--text-secondary); }
 .status-pill-precision.online .status-pill-dot { background: var(--status-success-text); animation: pulse 2s infinite; }
 
 .status-pill-precision.offline { color: var(--red-400); border-color: var(--red-500); }
@@ -92,7 +92,7 @@
 }
 
 .user-trigger-precision:hover {
-  background: var(--black-800);
+  background: var(--bg-surface-elevated);
 }
 
 .avatar-circle-precision {

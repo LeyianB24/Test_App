@@ -76,7 +76,7 @@ import { NotificationService, Notification } from '../../../core/services/notifi
           <div class="user-trigger-precision" (click)="toggleMenu($event)">
             <div class="avatar-circle-precision">{{ getInitials(userName()) }}</div>
             <div class="hidden sm:block">
-              <div class="text-[12px] font-bold text-white leading-none">{{ userName() }}</div>
+              <div class="text-[12px] font-bold text-[var(--text-primary)] leading-none">{{ userName() }}</div>
               <div class="text-[10px] text-red-500 mt-1 uppercase tracking-widest">{{ userRole() }}</div>
             </div>
           </div>

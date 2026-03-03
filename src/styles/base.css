@@ -22,6 +22,7 @@ body {
   background-color: var(--bg-app);
   overflow-x: hidden;
   position: relative;
+  transition: background-color var(--duration-base) var(--ease-tactile), color var(--duration-base) var(--ease-tactile);
 }
 
 body::before {
