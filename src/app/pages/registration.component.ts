@@ -12,416 +12,375 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, NgOptimizedImage, PinCertificateComponent],
   template: `
-    <div class="auth-layout login-scene">
-      <!-- Fixed Background Layer -->
+    <div class="auth-layout login-scene animate-fade-in">
+      <!-- High-Performance Background -->
       <div class="bg-image-container">
         <div class="bg-overlay"></div>
       </div>
       
       <div class="registration-view-scroller">
-        <div class="registration-container animate-up">
-          <div class="glass-card elite-reg-card-premium">
+        <div class="registration-container animate-slide-up">
+          <div class="card-precision auth-card-precision">
             
-            <!-- Brand & Hub Header -->
-            <div class="reg-brand-box">
-              <div class="logo-wrapper-luxury">
-                <img ngSrc="assets/logo.png" width="100" height="100" alt="KRA Logo" priority>
+            <!-- Strategic Header -->
+            <div class="reg-header-precision border-b border-white/5 pb-10 mb-10 flex items-center gap-8">
+              <div class="logo-box-precision bg-white p-4 rounded-3xl shadow-glow-white">
+                <img ngSrc="assets/logo.png" width="80" height="80" alt="KRA Logo" priority>
               </div>
-              <div class="brand-info-elite">
-                <span class="hub-tag">Registration Portal</span>
-                <h1 class="auth-title-elite">Resident <span class="gradient-text">Registration</span></h1>
-              </div>
-            </div>
-
-            <!-- Enhanced Universal Step Tracker -->
-            <div class="elite-stepper mt-40">
-              <div class="step-blob" [class.active]="currentStep === 1" [class.done]="currentStep > 1">
-                <div class="step-icon">
-                   <span *ngIf="currentStep <= 1">01</span>
-                   <svg *ngIf="currentStep > 1" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-                <span class="step-text">Bio-Data</span>
-              </div>
-              <div class="step-connector" [class.done]="currentStep > 1"></div>
-              <div class="step-blob" [class.active]="currentStep === 2" [class.done]="currentStep > 2">
-                <div class="step-icon">
-                   <span *ngIf="currentStep <= 2">02</span>
-                   <svg *ngIf="currentStep > 2" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-                <span class="step-text">Geography</span>
-              </div>
-              <div class="step-connector" [class.done]="currentStep > 2"></div>
-              <div class="step-blob" [class.active]="currentStep === 3" [class.done]="currentStep > 3">
-                <div class="step-icon">
-                   <span *ngIf="currentStep <= 3">03</span>
-                   <svg *ngIf="currentStep > 3" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-                <span class="step-text">Security</span>
+              <div class="header-titles">
+                <span class="text-[10px] font-black uppercase text-red-500 tracking-[0.3em] block mb-2">Central Registry</span>
+                <h1 class="text-4xl font-black text-white tracking-tight">Resident <span class="text-red-base">Enrollment</span></h1>
               </div>
             </div>
 
-            <!-- Dynamic Form Entry Surface -->
-            <div class="form-surface mt-48">
+            <!-- Tactical Step Progress -->
+            <div class="stepper-precision mb-16 px-4">
+              <div class="step-unit" [class.active]="currentStep === 1" [class.done]="currentStep > 1">
+                <div class="step-blob">
+                   @if (currentStep > 1) {
+                     <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                   } @else {
+                     01
+                   }
+                </div>
+                <span class="step-label">Identify</span>
+              </div>
+              <div class="step-line" [class.done]="currentStep > 1"></div>
+              <div class="step-unit" [class.active]="currentStep === 2" [class.done]="currentStep > 2">
+                <div class="step-blob">
+                   @if (currentStep > 2) {
+                     <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                   } @else {
+                     02
+                   }
+                </div>
+                <span class="step-label">Domicile</span>
+              </div>
+              <div class="step-line" [class.done]="currentStep > 2"></div>
+              <div class="step-unit" [class.active]="currentStep === 3" [class.done]="currentStep > 3">
+                <div class="step-blob">
+                   03
+                </div>
+                <span class="step-label">Secure</span>
+              </div>
+            </div>
+
+            <!-- Dynamic Entry Surface -->
+            <div class="form-surface-precision">
               
-              <!-- Success Result: Digital PIN Certificate -->
-              <div class="success-reveal animate-scale" *ngIf="showSuccess()">
-                <app-pin-certificate 
-                  [pin]="generatedPIN()" 
-                  [name]="regForm.get('firstName')?.value + ' ' + regForm.get('lastName')?.value"
-                  [email]="regForm.get('email')?.value">
-                </app-pin-certificate>
+              <!-- Success: Validated Credential -->
+              @if (showSuccess()) {
+                <div class="success-vault animate-scale">
+                  <app-pin-certificate 
+                    [pin]="generatedPIN()" 
+                    [name]="regForm.get('firstName')?.value + ' ' + regForm.get('lastName')?.value"
+                    [email]="regForm.get('email')?.value">
+                  </app-pin-certificate>
 
-                <div class="success-actions mt-40 max-w-md mx-auto">
-                   <button class="modern-btn primary-btn full-width" routerLink="/login">
-                      Login to iTax Dashboard
-                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                   </button>
-                </div>
-              </div>
-
-              <!-- Form Body -->
-              <form [formGroup]="regForm" (ngSubmit)="onSubmit()" *ngIf="!showSuccess()">
-                
-                <!-- Stage 01: Bio-Data Intelligence -->
-                <div class="form-stage" *ngIf="currentStep === 1">
-                  <div class="stage-intro">
-                     <h3>Personal Details</h3>
-                     <p>Your basic identification information</p>
+                  <div class="mt-12 flex justify-center">
+                     <button class="btn-precision btn-primary-precision btn-lg w-full max-w-sm" routerLink="/login">
+                        Access Taxpayer Dashboard
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="ml-2"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                     </button>
                   </div>
+                </div>
+              } @else {
+                <!-- Form Interaction -->
+                <form [formGroup]="regForm" (ngSubmit)="onSubmit()" class="form-stack-precision">
                   
-                  <div class="form-grid-elite">
-                    <div class="form-group-luxury">
-                      <label>Taxpayer Category</label>
-                      <select class="elite-select-luxury" formControlName="taxpayerType">
-                        <option value="individual">Individual Taxpayer</option>
-                        <option value="business">Non-Individual / Business</option>
-                      </select>
-                    </div>
-                    <div class="form-group-luxury">
-                      <label>Residency Status</label>
-                      <select class="elite-select-luxury" formControlName="residentStatus">
-                        <option value="resident">Resident of Kenya</option>
-                        <option value="non-resident">Non-Resident</option>
-                      </select>
-                    </div>
+                  <!-- Sequence 01: Identity parameters -->
+                  @if (currentStep === 1) {
+                    <div class="sequence-fade">
+                      <div class="sequence-header mb-8">
+                         <h3 class="text-xl font-black text-white">Identity Parameters</h3>
+                         <p class="text-sm font-medium text-white/30 uppercase tracking-widest mt-1">Foundational taxpayer attributes</p>
+                      </div>
+                      
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="form-group-precision">
+                          <label class="label-precision">Taxpayer Category</label>
+                          <select class="input-precision w-full" formControlName="taxpayerType">
+                            <option value="individual">Individual Entity</option>
+                            <option value="business">Non-Individual / Corporate</option>
+                          </select>
+                        </div>
+                        <div class="form-group-precision">
+                          <label class="label-precision">Residency Status</label>
+                          <select class="input-precision w-full" formControlName="residentStatus">
+                            <option value="resident">Resident of Kenya</option>
+                            <option value="non-resident">Non-Resident Entity</option>
+                          </select>
+                        </div>
 
-                    <div class="form-group-luxury">
-                      <label>First Name</label>
-                      <input type="text" class="elite-input-luxury" formControlName="firstName" placeholder="As per ID/Passport">
-                    </div>
-                    <div class="form-group-luxury">
-                      <label>Surname / Last Name</label>
-                      <input type="text" class="elite-input-luxury" formControlName="lastName" placeholder="Legal surname">
-                    </div>
+                        <div class="form-group-precision">
+                          <label class="label-precision">First Name</label>
+                          <input type="text" class="input-precision w-full" formControlName="firstName" placeholder="Legal Forename">
+                        </div>
+                        <div class="form-group-precision">
+                          <label class="label-precision">Surname</label>
+                          <input type="text" class="input-precision w-full" formControlName="lastName" placeholder="Legal Surname">
+                        </div>
 
-                    <div class="form-group-luxury">
-                      <label>National ID Number / Passport</label>
-                      <input type="text" class="elite-input-luxury" formControlName="idNumber" placeholder="ID/Passport Number">
-                    </div>
-                    <div class="form-group-luxury">
-                      <label>Date of Birth</label>
-                      <input type="date" class="elite-input-luxury" formControlName="dob">
-                    </div>
+                        <div class="form-group-precision">
+                          <label class="label-precision">National Identifier (ID/Passport)</label>
+                          <input type="text" class="input-precision w-full" formControlName="idNumber" placeholder="Registry Number">
+                        </div>
+                        <div class="form-group-precision">
+                          <label class="label-precision">Date of Birth</label>
+                          <input type="date" class="input-precision w-full" formControlName="dob">
+                        </div>
 
-                    <div class="form-group-luxury full-width">
-                      <label>Main Occupation/Business</label>
-                      <select class="elite-select-luxury" formControlName="economicActivity">
-                        <option value="">Select principal activity...</option>
-                        <option value="employment">Employed</option>
-                        <option value="business">Wholesale / Trade / Retail</option>
-                        <option value="professional">Professional</option>
-                        <option value="farming">Agro-Business / Farming</option>
-                      </select>
+                        <div class="form-group-precision md:col-span-2">
+                          <label class="label-precision">Principal Economic Activity</label>
+                          <select class="input-precision w-full" formControlName="economicActivity">
+                            <option value="">Select activity classification...</option>
+                            <option value="employment">Employment Services</option>
+                            <option value="business">General Trade / Retail</option>
+                            <option value="professional">Specialized Professional</option>
+                            <option value="farming">Agro-Industrial</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="sequence-footer mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div class="status-state-precision pending">
+                           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2.5"/></svg>
+                           <span class="text-[10px] font-black uppercase tracking-widest">Protocol: Ensure alignment with legal ID registry.</span>
+                        </div>
+                        <button type="button" class="btn-precision btn-primary-precision btn-lg w-full md:w-auto" (click)="goToStep(2)" [disabled]="isStep1Invalid()">
+                          Advanced Sequence
+                          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="ml-2"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  }
 
-                  <div class="stage-footer mt-48">
-                    <div class="support-hint">
-                       <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/></svg>
-                       <span>Ensure data matches your ID for automatic validation.</span>
+                  <!-- Sequence 02: Domicile & Location -->
+                  @if (currentStep === 2) {
+                    <div class="sequence-fade">
+                      <div class="sequence-header mb-8">
+                         <h3 class="text-xl font-black text-white">Domicile Registry</h3>
+                         <p class="text-sm font-medium text-white/30 uppercase tracking-widest mt-1">Geographical and jurisdictional parameters</p>
+                      </div>
+
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="form-group-precision">
+                          <label class="label-precision">County of Domicile</label>
+                          <select class="input-precision w-full" formControlName="county" (change)="onCountyChange()">
+                            <option value="">Select County...</option>
+                            @for (c of counties; track c.code) {
+                              <option [value]="c.name">{{ c.name }}</option>
+                            }
+                          </select>
+                        </div>
+                        <div class="form-group-precision">
+                          <label class="label-precision">Major Town / City</label>
+                          <input type="text" class="input-precision w-full" formControlName="town" placeholder="Nairobi, etc.">
+                        </div>
+
+                        <div class="form-group-precision">
+                          <label class="label-precision">Sub-County / District</label>
+                          <input type="text" class="input-precision w-full" formControlName="subCounty" placeholder="Registry District">
+                        </div>
+                        <div class="form-group-precision">
+                          <label class="label-precision">Administrative Ward</label>
+                          <input type="text" class="input-precision w-full" formControlName="ward" placeholder="Ward Identity">
+                        </div>
+
+                        <div class="form-group-precision">
+                          <label class="label-precision">Tactical Station Assignment</label>
+                          <select class="input-precision w-full" formControlName="kraStation">
+                            <option value="">Select nearest center...</option>
+                            <option value="Nairobi North">Nairobi North Station</option>
+                            <option value="Mombasa Station">Mombasa Operational Hub</option>
+                            <option value="Kisumu Station">Kisumu Regional Station</option>
+                            <option value="Eldoret Station">Eldoret Regional Hub</option>
+                          </select>
+                        </div>
+                        <div class="form-group-precision">
+                          <label class="label-precision">Postal Sequence Code</label>
+                          <input type="text" class="input-precision w-full" formControlName="postalCode" placeholder="00100">
+                        </div>
+
+                        <div class="form-group-precision md:col-span-2">
+                          <label class="label-precision">Surgical Physical Address</label>
+                          <textarea class="input-precision w-full pt-4 min-h-[100px] resize-none" formControlName="address" placeholder="Building, Floor, Suite, Street Identity..."></textarea>
+                        </div>
+                      </div>
+
+                      <div class="sequence-footer mt-12 pt-8 border-t border-white/5 flex justify-between gap-6">
+                        <button type="button" class="btn-precision btn-secondary-precision btn-lg flex-1" (click)="goToStep(1)">
+                          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mr-2"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                          Return
+                        </button>
+                        <button type="button" class="btn-precision btn-primary-precision btn-lg flex-1" (click)="goToStep(3)" [disabled]="isStep2Invalid()">
+                          Finalize Sequence
+                          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="ml-2"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                      </div>
                     </div>
-                    <button type="button" class="modern-btn primary-btn" (click)="goToStep(2)" [disabled]="isStep1Invalid()">
-                      Next Step
-                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-                  </div>
-                </div>
+                  }
 
-                <!-- Stage 02: Geocoding & Jurisdiction -->
-                <div class="form-stage" *ngIf="currentStep === 2">
-                  <div class="stage-intro">
-                     <h3>Contact Information</h3>
-                     <p>Provide your address and location</p>
-                  </div>
+                  <!-- Sequence 03: Security & Mandates -->
+                  @if (currentStep === 3) {
+                    <div class="sequence-fade">
+                      <div class="sequence-header mb-8">
+                         <h3 class="text-xl font-black text-white">Security & Mandate Registry</h3>
+                         <p class="text-sm font-medium text-white/30 uppercase tracking-widest mt-1">Access protocols and legal obligations</p>
+                      </div>
 
-                  <div class="form-grid-elite">
-                    <div class="form-group-luxury">
-                      <label>County of Residence</label>
-                      <select class="elite-select-luxury" formControlName="county" (change)="onCountyChange()">
-                        <option value="">Select County...</option>
-                        <option *ngFor="let c of counties" [value]="c.name">{{ c.name }}</option>
-                      </select>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="form-group-precision">
+                          <label class="label-precision">Operational Email</label>
+                          <input type="email" class="input-precision w-full" formControlName="email" placeholder="name@domain.com">
+                        </div>
+                        <div class="form-group-precision">
+                          <label class="label-precision">Primary Contact Line</label>
+                          <input type="tel" class="input-precision w-full" formControlName="phone" placeholder="+254 7XX XXX XXX">
+                        </div>
+
+                        <div class="form-group-precision">
+                          <label class="label-precision">Encryption Password</label>
+                          <input type="password" class="input-precision w-full" formControlName="password" placeholder="Min 6 characters">
+                        </div>
+                        <div class="form-group-precision">
+                          <label class="label-precision">Confirm Protocol</label>
+                          <input type="password" class="input-precision w-full" formControlName="confirmPassword" placeholder="Match encryption key">
+                        </div>
+                      </div>
+
+                      <div class="card-precision ops-card-precision mt-10 p-8 border border-white/5">
+                         <h4 class="text-[10px] font-black uppercase text-white/40 tracking-[0.2em] mb-6">Registered Tax Mandates</h4>
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <label class="mandate-toggle-precision group" [class.checked]="regForm.get('obIncomeTax')?.value">
+                               <input type="checkbox" formControlName="obIncomeTax" [disabled]="true" class="hidden">
+                               <div class="content flex items-center justify-between">
+                                  <div>
+                                     <span class="text-sm font-bold text-white block">Income Tax - Resident</span>
+                                     <span class="text-[9px] font-black text-red-500 uppercase tracking-widest">Mandatory Sequence</span>
+                                  </div>
+                                  <div class="check-box bg-red-base/20 border border-red-base flex items-center justify-center w-6 h-6 rounded-lg text-red-base">
+                                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                  </div>
+                               </div>
+                            </label>
+                            
+                            <label class="mandate-toggle-precision group cursor-pointer" [class.checked]="regForm.get('obVAT')?.value">
+                               <input type="checkbox" formControlName="obVAT" class="hidden">
+                               <div class="content flex items-center justify-between">
+                                  <div>
+                                     <span class="text-sm font-bold text-white block">Value Added Tax (VAT)</span>
+                                     <span class="text-[9px] font-black text-white/30 uppercase tracking-widest">Optional Stream</span>
+                                  </div>
+                                  <div class="check-box border border-white/10 group-hover:border-red-base/50 flex items-center justify-center w-6 h-6 rounded-lg text-transparent group-hover:text-red-base/30 transition-all" [class.!text-red-base]="regForm.get('obVAT')?.value" [class.!border-red-base]="regForm.get('obVAT')?.value" [class.!bg-red-base/10]="regForm.get('obVAT')?.value">
+                                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                  </div>
+                               </div>
+                            </label>
+                         </div>
+                      </div>
+
+                      <div class="agreement-strip mt-10 p-6 bg-white/2 rounded-2xl border border-white/5">
+                         <label class="flex items-start gap-4 cursor-pointer group">
+                            <input type="checkbox" formControlName="terms" class="mt-1 w-5 h-5 accent-red-base">
+                            <span class="text-xs font-semibold text-white/50 group-hover:text-white/80 transition-colors leading-relaxed">
+                               DECLARATION: I formally certify that all informational parameters submitted are accurate and legally binding under the Tax Administration Act.
+                            </span>
+                         </label>
+                      </div>
+
+                      <div class="sequence-footer mt-12 pt-8 border-t border-white/5 flex justify-between gap-6">
+                        <button type="button" class="btn-precision btn-secondary-precision btn-lg flex-1" (click)="goToStep(2)">Return</button>
+                        <button type="submit" class="btn-precision btn-primary-precision btn-lg flex-1 shadow-glow-red" [disabled]="regForm.invalid || isSubmitting()">
+                          @if (!isSubmitting()) {
+                             <span>Initialize Registration</span>
+                          } @else {
+                             <div class="flex items-center gap-3">
+                                <div class="loader-spinner-precision sm"></div>
+                                <span>Registering...</span>
+                             </div>
+                          }
+                        </button>
+                      </div>
                     </div>
-                    <div class="form-group-luxury">
-                      <label>Major Town / City</label>
-                      <input type="text" class="elite-input-luxury" formControlName="town" placeholder="Nairobi, Mombasa, etc">
-                    </div>
+                  }
 
-                    <div class="form-group-luxury">
-                      <label>District / Sub-County</label>
-                      <input type="text" class="elite-input-luxury" formControlName="subCounty" placeholder="e.g. Dagoretti">
-                    </div>
-                    <div class="form-group-luxury">
-                      <label>Ward</label>
-                      <input type="text" class="elite-input-luxury" formControlName="ward" placeholder="e.g. Kilimani">
-                    </div>
-
-                    <div class="form-group-luxury">
-                      <label>Nearest KRA Station</label>
-                      <select class="elite-select-luxury" formControlName="kraStation">
-                        <option value="">Select nearest center...</option>
-                        <option value="Nairobi North">Nairobi North</option>
-                        <option value="Mombasa Station">Mombasa Station</option>
-                        <option value="Kisumu Station">Kisumu Station</option>
-                        <option value="Eldoret Station">Eldoret Station</option>
-                      </select>
-                    </div>
-                    <div class="form-group-luxury">
-                      <label>Postal Code</label>
-                      <input type="text" class="elite-input-luxury" formControlName="postalCode" placeholder="00100">
-                    </div>
-
-                    <div class="form-group-luxury full-width">
-                      <label>Detailed Physical Address</label>
-                      <textarea class="elite-input-luxury" formControlName="address" rows="2" placeholder="Building, Floor, Suite, Street..."></textarea>
-                    </div>
-                  </div>
-
-                  <div class="stage-footer mt-48">
-                    <button type="button" class="modern-btn outline-btn" (click)="goToStep(1)">
-                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      Back
-                    </button>
-                    <button type="button" class="modern-btn primary-btn" (click)="goToStep(3)" [disabled]="isStep2Invalid()">
-                      Next Step
-                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Stage 03: Safety & Compliance -->
-                <div class="form-stage" *ngIf="currentStep === 3">
-                  <div class="stage-intro">
-                     <h3>Account Security</h3>
-                     <p>Set up your password and tax obligations</p>
-                  </div>
-
-                  <div class="form-grid-elite">
-                    <div class="form-group-luxury">
-                      <label>Email Address</label>
-                      <input type="email" class="elite-input-luxury" formControlName="email" placeholder="name@agency.com">
-                    </div>
-                    <div class="form-group-luxury">
-                      <label>Phone Number</label>
-                      <input type="tel" class="elite-input-luxury" formControlName="phone" placeholder="+254 7XX XXX XXX">
-                    </div>
-
-                    <div class="form-group-luxury">
-                      <label>Password</label>
-                      <input type="password" class="elite-input-luxury" formControlName="password" placeholder="Password">
-                    </div>
-                    <div class="form-group-luxury">
-                      <label>Confirm Password</label>
-                      <input type="password" class="elite-input-luxury" formControlName="confirmPassword" placeholder="Repeat for verification">
-                    </div>
-                  </div>
-
-                  <div class="compliance-box-luxury mt-32">
-                     <h4 class="box-title-elite">Registered Tax Obligations</h4>
-                     <div class="ob-list-fancy">
-                        <label class="ob-luxury-pill">
-                           <input type="checkbox" formControlName="obIncomeTax" [disabled]="true">
-                           <div class="pill-content">
-                              <span class="p-title">Income Tax - Resident</span>
-                              <span class="p-badge">Mandatory</span>
-                           </div>
-                        </label>
-                        <label class="ob-luxury-pill clickable">
-                           <input type="checkbox" formControlName="obVAT">
-                           <div class="pill-content">
-                              <span class="p-title">Value Added Tax (VAT)</span>
-                              <span class="p-opt">Optional</span>
-                           </div>
-                        </label>
-                     </div>
-                  </div>
-
-                  <div class="agreement-surface mt-32">
-                     <label class="agreement-luxury">
-                        <input type="checkbox" formControlName="terms">
-                        <span class="agreement-text">I declare that the information provided is correct and complete.</span>
-                     </label>
-                  </div>
-
-                  <div class="stage-footer mt-48">
-                    <button type="button" class="modern-btn outline-btn" (click)="goToStep(2)">Back</button>
-                    <button type="submit" class="modern-btn primary-btn elite-glow" [disabled]="regForm.invalid || isSubmitting()">
-                      <span *ngIf="!isSubmitting()">Submit Registration</span>
-                      <span *ngIf="isSubmitting()" class="loader-flex">
-                        <div class="mini-spinner"></div>
-                        Registering...
-                      </span>
-                    </button>
-                  </div>
-                </div>
-
-              </form>
+                </form>
+              }
             </div>
 
-            <!-- Footer Meta -->
-            <div class="reg-footer-meta mt-48" *ngIf="!showSuccess()">
-               <p>Already have an active KRA PIN? <a routerLink="/login" class="login-link-elite">Login Here</a></p>
-               <div class="security-seal">
-                  <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.946-2.597 9.289-6.5 11.534-3.903-2.245-6.5-6.588-6.5-11.534 0-.68.056-1.35.166-2.001zm8.334 1.5a1 1 0 10-2 0V9H7a1 1 0 100 2h1.5v2.5a1 1 0 102 0V11H12a1 1 0 100-2h-1.5V6.499z" clip-rule="evenodd"/></svg>
-                  <span>Secure Registration</span>
-               </div>
-            </div>
+            <!-- Footer Authenticity Seal -->
+            @if (!showSuccess()) {
+              <div class="auth-footer-precision mt-12 pt-8 border-t border-white/5 flex flex-col items-center gap-6">
+                 <p class="text-sm font-bold text-white/40">Already hold an active KRA PIN? <a routerLink="/login" class="text-white hover:text-red-base transition-colors underline underline-offset-4 decoration-red-base/30">Authorize Login</a></p>
+                 <div class="security-seal-precision flex items-center gap-3 py-2 px-6 bg-white/5 rounded-full border border-white/10">
+                    <svg width="14" height="14" fill="currentColor" class="text-red-base" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.946-2.597 9.289-6.5 11.534-3.903-2.245-6.5-6.588-6.5-11.534 0-.68.056-1.35.166-2.001zm8.334 1.5a1 1 0 10-2 0V9H7a1 1 0 100 2h1.5v2.5a1 1 0 102 0V11H12a1 1 0 100-2h-1.5V6.499z" clip-rule="evenodd"/></svg>
+                    <span class="text-[9px] font-black uppercase text-white/40 tracking-[0.2em]">Secure Cryptographic Enrollment</span>
+                 </div>
+              </div>
+            }
 
           </div>
         </div>
       </div>
     </div>
+
   `,
   styles: [`
     .login-scene { 
-      min-height: 100vh; position: relative; background: #0a0a0b; overflow: hidden;
+      min-height: 100vh; position: relative; background: var(--black-950); overflow: hidden;
     }
     .bg-image-container {
       position: fixed; inset: 0;
       background-image: url('/assets/kra_background.png');
-      background-size: cover; background-position: center; z-index: 1;
+      background-size: cover; background-position: center; z-index: 1; filter: grayscale(1) brightness(0.2);
     }
     .bg-overlay {
       position: absolute; inset: 0;
-      background: radial-gradient(circle at center, rgba(10, 10, 11, 0.75) 0%, rgba(10, 10, 11, 0.98) 100%);
+      background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.9) 100%);
     }
 
     .registration-view-scroller {
       position: relative; z-index: 10; height: 100vh; overflow-y: auto; display: flex; align-items: flex-start; justify-content: center; padding: 60px 20px;
     }
-    .registration-container { width: 100%; max-width: 1000px; margin: 0 auto; }
+    .registration-container { width: 100%; max-width: 900px; margin: 0 auto; }
 
-    .elite-reg-card-premium {
-      background: rgba(255, 255, 255, 0.03);
-      -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px);
-      border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 56px;
-      padding: 70px; box-shadow: 0 50px 150px rgba(0,0,0,0.6);
+    .auth-card-precision {
+      background: rgba(10, 10, 12, 0.8);
+      backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+      padding: 60px;
     }
 
-    /* Brand Luxury Header */
-    .reg-brand-box { display: flex; align-items: center; gap: 32px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 40px; }
-    .logo-wrapper-luxury { background: white; padding: 16px; border-radius: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(255,255,255,0.1); }
-    .hub-tag { display: block; color: var(--kra-red); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 8px; }
-    .auth-title-elite { font-size: 3.5rem; font-weight: 900; color: white; margin: 0; letter-spacing: -2.5px; line-height: 1; }
-
-    /* Universal Stepper */
-    .elite-stepper { display: flex; align-items: center; justify-content: space-between; position: relative; }
-    .step-blob { display: flex; flex-direction: column; align-items: center; gap: 14px; position: relative; z-index: 5; flex: 1; }
-    .step-icon { 
-      width: 52px; height: 52px; background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.1);
-      border-radius: 18px; display: flex; align-items: center; justify-content: center;
-      color: rgba(255,255,255,0.4); font-weight: 800; font-size: 1.1rem; transition: 0.4s;
+    /* Stepper Precision System */
+    .stepper-precision { display: flex; align-items: center; justify-content: space-between; }
+    .step-unit { display: flex; flex-direction: column; align-items: center; gap: 12px; position: relative; z-index: 5; flex: 1; }
+    .step-blob { 
+      width: 44px; height: 44px; background: var(--black-900); border: 2px solid var(--white-10);
+      border-radius: 14px; display: flex; align-items: center; justify-content: center;
+      color: var(--white-20); font-weight: 900; font-size: 0.9rem; transition: all 0.4s var(--ease-out);
     }
-    .step-text { font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 1.5px; }
+    .step-label { font-[9px] font-black color: var(--white-20); text-transform: uppercase; tracking-widest transition: color 0.4s; }
     
-    .step-blob.active .step-icon { border-color: var(--kra-red); background: var(--kra-red); color: white; transform: scale(1.15); box-shadow: 0 0 30px rgba(227, 30, 36, 0.5); }
-    .step-blob.active .step-text { color: white; font-weight: 800; }
-    .step-blob.done .step-icon { border-color: var(--success); background: var(--success); color: white; }
-    .step-blob.done .step-text { color: var(--success); }
+    .step-unit.active .step-blob { border-color: var(--red-500); background: var(--red-500); color: white; box-shadow: var(--shadow-glow-red); transform: scale(1.1); }
+    .step-unit.active .step-label { color: white; }
+    .step-unit.done .step-blob { border-color: #10B981; background: #10B981; color: white; }
+    .step-unit.done .step-label { color: #10B981; }
 
-    .step-connector { flex: 1; height: 3px; background: rgba(255,255,255,0.1); margin: -35px 0 0 0; border-radius: 4px; z-index: 1; }
-    .step-connector.done { background: var(--success); }
+    .step-line { flex: 1; height: 1px; background: var(--white-10); margin-top: -32px; z-index: 1; }
+    .step-line.done { background: #10B981; }
 
-    /* Elite Form Grid */
-    .form-stage { animation: stageFade 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-    @keyframes stageFade { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-    
-    .stage-intro { margin-bottom: 40px; }
-    .stage-intro h3 { font-size: 1.6rem; font-weight: 800; color: white; margin-bottom: 8px; letter-spacing: -0.5px; }
-    .stage-intro p { color: rgba(255,255,255,0.4); font-size: 1rem; }
-
-    .form-grid-elite { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-    .form-group-luxury { display: flex; flex-direction: column; gap: 12px; }
-    .form-group-luxury.full-width { grid-column: span 2; }
-    .form-group-luxury label { font-size: 0.8rem; font-weight: 800; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 1px; }
-
-    .elite-input-luxury, .elite-select-luxury {
-      width: 100%; padding: 18px 24px; background: rgba(255,255,255,0.04);
-      border: 2px solid rgba(255,255,255,0.08); border-radius: 20px;
-      color: white; font-size: 1.05rem; font-weight: 600; font-family: inherit;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    .mandate-toggle-precision {
+       display: block; padding: 24px; background: var(--white-02); border-radius: 16px; border: 1px solid var(--white-05); transition: all 0.3s;
     }
-    .elite-input-luxury:focus, .elite-select-luxury:focus { 
-      background: rgba(255,255,255,0.06); border-color: var(--kra-red); outline: none;
-      box-shadow: 0 0 0 6px rgba(227, 30, 36, 0.15); transform: translateY(-2px);
-    }
-    .elite-select-luxury option { background: #0a0a0b; color: white; }
+    .mandate-toggle-precision.checked { border-color: var(--red-500); background: rgba(218, 56, 50, 0.05); }
 
-    .stage-footer { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
-    .support-hint { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.45); font-weight: 600; font-size: 0.9rem; }
-    
-    /* Compliance & Obligations */
-    .compliance-box-luxury { background: rgba(0,0,0,0.25); border-radius: 32px; padding: 32px; border: 1px solid rgba(255,255,255,0.04); }
-    .box-title-elite { margin: 0 0 24px 0; font-size: 1.1rem; color: white; font-weight: 800; letter-spacing: -0.2px; }
-    .ob-list-fancy { display: flex; gap: 20px; }
-    .ob-luxury-pill { background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px 24px; flex: 1; display: flex; align-items: center; gap: 16px; transition: 0.3s; }
-    .ob-luxury-pill.clickable { cursor: pointer; }
-    .ob-luxury-pill:has(input:checked) { border-color: var(--kra-red); background: rgba(227,30,36,0.05); }
-    .ob-luxury-pill input { width: 24px; height: 24px; accent-color: var(--kra-red); }
-    .pill-content { display: flex; flex-direction: column; gap: 4px; }
-    .p-title { font-weight: 700; color: white; }
-    .p-badge { font-size: 0.7rem; font-weight: 800; color: var(--kra-red); text-transform: uppercase; }
-    .p-opt { font-size: 0.7rem; font-weight: 800; color: rgba(255,255,255,0.3); text-transform: uppercase; }
-
-    .agreement-luxury { display: flex; gap: 16px; cursor: pointer; color: rgba(255,255,255,0.6); font-size: 0.95rem; font-weight: 500; align-items: flex-start; }
-    .agreement-luxury input { margin-top: 4px; width: 20px; height: 20px; flex-shrink: 0; accent-color: var(--kra-red); }
-
-    /* Success Luxury Certificate */
-    .success-reveal { text-align: center; padding: 40px 0; }
-    .cert-header h2 { font-size: 3rem; font-weight: 900; color: white; letter-spacing: -2px; margin-top: 24px; margin-bottom: 8px; }
-    .cert-header p { font-size: 1.1rem; color: rgba(255,255,255,0.5); margin-bottom: 48px; }
-    .stamp-luxury { width: 120px; height: 120px; background: var(--success); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 0 60px rgba(16,185,129,0.3); border: 8px solid rgba(16,185,129,0.2); }
-    
-    .pin-display-luxury { background: rgba(255,255,255,0.03); border: 2px dashed rgba(255,255,255,0.1); border-radius: 40px; padding: 50px; position: relative; }
-    .p-meta { font-size: 0.85rem; font-weight: 800; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 20px; display: block; }
-    .p-value { font-family: 'Outfit', sans-serif; font-size: 5rem; font-weight: 900; color: var(--kra-red); letter-spacing: 12px; margin-bottom: 24px; }
-    .p-verify { display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 700; color: var(--success); font-size: 0.9rem; }
-    .v-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); }
-
-    .full-width { width: 100%; }
-    .loader-flex { display: flex; align-items: center; justify-content: center; gap: 12px; }
-    .mini-spinner { width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.2); border-top: 3px solid white; border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .reg-footer-meta { text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 40px; }
-    .reg-footer-meta p { color: rgba(255,255,255,0.4); font-size: 1rem; font-weight: 600; }
-    .login-link-elite { color: white; font-weight: 800; text-decoration: underline; text-underline-offset: 6px; margin-left: 8px; transition: 0.3s; }
-    .login-link-elite:hover { color: var(--kra-red); }
-    .security-seal { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; font-size: 0.75rem; color: rgba(255,255,255,0.3); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
-
-    .mt-12 { margin-top: 12px; }
-    .mt-32 { margin-top: 32px; }
-    .mt-40 { margin-top: 40px; }
-    .mt-48 { margin-top: 48px; }
+    .sequence-fade { animation: fadeSlideUp 0.6s var(--ease-out); }
 
     @media (max-width: 768px) {
-      .registration-view-scroller { padding: 30px 12px; }
-      .elite-reg-card-premium { padding: 40px 24px; }
-      .form-grid-elite { grid-template-columns: 1fr; }
-      .auth-title-elite { font-size: 2.5rem; }
-      .reg-brand-box { flex-direction: column; text-align: center; gap: 20px; }
-      .p-value { font-size: 3rem; letter-spacing: 6px; }
-      .elite-stepper { display: none; }
+      .registration-view-scroller { padding: 20px 10px; }
+      .auth-card-precision { padding: 40px 20px; }
+      .stepper-precision { gap: 10px; }
+      .step-label { font-size: 8px; }
     }
   `]
 })

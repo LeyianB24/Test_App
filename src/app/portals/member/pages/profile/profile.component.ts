@@ -9,298 +9,211 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="page-container animate-up">
+    <div class="dashboard-precision animate-fade-in">
       
-      <!-- Elite Page Header -->
-      <header class="page-header-elite">
-        <div class="header-info">
-          <h1 class="premium-title">Taxpayer <span class="gradient-text">Profile</span></h1>
-          <p class="premium-subtitle">Your official taxpayer information</p>
+      <header class="header-precision">
+        <div class="header-titles">
+          <h1 class="title-primary">Taxpayer <span class="title-accent">Intelligence</span></h1>
+          <p class="subtitle-secondary">Official registration and operation credentials</p>
         </div>
         <div class="header-actions">
-           <button class="modern-btn outline-btn sm" (click)="downloadCertificate()">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16h16M4 12h16M4 18h16" stroke-width="2.5"/></svg>
-              PIN Certificate
-           </button>
-           <button class="modern-btn primary-btn" (click)="showEditModal.set(true)">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="3"/></svg>
-              Update Details
-           </button>
+           <div class="btn-group-precision">
+             <button class="btn-precision btn-secondary-precision btn-sm" (click)="downloadCertificate()">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16h16M4 12h16M4 18h16" stroke-width="2.5"/></svg>
+                PIN Certificate
+             </button>
+             <button class="btn-precision btn-primary-precision btn-sm" (click)="showEditModal.set(true)">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2.5"/></svg>
+                Update Registry
+             </button>
+           </div>
         </div>
       </header>
 
-      <div class="profile-grid-luxury">
+      <div class="dashboard-content-precision grid grid-cols-1 lg:grid-cols-3 gap-10">
         
-        <!-- Left Column: Identity Core -->
-        <div class="profile-core-hub">
-           <div class="id-card-luxury animate-up delay-1">
-              <div class="id-inner-glass">
-                 <div class="id-header-v">
-                    <div class="id-avatar-box">
-                       {{ getInitials(user()?.name) }}
-                       <div class="id-badge-verified">
-                          <svg width="12" height="12" fill="white" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" /></svg>
-                       </div>
-                    </div>
-                    <div class="id-title-v">
-                       <h2 class="id-name-elite">{{ user()?.name }}</h2>
-                       <span class="id-type-tag">{{ user()?.type }} Taxpayer</span>
+        <!-- Left Column: Core Identity -->
+        <div class="lg:col-span-1 space-y-10">
+           <div class="card-precision profile-identity-card animate-slide-up">
+              <div class="avatar-system mb-8">
+                 <div class="avatar-orb-precision">
+                    {{ getInitials(user()?.name) }}
+                    <div class="verified-indicator">
+                       <svg width="10" height="10" fill="white" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" /></svg>
                     </div>
                  </div>
+              </div>
+              
+              <div class="identity-info-precision text-center mb-10">
+                 <h2 class="text-2xl font-black text-white leading-tight mb-2">{{ user()?.name }}</h2>
+                 <span class="text-[10px] font-black uppercase text-red-base tracking-widest">{{ user()?.type }} Taxpayer</span>
+              </div>
 
-                 <div class="compliance-pulse-v mt-32">
-                    <div class="p-labels">
-                       <span class="p-tag">PROFILE COMPLETION</span>
-                       <span class="p-val">{{ complianceProgress() }}%</span>
-                    </div>
-                    <div class="p-track-lux">
-                       <div class="p-fill-lux" [style.width.%]="complianceProgress()"></div>
-                    </div>
-                    <p class="p-hint-v">{{ complianceProgress() === 100 ? 'Profile is fully updated' : 'Update your address to reach 100%' }}</p>
+              <div class="integrity-meter mb-10">
+                 <div class="meter-labels flex justify-between mb-2">
+                    <span class="text-[9px] font-black text-white/30 uppercase tracking-widest">Profile Integrity</span>
+                    <span class="text-[9px] font-black text-white">{{ complianceProgress() }}%</span>
                  </div>
+                 <div class="meter-track bg-white/5 h-1.5 rounded-full overflow-hidden">
+                    <div class="meter-fill bg-red-base h-full shadow-glow-red transition-all duration-700" [style.width.%]="complianceProgress()"></div>
+                 </div>
+              </div>
 
-                 <div class="id-footer-v mt-40">
-                    <div class="id-stat-unit">
-                       <span class="isu-label">KRA PIN</span>
-                       <span class="isu-val mono">{{ user()?.taxpayer_id }}</span>
-                    </div>
-                    <div class="isu-divider"></div>
-                    <div class="id-stat-unit">
-                       <span class="isu-label">REGISTRATION DATE</span>
-                       <span class="isu-val">{{ user()?.registrationDate | date:'MMM yyyy' }}</span>
-                    </div>
+              <div class="ledger-summary-precision pt-8 border-t border-white/5 space-y-6">
+                 <div class="ledger-item flex justify-between">
+                    <span class="text-[9px] font-black text-white/30 uppercase tracking-widest">KRA PIN</span>
+                    <span class="text-[11px] font-black text-white tabular-nums tracking-widest">{{ user()?.taxpayer_id }}</span>
+                 </div>
+                 <div class="ledger-item flex justify-between">
+                    <span class="text-[9px] font-black text-white/30 uppercase tracking-widest">Registered</span>
+                    <span class="text-[11px] font-black text-white uppercase">{{ user()?.registrationDate | date:'MMM yyyy' }}</span>
                  </div>
               </div>
            </div>
 
-           <!-- Connectivity & Domicile -->
-           <div class="content-card-premium mt-32 animate-up delay-2">
-              <div class="card-p-header">
-                 <div class="ch-icon-ring green">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-width="2.2"/></svg>
-                 </div>
-                 <div class="p-title-group">
-                    <h3 class="card-p-title">Contact Information</h3>
-                    <p class="card-p-subtitle">Your verified contact details</p>
-                 </div>
+           <!-- Contact Parameters -->
+           <div class="card-precision ops-card-precision">
+              <div class="card-header-precision border-b border-white/5 pb-4 mb-6">
+                 <h3 class="text-[10px] font-black uppercase tracking-widest text-white/40">Communication Interface</h3>
               </div>
-              <div class="luxury-info-stack p-32">
-                 <div class="li-item">
-                    <span class="li-label">Email Address</span>
-                    <div class="li-val-row">
-                       <span class="li-val">{{ user()?.email }}</span>
-                       <span class="verify-status">VERIFIED</span>
+              <div class="parameter-stack space-y-6">
+                 <div class="parameter-item">
+                    <span class="text-[9px] font-black text-white/30 uppercase tracking-widest block mb-1">Transmission Email</span>
+                    <div class="flex items-center gap-3">
+                       <span class="text-sm font-bold text-white">{{ user()?.email }}</span>
+                       <span class="badge-precision active tabular-nums">VERIFIED</span>
                     </div>
                  </div>
-                 <div class="li-item">
-                    <span class="li-label">Phone Number</span>
-                    <span class="li-val">{{ taxpayer()?.phone || '07XXXXXXXX' }}</span>
+                 <div class="parameter-item">
+                    <span class="text-[9px] font-black text-white/30 uppercase tracking-widest block mb-1">Operational Phone</span>
+                    <span class="text-sm font-bold text-white">{{ taxpayer()?.phone || '07XXXXXXXX' }}</span>
                  </div>
-                 <div class="li-item full">
-                    <span class="li-label">Physical Address</span>
-                    <span class="li-val">{{ taxpayer()?.address || 'Nairobi, Kenya' }}</span>
+                 <div class="parameter-item">
+                    <span class="text-[9px] font-black text-white/30 uppercase tracking-widest block mb-1">Legal Domicile</span>
+                    <span class="text-sm font-bold text-white leading-relaxed">{{ taxpayer()?.address || 'Nairobi, Kenya' }}</span>
                  </div>
               </div>
            </div>
         </div>
 
-        <!-- Right Column: Legal Mandates -->
-        <div class="profile-mandate-hub">
-           <div class="content-card-premium animate-up delay-2">
-              <div class="card-p-header">
-                 <div class="ch-icon-ring blue">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2.2"/></svg>
+        <!-- Middle/Right Column: Strategic Mandates -->
+        <div class="lg:col-span-2 space-y-10">
+           <div class="card-precision main-record-card-precision">
+              <div class="card-header-precision border-b border-white/5 pb-6 mb-8 flex justify-between items-center">
+                 <div>
+                    <h3 class="text-lg font-black text-white">Tax Obligations</h3>
+                    <p class="text-[10px] font-black text-white/30 uppercase tracking-widest mt-1">Legally registered tax mandates</p>
                  </div>
-                 <div class="p-title-group">
-                    <h3 class="card-p-title">Tax Obligations</h3>
-                    <p class="card-p-subtitle">Your registered tax obligations</p>
-                 </div>
+                 <button class="btn-precision btn-secondary-precision btn-xs">Request Amendment</button>
               </div>
-              <div class="luxury-mandate-list p-32">
+              
+              <div class="mandate-registry-precision space-y-4">
                  @for (ob of obligations(); track ob.id) {
-                   <div class="mandate-item-elite">
-                      <div class="m-icon-box">
-                         {{ ob.obligation_name.substring(0, 2).toUpperCase() }}
-                      </div>
-                      <div class="m-content">
-                         <h4 class="m-title">{{ ob.obligation_name }}</h4>
-                         <div class="m-meta-stack">
-                            <span>Effective Date: {{ ob.effective_from }}</span>
-                            <span class="m-sep">|</span>
-                            <span>Cycle: Monthly</span>
-                         </div>
-                      </div>
-                      <div class="m-status-wrap">
-                         <div class="status-pill-elite synced">
-                            <span class="dot"></span> ACTIVE
-                         </div>
-                      </div>
-                   </div>
+                    <div class="mandate-tile-precision flex items-center gap-6 p-6 bg-white/2 rounded-2xl border border-white/5 hover:border-red-base/20 transition-all group">
+                       <div class="tile-icon-orb bg-white/5 group-hover:bg-red-base/10 text-white/40 group-hover:text-red-base text-xs font-black w-10 h-10 rounded-xl flex items-center justify-center transition-all">
+                          {{ ob.obligation_name.substring(0, 2).toUpperCase() }}
+                       </div>
+                       <div class="flex-1">
+                          <h4 class="text-white font-bold">{{ ob.obligation_name }}</h4>
+                          <div class="flex gap-4 mt-1">
+                             <span class="text-[9px] font-black text-white/20 uppercase tracking-widest">Effective: {{ ob.effective_from }}</span>
+                             <span class="text-[9px] font-black text-white/20 uppercase tracking-widest">Cycle: Monthly</span>
+                          </div>
+                       </div>
+                       <div class="mandate-status">
+                          <span class="badge-precision active uppercase">Active Sequence</span>
+                       </div>
+                    </div>
                  } @empty {
-                   <div class="empty-placeholder" style="padding: 40px 0;">
-                      <p>No active obligations found.</p>
-                   </div>
+                    <div class="null-state-precision py-20 text-center">
+                       <p class="text-[10px] font-black text-white/20 uppercase tracking-widest">No primary mandates detected.</p>
+                    </div>
                  }
               </div>
            </div>
 
-           <div class="content-card-premium mt-32 animate-up delay-3">
-              <div class="card-p-header">
-                 <div class="p-title-group">
-                    <h3 class="card-p-title">Account Verification</h3>
-                    <p class="card-p-subtitle">Verification status</p>
-                 </div>
+           <div class="card-precision ops-card-precision">
+              <div class="card-header-precision border-b border-white/5 pb-4 mb-8">
+                 <h3 class="text-[10px] font-black uppercase tracking-widest text-white/40">Credential Integrity</h3>
               </div>
-              <div class="integrity-timeline p-32">
-                 <div class="it-unit">
-                    <div class="it-dot active"></div>
-                    <div class="it-text">
-                       <span class="it-title">ID Verification</span>
-                       <span class="it-desc">Verification complete via national ID registry</span>
-                    </div>
+              <div class="integrity-stack-precision space-y-8 relative pl-6 border-l border-white/5 ml-3">
+                 <div class="integrity-entry relative">
+                    <div class="entry-dot bg-red-base absolute -left-[30px] top-1.5 w-2 h-2 rounded-full shadow-glow-red"></div>
+                    <span class="it-title text-sm font-bold text-white block mb-1">Identity Verification</span>
+                    <span class="it-desc text-[10px] font-medium text-white/30 uppercase tracking-widest">Authenticated via National Central Registry</span>
                  </div>
-                 <div class="it-unit">
-                    <div class="it-dot active"></div>
-                    <div class="it-text">
-                       <span class="it-title">PIN Verification</span>
-                       <span class="it-desc">Verified as authorized for this PIN</span>
-                    </div>
+                 <div class="integrity-entry relative">
+                    <div class="entry-dot bg-red-base absolute -left-[30px] top-1.5 w-2 h-2 rounded-full shadow-glow-red"></div>
+                    <span class="it-title text-sm font-bold text-white block mb-1">PIN Authorization</span>
+                    <span class="it-desc text-[10px] font-medium text-white/30 uppercase tracking-widest">Cryptographic validation of taxpayer signature</span>
                  </div>
               </div>
            </div>
         </div>
-
       </div>
 
-      <!-- Elite Edit Overlay -->
-      <div class="dialog-overlay-elite animate-fade" *ngIf="showEditModal()" (click)="showEditModal.set(false)">
-         <div class="elite-dialog-card animate-scale" (click)="$event.stopPropagation()">
-            <div class="dialog-header-luxury">
-               <div class="header-icon-ring">
-                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="white"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="3"/></svg>
-               </div>
-               <div class="header-text-v">
-                  <h3>Update Details</h3>
-                  <p>Update your contact information and address</p>
-               </div>
-               <button class="close-luxury-circular" (click)="showEditModal.set(false)">✕</button>
-            </div>
+      <!-- Tactical Edit Surface -->
+      @if (showEditModal()) {
+        <div class="modal-backdrop-precision" (click)="showEditModal.set(false)">
+           <div class="modal-panel-precision max-w-lg animate-scale" (click)="$event.stopPropagation()">
+              <div class="modal-header-precision">
+                 <div class="icon-orb-precision">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2.5"/></svg>
+                 </div>
+                 <div class="modal-titles">
+                    <h3 class="title-primary">Update <span class="title-accent">Registry</span></h3>
+                    <p class="subtitle-secondary">Modify operational transmission parameters</p>
+                 </div>
+                 <button class="modal-close-precision" (click)="showEditModal.set(false)">✕</button>
+              </div>
 
-            <div class="dialog-content-luxury">
-               <div class="luxury-form-stack">
-                  <div class="form-item-elite">
-                     <label>Mobile Number</label>
-                     <input type="text" [(ngModel)]="editData.phone" placeholder="+254 XXX XXX XXX" class="luxury-input-elite">
-                  </div>
-                  <div class="form-item-elite">
-                     <label>Physical Address</label>
-                     <textarea rows="3" [(ngModel)]="editData.address" placeholder="Enter full address" class="luxury-input-elite"></textarea>
-                  </div>
-               </div>
-               
-               <div class="policy-notice-luxury">
-                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2.5"/></svg>
-                  <span>A verification code will be sent to your registered address.</span>
-               </div>
-            </div>
+              <div class="modal-body-precision py-10">
+                 <div class="form-stack-precision space-y-8">
+                    <div class="form-group-precision">
+                       <label class="label-precision">Mobile Transmission Line</label>
+                       <input type="text" [(ngModel)]="editData.phone" placeholder="+254 XXX XXX XXX" class="input-precision w-full">
+                    </div>
+                    <div class="form-group-precision">
+                       <label class="label-precision">Primary Legal Domicile</label>
+                       <textarea rows="3" [(ngModel)]="editData.address" placeholder="Enter full physical address" class="input-precision w-full resize-none pt-4"></textarea>
+                    </div>
+                 </div>
+                 
+                 <div class="status-state-precision pending mt-8">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2.5"/></svg>
+                    <span class="text-[10px] font-black uppercase tracking-widest">Protocol: An OTP will be dispatched to verify changes.</span>
+                 </div>
+              </div>
 
-            <div class="dialog-footer-luxury">
-               <button class="modern-btn outline-btn sm" (click)="showEditModal.set(false)">Cancel</button>
-               <button class="modern-btn primary-btn" (click)="saveProfile()" [disabled]="isSaving()">
-                  {{ isSaving() ? 'SAVING...' : 'SAVE CHANGES' }}
-               </button>
-            </div>
-         </div>
-      </div>
-
+              <div class="modal-footer-precision">
+                 <button class="btn-precision btn-secondary-precision" (click)="showEditModal.set(false)">Abort</button>
+                 <button class="btn-precision btn-primary-precision" (click)="saveProfile()" [disabled]="isSaving()">
+                    @if (isSaving()) {
+                      <div class="loader-spinner-precision sm"></div>
+                    } @else {
+                      Execute Update
+                    }
+                 </button>
+              </div>
+           </div>
+        </div>
+      }
     </div>
   `,
   styles: [`
-    .profile-grid-luxury { display: grid; grid-template-columns: 1fr 450px; gap: 40px; }
-    
-    .id-card-luxury {
-      background: var(--kra-gradient); border-radius: 40px; padding: 1px;
-      box-shadow: 0 30px 60px rgba(227, 30, 36, 0.15);
-    }
-    .id-inner-glass {
-      background: rgba(10, 34, 61, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-radius: 39px; padding: 40px; color: white;
-    }
-    .id-header-v { display: flex; align-items: center; gap: 32px; }
-    .id-avatar-box {
-      width: 100px; height: 100px; background: white; border-radius: 32px;
+    .avatar-orb-precision {
+      width: 100px; height: 100px; background: var(--black-900); border: 2px solid var(--red-500); border-radius: 32px;
       display: flex; align-items: center; justify-content: center;
-      font-weight: 900; font-size: 2.2rem; color: var(--kra-red); position: relative;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      font-weight: 900; font-size: 2.2rem; color: #FFFFFF; position: relative;
+      box-shadow: var(--shadow-glow-red);
+      margin: 0 auto;
     }
-    .id-badge-verified {
-      position: absolute; bottom: -8px; right: -8px; width: 32px; height: 32px;
-      background: #10B981; border: 4px solid #1a223d; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(16,185,129,0.3);
+    .verified-indicator {
+      position: absolute; bottom: -6px; right: -6px; width: 28px; height: 28px;
+      background: #10B981; border: 3px solid var(--black-950); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; shadow: var(--shadow-md);
     }
-    .id-name-elite { font-size: 2.2rem; font-weight: 900; margin: 0; letter-spacing: -1.5px; }
-    .id-type-tag { font-size: 0.85rem; font-weight: 800; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; }
-
-    .compliance-pulse-v .p-labels { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
-    .p-tag { font-size: 0.75rem; font-weight: 900; color: rgba(255,255,255,0.5); letter-spacing: 1px; }
-    .p-val { font-size: 1.1rem; font-weight: 900; }
-    .p-track-lux { height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; overflow: hidden; }
-    .p-fill-lux { height: 100%; background: white; box-shadow: 0 0 15px rgba(255,255,255,0.5); border-radius: 5px; }
-    .p-hint-v { font-size: 0.8rem; color: rgba(255,255,255,0.5); font-weight: 600; margin-top: 10px; }
-
-    .id-footer-v { display: flex; gap: 50px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); }
-    .isu-label { font-size: 0.7rem; font-weight: 900; color: rgba(255,255,255,0.4); display: block; margin-bottom: 4px; letter-spacing: 1px; }
-    .isu-val { font-size: 1.15rem; font-weight: 800; }
-    .isu-val.mono { font-family: 'Courier New', monospace; letter-spacing: 1px; color: #60A5FA; }
-    .isu-divider { width: 1px; background: rgba(255,255,255,0.1); }
-
-    .luxury-info-stack { display: flex; flex-direction: column; gap: 32px; }
-    .li-item { display: flex; flex-direction: column; gap: 8px; }
-    .li-label { font-size: 0.75rem; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; }
-    .li-val { font-size: 1.1rem; font-weight: 800; color: #1a202c; }
-    .li-val-row { display: flex; align-items: center; gap: 16px; }
-    .verify-status { font-size: 0.65rem; font-weight: 900; color: #10B981; background: #ECFDF5; padding: 4px 10px; border-radius: 8px; }
-
-    .luxury-mandate-list { display: flex; flex-direction: column; gap: 16px; }
-    .mandate-item-elite {
-      display: flex; align-items: center; gap: 20px; padding: 24px; background: #F8FAFC;
-      border-radius: 24px; border: 1.5px solid #E2E8F0; transition: 0.3s;
-    }
-    .mandate-item-elite:hover { transform: translateX(10px); background: white; border-color: var(--kra-red); }
-    .m-icon-box { width: 44px; height: 44px; background: white; border: 2px solid #E2E8F0; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--kra-blue); }
-    .m-title { font-size: 1rem; font-weight: 900; color: #1a202c; margin: 0; }
-    .m-meta-stack { font-size: 0.8rem; color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 10px; margin-top: 4px; }
-    .m-sep { color: #CBD5E1; }
-
-    .integrity-timeline { display: flex; flex-direction: column; gap: 32px; }
-    .it-unit { display: flex; gap: 20px; align-items: flex-start; }
-    .it-dot { width: 14px; height: 14px; border-radius: 50%; background: #E2E8F0; margin-top: 6px; flex-shrink: 0; }
-    .it-dot.active { background: #10B981; box-shadow: 0 0 10px rgba(16,185,129,0.4); border: 3px solid white; outline: 1px solid #10B981; }
-    .it-title { font-weight: 800; font-size: 1rem; color: #1a202c; display: block; }
-    .it-desc { font-size: 0.85rem; color: #64748b; font-weight: 600; margin-top: 2px; display: block; }
-
-    /* Dialog/Overlay Extras */
-    .dialog-overlay-elite { position: fixed; inset: 0; background: rgba(10, 10, 11, 0.5); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-    .elite-dialog-card { background: white; width: 100%; max-width: 600px; border-radius: 40px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); border-top: 6px solid var(--kra-red); }
-    .dialog-header-luxury { padding: 40px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; gap: 24px; position: relative; }
-    .header-icon-ring { width: 56px; height: 56px; background: var(--kra-red); border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(227, 30, 36, 0.2); }
-    .header-text-v h3 { font-size: 1.4rem; font-weight: 900; color: #1a202c; margin: 0; letter-spacing: -0.5px; }
-    .header-text-v p { font-size: 0.9rem; color: #64748b; font-weight: 600; margin-top: 4px; }
-    .close-luxury-circular { position: absolute; top: 30px; right: 30px; width: 44px; height: 44px; border-radius: 50%; border: none; background: #F1F5F9; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-    .close-luxury-circular:hover { background: #fee2e2; color: #ef4444; }
-
-    .dialog-content-luxury { padding: 40px; }
-    .luxury-form-stack { display: flex; flex-direction: column; gap: 32px; }
-    .form-item-elite { display: flex; flex-direction: column; gap: 12px; }
-    .form-item-elite label { font-size: 0.75rem; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; }
-    
-    .luxury-input-elite { width: 100%; padding: 18px 24px; background: #F8FAFC; border: 2.5px solid #E2E8F0; border-radius: 20px; font-weight: 800; color: #1a202c; font-size: 1.05rem; transition: 0.3s; font-family: inherit; }
-    .luxury-input-elite:focus { border-color: var(--kra-red); outline: none; background: white; box-shadow: 0 0 0 6px rgba(227,30,36,0.1); }
-    
-    .policy-notice-luxury { margin-top: 40px; padding: 20px; background: #E0F2FE; border-radius: 18px; border: 1.5px solid #BAE6FD; display: flex; align-items: center; gap: 16px; color: #0369A1; font-weight: 700; font-size: 0.9rem; }
-    .dialog-footer-luxury { padding: 32px 40px; background: #F8FAFC; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 20px; }
-
-    .p-32 { padding: 32px; }
+    .meter-fill { box-shadow: 0 0 20px rgba(218, 56, 50, 0.4); }
 
     @media (max-width: 1200px) {
        .profile-grid-luxury { grid-template-columns: 1fr; }
