@@ -167,6 +167,7 @@ const NAV_MAP: { slug: string; route: string; label: string; iconPath: string }[
 
 @Component({
   selector: 'app-sidebar',
+  standalone: true,
   imports: [CommonModule, RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

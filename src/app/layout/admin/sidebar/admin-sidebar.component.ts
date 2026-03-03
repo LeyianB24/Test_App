@@ -76,6 +76,7 @@ const ADMIN_NAV_MAP: MenuItem[] = [
 
 @Component({
   selector: 'app-admin-sidebar',
+  standalone: true,
   imports: [CommonModule, RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
