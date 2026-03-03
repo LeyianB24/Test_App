@@ -160,7 +160,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
                  <div class="ledger-stack-precision space-y-6 relative pl-4 border-l border-white/5 ml-2">
                     @for (event of ticket()!.history; track event.id) {
                        <div class="ledger-entry-precision relative">
-                          <div class="ledger-dot bg-red-base absolute -left-[21px] top-1.5 w-2 h-2 rounded-full shadow-[0_0_8px_rgba(218,56,50,0.5)]"></div>
+                          <div class="ledger-dot bg-red-base absolute -left-[21px] top-1.5 w-2 h-2 rounded-full shadow-glow-red"></div>
                           <p class="ledger-text text-white/70 font-bold text-[11px] leading-tight mb-2">{{ event.description }}</p>
                           <span class="ledger-time text-white/20 font-black text-[9px] uppercase tracking-widest">{{ event.changed_at | date:'dd MMM, HH:mm' }}</span>
                        </div>

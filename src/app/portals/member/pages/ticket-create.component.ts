@@ -169,10 +169,9 @@ import { HelpdeskService } from '../../../services/helpdesk.service';
     .animate-shake { animation: shake 0.5s; }
     @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
-    .badge-elite { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.6rem; font-weight: 950; text-transform: uppercase; border: 1px solid transparent; }
-    .badge-critical { background: #E31E24; color: white; }
-    .badge-high { background: rgba(227, 30, 36, 0.1); color: #E31E24; border-color: rgba(227, 30, 36, 0.2); }
-    .badge-progress { background: rgba(59, 130, 246, 0.1); color: #3B82F6; border-color: rgba(59, 130, 246, 0.2); }
+    .badge-critical { background: var(--red-500); color: white; }
+    .badge-high { background: var(--red-050); color: var(--red-500); border-color: var(--red-200); }
+    .badge-progress { background: var(--status-info-bg); color: var(--status-info); border-color: var(--border-subtle); }
   `]
 })
 export class TicketCreateComponent {

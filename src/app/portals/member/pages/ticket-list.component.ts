@@ -39,7 +39,7 @@ import { HelpdeskService, Ticket } from '../../../services/helpdesk.service';
               <span class="label">Open Tickets</span>
               <h3 class="value">{{ helpdeskService.openTicketsCount() }}</h3>
             </div>
-            <div class="kpi-status-dot bg-blue-500"></div>
+            <div class="kpi-status-dot bg-blue-400"></div>
           </div>
           <div class="card-precision kpi-card-precision">
             <div class="kpi-info">
@@ -166,15 +166,15 @@ import { HelpdeskService, Ticket } from '../../../services/helpdesk.service';
     </div>
   `,
   styles: [`
-    .btn-group-precision { display: flex; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+    .btn-group-precision { display: flex; background: var(--black-800); padding: 4px; border-radius: 12px; border: 1px solid var(--border-subtle); }
     .btn-group-precision .btn-precision { border: none; background: transparent; }
-    .btn-group-precision .btn-precision.active-precision { background: #DA3832; color: white; }
+    .btn-group-precision .btn-precision.active-precision { background: var(--red-500); color: white; }
     .kpi-status-dot { width: 4px; height: 100%; position: absolute; left: 0; top: 0; }
-    .count-badge-precision { background: rgba(255,255,255,0.05); color: white; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 950; }
+    .count-badge-precision { background: var(--black-800); color: white; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 950; }
     .priority-dot { width: 6px; height: 6px; border-radius: 50%; }
-    .bg-red-base { background-color: #DA3832; }
-    .bg-warning { background-color: #FBBF24; }
-    .bg-success { background-color: #10B981; }
+    .bg-red-base { background-color: var(--red-500); }
+    .bg-warning { background-color: var(--status-warning); }
+    .bg-success { background-color: var(--status-success); }
   `]
 })
 export class TicketListComponent {
@@ -239,9 +239,9 @@ export class TicketListComponent {
   getPriorityColor(priority: string): string {
     switch (priority) {
       case 'Critical': return 'bg-red-500';
-      case 'High': return 'bg-orange-500';
-      case 'Medium': return 'bg-blue-500';
-      default: return 'bg-slate-500';
+      case 'High': return 'bg-orange-400';
+      case 'Medium': return 'bg-blue-400';
+      default: return 'bg-slate-400';
     }
   }
 }
