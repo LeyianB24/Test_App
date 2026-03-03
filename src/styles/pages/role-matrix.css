@@ -1,5 +1,5 @@
 .role-matrix-container {
-  background: var(--bg-surface);
+  background: var(--bg-surface-1);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -24,7 +24,7 @@
   font-weight: var(--weight-semibold);
   cursor: pointer;
   padding-bottom: var(--space-2);
-  transition: color var(--duration-base) ease;
+  transition: color var(--duration-200) ease;
   position: relative;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .role-tab-item.active {
-  color: var(--red-500);
+  color: var(--color-accent);
 }
 
 .role-tab-item.active::after {
@@ -43,12 +43,12 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--red-500);
-  animation: borderDraw 300ms var(--ease-out) forwards;
+  background: var(--color-accent);
+  animation: borderDraw var(--duration-300) var(--ease-out) forwards;
 }
 
 .role-matrix-table-row:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-hover);
 }
 
 .role-matrix-cell-flash {

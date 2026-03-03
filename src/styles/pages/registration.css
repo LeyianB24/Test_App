@@ -33,13 +33,11 @@
 }
 
 .reg-card-precision {
-  background: var(--bg-surface-glass);
-  -webkit-backdrop-filter: blur(40px);
-  backdrop-filter: blur(40px);
+  background: var(--bg-surface-1);
   padding: var(--space-16);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-2xl);
+  box-shadow: var(--shadow-xl);
 }
 
 /* Stepper Precision System */
@@ -63,47 +61,48 @@
 .step-blob {
   width: 44px;
   height: 44px;
-  background: var(--bg-surface-sunken);
+  background: var(--bg-surface-2);
   border: 2px solid var(--border-default);
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-tertiary);
-  font-weight: 800;
+  font-weight: var(--weight-bold);
   font-size: var(--text-sm);
-  transition: all var(--duration-base) var(--ease-out);
+  transition: all var(--duration-200) var(--ease-out);
 }
 
 .step-label {
-  font-size: 10px;
-  font-weight: var(--weight-black);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
   color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
-  transition: color var(--duration-base);
+  transition: color var(--duration-200);
 }
 
 .step-unit.active .step-blob {
-  border-color: var(--red-500);
-  background: var(--red-500);
-  color: white;
-  box-shadow: 0 0 20px rgba(218, 56, 50, 0.4);
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--text-on-accent);
+  box-shadow: var(--shadow-focus);
   transform: scale(1.1);
 }
 
 .step-unit.active .step-label {
-  color: white;
+  color: var(--color-accent-text);
 }
 
 .step-unit.done .step-blob {
-  border-color: var(--status-success-text);
-  background: var(--status-success-text);
-  color: white;
+  border-color: var(--text-success);
+  background: var(--bg-success-subtle);
+  color: var(--text-success);
 }
 
 .step-unit.done .step-label {
-  color: var(--status-success-text);
+  color: var(--text-success);
 }
 
 .step-line {
@@ -115,21 +114,21 @@
 }
 
 .step-line.done {
-  background: var(--status-success-text);
+  background: var(--text-success);
 }
 
 .mandate-toggle-precision {
   display: block;
   padding: var(--space-6);
-  background: var(--bg-surface-sunken);
+  background: var(--bg-surface-2);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-subtle);
-  transition: all var(--duration-base);
+  transition: all var(--duration-200);
 }
 
 .mandate-toggle-precision.checked {
-  border-color: var(--red-500);
-  background: rgba(218, 56, 50, 0.05);
+  border-color: var(--color-accent);
+  background: var(--bg-accent-subtle);
 }
 
 @media (max-width: 768px) {

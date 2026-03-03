@@ -4,7 +4,7 @@
 }
 
 .checker-form-card {
-  background: var(--bg-surface);
+  background: var(--bg-surface-1);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-xl);
   padding: var(--space-8);
@@ -42,5 +42,5 @@
 }
 
 .open-itax-btn:hover {
-    color: var(--red-500);
+    color: var(--color-accent);
 }

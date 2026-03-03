@@ -1,9 +1,9 @@
 .wizard-content-precision {
-  background: var(--bg-surface);
+  background: var(--bg-surface-1);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-xl);
   padding: var(--space-8);
-  animation: scaleIn 400ms var(--ease-out) forwards;
+  animation: scaleIn var(--duration-400) var(--ease-out) forwards;
 }
 
 .wizard-step-title {
@@ -27,7 +27,7 @@
 }
 
 .calculation-preview-precision {
-  background: var(--bg-surface-sunken);
+  background: var(--bg-surface-2);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
   padding: var(--space-4);
@@ -66,8 +66,8 @@
 .prn-display-precision {
   text-align: center;
   padding: var(--space-10);
-  background: var(--bg-surface-sunken);
-  border: 1px dashed var(--red-500);
+  background: var(--bg-surface-2);
+  border: 1px dashed var(--color-accent);
   border-radius: var(--radius-lg);
 }
 
@@ -75,7 +75,7 @@
   font-family: var(--font-mono);
   font-size: var(--text-2xl);
   font-weight: var(--weight-bold);
-  color: var(--red-500);
+  color: var(--color-accent);
   letter-spacing: var(--tracking-wide);
   display: block;
   margin-bottom: var(--space-4);
