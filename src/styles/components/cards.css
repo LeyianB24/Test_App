@@ -43,7 +43,7 @@
 .stat-card-precision .card-value {
   font-family: var(--font-display);
   font-size: var(--text-4xl);
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-extrabold);
   color: var(--text-primary);
   letter-spacing: var(--tracking-tightest);
   line-height: 1;

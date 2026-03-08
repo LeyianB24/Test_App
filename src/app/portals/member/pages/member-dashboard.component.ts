@@ -31,7 +31,7 @@ interface DashboardStat {
                 v2.0 MASTER
               </span>
             </h1>
-            <p class="text-tertiary mt-2 font-medium tracking-wide">Synchronized access for {{ userName() }}</p>
+            <p class="text-[var(--text-secondary)] mt-2 font-semibold tracking-wide uppercase text-[10px]">Synchronized access for {{ userName() }}</p>
           </div>
           <div class="flex items-center gap-4">
             <button class="btn-precision btn-secondary-precision btn-sm" (click)="downloadStatusReport()">
@@ -46,9 +46,9 @@ interface DashboardStat {
         </div>
       </header>
     
-      <div class="dashboard-grid-precision mb-10">
+      <div class="dashboard-grid-precision grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         @for (stat of stats(); track stat.label) {
-          <div class="stat-card-precision">
+          <div class="stat-card-precision overflow-visible">
             <div class="card-icon-box" [class]="stat.color">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-width="2" [attr.d]="stat.icon" />
@@ -56,7 +56,7 @@ interface DashboardStat {
             </div>
             <span class="card-label">{{ stat.label }}</span>
             <span class="card-value">{{ stat.formattedValue }}</span>
-            <div class="delta-badge" [class.positive]="stat.trendDirection === 'up'" [class.negative]="stat.trendDirection === 'down'">
+            <div class="delta-badge mt-4" [class.positive]="stat.trendDirection === 'up'" [class.negative]="stat.trendDirection === 'down'">
               <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 @if (stat.trendDirection === 'up') {
                   <path d="M5 10l7-7 7 7M12 3v18" stroke-width="2.5"/>
@@ -71,40 +71,38 @@ interface DashboardStat {
         }
       </div>
     
-      <div class="dashboard-charts-grid">
+      <div class="dashboard-charts-grid grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Revenue Analytics Surface -->
-        <div class="stat-card-precision">
+        <div class="stat-card-precision lg:col-span-2">
           <div class="flex items-center justify-between mb-8">
             <div>
-              <h3 class="text-lg font-bold text-primary uppercase tracking-widest">Revenue Trajectory</h3>
-              <p class="text-xs text-tertiary mt-1">12-month centralized performance overview</p>
+              <h3 class="text-lg font-black text-primary uppercase tracking-widest">Revenue Trajectory</h3>
+              <p class="text-[10px] text-tertiary mt-1 font-bold uppercase tracking-wider">12-month centralized performance overview</p>
             </div>
             <span class="status-pill-precision">REAL-TIME TELEMETRY</span>
           </div>
     
-          <div class="relative h-[300px] w-full">
+          <div class="relative h-[300px] w-full mt-4">
             <svg class="w-full h-full overflow-visible">
               <defs>
                 <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#DA3832" />
-                  <stop offset="100%" stop-color="#8B1E1A" />
+                  <stop offset="0%" stop-color="var(--color-accent)" />
+                  <stop offset="100%" stop-color="var(--color-accent-hover)" />
                 </linearGradient>
                 <filter id="glow">
                   <feGaussianBlur stdDeviation="3" result="blur" />
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
               </defs>
-              <!-- Bar iteration would go here based on real data -->
               @for (bar of [50, 70, 40, 90, 60, 80, 55, 75, 65, 85, 95, 100]; track $index) {
                 <rect
                   [attr.x]="$index * (100 / 12) + '%'"
                   [attr.y]="100 - bar + '%'"
-                  [attr.width]="(100 / 12) - 1 + '%'"
+                  [attr.width]="(100 / 12) - 1.5 + '%'"
                   [attr.height]="bar + '%'"
                   fill="url(#barGradient)"
-                  rx="4"
-                  filter="url(#glow)"
-                  style="transition: all 0.5s ease"
+                  rx="6"
+                  class="transition-all duration-500 ease-out hover:brightness-125 cursor-pointer"
                   />
                 }
               </svg>
@@ -113,16 +111,16 @@ interface DashboardStat {
     
           <!-- System Load / Distribution -->
           <div class="stat-card-precision">
-            <h3 class="text-lg font-bold text-primary uppercase tracking-widest mb-8">System Compliance</h3>
-            <div class="flex flex-col items-center justify-center h-full">
-              <div class="gauge-container">
+            <h3 class="text-lg font-black text-primary uppercase tracking-widest mb-8">System Compliance</h3>
+            <div class="flex flex-col items-center justify-center flex-1">
+              <div class="gauge-container scale-150">
                 <svg class="gauge-svg" viewBox="0 0 100 50">
-                  <path class="gauge-track" d="M10 50 A40 40 0 0 1 90 50" />
-                  <path class="gauge-fill" d="M10 50 A40 40 0 0 1 90 50" [style.--arc-target]="70" />
-                  <text x="50" y="45" class="gauge-text">84%</text>
+                  <path class="gauge-track" d="M10 50 A40 40 0 0 1 90 50" stroke-width="12" />
+                  <path class="gauge-fill" d="M10 50 A40 40 0 0 1 90 50" [style.--arc-target]="70" stroke-width="12" />
+                  <text x="50" y="45" class="gauge-text font-black text-xs" fill="var(--text-primary)">84%</text>
                 </svg>
               </div>
-              <p class="text-[10px] text-tertiary mt-6 uppercase tracking-widest text-center">Operational Integrity Status</p>
+              <p class="text-[10px] text-tertiary mt-12 uppercase tracking-widest text-center font-black">Operational Integrity Status</p>
             </div>
           </div>
         </div>

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 /* ─── Reset & Foundation ─── */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -75,11 +77,10 @@ body::before {
 /* ─── Typography base ─── */
 h1, h2, h3 {
   font-family: var(--font-heading);
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-extrabold);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   color: var(--text-primary);
-  text-shadow: var(--text-shadow-premium);
 }
 h4, h5, h6 {
   font-family: var(--font-heading);

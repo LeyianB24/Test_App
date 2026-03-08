@@ -9,23 +9,27 @@ import { environment } from '../../../../../environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   template: `
-    <div class="page-container animate-up print-container">
+    <div class="content-area animate-fade-in print-container">
       <!-- ── Dashboard Header (Hidden on Print) ─────────────── -->
-      <header class="page-header-elite no-print">
-        <div class="header-info">
-          <h1 class="premium-title">PIN <span class="gradient-text">Registration Certificate</span></h1>
-          <p class="premium-subtitle">Official acknowledgement of taxpayer registration with KRA.</p>
-        </div>
-        <div class="header-actions">
-           <button class="modern-btn primary-btn" (click)="downloadPdf()">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      <header class="mb-10 no-print">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="header-titles-complex">
+            <h1 class="text-3xl font-black text-primary tracking-tight">
+              PIN <span class="text-accent">Certificate</span>
+            </h1>
+            <p class="text-[var(--text-secondary)] mt-2 font-semibold tracking-wide uppercase text-[10px]">Official acknowledgement of taxpayer registration</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <button class="btn-precision btn-primary-precision btn-sm" (click)="downloadPdf()">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2"/></svg>
               Download PDF Certificate
-           </button>
+            </button>
+          </div>
         </div>
       </header>
 
       <!-- ── Official PIN Certificate Document ──────────────── -->
-      <div id="pin-cert-doc" class="official-cert-paper">
+      <div id="pin-cert-doc" class="official-cert-paper rounded-2xl overflow-hidden">
 
         <!-- Hourglass Branding Bar (Left) — SVG polygons for reliable rendering -->
         <div id="branding-bar">
@@ -214,16 +218,14 @@ import { environment } from '../../../../../environments/environment';
     </div>
   `,
   styles: [`
-    .page-container { max-width: 1200px; margin: 0 auto; padding-bottom: 50px; }
-
     .official-cert-paper {
       background: #ffffff;
       width: 210mm;
       min-height: 297mm;
       margin: 20px auto;
       padding: 0;
-      box-shadow: 0 5px 30px rgba(0,0,0,0.1);
-      border: 1px solid #ddd;
+      box-shadow: var(--shadow-2xl);
+      border: 1px solid var(--border-default);
       color: #000000;
       font-family: 'Arial', sans-serif;
       position: relative;
@@ -236,7 +238,6 @@ import { environment } from '../../../../../environments/environment';
       z-index: 5;
     }
 
-    /* ── Hourglass Branding Bar — uses SVG polygons ── */
     #branding-bar {
         position: absolute;
         top: 0;
@@ -249,14 +250,12 @@ import { environment } from '../../../../../environments/environment';
         display: flex;
         flex-direction: column;
     }
-    /* Each SVG takes exactly half the height */
     .wedge-top, .wedge-bottom {
         display: block;
         width: 38px;
         flex: 1;
     }
 
-    /* Certificate Header */
     .cert-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; border-bottom: 2pt solid #000; padding-bottom: 10px; }
     .cert-header-left { display: flex; flex-direction: column; align-items: flex-start; }
     .kra-logo-large { height: 75px; object-fit: contain; margin-bottom: 5px; }
@@ -267,7 +266,6 @@ import { environment } from '../../../../../environments/environment';
     .contact-header { font-size: 9pt; font-weight: bold; line-height: 1.2; }
     .contact-line { font-size: 9pt; margin-top: 1px; }
 
-    /* Meta */
     .cert-meta { display: flex; flex-direction: column; align-items: flex-end; margin: 15px 0; border-bottom: 2pt solid #000; padding-bottom: 15px; }
     .meta-row { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
     .meta-label { font-size: 11pt; font-weight: bold; }
@@ -275,7 +273,6 @@ import { environment } from '../../../../../environments/environment';
     .pin-highlight { font-size: 13pt; font-weight: bold; letter-spacing: 0.5px; }
     .cert-certify { text-align: center; font-size: 11pt; color: #000; margin: 20px 0 28px 0; }
 
-    /* Sections & Tables */
     .cert-section { margin-bottom: 20px; }
     .section-title { font-size: 13pt; font-weight: bold; text-align: center; margin-bottom: 10px; }
     .cert-table { width: 100%; border-collapse: collapse; border: 1.2pt solid #000; }
@@ -286,7 +283,6 @@ import { environment } from '../../../../../environments/environment';
     .list-table thead th { background: #E5E7EB; text-align: center; font-weight: bold; }
     .cert-disclaimer { font-size: 8.5pt; line-height: 1.5; margin: 20px 0; text-align: justify; }
 
-    /* Branded Footer */
     .cert-footer-branded {
         margin-top: 15px; border-top: 1pt solid #000; padding-top: 12px;
         display: flex; flex-direction: column; align-items: center; gap: 12px;
@@ -296,29 +292,25 @@ import { environment } from '../../../../../environments/environment';
     .footer-brand-img { height: 36px; object-fit: contain; }
     .disclaimer-note { font-size: 7.5pt; color: #666; font-style: italic; width: 100%; text-align: left; }
 
-    /* Print */
     @media print {
       .no-print { display: none !important; }
       @page { margin: 0; size: A4; }
       body { background: white !important; padding: 0 !important; margin: 0 !important; }
-      .page-container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
+      .content-area { max-width: none !important; padding: 0 !important; margin: 0 !important; }
       .official-cert-paper {
         margin: 0 !important; box-shadow: none !important; border: none !important;
         width: 210mm !important; height: 297mm !important; position: relative !important;
       }
       #branding-bar { height: 297mm !important; min-height: 297mm !important; }
-      .triangle-top { border-width: 148.5mm 15mm 0 0 !important; }
-      .triangle-bottom { border-width: 0 0 148.5mm 15mm !important; }
     }
 
     @media (max-width: 800px) {
       .official-cert-paper { width: auto; height: auto; padding: 0; }
       .cert-content-inner { padding: 20px 20px 20px 45px; }
       #branding-bar { width: 10mm; min-height: 100%; }
-      .triangle-top { border-width: 148.5mm 10mm 0 0; }
-      .triangle-bottom { border-width: 0 0 148.5mm 10mm; }
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PinCertificateComponent implements OnInit {
   private authService = inject(AuthService);
@@ -326,18 +318,14 @@ export class PinCertificateComponent implements OnInit {
 
   readonly today = new Date();
   
-  // Optional inputs for use in registration success or other flows
   pin = input<string>();
   name = input<string>();
   email = input<string>();
   
-  // Auth signals with input fallbacks
   userName = computed(() => this.name || this.authService.userName());
   userEmail = computed(() => this.email || this.authService.currentUser()?.email || 'N.A.');
   taxpayerPin = computed(() => this.pin || this.authService.currentUser()?.taxpayer_id || 'N/A');
 
-  // The backend returns `registration_date` (snake_case); the User model has `registrationDate`.
-  // Using `as any` to handle both shapes safely at runtime.
   registrationDate = computed(() => {
     const u = this.authService.currentUser() as any;
     return u?.registration_date ?? u?.registrationDate ?? this.today;
@@ -349,13 +337,11 @@ export class PinCertificateComponent implements OnInit {
     return type === 'business' ? 'Non-Individual (Business)' : 'Individual';
   });
 
-  // Dashboard data signals
   profile = this.dashboardData.taxpayerProfile;
   station = this.dashboardData.station;
   obligations = this.dashboardData.obligations;
 
   ngOnInit() {
-    // Refresh data if not already loaded
     if (!this.dashboardData.taxpayerProfile()) {
       this.dashboardData.refreshData().subscribe();
     }
@@ -363,8 +349,6 @@ export class PinCertificateComponent implements OnInit {
 
   downloadPdf() {
     this.authService.isLoading.set(true);
-    // Force a fresh token before download to prevent "Invalid or expired token" errors
-    // Since access tokens expire in 15 mins but user might stay on dashboard longer.
     this.authService.refreshToken().subscribe({
       next: (res) => {
         this.authService.isLoading.set(false);
@@ -374,7 +358,6 @@ export class PinCertificateComponent implements OnInit {
       },
       error: () => {
         this.authService.isLoading.set(false);
-        // Fallback: try download anyway if refresh fails
         const token = this.authService.getAuthToken();
         const url = `${environment.apiUrl}/pin_certificate_pdf.php?token=${encodeURIComponent(token ?? '')}`;
         window.open(url, '_blank');

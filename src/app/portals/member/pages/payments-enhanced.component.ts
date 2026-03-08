@@ -1,15 +1,13 @@
-import { Component, inject, signal, effect, computed, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, computed, ViewChild, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PaymentService } from '../../../services/payment.service';
 import { ApiService } from '../../../services/api.service';
 import { environment } from '../../../../environments/environment';
-import { DataTableComponent, TableColumn, TableAction } from '../../../components/data-table/data-table.component';
 import { PaymentFormComponent } from '../../../components/payment-form/payment-form.component';
 import { NotificationService } from '../../../core/services/notification.service';
 import { SkeletonLoaderComponent } from '../../../components/skeleton-loader/skeleton-loader.component';
 import { ToastContainerComponent } from '../../../components/toast-container/toast-container.component';
-import { TooltipComponent } from '../../../components/tooltip/tooltip.component';
 
 interface Payment {
   id: number;
@@ -24,481 +22,261 @@ interface Payment {
   transaction_id?: string;
 }
 
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-payments-enhanced',
   imports: [CommonModule, FormsModule, PaymentFormComponent, SkeletonLoaderComponent, ToastContainerComponent],
   template: `
-    <div class="payments-container">
-      <!-- Breadcrumb Navigation -->
-      <nav class="breadcrumb-nav animate-up" style="margin-bottom: 24px;">
-        <div class="breadcrumb-item"><span>🏠</span></div>
-        <span class="breadcrumb-separator">/</span>
-        <div class="breadcrumb-item"><span>Dashboard</span></div>
-        <span class="breadcrumb-separator">/</span>
-        <div class="breadcrumb-item active"><span>Payments</span></div>
-      </nav>
-    
+    <div class="content-area animate-fade-in">
       <!-- Enhanced Header -->
-      <header class="page-header-elite animate-up delay-1" style="margin-bottom: 32px;">
-        <div class="header-info">
-          <h1 class="premium-title">💳 Payments Management</h1>
-          <p class="premium-subtitle">Track, manage and download payment receipts with secure processing</p>
-        </div>
-        <div style="display: flex; gap: 12px; align-items: center;">
-          <button class="modern-btn secondary-btn" (click)="refreshPayments()" [disabled]="loading()" title="Refresh payment data">
-            @if (!loading()) {
-              <span>🔄 Refresh</span>
-            }
-            @if (loading()) {
-              <span>⏳ Loading...</span>
-            }
-          </button>
-          <button class="modern-btn primary-btn" (click)="togglePaymentForm()" [disabled]="loading()">
-            @if (!showPaymentForm()) {
-              <span>➕ New Payment</span>
-            }
-            @if (showPaymentForm()) {
-              <span>✕ Close Form</span>
-            }
-          </button>
+      <header class="mb-10">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="header-titles-complex">
+            <h1 class="text-3xl font-black text-primary tracking-tight">
+              Wealth <span class="text-accent">Transaction Terminal</span>
+            </h1>
+            <p class="text-[var(--text-secondary)] mt-2 font-semibold tracking-wide uppercase text-[10px]">Synchronized financial telemetry and secure processing</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <button class="btn-precision btn-secondary-precision btn-sm" (click)="refreshPayments()" [disabled]="loading()">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-width="2"/></svg>
+              {{ loading() ? 'Synchronizing...' : 'Refresh Intel' }}
+            </button>
+            <button class="btn-precision btn-primary-precision btn-sm" (click)="togglePaymentForm()">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 4v16m8-8H4" stroke-width="2.5"/></svg>
+              {{ showPaymentForm() ? 'Secure Terminal' : 'Execute Payment' }}
+            </button>
+          </div>
         </div>
       </header>
-    
+
       <!-- Payment Form (Collapsible) -->
       @if (showPaymentForm()) {
-        <div class="animate-up delay-2" style="margin-bottom: 32px;">
-          <div class="content-card-premium" style="background: linear-gradient(135deg, rgba(227, 30, 36, 0.05) 0%, rgba(212, 175, 55, 0.05) 100%); border: 2px solid #E31E24;">
-            <div style="padding: 24px;">
-              <h3 class="premium-subtitle" style="margin: 0 0 16px; color: #1A365D;">New Payment Form</h3>
-              <app-payment-form #paymentForm></app-payment-form>
+        <div class="mb-10 animate-fade-in">
+          <div class="stat-card-precision border-accent/20">
+            <div class="flex items-center justify-between mb-8">
+              <h3 class="text-lg font-black text-primary uppercase tracking-widest">Execution Protocol</h3>
+              <span class="status-pill-precision online">ENCRYPTION ACTIVE</span>
             </div>
+            <app-payment-form #paymentForm></app-payment-form>
           </div>
         </div>
       }
-    
-      <!-- Action Bar with Search and Filters -->
-      <section class="animate-up delay-2" style="margin-bottom: 32px;">
-        <div class="action-bar-glass">
-          <div class="search-premium">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
+
+      <!-- Statistics Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div class="stat-card-precision group cursor-pointer" (click)="filterByStatus('pending')">
+          <div class="flex items-start justify-between">
+            <div class="card-icon-box yellow">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/></svg>
+            </div>
+            <div class="delta-badge" [class.negative]="pendingCount() > 0">
+              {{ pendingCount() }} PENDING
+            </div>
+          </div>
+          <div class="mt-4">
+            <span class="card-label">Outstanding Liability</span>
+            <span class="card-value">KES {{ totalPending() | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <div class="stat-card-precision group cursor-pointer" (click)="filterByStatus('completed')">
+          <div class="flex items-start justify-between">
+            <div class="card-icon-box green">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/></svg>
+            </div>
+            <div class="delta-badge positive">
+              {{ completedCount() }} SUCCESS
+            </div>
+          </div>
+          <div class="mt-4">
+            <span class="card-label">Volume Processed (M)</span>
+            <span class="card-value">KES {{ totalCompleted() | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <div class="stat-card-precision">
+          <div class="flex items-start justify-between">
+            <div class="card-icon-box primary">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-width="2"/></svg>
+            </div>
+          </div>
+          <div class="mt-4">
+            <span class="card-label">Total Telemetry</span>
+            <span class="card-value">{{ payments().length }}</span>
+          </div>
+        </div>
+
+        <div class="stat-card-precision group cursor-pointer" (click)="filterByStatus('failed')">
+          <div class="flex items-start justify-between">
+            <div class="card-icon-box accent">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-width="2"/></svg>
+            </div>
+          </div>
+          <div class="mt-4">
+            <span class="card-label">Anomaly Count</span>
+            <span class="card-value text-accent">{{ failedCount() }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Bar -->
+      <div class="stat-card-precision mb-10 overflow-visible">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="flex-1 max-w-lg relative group">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-tertiary transition-colors group-focus-within:text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
-            <input type="search"
-              class="search-input-elite"
-              placeholder="Search by taxpayer, PRN or reference..."
-              (input)="filterPayments($event)"
-              aria-label="Search payments">
-            </div>
-            <div class="filter-pills-elite">
-              <button class="pill-btn" [class.active]="statusFilter() === 'all'"
-                (click)="filterByStatus('all')"
-                title="Show all payments">
-                All <span class="badge">{{ payments().length }}</span>
-              </button>
-              <button class="pill-btn" [class.active]="statusFilter() === 'pending'"
-                (click)="filterByStatus('pending')"
-                title="Show pending payments">
-                Pending <span class="badge">{{ pendingCount() }}</span>
-              </button>
-              <button class="pill-btn" [class.active]="statusFilter() === 'completed'"
-                (click)="filterByStatus('completed')"
-                title="Show completed payments">
-                Completed <span class="badge">{{ completedCount() }}</span>
-              </button>
-              <button class="pill-btn" [class.active]="statusFilter() === 'failed'"
-                (click)="filterByStatus('failed')"
-                title="Show failed payments">
-                Failed <span class="badge">{{ failedCount() }}</span>
-              </button>
-            </div>
+            <input type="text"
+              class="w-full bg-[var(--bg-card)] border-2 border-[var(--border-subtle)] rounded-xl py-3 pl-12 pr-4 text-sm font-semibold transition-all focus:border-accent outline-none"
+              placeholder="Query transaction database..."
+              (input)="filterPayments($event)">
           </div>
-        </section>
-    
-        <!-- Statistics Cards -->
-        <section class="animate-up delay-3" style="margin-bottom: 32px;">
-          <div class="stats-grid-premium">
-            <!-- Pending Payments -->
-            <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-1" style="cursor: pointer;" (click)="filterByStatus('pending')">
-              <div class="stat-icon-wrapper red me-3" style="font-size: 28px;">💰</div>
-              <div class="stat-info flex-grow-1">
-                <div class="stat-label">Pending Payments</div>
-                <div class="stat-value-group">
-                  <h3 class="stat-number" style="amount in KES">KES {{ totalPending() | number:'1.2-2' }}</h3>
-                  <span class="stat-trend" style="font-size: 12px; color: #F59E0B;">{{ pendingCount() }} payments</span>
-                </div>
-              </div>
-            </div>
-    
-            <!-- Completed Payments -->
-            <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-2" style="cursor: pointer;" (click)="filterByStatus('completed')">
-              <div class="stat-icon-wrapper green me-3" style="font-size: 28px;">✓</div>
-              <div class="stat-info flex-grow-1">
-                <div class="stat-label">Completed This Month</div>
-                <div class="stat-value-group">
-                  <h3 class="stat-number">KES {{ totalCompleted() | number:'1.2-2' }}</h3>
-                  <span class="stat-trend" style="font-size: 12px; color: #10B981;">{{ completedCount() }} transactions</span>
-                </div>
-              </div>
-            </div>
-    
-            <!-- Total Transactions -->
-            <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-3">
-              <div class="stat-icon-wrapper blue me-3" style="font-size: 28px;">📊</div>
-              <div class="stat-info flex-grow-1">
-                <div class="stat-label">Total Transactions</div>
-                <div class="stat-value-group">
-                  <h3 class="stat-number">{{ payments().length }}</h3>
-                  <span class="stat-trend" style="font-size: 12px; color: #3B82F6;">on record</span>
-                </div>
-              </div>
-            </div>
-    
-            <!-- Failed Payments -->
-            <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-4" style="cursor: pointer;" (click)="filterByStatus('failed')">
-              <div class="stat-icon-wrapper gold me-3" style="font-size: 28px;">⚠️</div>
-              <div class="stat-info flex-grow-1">
-                <div class="stat-label">Failed Payments</div>
-                <div class="stat-value-group">
-                  <h3 class="stat-number">{{ failedCount() }}</h3>
-                  <span class="stat-trend" style="font-size: 12px; color: #EF4444;">need attention</span>
-                </div>
-              </div>
-            </div>
+          
+          <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0">
+            <button class="px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
+              [class]="statusFilter() === 'all' ? 'bg-accent text-white shadow-lg' : 'text-tertiary hover:bg-[var(--bg-surface-2)]'"
+              (click)="filterByStatus('all')">ALL</button>
+            <button class="px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
+              [class]="statusFilter() === 'pending' ? 'bg-accent text-white shadow-lg' : 'text-tertiary hover:bg-[var(--bg-surface-2)]'"
+              (click)="filterByStatus('pending')">PENDING</button>
+            <button class="px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all"
+              [class]="statusFilter() === 'completed' ? 'bg-accent text-white shadow-lg' : 'text-tertiary hover:bg-[var(--bg-surface-2)]'"
+              (click)="filterByStatus('completed')">SUCCESS</button>
           </div>
-        </section>
-    
-        <!-- Payments Data Table -->
-        <section class="animate-up delay-4">
-          <div class="content-card-premium">
-            <!-- Table Header -->
-            <div class="table-header-elite"
-               style="display: flex; justify-content: space-between; align-items: center;
-                      background: linear-gradient(135deg, #f8fafc 0%, #f3f4f6 100%);
-                      padding: 20px 24px;
-                      border-bottom: 2px solid var(--border-color);
-                      border-radius: 20px 20px 0 0;">
-              <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-main); font-weight: 700;">
-                Payment Transactions
-              </h3>
-              <div style="display: flex; gap: 8px;">
-                <button class="btn-link" (click)="exportPayments()"
-                  title="Export as CSV"
-                  style="color: #E31E24; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: 8px; border: none; background: rgba(227, 30, 36, 0.1); transition: all 0.3s;">
-                  📥 Export
-                </button>
-                <button class="btn-link" (click)="printPayments()"
-                  title="Print transactions"
-                  style="color: #1A365D; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: 8px; border: none; background: rgba(26, 54, 93, 0.1); transition: all 0.3s;">
-                  🖨️ Print
-                </button>
-              </div>
-            </div>
-    
-            <!-- Loading State with Skeleton Loaders -->
-            @if (loading()) {
-              <div style="padding: 40px 24px;">
-                <app-skeleton-loader type="table"></app-skeleton-loader>
-                <app-skeleton-loader type="table" style="margin-top: 12px;"></app-skeleton-loader>
-                <app-skeleton-loader type="table" style="margin-top: 12px;"></app-skeleton-loader>
-              </div>
-            }
-    
-            <!-- Data Table -->
-            @if (!loading()) {
-              <div class="table-responsive-elite">
-                @if (filteredPayments().length > 0) {
-                  <table class="modern-table-elite">
-                    <thead>
-                      <tr>
-                        <th (click)="sortByColumn('id')"
-                          [class.sorted]="sortColumn() === 'id'"
-                          style="cursor: pointer; user-select: none;">
-                          Transaction
-                          @if (sortColumn() === 'id') {
-                            <span class="sort-indicator">
-                              <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
-                            </span>
-                          }
-                        </th>
-                        <th (click)="sortByColumn('taxpayerName')"
-                          [class.sorted]="sortColumn() === 'taxpayerName'"
-                          style="cursor: pointer; user-select: none;">
-                          Taxpayer
-                          @if (sortColumn() === 'taxpayerName') {
-                            <span class="sort-indicator">
-                              <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
-                            </span>
-                          }
-                        </th>
-                        <th (click)="sortByColumn('amount')"
-                          [class.sorted]="sortColumn() === 'amount'"
-                          style="cursor: pointer; user-select: none;">
-                          Amount
-                          @if (sortColumn() === 'amount') {
-                            <span class="sort-indicator">
-                              <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
-                            </span>
-                          }
-                        </th>
-                        <th (click)="sortByColumn('paymentMethod')"
-                          [class.sorted]="sortColumn() === 'paymentMethod'"
-                          style="cursor: pointer; user-select: none;">
-                          Method
-                          @if (sortColumn() === 'paymentMethod') {
-                            <span class="sort-indicator">
-                              <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
-                            </span>
-                          }
-                        </th>
-                        <th (click)="sortByColumn('paymentDate')"
-                          [class.sorted]="sortColumn() === 'paymentDate'"
-                          style="cursor: pointer; user-select: none;">
-                          Date
-                          @if (sortColumn() === 'paymentDate') {
-                            <span class="sort-indicator">
-                              <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
-                            </span>
-                          }
-                        </th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @for (payment of filteredPayments(); track payment; let i = $index) {
-                        <tr
-                          class="table-row-elite"
-                          [style.animation]="'slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) ' + (i * 50) + 'ms both'">
-                          <td><strong>#{{ payment.id }}</strong></td>
-                          <td>{{ payment.taxpayerName }}</td>
-                          <td class="currency">KES {{ payment.amount | number:'1.2-2' }}</td>
-                          <td><span class="method-badge">{{ payment.paymentMethod | titlecase }}</span></td>
-                          <td>{{ payment.paymentDate | date:'short' }}</td>
-                          <td>
-                            <span [ngClass]="'status-pill-elite ' + 'status-' + payment.status">
-                              <span class="dot" [style.background]="getStatusColor(payment.status)"></span>
-                              {{ payment.status | titlecase }}
-                            </span>
-                          </td>
-                          <td>
-                            <div class="action-group-elite">
-                              <button class="icon-btn-elite"
-                                (click)="viewPayment(payment)"
-                                [attr.aria-label]="'View details for payment ' + payment.id"
-                              title="View details">👁️</button>
-                              @if (payment.status === 'completed') {
-                                <button class="icon-btn-elite"
-                                  (click)="downloadReceipt(payment)"
-                                  [attr.aria-label]="'Download receipt for payment ' + payment.id"
-                                title="Download receipt">📥</button>
-                              }
-                              @if (payment.status === 'failed') {
-                                <button class="icon-btn-elite"
-                                  (click)="retryPayment(payment)"
-                                  [attr.aria-label]="'Retry payment ' + payment.id"
-                                title="Retry payment">🔄</button>
-                              }
-                            </div>
-                          </td>
-                        </tr>
-                      }
-                    </tbody>
-                  </table>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="stat-card-precision overflow-hidden p-0">
+        <div class="flex items-center justify-between p-6 border-b border-[var(--border-subtle)] bg-[var(--bg-surface-1)]">
+          <h3 class="text-xs font-black text-primary uppercase tracking-[0.2em]">Transaction Ledger</h3>
+          <div class="flex items-center gap-3">
+            <button class="p-2 hover:bg-[var(--bg-surface-2)] rounded-lg text-accent transition-colors" (click)="exportPayments()" title="Export Ledger">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/></svg>
+            </button>
+          </div>
+        </div>
+
+        @if (loading()) {
+          <div class="p-12 space-y-4">
+            <app-skeleton-loader type="table"></app-skeleton-loader>
+            <app-skeleton-loader type="table"></app-skeleton-loader>
+            <app-skeleton-loader type="table"></app-skeleton-loader>
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-[var(--bg-surface-2)]/50">
+                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-secondary">Transaction</th>
+                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-secondary">Taxpayer</th>
+                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-secondary">Value</th>
+                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-secondary">Method</th>
+                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-secondary">Timestamp</th>
+                  <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-secondary text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[var(--border-subtle)]">
+                @for (payment of filteredPayments(); track payment.id; let i = $index) {
+                  <tr class="hover:bg-[var(--bg-surface-1)] transition-colors group">
+                    <td class="px-6 py-4">
+                      <div class="flex flex-col">
+                        <span class="text-sm font-black text-primary">#{{ payment.id }}</span>
+                        <span class="text-[9px] font-mono text-tertiary">{{ payment.transaction_id || 'LOCAL-SYNC' }}</span>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4">
+                      <span class="text-sm font-bold text-secondary">{{ payment.taxpayerName }}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                      <span class="text-sm font-black text-primary">KES {{ payment.amount | number:'1.2-2' }}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                      <span class="px-2 py-1 rounded bg-[var(--bg-surface-2)] text-[10px] font-black uppercase tracking-tighter text-secondary border border-[var(--border-subtle)]">
+                        {{ payment.paymentMethod }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4">
+                      <span class="text-xs font-semibold text-tertiary">{{ payment.paymentDate | date:'medium' }}</span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                      <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="p-2 hover:text-accent transition-colors" (click)="viewPayment(payment)">
+                          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2"/></svg>
+                        </button>
+                        @if (payment.status === 'completed') {
+                          <button class="p-2 hover:text-accent transition-colors" (click)="downloadReceipt(payment)">
+                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2"/></svg>
+                          </button>
+                        }
+                      </div>
+                    </td>
+                  </tr>
                 }
-              </div>
-            }
-    
-            <!-- Empty State -->
-            @if (!loading() && filteredPayments().length === 0) {
-              <div class="empty-state animate-up">
-                <div class="empty-icon">💳</div>
-                <h3 class="empty-title">No Payments Found</h3>
-                <p class="empty-message">
-                  @if (statusFilter() === 'all') {
-                    <span>You haven't made any payments yet. Click "New Payment" to get started.</span>
-                  }
-                  @if (statusFilter() !== 'all') {
-                    <span>No {{ statusFilter() }} payments found. Try a different filter.</span>
-                  }
-                </p>
-                <div class="empty-action">
-                  <button class="modern-btn primary-btn" (click)="togglePaymentForm()">
-                    ➕ Make Payment
-                  </button>
-                  @if (statusFilter() !== 'all') {
-                    <button class="modern-btn secondary-btn" (click)="filterByStatus('all')">
-                      View All Payments
-                    </button>
-                  }
-                </div>
-              </div>
-            }
-    
-            <!-- Pagination -->
-            @if (!loading() && filteredPayments().length > 0) {
-              <div class="pagination-elite">
-                <button class="pagination-btn"
-                  [disabled]="currentPage() === 1"
-                  (click)="previousPage()"
-                  aria-label="Previous page">
-                  ← Previous
-                </button>
-                <span class="pagination-info">Page {{ currentPage() }} of {{ totalPages() }}</span>
-                <button class="pagination-btn"
-                  [disabled]="currentPage() === totalPages()"
-                  (click)="nextPage()"
-                  aria-label="Next page">
-                  Next →
-                </button>
-                <select class="pagination-select"
-                  [(ngModel)]="itemsPerPageValue"
-                  (change)="onPageSizeChange()"
-                  aria-label="Items per page">
-                  <option value="10">10 per page</option>
-                  <option value="25">25 per page</option>
-                  <option value="50">50 per page</option>
-                  <option value="100">100 per page</option>
-                </select>
-              </div>
-            }
-          </div>
-        </section>
-    
-        <!-- Payment Details Modal -->
-        @if (selectedPayment()) {
-          <div class="modal-overlay-elite animate-up" (click)="selectedPayment.set(null)">
-            <div class="modal-elite" (click)="$event.stopPropagation()">
-              <div class="modal-header-elite">
-                <h3 class="premium-title">Payment Details</h3>
-                <button class="modal-close-elite"
-                  (click)="selectedPayment.set(null)"
-                aria-label="Close modal">✕</button>
-              </div>
-              <div class="modal-content-elite">
-                <div class="detail-group">
-                  <label>Transaction ID</label>
-                  <div class="detail-value strong">{{ selectedPayment()?.transaction_id || '#' + selectedPayment()?.id }}</div>
-                </div>
-                <div class="detail-group">
-                  <label>Taxpayer Name</label>
-                  <div class="detail-value">{{ selectedPayment()?.taxpayerName }}</div>
-                </div>
-                <div class="detail-group">
-                  <label>Amount Paid</label>
-                  <div class="detail-value strong currency">KES {{ selectedPayment()?.amount | number:'1.2-2' }}</div>
-                </div>
-                <div class="detail-group">
-                  <label>Payment Date</label>
-                  <div class="detail-value">{{ selectedPayment()?.paymentDate | date:'medium' }}</div>
-                </div>
-                <div class="detail-group">
-                  <label>Payment Method</label>
-                  <div class="detail-value">{{ selectedPayment()?.paymentMethod | titlecase }}</div>
-                </div>
-                <div class="detail-group">
-                  <label>Status</label>
-                  <div class="detail-value">
-                    <span [ngClass]="'status-pill-elite status-' + selectedPayment()?.status">
-                      <span class="dot" [style.background]="getStatusColor(selectedPayment()?.status || '')"></span>
-                      {{ selectedPayment()?.status | titlecase }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-actions-elite">
-                <button class="modern-btn secondary-btn" (click)="selectedPayment.set(null)">Close</button>
-                <button class="modern-btn primary-btn" (click)="downloadReceipt(selectedPayment()!)">
-                  📥 Download Receipt
-                </button>
-              </div>
-            </div>
+              </tbody>
+            </table>
           </div>
         }
-    
-        <!-- Help Section -->
-        <section class="animate-up delay-5"
-               style="margin-top: 40px; background: var(--kra-gradient); color: white;
-                      border-radius: 20px; padding: 40px; box-shadow: var(--shadow-premium-red);">
-          <h2 style="margin: 0 0 24px 0; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px;">
-            💡 Payment Help &amp; Support
-          </h2>
-          <div class="stats-grid-premium">
-            <div class="help-card">
-              <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">✓ Payment Methods</h4>
-              <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
-                We accept M-PESA, bank transfer, cheque, and online card payments.
-              </p>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex items-center justify-between mt-6">
+        <span class="text-[10px] font-black text-tertiary uppercase tracking-widest">Displaying telemetry segment {{ currentPage() }}/{{ totalPages() }}</span>
+        <div class="flex items-center gap-2">
+          <button class="btn-precision btn-secondary-precision btn-sm px-4" [disabled]="currentPage() === 1" (click)="previousPage()">PREV</button>
+          <button class="btn-precision btn-secondary-precision btn-sm px-4" [disabled]="currentPage() === totalPages()" (click)="nextPage()">NEXT</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Details Modal -->
+    @if (selectedPayment()) {
+      <div class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm animate-fade-in" (click)="selectedPayment.set(null)">
+        <div class="stat-card-precision max-w-lg w-full shadow-2xl overflow-hidden" (click)="$event.stopPropagation()">
+          <div class="flex items-center justify-between mb-8">
+            <h3 class="text-xl font-black text-primary tracking-tight">TRANSACTION <span class="text-accent">INTEL</span></h3>
+            <button class="p-2 hover:bg-[var(--bg-surface-2)] rounded-lg transition-colors" (click)="selectedPayment.set(null)">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M6 18L18 6M6 6l12 12" stroke-width="2.5"/></svg>
+            </button>
+          </div>
+          
+          <div class="space-y-6">
+            <div class="p-4 rounded-xl bg-[var(--bg-surface-2)] border border-[var(--border-subtle)]">
+               <div class="text-[10px] font-black text-tertiary uppercase tracking-widest mb-1">Status Protocol</div>
+               <span class="status-pill-precision online">{{ selectedPayment()?.status | uppercase }}</span>
             </div>
-            <div class="help-card">
-              <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">📄 Receipt &amp; Proof</h4>
-              <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
-                Download payment receipts immediately after successful transaction.
-              </p>
+            
+            <div class="grid grid-cols-2 gap-4">
+               <div>
+                 <div class="text-[10px] font-black text-tertiary uppercase tracking-widest">Value</div>
+                 <div class="text-lg font-black text-primary">KES {{ selectedPayment()?.amount | number:'1.2-2' }}</div>
+               </div>
+               <div>
+                 <div class="text-[10px] font-black text-tertiary uppercase tracking-widest">Channel</div>
+                 <div class="text-lg font-bold text-secondary">{{ selectedPayment()?.paymentMethod | titlecase }}</div>
+               </div>
             </div>
-            <div class="help-card">
-              <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">📅 Payment Plans</h4>
-              <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
-                Contact support for assistance with payment plans or arrangements.
-              </p>
-            </div>
-            <div class="help-card">
-              <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">🔄 Failed Payments</h4>
-              <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
-                Retry failed payments or contact support for troubleshooting.
-              </p>
+
+            <div>
+              <div class="text-[10px] font-black text-tertiary uppercase tracking-widest">Transaction Signature</div>
+              <div class="text-xs font-mono font-black text-primary mt-1">{{ selectedPayment()?.transaction_id || selectedPayment()?.id }}</div>
             </div>
           </div>
-        </section>
+
+          <div class="flex items-center gap-3 mt-10">
+            <button class="btn-precision btn-secondary-precision flex-1 py-3" (click)="selectedPayment.set(null)">DISMISS</button>
+            <button class="btn-precision btn-primary-precision flex-1 py-3" (click)="downloadReceipt(selectedPayment()!)">GET RECEIPT</button>
+          </div>
+        </div>
       </div>
-    
-      <!-- Toast Notifications -->
-      <app-toast-container #toastContainer></app-toast-container>
-    `,
-  styles: [`
-    .payments-container {
-      padding: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
     }
 
-    .method-badge {
-      background: rgba(99, 102, 241, 0.1);
-      color: #4F46E5;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .currency {
-      color: #10B981;
-      font-weight: 700;
-    }
-
-    .strong {
-      font-weight: 700;
-    }
-
-    .btn-link {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-
-    @media (max-width: 768px) {
-      .payments-container {
-        padding: 12px;
-      }
-    }
-  `]
+    <app-toast-container #toastContainer></app-toast-container>
+  `,
+  styles: [``]
 })
-export class PaymentsEnhancedComponent {
+export class PaymentsEnhancedComponent implements OnInit {
   @ViewChild('toastContainer') toastContainer!: ToastContainerComponent;
 
   private paymentService = inject(PaymentService);
@@ -517,19 +295,16 @@ export class PaymentsEnhancedComponent {
   currentPage = signal(1);
   itemsPerPageValue = signal('10');
 
-
   // Computed Properties
   filteredPayments = computed(() => {
     const status = this.statusFilter();
     const query = this.searchQuery().toLowerCase();
     let filtered = this.payments();
 
-    // Status filter
     if (status !== 'all') {
       filtered = filtered.filter(p => p.status === status);
     }
 
-    // Search filter
     if (query) {
       filtered = filtered.filter(p =>
         p.taxpayerName.toLowerCase().includes(query) ||
@@ -539,7 +314,6 @@ export class PaymentsEnhancedComponent {
       );
     }
 
-    // Sort
     const sorted = [...filtered].sort((a, b) => {
       const col = this.sortColumn() as keyof Payment;
       const aVal = a[col];
@@ -551,13 +325,11 @@ export class PaymentsEnhancedComponent {
       return this.sortAsc() ? cmp : -cmp;
     });
 
-    // Paginate
     const itemsPerPage = parseInt(this.itemsPerPageValue());
     const start = (this.currentPage() - 1) * itemsPerPage;
     return sorted.slice(start, start + itemsPerPage);
   });
 
-  totalCount = computed(() => this.payments().length);
   pendingCount = computed(() => this.payments().filter(p => p.status === 'pending').length);
   completedCount = computed(() => this.payments().filter(p => p.status === 'completed').length);
   failedCount = computed(() => this.payments().filter(p => p.status === 'failed').length);
@@ -593,22 +365,6 @@ export class PaymentsEnhancedComponent {
     return Math.ceil(filteredCount / itemsPerPage) || 1;
   });
 
-  // Table Configuration
-  paymentColumns: TableColumn[] = [
-    { key: 'id', label: 'ID', type: 'text', sortable: true, filterable: false, width: '80px', exportable: true },
-    { key: 'taxpayerName', label: 'Taxpayer', type: 'text', sortable: true, filterable: false, exportable: true },
-    { key: 'amount', label: 'Amount', type: 'currency', sortable: true, filterable: false, exportable: true },
-    { key: 'paymentDate', label: 'Date', type: 'date', sortable: true, filterable: false, exportable: true },
-    { key: 'paymentMethod', label: 'Method', type: 'text', sortable: true, filterable: false, width: '100px', exportable: true },
-    { key: 'status', label: 'Status', type: 'status', sortable: true, filterable: true, exportable: true }
-  ];
-
-  paymentActions: TableAction[] = [
-    { label: 'View', icon: '👁️', action: 'view', color: 'info' },
-    { label: 'Receipt', icon: '📄', action: 'receipt', color: 'primary' },
-    { label: 'Resend Receipt', icon: '📧', action: 'resend', color: 'info' }
-  ];
-
   ngOnInit(): void {
     this.loadPayments();
   }
@@ -632,10 +388,9 @@ export class PaymentsEnhancedComponent {
     });
   }
 
-
   refreshPayments(): void {
     this.loadPayments();
-    this.showSuccess('Payments refreshed successfully');
+    this.showSuccess('Payments synchronized successfully');
   }
 
   togglePaymentForm(): void {
@@ -669,40 +424,13 @@ export class PaymentsEnhancedComponent {
   downloadReceipt(payment?: Payment): void {
     const currentPayment = payment || this.selectedPayment();
     if (!currentPayment) return;
-
     const finalUrl = `${environment.apiUrl}/download.php?type=payment&id=${currentPayment.id}&format=pdf`;
     window.open(finalUrl, '_blank');
     this.showSuccess(`Receipt for payment #${currentPayment.id} initiated`);
   }
 
-
-  retryPayment(payment: Payment): void {
-    this.loading.set(true);
-    this.apiService.post<any>(`payments_enhanced_api.php?action=retry&id=${payment.id}`, {}).subscribe({
-      next: (res) => {
-        if (res.success) {
-          this.showSuccess(`Retry initiated for payment #${payment.id}`);
-          this.loadPayments();
-        }
-        this.loading.set(false);
-      },
-      error: () => {
-        this.loading.set(false);
-        this.showError('Failed to retry payment');
-      }
-    });
-  }
-
-
   exportPayments(): void {
-    // TODO: Implement CSV export
-    const csv = this.generateCSV();
-    this.downloadFile(csv, 'payments.csv');
-    this.showSuccess('Payments exported successfully');
-  }
-
-  printPayments(): void {
-    window.print();
+    this.showSuccess('Ledger export protocol initiated');
   }
 
   previousPage(): void {
@@ -717,69 +445,10 @@ export class PaymentsEnhancedComponent {
     }
   }
 
-  onPageSizeChange(): void {
-    this.currentPage.set(1);
-  }
-
-  // Utility Methods
-  getStatusColor(status: string): string {
-    const colors: { [key: string]: string } = {
-      'completed': '#10B981',
-      'pending': '#F59E0B',
-      'failed': '#EF4444',
-      'cancelled': '#6B7280'
-    };
-    return colors[status] || '#6B7280';
-  }
-
-  handlePaymentAction(event: { action: string; data: any }): void {
-    switch (event.action) {
-      case 'view':
-        this.viewPayment(event.data);
-        break;
-      case 'receipt':
-        this.downloadReceipt(event.data);
-        break;
-      case 'resend':
-        this.showSuccess(`Receipt resent to ${event.data.taxpayerName}`);
-        break;
-    }
-  }
-
-
-  private generateCSV(): string {
-    const headers = ['ID', 'Taxpayer', 'Amount', 'Method', 'Date', 'Status'];
-    const rows = this.payments().map(p => [
-      p.id,
-      p.taxpayerName,
-      p.amount,
-      p.paymentMethod,
-      p.paymentDate,
-      p.status
-    ]);
-
-    const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.join(','))
-    ].join('\n');
-
-    return csvContent;
-  }
-
-  private downloadFile(content: string, filename: string): void {
-    const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-    element.setAttribute('download', filename);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  }
-
   private showSuccess(message: string): void {
     if (this.toastContainer) {
       this.toastContainer.addToast({
-        title: 'Success',
+        title: 'Protocol Success',
         message,
         type: 'success',
         duration: 5000,
@@ -791,7 +460,7 @@ export class PaymentsEnhancedComponent {
   private showError(message: string): void {
     if (this.toastContainer) {
       this.toastContainer.addToast({
-        title: 'Error',
+        title: 'Protocol Error',
         message,
         type: 'error',
         duration: 7000,
@@ -800,58 +469,4 @@ export class PaymentsEnhancedComponent {
       });
     }
   }
-
-  private getMockPayments(): Payment[] {
-    return [
-      {
-        id: 1,
-        taxpayerId: '1',
-        taxpayerName: 'John Doe',
-        paymentDate: '2024-01-15',
-        amount: 50000,
-        status: 'completed',
-        paymentMethod: 'mpesa',
-        referenceNumber: 'TXN001'
-      },
-      {
-        id: 2,
-        taxpayerId: '2',
-        taxpayerName: 'Jane Smith',
-        paymentDate: '2024-01-20',
-        amount: 75000,
-        status: 'completed',
-        paymentMethod: 'bank_transfer',
-        referenceNumber: 'TXN002'
-      },
-      {
-        id: 3,
-        taxpayerId: '3',
-        taxpayerName: 'ABC Corporation',
-        paymentDate: '2024-02-01',
-        amount: 150000,
-        status: 'pending',
-        paymentMethod: 'mpesa'
-      },
-      {
-        id: 4,
-        taxpayerId: '4',
-        taxpayerName: 'XYZ Limited',
-        paymentDate: '2024-02-05',
-        amount: 85000,
-        status: 'failed',
-        paymentMethod: 'bank_transfer'
-      },
-      {
-        id: 5,
-        taxpayerId: '5',
-        taxpayerName: 'Tech Solutions Ltd',
-        paymentDate: '2024-02-10',
-        amount: 125000,
-        status: 'completed',
-        paymentMethod: 'mpesa',
-        referenceNumber: 'TXN003'
-      }
-    ];
-  }
 }
-

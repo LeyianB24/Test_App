@@ -148,10 +148,10 @@
   --content-padding-x:       var(--space-8);
   --content-padding-y:       var(--space-6);
 
-  /* ─── Typography (Syne, Outfit, IBM Plex Sans, IBM Plex Mono) ─── */
-  --font-display:  'Syne', 'Georgia', serif;
-  --font-heading:  'Outfit', 'system-ui', sans-serif;
-  --font-body:     'IBM Plex Sans', 'system-ui', sans-serif;
+  /* ─── Typography (Plus Jakarta Sans) ─── */
+  --font-display:  'Plus Jakarta Sans', 'Syne', sans-serif;
+  --font-heading:  'Plus Jakarta Sans', 'Outfit', sans-serif;
+  --font-body:     'Plus Jakarta Sans', 'IBM Plex Sans', sans-serif;
   --font-mono:     'IBM Plex Mono', 'Fira Code', 'Consolas', monospace;
 
   /* Type Scale (Major Third ratio — 1.25×) */
@@ -212,21 +212,21 @@
   --color-accent-text:         var(--red-400);
 
   /* ─── Backgrounds ─── */
-  --bg-root:          var(--neutral-050);
-  --bg-app:           var(--neutral-025);
-  --bg-sidebar:       var(--neutral-000);
-  --bg-topbar:        var(--neutral-000);
-  --bg-footer:        var(--neutral-000);
+  --bg-root:          #0a0908;
+  --bg-app:           #0e0c0b;
+  --bg-sidebar:       #12100e;
+  --bg-topbar:        #12100e;
+  --bg-footer:        #12100e;
 
-  --bg-surface-0:     var(--neutral-025);
-  --bg-surface-1:     var(--neutral-050);
-  --bg-surface-2:     var(--neutral-100);
-  --bg-surface-3:     var(--neutral-150);
-  --bg-surface-4:     var(--neutral-200);
+  --bg-surface-0:     #12100e;
+  --bg-surface-1:     #181512;
+  --bg-surface-2:     #1e1a17;
+  --bg-surface-3:     #231f1b;
+  --bg-surface-4:     #2a2622;
 
-  --bg-input:         var(--neutral-100);
-  --bg-input-hover:   var(--neutral-150);
-  --bg-input-focus:   var(--neutral-050);
+  --bg-input:         #1e1a17;
+  --bg-input-hover:   #231f1b;
+  --bg-input-focus:   #2a2622;
 
   --bg-hover:         rgba(255, 255, 255, 0.06);
   --bg-active:        rgba(255, 255, 255, 0.10);
@@ -251,14 +251,14 @@
   --bg-status-info:    rgba(14, 165, 233, 0.15);
 
   /* ─── Text ─── */
-  --text-primary:     var(--neutral-1000);
-  --text-secondary:   var(--neutral-600);
-  --text-tertiary:    var(--neutral-500);
-  --text-quaternary:  var(--neutral-400);
-  --text-disabled:    var(--neutral-350);
-  --text-placeholder: var(--neutral-400);
-  --text-accent:      var(--red-400);
-  --text-accent-strong: var(--red-300);
+  --text-primary:     #f0ede8;
+  --text-secondary:   #9c9590;
+  --text-tertiary:    #5c5650;
+  --text-quaternary:  #4a4540;
+  --text-disabled:    #3a3530;
+  --text-placeholder: #5c5650;
+  --text-accent:      #e04534;
+  --text-accent-strong: #f46a5a;
   --text-inverse:     var(--neutral-000);
   --text-on-accent:   var(--neutral-1000);
   --text-link:        var(--red-400);
@@ -339,21 +339,21 @@
   --color-accent-text:         var(--red-600);
 
   /* ─── Backgrounds ─── */
-  --bg-root:          var(--neutral-800);
-  --bg-app:           var(--neutral-850);
-  --bg-sidebar:       var(--neutral-1000);
-  --bg-topbar:        var(--neutral-1000);
-  --bg-footer:        var(--neutral-1000);
+  --bg-root:          #f4f3f0;
+  --bg-app:           #f8f7f5;
+  --bg-sidebar:       #ffffff;
+  --bg-topbar:        #ffffff;
+  --bg-footer:        #ffffff;
 
-  --bg-surface-0:     var(--neutral-800);
-  --bg-surface-1:     var(--neutral-1000);
-  --bg-surface-2:     var(--neutral-950);
-  --bg-surface-3:     var(--neutral-900);
-  --bg-surface-4:     var(--neutral-850);
+  --bg-surface-0:     #f4f3f0;
+  --bg-surface-1:     #ffffff;
+  --bg-surface-2:     #fcfbf9;
+  --bg-surface-3:     #f8f7f5;
+  --bg-surface-4:     #f2f0ed;
 
-  --bg-input:         var(--neutral-1000);
-  --bg-input-hover:   var(--neutral-950);
-  --bg-input-focus:   var(--neutral-1000);
+  --bg-input:         #f8f7f5;
+  --bg-input-hover:   #f2f0ed;
+  --bg-input-focus:   #ffffff;
 
   --bg-hover:         rgba(0, 0, 0, 0.03);
   --bg-active:        rgba(0, 0, 0, 0.06);
@@ -378,13 +378,13 @@
   --bg-status-info:    #F0F9FF;
 
   /* ─── Text ─── */
-  --text-primary:     var(--neutral-025);
-  --text-secondary:   var(--neutral-300);
-  --text-tertiary:    var(--neutral-400);
-  --text-quaternary:  var(--neutral-450);
-  --text-disabled:    var(--neutral-550);
-  --text-placeholder: var(--neutral-500);
-  --text-accent:      var(--red-600);
+  --text-primary:     #141210;
+  --text-secondary:   #6b6560;
+  --text-tertiary:    #8a8580;
+  --text-quaternary:  #a09a94;
+  --text-disabled:    #c0beb9;
+  --text-placeholder: #a09a94;
+  --text-accent:      #c1392b;
   --text-accent-strong: var(--red-700);
   --text-inverse:     var(--neutral-1000);
   --text-on-accent:   var(--neutral-1000);
