@@ -9,20 +9,24 @@ import { environment } from '../../../../../environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   template: `
-    <div class="content-area animate-fade-in print-container">
+    <div class="content-area animate-stagger print-container">
       <!-- ── Dashboard Header (Hidden on Print) ─────────────── -->
-      <header class="mb-10 no-print">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div class="header-titles-complex">
-            <h1 class="text-3xl font-black text-primary tracking-tight">
-              PIN <span class="text-accent">Certificate</span>
+      <header class="mb-12 no-print">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div>
+            <h1 class="premium-title">
+              PIN <span class="text-[var(--color-accent)]">Certificate</span>
             </h1>
-            <p class="text-[var(--text-secondary)] mt-2 font-semibold tracking-wide uppercase text-[10px]">Official acknowledgement of taxpayer registration</p>
+            <p class="premium-subtitle">Official acknowledgement of registered taxpayer status</p>
           </div>
           <div class="flex items-center gap-4">
-            <button class="btn-precision btn-primary-precision btn-sm" (click)="downloadPdf()">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2"/></svg>
-              Download PDF Certificate
+            <button class="btn-precision btn-secondary-precision" (click)="print()">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4"/></svg>
+              Print
+            </button>
+            <button class="btn-precision btn-primary-precision" (click)="downloadPdf()">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              Download PDF
             </button>
           </div>
         </div>
