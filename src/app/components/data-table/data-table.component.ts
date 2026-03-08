@@ -26,9 +26,9 @@ export interface TableAction {
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="card-precision dashboard-content-precision overflow-hidden border border-default">
-      <!-- High-Authority Toolbar -->
-      <div class="table-toolbar-precision px-8 py-6 border-b border-default bg-surface-2 flex justify-between items-center gap-6">
+    <div class="card-precision dashboard-content-precision overflow-hidden border border-subtle relative">
+      <!-- High-Authority Glass Toolbar -->
+      <div class="table-toolbar-precision px-8 py-5 border-b border-subtle flex justify-between items-center gap-6 glass-effect sticky top-0 z-20">
         <div class="toolbar-left flex items-center gap-6">
           <div class="search-box-precision relative group">
             <svg class="absolute left-4 top-1/2 -translate-y-1/2 text-tertiary group-focus-within:text-accent transition-colors" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -39,11 +39,11 @@ export interface TableAction {
               placeholder="Filter Registry..."
               [(ngModel)]="searchQuery"
               (input)="onSearch()"
-              class="input-precision sm pl-10 w-[280px]">
+              class="input-precision sm pl-10 w-[280px] bg-surface-2/50">
           </div>
 
           <div class="filter-wrapper-precision relative">
-            <select [(ngModel)]="selectedStatus" (change)="onFilter()" class="input-precision sm appearance-none pr-10">
+            <select [(ngModel)]="selectedStatus" (change)="onFilter()" class="input-precision sm appearance-none pr-10 bg-surface-2/50 text-xs font-bold uppercase tracking-wider">
               <option value="">Operational Status</option>
               <option value="completed">Verified</option>
               <option value="pending">Synchronizing</option>
@@ -67,7 +67,7 @@ export interface TableAction {
               <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/>
               </svg>
-              <span>Export</span>
+              <span class="style-label">Export</span>
             </button>
             
             @if (showExportMenu()) {
@@ -89,16 +89,16 @@ export interface TableAction {
 
       <!-- High-Precision Data Grid -->
       <div class="table-container-precision overflow-x-auto scrollbar-thin">
-        <table class="table-precision w-full">
+        <table class="table-precision w-full border-collapse">
           <thead>
-            <tr>
+            <tr class="bg-surface-2/30">
               @for (col of columns; track col.key) {
                 <th [style.width]="col.width || 'auto'"
                     [class.sortable-precision]="col.sortable"
                     (click)="col.sortable && toggleSort(col.key)"
-                    class="group">
+                    class="group px-8 py-5 border-b border-subtle">
                   <div class="flex items-center justify-between gap-4">
-                    <span class="label-master uppercase tracking-[0.2em] font-black pointer-events-none">{{ col.label }}</span>
+                    <span class="style-label text-tertiary group-hover:text-primary transition-colors">{{ col.label }}</span>
                     @if (col.sortable) {
                       <div class="sort-icon-precision opacity-20 group-hover:opacity-100 transition-opacity" [class.active-precision]="sortBy() === col.key">
                         @if (sortBy() === col.key && sortOrder() === 'desc') {
@@ -112,15 +112,15 @@ export interface TableAction {
                 </th>
               }
               @if (actions.length > 0) {
-                <th style="width: 140px;" class="text-right">Actions</th>
+                <th style="width: 140px;" class="text-right px-8 py-5 border-b border-subtle style-label text-tertiary">Actions</th>
               }
             </tr>
           </thead>
-          <tbody>
+          <tbody class="divide-y divide-subtle">
             @for (row of paginatedData(); track $index) {
-              <tr class="hover-precision transition-all border-b border-default">
+              <tr class="table-row-precision transition-all bg-table-row hover:bg-table-row-hover">
                 @for (col of columns; track col.key) {
-                  <td [style.width]="col.width || 'auto'">
+                  <td class="px-8 py-5" [style.width]="col.width || 'auto'">
                     <div [ngSwitch]="col.type">
                       <!-- Standard Text -->
                       <span *ngSwitchCase="'text'" class="text-primary font-medium text-sm leading-none block">
@@ -128,25 +128,26 @@ export interface TableAction {
                       </span>
 
                       <!-- Financial Intensity -->
-                      <span *ngSwitchCase="'currency'" class="text-primary font-black text-sm tabular-nums tracking-tight">
+                      <span *ngSwitchCase="'currency'" class="style-data text-primary tabular-nums">
                         {{ row[col.key] | currency:'KES ':'code':'1.0-0' }}
                       </span>
 
                       <!-- Chronological Identity -->
                       <div *ngSwitchCase="'date'" class="date-identity">
-                        <span class="text-secondary font-bold text-[12px] block">{{ row[col.key] | date:'dd MMM yyyy' }}</span>
-                        <span class="text-tertiary font-black text-[9px] uppercase tracking-widest block">{{ row[col.key] | date:'HH:mm' }}</span>
+                        <span class="style-data text-secondary block">{{ row[col.key] | date:'dd MMM yyyy' }}</span>
+                        <span class="text-tertiary font-black text-[9px] uppercase tracking-widest block mt-1">{{ row[col.key] | date:'HH:mm' }}</span>
                       </div>
 
                       <!-- Operational Status -->
                       <div *ngSwitchCase="'status'">
-                        <span class="badge-precision" [class]="getStatusClass(row[col.key])">
+                        <span class="status-badge-elite" [class]="getStatusClass(row[col.key])">
+                          <span class="dot"></span>
                           {{ row[col.key] }}
                         </span>
                       </div>
 
                       <!-- Mathematical units -->
-                      <span *ngSwitchCase="'number'" class="text-tertiary font-black text-sm tabular-nums">
+                      <span *ngSwitchCase="'number'" class="style-data text-tertiary tabular-nums">
                         {{ row[col.key] | number:'1.0-0' }}
                       </span>
                     </div>
@@ -155,11 +156,11 @@ export interface TableAction {
 
                 <!-- Reactive Actions -->
                 @if (actions.length > 0) {
-                  <td class="text-right">
+                  <td class="px-8 py-5 text-right">
                     <div class="flex justify-end gap-2">
                       @for (action of actions; track action.label) {
                         <button (click)="onAction(action.action, row)" 
-                                class="btn-precision btn-secondary-precision btn-sm px-2 border-default hover:border-accent/50" 
+                                class="btn-precision btn-secondary-precision btn-sm px-2.5 border-subtle hover:border-accent/40 bg-surface-2/30" 
                                 [title]="action.label">
                           <span class="text-xs">{{ action.icon }}</span>
                         </button>
@@ -175,7 +176,7 @@ export interface TableAction {
               <tr>
                 <td [attr.colspan]="columns.length + (actions.length > 0 ? 1 : 0)" class="py-32">
                   <div class="null-state-precision text-center max-w-sm mx-auto">
-                    <div class="icon-orb-precision w-20 h-20 bg-surface-2 rounded-full flex items-center justify-center mx-auto mb-6 border border-default">
+                    <div class="icon-orb-precision w-20 h-20 bg-surface-2/40 rounded-full flex items-center justify-center mx-auto mb-6 border border-subtle">
                       <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-tertiary"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" stroke-width="1.5"/></svg>
                     </div>
                     <h3 class="text-primary font-bold text-lg mb-2">No Records Localized</h3>
@@ -190,20 +191,23 @@ export interface TableAction {
 
       <!-- Tactical Pagination Shell -->
       @if (totalPages() > 1) {
-        <div class="pagination-shell-precision px-8 py-6 border-t border-default flex justify-between items-center bg-surface-2">
+        <div class="pagination-shell-precision px-8 py-5 border-t border-subtle flex justify-between items-center glass-effect">
           <div class="pagination-telemetry">
-            <span class="text-[10px] uppercase font-black tracking-widest text-tertiary">Telemetry: </span>
-            <span class="text-secondary font-bold text-xs">{{ startIndex() + 1 }} - {{ endIndex() }} of {{ filteredData().length }} Units</span>
+            <span class="style-label text-tertiary opacity-60">Telemetry: </span>
+            <span class="style-data text-secondary text-xs">{{ startIndex() + 1 }} - {{ endIndex() }} <span class="text-tertiary mx-1">of</span> {{ filteredData().length }} Units</span>
           </div>
           
-          <div class="pagination-controls-precision flex items-center gap-2">
-            <button [disabled]="currentPage() === 1" (click)="previousPage()" class="btn-precision btn-secondary-precision btn-sm px-4 disabled:opacity-20 transition-all">
+          <div class="pagination-controls-precision flex items-center gap-3">
+            <button [disabled]="currentPage() === 1" (click)="previousPage()" class="btn-precision btn-secondary-precision btn-sm px-4 disabled:opacity-10 transition-all border-subtle">
               Prev Transmission
             </button>
-            <div class="page-indicator-precision px-6 py-2 bg-app border border-default rounded-xl">
-               <span class="text-primary font-black text-xs">Phase {{ currentPage() }} <span class="text-tertiary">/ {{ totalPages() }}</span></span>
+            <div class="page-indicator-precision px-5 py-1.5 bg-surface-3/50 border border-subtle rounded-xl shadow-inner">
+               <span class="style-label text-[10px] text-tertiary">Phase</span>
+               <span class="text-primary font-black text-xs ml-2">{{ currentPage() }}</span>
+               <span class="text-tertiary mx-1.5">/</span>
+               <span class="text-tertiary font-bold text-xs">{{ totalPages() }}</span>
             </div>
-            <button [disabled]="currentPage() === totalPages()" (click)="nextPage()" class="btn-precision btn-secondary-precision btn-sm px-4 disabled:opacity-20 transition-all">
+            <button [disabled]="currentPage() === totalPages()" (click)="nextPage()" class="btn-precision btn-secondary-precision btn-sm px-4 disabled:opacity-10 transition-all border-subtle">
               Next Transmission
             </button>
           </div>
@@ -213,14 +217,54 @@ export interface TableAction {
   `,
   styles: [`
     :host { display: block; width: 100%; }
+    .glass-effect {
+      background: color-mix(in srgb, var(--bg-surface-1), transparent 30%);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+    }
+    .table-row-precision:hover {
+      transform: scale(1.002) translateX(4px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      z-index: 5;
+    }
+    .status-badge-elite {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .status-badge-elite .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .status-badge-elite.completed, .status-badge-elite.verified, .status-badge-elite.paid {
+      background: var(--bg-status-success);
+      color: var(--text-success);
+    }
+    .status-badge-elite.pending, .status-badge-elite.synchronizing {
+      background: var(--bg-status-warning);
+      color: var(--text-warning);
+    }
+    .status-badge-elite.failed, .status-badge-elite.halted {
+      background: var(--bg-status-danger);
+      color: var(--text-danger);
+    }
     .scrollbar-thin::-webkit-scrollbar { width: 4px; height: 4px; }
     .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
-    .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-    .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #DA3832; }
-    @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(10px); }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: var(--bg-hover); border-radius: 10px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    .animate-fade-in { animation: fadeIn 0.3s var(--ease-out) forwards; }
   `]
 })
 export class DataTableComponent {
