@@ -8,152 +8,136 @@ import { EtimsService } from '../../../services/etims.service';
   selector: 'app-etims',
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="page-container animate-up">
+    <div class="content-area animate-stagger">
     
-      <!-- Elite Page Header -->
-      <header class="page-header-elite">
-        <div class="header-info">
-          <h1 class="premium-title">e-TIMS <span class="gradient-text">Invoicing</span></h1>
-          <p class="premium-subtitle">Create and manage your electronic tax invoices</p>
-        </div>
-        <div class="header-actions">
-          <button class="modern-btn primary-btn" (click)="showInvoiceDialog.set(true)">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="3"/></svg>
-            Create Invoice
-          </button>
+      <!-- HD Page Header -->
+      <header class="mb-12">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div>
+            <h1 class="premium-title">e-TIMS <span class="text-[var(--color-accent)]">Invoicing</span></h1>
+            <p class="premium-subtitle">Digital Sales Registry & Tax Compliance Terminal</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <button class="btn-precision btn-primary-precision" (click)="showInvoiceDialog.set(true)">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+              Generate Invoice
+            </button>
+          </div>
         </div>
       </header>
     
-      <!-- Elite Metrics Grid -->
-      <div class="stats-grid-premium">
-        <div class="premium-stat-card animate-up delay-1">
-          <div class="stat-icon-wrapper blue">
-            <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2.2"/></svg>
+      <!-- HD Metrics Matrix -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div class="stat-card-precision">
+          <div class="card-icon-box blue">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
           </div>
-          <div class="stat-info">
-            <span class="stat-label">Total Invoices</span>
-            <div class="stat-value-group">
-              <h3 class="stat-number">{{ allInvoices().length }}</h3>
-            </div>
-          </div>
+          <span class="card-label">TOTAL INVOICES</span>
+          <span class="card-value">{{ allInvoices().length }}</span>
         </div>
     
-        <div class="premium-stat-card animate-up delay-2">
-          <div class="stat-icon-wrapper green">
-            <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2.2"/></svg>
+        <div class="stat-card-precision">
+          <div class="card-icon-box green">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
-          <div class="stat-info">
-            <span class="stat-label">Total Revenue</span>
-            <div class="stat-value-group">
-              <h3 class="stat-number">KES {{ totalRevenue() | number:'1.0-0' }}</h3>
-            </div>
-          </div>
+          <span class="card-label">TOTAL REVENUE (NET)</span>
+          <span class="card-value">KES {{ totalRevenue() | number:'1.0-0' }}</span>
         </div>
     
-        <div class="premium-stat-card animate-up delay-3">
-          <div class="stat-icon-wrapper red">
-            <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-width="2.2"/></svg>
+        <div class="stat-card-precision">
+          <div class="card-icon-box danger">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
           </div>
-          <div class="stat-info">
-            <span class="stat-label">Total VAT</span>
-            <div class="stat-value-group">
-              <h3 class="stat-number">KES {{ totalTax() | number:'1.0-0' }}</h3>
-            </div>
-          </div>
+          <span class="card-label">VAT OBLIGATION</span>
+          <span class="card-value">KES {{ totalTax() | number:'1.0-0' }}</span>
         </div>
     
-        <div class="premium-stat-card animate-up delay-3">
-          <div class="stat-icon-wrapper grey">
-            <div class="pulse-ring"></div>
-            <div class="pulse-dot"></div>
+        <div class="stat-card-precision">
+          <div class="card-icon-box compliant">
+            <div class="status-pill-dot animate-pulse"></div>
           </div>
-          <div class="stat-info">
-            <span class="stat-label">System Status</span>
-            <div class="stat-value-group">
-              <h3 class="stat-number status-online" style="font-size: 0.95rem;">ONLINE</h3>
-            </div>
-          </div>
+          <span class="card-label">GATEWAY STATUS</span>
+          <span class="card-value !text-[var(--color-success)]">ONLINE</span>
         </div>
       </div>
     
-      <!-- Action & Filter Surface -->
-      <div class="action-bar-glass mt-32 animate-up delay-2">
-        <div class="filter-pills-elite">
-          <button class="pill-btn" [class.active]="activeFilter === 'all'" (click)="activeFilter = 'all'">
-            All Invoices <span class="badge">{{ allInvoices().length }}</span>
-          </button>
-          <button class="pill-btn" [class.active]="activeFilter === 'synced'" (click)="activeFilter = 'synced'">
-            Synced
-          </button>
-          <button class="pill-btn" [class.active]="activeFilter === 'pending'" (click)="activeFilter = 'pending'">
-            Pending
-          </button>
+      <!-- HD Registry Surface -->
+      <div class="glass-panel p-0 overflow-hidden">
+        <div class="flex flex-col md:flex-row md:items-center justify-between p-10 border-b border-subtle bg-surface-2/50 gap-6">
+          <div class="flex gap-4">
+            <button class="status-pill-precision !px-6 !py-2 cursor-pointer transition-all hover:bg-surface-3" [class.online]="activeFilter === 'all'" (click)="activeFilter = 'all'">
+              Universal Log
+            </button>
+            <button class="status-pill-precision !px-6 !py-2 cursor-pointer transition-all hover:bg-surface-3" [class.online]="activeFilter === 'synced'" (click)="activeFilter = 'synced'">
+              Synchronized
+            </button>
+            <button class="status-pill-precision !px-6 !py-2 cursor-pointer transition-all hover:bg-surface-3" [class.pending]="activeFilter === 'pending'" (click)="activeFilter = 'pending'">
+              Pending Sync
+            </button>
+          </div>
+          <div class="search-input-precision w-full md:w-96">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" placeholder="Search by Invoice ID or Customer..." [(ngModel)]="searchQuery" (input)="onSearch()">
+          </div>
         </div>
-        <div class="search-premium">
-          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2.5"/></svg>
-          <input type="text" placeholder="Search invoice number or customer..." class="search-input-elite" [(ngModel)]="searchQuery" (input)="onSearch()">
-        </div>
-      </div>
     
-      <!-- Main Registry Table -->
-      <div class="content-card-premium animate-up delay-3">
-        <div class="table-responsive-elite">
-          <table class="modern-table-elite">
+        <div class="table-container">
+          <table class="table-precision">
             <thead>
               <tr>
-                <th>Invoice Number</th>
-                <th>Date</th>
-                <th>Customer</th>
-                <th>Amount</th>
-                <th>Tax Amount</th>
-                <th>Status</th>
-                <th class="text-center">Action</th>
+                <th>INVOICE NUMBER</th>
+                <th>TIMESTAMP</th>
+                <th>CUSTOMER ENTITY</th>
+                <th>NET AMOUNT</th>
+                <th>TAX APPLIED</th>
+                <th>PROTOCO STATUS</th>
+                <th class="text-right">OPERATION</th>
               </tr>
             </thead>
             <tbody>
               @for (invoice of filteredInvoices(); track invoice.id) {
-                <tr class="table-row-hover">
-                  <td><span class="invoice-id-elite">{{ invoice.invoiceNumber }}</span></td>
-                  <td><span class="date-label-elite">{{ invoice.date }}</span></td>
+                <tr class="animate-stagger-item">
+                  <td class="font-mono font-black text-[var(--color-accent)]">{{ invoice.invoiceNumber }}</td>
+                  <td class="text-muted font-bold">{{ invoice.date }}</td>
                   <td>
-                    <div class="customer-block">
-                      <div class="avatar-ref">{{ invoice.customerName.charAt(0) }}</div>
-                      <span class="customer-title">{{ invoice.customerName }}</span>
+                    <div class="flex items-center gap-4">
+                      <div class="w-10 h-10 rounded-xl bg-surface-3 flex items-center justify-center font-black text-xs text-primary shadow-sm">
+                        {{ invoice.customerName.charAt(0) }}
+                      </div>
+                      <span class="font-black text-primary">{{ invoice.customerName }}</span>
                     </div>
                   </td>
-                  <td><span class="amount-val-elite">KES {{ invoice.amount | number:'1.0-0' }}</span></td>
-                  <td><span class="tax-amt-elite">KES {{ invoice.taxAmount | number:'1.0-0' }}</span></td>
+                  <td class="font-black">KES {{ invoice.amount | number:'1.0-0' }}</td>
+                  <td class="text-muted font-bold">KES {{ invoice.taxAmount | number:'1.0-0' }}</td>
                   <td>
-                    <div class="status-pill-elite" [ngClass]="invoice.status">
-                      <span class="dot"></span>
-                      {{ invoice.status }}
+                    <div class="status-pill-precision" [class]="invoice.status === 'synced' ? 'online' : (invoice.status === 'pending' ? 'pending' : 'overdue')">
+                      <span class="status-pill-dot"></span>
+                      {{ invoice.status | uppercase }}
                     </div>
                   </td>
-                  <td>
-                    <div class="action-center">
-                      @if (invoice.status === 'pending') {
-                        <button class="modern-btn primary-btn sm" (click)="syncInvoice(invoice.id)" [disabled]="syncing() === invoice.id">
-                          {{ syncing() === invoice.id ? 'SYNCING' : 'SYNC NOW' }}
-                        </button>
-                      } @else if (invoice.status === 'error') {
-                        <button class="modern-btn outline-btn sm danger" (click)="retrySync(invoice.id)">
-                          RETRY SYNC
-                        </button>
-                      } @else {
-                        <button class="icon-btn-elite" title="Download Invoice">
-                          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2.2"/></svg>
-                        </button>
-                      }
-                    </div>
+                  <td class="text-right">
+                    @if (invoice.status === 'pending') {
+                      <button class="btn-precision btn-primary-precision !py-2" (click)="syncInvoice(invoice.id)" [disabled]="syncing() === invoice.id">
+                        {{ syncing() === invoice.id ? 'SYNCING...' : 'SYNC TERMINAL' }}
+                      </button>
+                    } @else if (invoice.status === 'error') {
+                      <button class="btn-precision btn-secondary-precision !py-2 !text-[var(--color-accent)]" (click)="retrySync(invoice.id)">
+                        RETRY LINK
+                      </button>
+                    } @else {
+                      <button class="notification-bell-precision" title="Download Official Invoice">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                      </button>
+                    }
                   </td>
                 </tr>
-                } @empty {
+              } @empty {
                 <tr>
-                  <td colspan="7" class="empty-placeholder">
-                    <div class="empty-state-luxury">
-                      <div class="e-icon">∅</div>
-                      <p>No invoices found. Create a new one below.</p>
-                      <button class="modern-btn outline-btn sm mt-16" (click)="showInvoiceDialog.set(true)">Create First Invoice</button>
+                  <td colspan="7">
+                    <div class="py-24 text-center">
+                      <div class="text-4xl mb-6 opacity-20">NULL</div>
+                      <p class="premium-subtitle">No fiscal transactions detected in this sector.</p>
+                      <button class="btn-precision btn-primary-precision mt-8" (click)="showInvoiceDialog.set(true)">Initialize First Invoice</button>
                     </div>
                   </td>
                 </tr>
@@ -163,53 +147,56 @@ import { EtimsService } from '../../../services/etims.service';
         </div>
       </div>
     
-      <!-- Elite Dialog: Smart Generation -->
+      <!-- HD Dialog: Invoice Generation -->
       @if (showInvoiceDialog()) {
-        <div class="dialog-overlay-elite animate-fade" (click)="cancelInvoiceDialog()">
-          <div class="elite-dialog-card animate-scale" (click)="$event.stopPropagation()">
-            <div class="dialog-header-luxury">
-              <div class="header-icon-ring">
-                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="white"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="3"/></svg>
+        <div class="dialog-overlay-elite animate-fade-in" (click)="cancelInvoiceDialog()">
+          <div class="glass-panel !p-0 !max-w-xl w-full animate-scale-in" (click)="$event.stopPropagation()">
+            <div class="p-10 border-b border-subtle bg-surface-2/50 flex items-center justify-between">
+              <div>
+                <h3 class="text-xl font-black text-primary uppercase tracking-widest">Generate Invoice</h3>
+                <p class="premium-subtitle">Initialize eTIMS Synchronized Transaction</p>
               </div>
-              <div class="header-text-v">
-                <h3>Create New Invoice</h3>
-                <p>Fill out the details to generate an eTIMS invoice</p>
-              </div>
-              <button class="close-luxury-circular" (click)="cancelInvoiceDialog()">✕</button>
+              <button class="notification-bell-precision" (click)="cancelInvoiceDialog()">✕</button>
             </div>
-            <div class="dialog-content-luxury">
-              <div class="luxury-form-stack">
-                <div class="form-item-elite">
-                  <label>Customer Name</label>
-                  <input type="text" [(ngModel)]="newInvoice.customerName" placeholder="Customer Name" class="luxury-input-elite">
+            
+            <div class="p-10 space-y-10">
+              <div class="space-y-4">
+                <label class="premium-subtitle !mt-0">Customer / Entity Name</label>
+                <div class="search-input-precision !w-full !px-6">
+                  <input type="text" [(ngModel)]="newInvoice.customerName" placeholder="Legal Name or PIN" class="!bg-transparent">
                 </div>
-                <div class="form-row-elite">
-                  <div class="form-item-elite">
-                    <label>Amount (KES)</label>
-                    <div class="luxury-input-wrapper">
-                      <span class="currency-tag">KES</span>
-                      <input type="number" [(ngModel)]="newInvoice.amount" placeholder="0.00" class="luxury-input-elite with-tag">
-                    </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-8">
+                <div class="space-y-4">
+                  <label class="premium-subtitle !mt-0">Transaction Amount</label>
+                  <div class="search-input-precision !w-full !px-6">
+                    <span class="text-[10px] font-black opacity-40 mr-2">KES</span>
+                    <input type="number" [(ngModel)]="newInvoice.amount" placeholder="0.00" class="!bg-transparent font-mono">
                   </div>
-                  <div class="form-item-elite">
-                    <label>VAT Rate</label>
-                    <select class="luxury-select-elite" [(ngModel)]="newInvoice.taxRate">
-                      <option [ngValue]="0.16">16% Standard Rate</option>
-                      <option [ngValue]="0">0% Zero Rated</option>
-                      <option [ngValue]="0.08">8% Reduced Rate</option>
+                </div>
+                <div class="space-y-4">
+                  <label class="premium-subtitle !mt-0">Tax Protocol (VAT)</label>
+                  <div class="search-input-precision !w-full !px-6">
+                    <select class="w-full bg-transparent border-none appearance-none font-black text-xs text-primary focus:outline-none" [(ngModel)]="newInvoice.taxRate">
+                      <option [ngValue]="0.16">16% STANDARD</option>
+                      <option [ngValue]="0">0% ZERO RATED</option>
+                      <option [ngValue]="0.08">8% REDUCED</option>
                     </select>
                   </div>
                 </div>
               </div>
-              <div class="policy-notice-luxury">
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-width="2.5"/></svg>
-                <span>The invoice will be synced with KRA immediately.</span>
+
+              <div class="p-6 rounded-2xl bg-[var(--color-accent)]/5 border border-[var(--color-accent)]/10 flex gap-4 text-[var(--color-accent)]">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 0 01-8.618 3.04A12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                <span class="text-xs font-bold leading-tight">Proceeding will immediately synchronize this record with the KRA National Ledger.</span>
               </div>
             </div>
-            <div class="dialog-footer-luxury">
-              <button class="modern-btn outline-btn sm" (click)="cancelInvoiceDialog()">Cancel</button>
-              <button class="modern-btn primary-btn" (click)="createInvoice()" [disabled]="!newInvoice.customerName || !newInvoice.amount">
-                Create & Sync
+
+            <div class="p-10 bg-surface-2/50 border-t border-subtle flex justify-end gap-6">
+              <button class="btn-precision btn-secondary-precision" (click)="cancelInvoiceDialog()">Protocol Abort</button>
+              <button class="btn-precision btn-primary-precision" (click)="createInvoice()" [disabled]="!newInvoice.customerName || !newInvoice.amount">
+                Commit & Sync Device
               </button>
             </div>
           </div>
@@ -219,51 +206,8 @@ import { EtimsService } from '../../../services/etims.service';
     </div>
     `,
   styles: [`
-    .invoice-id-elite { font-weight: 900; color: var(--color-accent); font-family: 'Courier New', monospace; font-size: 0.95rem; background: var(--bg-accent-subtle); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--border-accent-subtle); }
-    .customer-block { display: flex; align-items: center; gap: 14px; }
-    .avatar-ref { width: 34px; height: 34px; background: var(--gradient-accent); color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.85rem; }
-    .customer-title { font-weight: 800; color: var(--text-primary); font-size: 0.95rem; }
-    .amount-val-elite { font-weight: 900; color: var(--text-primary); letter-spacing: -0.5px; }
-    .tax-amt-elite { color: var(--text-tertiary); font-weight: 700; font-size: 0.9rem; }
-
-    .status-online { color: var(--success-base); font-weight: 900; letter-spacing: 1px; }
-    .pulse-dot { width: 12px; height: 12px; background: var(--success-base); border-radius: 50%; z-index: 2; }
-    .pulse-ring { position: absolute; width: 32px; height: 32px; border: 2.5px solid var(--success-base); border-radius: 50%; animation: pulse-ring 2s infinite; }
-    @keyframes pulse-ring { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
-
-    /* Luxury Dialog Systems */
-    .dialog-overlay-elite { position: fixed; inset: 0; background: var(--bg-overlay); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-    .elite-dialog-card { background: var(--bg-surface-1); width: 100%; max-width: 650px; border-radius: 40px; overflow: hidden; box-shadow: var(--shadow-xl); border-top: 6px solid var(--color-accent); }
-    .dialog-header-luxury { padding: 40px; background: var(--bg-surface-2); border-bottom: 1px solid var(--border-default); display: flex; align-items: center; gap: 24px; position: relative; }
-    .header-icon-ring { width: 56px; height: 56px; background: var(--color-accent); border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-focus); }
-    .header-text-v h3 { font-size: 1.4rem; font-weight: 900; color: var(--text-primary); margin: 0; letter-spacing: -0.5px; }
-    .header-text-v p { font-size: 0.9rem; color: var(--text-tertiary); font-weight: 600; margin-top: 4px; }
-    .close-luxury-circular { position: absolute; top: 30px; right: 30px; width: 44px; height: 44px; border-radius: 50%; border: none; background: var(--bg-app); color: var(--text-tertiary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-    .close-luxury-circular:hover { background: var(--status-danger-bg); color: var(--danger-base); }
-
-    .dialog-content-luxury { padding: 40px; }
-    .luxury-form-stack { display: flex; flex-direction: column; gap: 32px; }
-    .form-item-elite { display: flex; flex-direction: column; gap: 12px; }
-    .form-item-elite label { font-size: 0.75rem; font-weight: 900; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1.5px; }
-    .form-row-elite { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    
-    .luxury-input-elite, .luxury-select-elite { width: 100%; padding: 18px 24px; background: var(--bg-surface-2); border: 2.5px solid var(--border-default); border-radius: 20px; font-weight: 800; color: var(--text-primary); font-size: 1.05rem; transition: 0.3s; font-family: inherit; }
-    .luxury-input-elite:focus, .luxury-select-elite:focus { border-color: var(--color-accent); outline: none; background: var(--bg-app); box-shadow: var(--shadow-focus); }
-    
-    .luxury-input-wrapper { position: relative; }
-    .currency-tag { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary); font-weight: 900; font-size: 0.8rem; }
-    .luxury-input-elite.with-tag { padding-left: 65px; }
-
-    .policy-notice-luxury { margin-top: 40px; padding: 20px; background: var(--bg-status-info); border-radius: 18px; border: 1.5px solid var(--info-border); display: flex; align-items: center; gap: 16px; color: var(--info-base); font-weight: 700; font-size: 0.9rem; }
-    .dialog-footer-luxury { padding: 32px 40px; background: var(--bg-surface-2); border-top: 1px solid var(--border-default); display: flex; justify-content: flex-end; gap: 20px; }
-
-    .mt-16 { margin-top: 16px; }
-    .action-center { display: flex; justify-content: center; }
-
-    @media (max-width: 900px) {
-       .form-row-elite { grid-template-columns: 1fr; }
-       .dialog-header-luxury, .dialog-content-luxury, .dialog-footer-luxury { padding: 24px; }
-    }
+    .dialog-overlay-elite { position: fixed; inset: 0; background: var(--bg-overlay); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 2rem; }
+    .animate-scale-in { animation: scaleIn var(--duration-base) var(--ease-out); }
   `]
 })
 export class EtimsComponent {

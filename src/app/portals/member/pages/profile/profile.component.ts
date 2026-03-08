@@ -9,88 +9,91 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="dashboard-precision animate-fade-in">
+    <div class="content-area animate-stagger">
       
-      <header class="header-precision">
-        <div class="header-titles">
-          <h1 class="title-primary">Taxpayer <span class="title-accent">Intelligence</span></h1>
-          <p class="subtitle-secondary">Official registration and operation credentials</p>
-        </div>
-        <div class="header-actions">
-           <div class="btn-group-precision">
-             <button class="btn-precision btn-secondary-precision btn-sm" (click)="downloadCertificate()">
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16h16M4 12h16M4 18h16" stroke-width="2.5"/></svg>
-                PIN Certificate
-             </button>
-             <button class="btn-precision btn-primary-precision btn-sm" (click)="showEditModal.set(true)">
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2.5"/></svg>
-                Update Registry
-             </button>
-           </div>
+      <!-- HD Page Header -->
+      <header class="mb-12">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div>
+            <h1 class="premium-title">Taxpayer <span class="text-[var(--color-accent)]">Intelligence</span></h1>
+            <p class="premium-subtitle">Official registration and operation credentials</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <button class="btn-precision btn-secondary-precision" (click)="downloadCertificate()">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 16h16M4 12h16M4 18h16"/></svg>
+              PIN Certificate
+            </button>
+            <button class="btn-precision btn-primary-precision" (click)="showEditModal.set(true)">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+              Update Registry
+            </button>
+          </div>
         </div>
       </header>
 
-      <div class="dashboard-content-precision grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
         
         <!-- Left Column: Core Identity -->
         <div class="lg:col-span-1 space-y-10">
-           <div class="card-precision profile-identity-card animate-slide-up">
-              <div class="avatar-system mb-8">
-                 <div class="avatar-orb-precision">
-                    {{ getInitials(user()?.name) }}
-                    <div class="verified-indicator">
-                       <svg width="10" height="10" fill="white" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" /></svg>
+           <div class="glass-panel text-center animate-stagger-item">
+              <div class="mb-8 relative inline-block">
+                 <div class="w-32 h-32 bg-surface-3 p-1 rounded-[40px] border-2 border-[var(--color-accent)]/30 overflow-hidden flex items-center justify-center">
+                    <div class="w-full h-full bg-surface-2 rounded-[36px] flex items-center justify-center font-black text-4xl text-primary">
+                       {{ getInitials(user()?.name) }}
                     </div>
+                 </div>
+                 <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-[var(--color-success)] border-4 border-[var(--bg-card)] rounded-2xl flex items-center justify-center shadow-lg">
+                    <svg width="18" height="18" fill="white" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
                  </div>
               </div>
               
-              <div class="identity-info-precision text-center mb-10">
-                 <h2 class="text-2xl font-black text-white leading-tight mb-2">{{ user()?.name }}</h2>
-                 <span class="text-[10px] font-black uppercase text-red-base tracking-widest">{{ user()?.type }} Taxpayer</span>
+              <div class="mb-10">
+                 <h2 class="text-3xl font-black text-primary leading-tight mb-2">{{ user()?.name }}</h2>
+                 <span class="text-[10px] font-black uppercase text-[var(--color-accent)] tracking-widest">{{ user()?.type }} Taxpayer</span>
               </div>
 
-              <div class="integrity-meter mb-10">
-                 <div class="meter-labels flex justify-between mb-2">
-                    <span class="text-[9px] font-black text-white/30 uppercase tracking-widest">Profile Integrity</span>
-                    <span class="text-[9px] font-black text-white">{{ complianceProgress() }}%</span>
+              <div class="mb-10 text-left">
+                 <div class="flex justify-between mb-3 items-end">
+                    <span class="text-[10px] font-black text-muted uppercase tracking-widest">Profile Integrity</span>
+                    <span class="text-xs font-black text-primary">{{ complianceProgress() }}%</span>
                  </div>
-                 <div class="meter-track bg-white/5 h-1.5 rounded-full overflow-hidden">
-                    <div class="meter-fill bg-red-base h-full shadow-glow-red transition-all duration-700" [style.width.%]="complianceProgress()"></div>
+                 <div class="h-2 bg-surface-3 rounded-full overflow-hidden border border-subtle">
+                    <div class="bg-[var(--color-accent)] h-full transition-all duration-1000 ease-out" [style.width.%]="complianceProgress()"></div>
                  </div>
               </div>
 
-              <div class="ledger-summary-precision pt-8 border-t border-white/5 space-y-6">
-                 <div class="ledger-item flex justify-between">
-                    <span class="text-[9px] font-black text-white/30 uppercase tracking-widest">KRA PIN</span>
-                    <span class="text-[11px] font-black text-white tabular-nums tracking-widest">{{ user()?.taxpayer_id }}</span>
+              <div class="pt-10 border-t border-subtle space-y-6 text-left">
+                 <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-black text-muted uppercase tracking-widest">KRA PIN</span>
+                    <span class="text-sm font-black text-primary font-mono tracking-widest">{{ user()?.taxpayer_id }}</span>
                  </div>
-                 <div class="ledger-item flex justify-between">
-                    <span class="text-[9px] font-black text-white/30 uppercase tracking-widest">Registered</span>
-                    <span class="text-[11px] font-black text-white uppercase">{{ user()?.registrationDate | date:'MMM yyyy' }}</span>
+                 <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-black text-muted uppercase tracking-widest">Registered</span>
+                    <span class="text-sm font-black text-primary uppercase">{{ user()?.registrationDate | date:'MMM yyyy' }}</span>
                  </div>
               </div>
            </div>
 
-           <!-- Contact Parameters -->
-           <div class="card-precision ops-card-precision">
-              <div class="card-header-precision border-b border-white/5 pb-4 mb-6">
-                 <h3 class="text-[10px] font-black uppercase tracking-widest text-white/40">Communication Interface</h3>
+           <!-- Communication Interface -->
+           <div class="glass-panel animate-stagger-item">
+              <div class="mb-10 pb-6 border-b border-subtle">
+                 <h3 class="text-xs font-black uppercase tracking-widest text-primary">Communication Interface</h3>
               </div>
-              <div class="parameter-stack space-y-6">
+              <div class="space-y-8">
                  <div class="parameter-item">
-                    <span class="text-[9px] font-black text-white/30 uppercase tracking-widest block mb-1">Transmission Email</span>
+                    <span class="text-[10px] font-black text-muted uppercase tracking-widest block mb-2">Transmission Email</span>
                     <div class="flex items-center gap-3">
-                       <span class="text-sm font-bold text-white">{{ user()?.email }}</span>
-                       <span class="badge-precision active tabular-nums">VERIFIED</span>
+                       <span class="text-sm font-bold text-primary">{{ user()?.email }}</span>
+                       <span class="status-pill-precision online !px-3 !py-1 text-[8px]">VERIFIED</span>
                     </div>
                  </div>
                  <div class="parameter-item">
-                    <span class="text-[9px] font-black text-white/30 uppercase tracking-widest block mb-1">Operational Phone</span>
-                    <span class="text-sm font-bold text-white">{{ taxpayer()?.phone || '07XXXXXXXX' }}</span>
+                    <span class="text-[10px] font-black text-muted uppercase tracking-widest block mb-2">Operational Phone</span>
+                    <span class="text-sm font-bold text-primary">{{ taxpayer()?.phone || '07XXXXXXXX' }}</span>
                  </div>
                  <div class="parameter-item">
-                    <span class="text-[9px] font-black text-white/30 uppercase tracking-widest block mb-1">Legal Domicile</span>
-                    <span class="text-sm font-bold text-white leading-relaxed">{{ taxpayer()?.address || 'Nairobi, Kenya' }}</span>
+                    <span class="text-[10px] font-black text-muted uppercase tracking-widest block mb-2">Legal Domicile</span>
+                    <span class="text-sm font-bold text-primary leading-relaxed">{{ taxpayer()?.address || 'Nairobi, Kenya' }}</span>
                  </div>
               </div>
            </div>
@@ -98,100 +101,107 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
 
         <!-- Middle/Right Column: Strategic Mandates -->
         <div class="lg:col-span-2 space-y-10">
-           <div class="card-precision main-record-card-precision">
-              <div class="card-header-precision border-b border-white/5 pb-6 mb-8 flex justify-between items-center">
+           <div class="glass-panel !p-0 overflow-hidden animate-stagger-item">
+              <div class="p-10 border-b border-subtle bg-surface-2/50 flex justify-between items-center">
                  <div>
-                    <h3 class="text-lg font-black text-white">Tax Obligations</h3>
-                    <p class="text-[10px] font-black text-white/30 uppercase tracking-widest mt-1">Legally registered tax mandates</p>
+                    <h3 class="text-xl font-black text-primary uppercase tracking-widest">Tax Obligations</h3>
+                    <p class="premium-subtitle">Legally registered tax mandates</p>
                  </div>
-                 <button class="btn-precision btn-secondary-precision btn-xs">Request Amendment</button>
+                 <button class="btn-precision btn-secondary-precision !py-2">Request Amendment</button>
               </div>
               
-              <div class="mandate-registry-precision space-y-4">
+              <div class="p-10 space-y-4">
                  @for (ob of obligations(); track ob.id) {
-                    <div class="mandate-tile-precision flex items-center gap-6 p-6 bg-white/2 rounded-2xl border border-white/5 hover:border-red-base/20 transition-all group">
-                       <div class="tile-icon-orb bg-white/5 group-hover:bg-red-base/10 text-white/40 group-hover:text-red-base text-xs font-black w-10 h-10 rounded-xl flex items-center justify-center transition-all">
+                    <div class="flex items-center gap-8 p-8 bg-surface-2 rounded-[24px] border border-subtle hover:border-[var(--color-accent)]/30 transition-all group">
+                       <div class="w-14 h-14 bg-surface-3 rounded-2xl flex items-center justify-center font-black text-primary group-hover:bg-[var(--color-accent)] group-hover:text-white transition-all shadow-sm">
                           {{ ob.obligation_name.substring(0, 2).toUpperCase() }}
                        </div>
                        <div class="flex-1">
-                          <h4 class="text-white font-bold">{{ ob.obligation_name }}</h4>
-                          <div class="flex gap-4 mt-1">
-                             <span class="text-[9px] font-black text-white/20 uppercase tracking-widest">Effective: {{ ob.effective_from }}</span>
-                             <span class="text-[9px] font-black text-white/20 uppercase tracking-widest">Cycle: Monthly</span>
+                          <h4 class="text-lg font-black text-primary">{{ ob.obligation_name }}</h4>
+                          <div class="flex gap-6 mt-2">
+                             <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-black text-muted uppercase tracking-widest">Effective</span>
+                                <span class="text-[10px] font-black text-primary">{{ ob.effective_from }}</span>
+                             </div>
+                             <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-black text-muted uppercase tracking-widest">Cycle</span>
+                                <span class="text-[10px] font-black text-primary">MONTHLY</span>
+                             </div>
                           </div>
                        </div>
-                       <div class="mandate-status">
-                          <span class="badge-precision active uppercase">Active Sequence</span>
+                       <div class="status-pill-precision online !px-5">
+                          <span class="status-pill-dot"></span>
+                          ACTIVE SEQUENCE
                        </div>
                     </div>
                  } @empty {
-                    <div class="null-state-precision py-20 text-center">
-                       <p class="text-[10px] font-black text-white/20 uppercase tracking-widest">No primary mandates detected.</p>
+                    <div class="py-24 text-center">
+                       <div class="text-4xl mb-6 opacity-20">NULL</div>
+                       <p class="premium-subtitle">No primary mandates detected in the registry.</p>
                     </div>
                  }
               </div>
            </div>
 
-           <div class="card-precision ops-card-precision">
-              <div class="card-header-precision border-b border-white/5 pb-4 mb-8">
-                 <h3 class="text-[10px] font-black uppercase tracking-widest text-white/40">Credential Integrity</h3>
+           <div class="glass-panel animate-stagger-item">
+              <div class="mb-10 pb-6 border-b border-subtle">
+                 <h3 class="text-xs font-black uppercase tracking-widest text-primary">Credential Integrity</h3>
               </div>
-              <div class="integrity-stack-precision space-y-8 relative pl-6 border-l border-white/5 ml-3">
-                 <div class="integrity-entry relative">
-                    <div class="entry-dot bg-red-base absolute -left-[30px] top-1.5 w-2 h-2 rounded-full shadow-glow-red"></div>
-                    <span class="it-title text-sm font-bold text-white block mb-1">Identity Verification</span>
-                    <span class="it-desc text-[10px] font-medium text-white/30 uppercase tracking-widest">Authenticated via National Central Registry</span>
+              <div class="space-y-10 relative pl-10 border-l-2 border-surface-3 ml-4">
+                 <div class="relative">
+                    <div class="absolute -left-[51px] top-1 w-5 h-5 bg-[var(--color-accent)] rounded-full border-4 border-[var(--bg-card)] shadow-[0_0_15px_rgba(var(--color-accent-rgb),0.3)]"></div>
+                    <span class="text-sm font-black text-primary block mb-1">Identity Verification</span>
+                    <span class="text-[10px] font-black text-muted uppercase tracking-widest">Authenticated via National Central Registry</span>
                  </div>
-                 <div class="integrity-entry relative">
-                    <div class="entry-dot bg-red-base absolute -left-[30px] top-1.5 w-2 h-2 rounded-full shadow-glow-red"></div>
-                    <span class="it-title text-sm font-bold text-white block mb-1">PIN Authorization</span>
-                    <span class="it-desc text-[10px] font-medium text-white/30 uppercase tracking-widest">Cryptographic validation of taxpayer signature</span>
+                 <div class="relative">
+                    <div class="absolute -left-[51px] top-1 w-5 h-5 bg-[var(--color-accent)] rounded-full border-4 border-[var(--bg-card)] shadow-[0_0_15px_rgba(var(--color-accent-rgb),0.3)]"></div>
+                    <span class="text-sm font-black text-primary block mb-1">PIN Authorization</span>
+                    <span class="text-[10px] font-black text-muted uppercase tracking-widest">Cryptographic validation of taxpayer signature</span>
                  </div>
               </div>
            </div>
         </div>
       </div>
 
-      <!-- Tactical Edit Surface -->
+      <!-- HD Tactical Edit Surface -->
       @if (showEditModal()) {
-        <div class="modal-backdrop-precision" (click)="showEditModal.set(false)">
-           <div class="modal-panel-precision max-w-lg animate-scale" (click)="$event.stopPropagation()">
-              <div class="modal-header-precision">
-                 <div class="icon-orb-precision">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2.5"/></svg>
-                 </div>
-                 <div class="modal-titles">
-                    <h3 class="title-primary">Update <span class="title-accent">Registry</span></h3>
-                    <p class="subtitle-secondary">Modify operational transmission parameters</p>
-                 </div>
-                 <button class="modal-close-precision" (click)="showEditModal.set(false)">✕</button>
+        <div class="dialog-overlay-elite animate-fade-in" (click)="showEditModal.set(false)">
+           <div class="glass-panel !p-0 !max-w-xl w-full animate-scale-in" (click)="$event.stopPropagation()">
+              <div class="p-10 border-b border-subtle bg-surface-2/50 flex items-center justify-between">
+                <div>
+                  <h3 class="text-xl font-black text-primary uppercase tracking-widest">Update <span class="text-[var(--color-accent)]">Registry</span></h3>
+                  <p class="premium-subtitle">Modify operational transmission parameters</p>
+                </div>
+                <button class="notification-bell-precision" (click)="showEditModal.set(false)">✕</button>
               </div>
 
-              <div class="modal-body-precision py-10">
-                 <div class="form-stack-precision space-y-8">
-                    <div class="form-group-precision">
-                       <label class="label-precision">Mobile Transmission Line</label>
-                       <input type="text" [(ngModel)]="editData.phone" placeholder="+254 XXX XXX XXX" class="input-precision w-full">
+              <div class="p-10 space-y-10">
+                 <div class="space-y-4">
+                    <label class="premium-subtitle !mt-0 uppercase tracking-widest text-[10px]">Mobile Transmission Line</label>
+                    <div class="search-input-precision !w-full !px-6">
+                       <input type="text" [(ngModel)]="editData.phone" placeholder="+254 XXX XXX XXX" class="!bg-transparent font-black">
                     </div>
-                    <div class="form-group-precision">
-                       <label class="label-precision">Primary Legal Domicile</label>
-                       <textarea rows="3" [(ngModel)]="editData.address" placeholder="Enter full physical address" class="input-precision w-full resize-none pt-4"></textarea>
+                 </div>
+                 <div class="space-y-4">
+                    <label class="premium-subtitle !mt-0 uppercase tracking-widest text-[10px]">Primary Legal Domicile</label>
+                    <div class="search-input-precision !w-full !px-6 !py-4">
+                       <textarea rows="3" [(ngModel)]="editData.address" placeholder="Enter full physical address" class="w-full bg-transparent border-none focus:outline-none font-black text-xs text-primary resize-none"></textarea>
                     </div>
                  </div>
                  
-                 <div class="status-state-precision pending mt-8">
-                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2.5"/></svg>
-                    <span class="text-[10px] font-black uppercase tracking-widest">Protocol: An OTP will be dispatched to verify changes.</span>
+                 <div class="p-6 rounded-2xl bg-[var(--color-accent)]/5 border border-[var(--color-accent)]/10 flex gap-4 text-[var(--color-accent)]">
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="text-xs font-bold leading-tight">Protocol: An OTP will be dispatched to your verified transmission line to authorize these changes.</span>
                  </div>
               </div>
 
-              <div class="modal-footer-precision">
-                 <button class="btn-precision btn-secondary-precision" (click)="showEditModal.set(false)">Abort</button>
+              <div class="p-10 bg-surface-2/50 border-t border-subtle flex justify-end gap-6">
+                 <button class="btn-precision btn-secondary-precision" (click)="showEditModal.set(false)">Abort Protocol</button>
                  <button class="btn-precision btn-primary-precision" (click)="saveProfile()" [disabled]="isSaving()">
                     @if (isSaving()) {
-                      <div class="loader-spinner-precision sm"></div>
+                      <div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                     } @else {
-                      Execute Update
+                      Commit to Registry
                     }
                  </button>
               </div>
@@ -201,6 +211,9 @@ import { DashboardDataService } from '../../../../services/dashboard-data.servic
     </div>
   `,
   styles: [`
+    .dialog-overlay-elite { position: fixed; inset: 0; background: var(--bg-overlay); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 2rem; }
+    .animate-scale-in { animation: scaleIn var(--duration-base) var(--ease-out); }
+
     .avatar-orb-precision {
       width: 100px; height: 100px; background: var(--black-900); border: 2px solid var(--red-500); border-radius: 32px;
       display: flex; align-items: center; justify-content: center;
