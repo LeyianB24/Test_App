@@ -159,3 +159,44 @@ code, kbd, pre, .mono {
   position: relative;
   overflow: hidden;
 }
+
+/* ─── HD & Modern Utilities ─── */
+.premium-title {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: var(--weight-black);
+  letter-spacing: -1.5px;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.premium-subtitle {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: var(--weight-black);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: var(--space-2);
+}
+
+.glass-panel {
+  background: var(--bg-surface-3);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: var(--space-8);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, var(--color-accent-bg), transparent 70%);
+  opacity: 0.15;
+  pointer-events: none;
+}

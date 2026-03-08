@@ -19,50 +19,50 @@ interface DashboardStat {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule],
   template: `
-    <div class="content-area animate-fade-in">
+    <div class="content-area animate-stagger">
       <!-- Top Intelligence Bar -->
-      <header class="mb-10">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div class="header-titles-complex">
-            <h1 class="text-3xl font-black text-primary tracking-tight flex items-center gap-3">
-              Wealth Terminal <span class="text-accent">Intelligence</span>
+      <header class="mb-12">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div>
+            <h1 class="premium-title flex items-center gap-4">
+              Wealth <span class="text-[var(--color-accent)]">Terminal</span>
               <span class="status-pill-precision online">
                 <span class="status-pill-dot"></span>
                 v2.0 MASTER
               </span>
             </h1>
-            <p class="text-[var(--text-secondary)] mt-2 font-semibold tracking-wide uppercase text-[10px]">Synchronized access for {{ userName() }}</p>
+            <p class="premium-subtitle">Synchronized Access Cluster // {{ userName() }}</p>
           </div>
           <div class="flex items-center gap-4">
-            <button class="btn-precision btn-secondary-precision btn-sm" (click)="downloadStatusReport()">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2"/></svg>
+            <button class="btn-precision btn-secondary-precision" (click)="downloadStatusReport()">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
               Intelligence Report
             </button>
-            <button class="btn-precision btn-primary-precision btn-sm" (click)="router.navigate(['/payments'])">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="2.5"/></svg>
+            <button class="btn-precision btn-primary-precision" (click)="router.navigate(['/payments'])">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
               Execute Payment
             </button>
           </div>
         </div>
       </header>
     
-      <div class="dashboard-grid-precision grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
         @for (stat of stats(); track stat.label) {
-          <div class="stat-card-precision overflow-visible">
+          <div class="stat-card-precision">
             <div class="card-icon-box" [class]="stat.color">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-width="2" [attr.d]="stat.icon" />
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path [attr.d]="stat.icon" />
               </svg>
             </div>
             <span class="card-label">{{ stat.label }}</span>
             <span class="card-value">{{ stat.formattedValue }}</span>
-            <div class="delta-badge mt-4" [class.positive]="stat.trendDirection === 'up'" [class.negative]="stat.trendDirection === 'down'">
-              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="delta-badge" [class.compliant]="stat.trendDirection === 'up'" [class.danger]="stat.trendDirection === 'down'">
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                 @if (stat.trendDirection === 'up') {
-                  <path d="M5 10l7-7 7 7M12 3v18" stroke-width="2.5"/>
+                  <path d="M5 10l7-7 7 7M12 3v18"/>
                 }
                 @if (stat.trendDirection === 'down') {
-                  <path d="M19 14l-7 7-7-7M12 21V3" stroke-width="2.5"/>
+                  <path d="M19 14l-7 7-7-7M12 21V3"/>
                 }
               </svg>
               {{ stat.trend }}
@@ -71,28 +71,27 @@ interface DashboardStat {
         }
       </div>
     
-      <div class="dashboard-charts-grid grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Revenue Analytics Surface -->
-        <div class="stat-card-precision lg:col-span-2">
-          <div class="flex items-center justify-between mb-8">
+        <div class="glass-panel lg:col-span-2">
+          <div class="flex items-center justify-between mb-10">
             <div>
-              <h3 class="text-lg font-black text-primary uppercase tracking-widest">Revenue Trajectory</h3>
-              <p class="text-[10px] text-tertiary mt-1 font-bold uppercase tracking-wider">12-month centralized performance overview</p>
+              <h3 class="text-xl font-black text-primary uppercase tracking-widest">Revenue Trajectory</h3>
+              <p class="premium-subtitle">12-month centralized performance telemetry</p>
             </div>
-            <span class="status-pill-precision">REAL-TIME TELEMETRY</span>
+            <span class="status-pill-precision online">
+              <span class="status-pill-dot text-success"></span>
+              REAL-TIME
+            </span>
           </div>
     
-          <div class="relative h-[300px] w-full mt-4">
+          <div class="relative h-[320px] w-full">
             <svg class="w-full h-full overflow-visible">
               <defs>
                 <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stop-color="var(--color-accent)" />
                   <stop offset="100%" stop-color="var(--color-accent-hover)" />
                 </linearGradient>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
-                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
               </defs>
               @for (bar of [50, 70, 40, 90, 60, 80, 55, 75, 65, 85, 95, 100]; track $index) {
                 <rect
@@ -101,8 +100,9 @@ interface DashboardStat {
                   [attr.width]="(100 / 12) - 1.5 + '%'"
                   [attr.height]="bar + '%'"
                   fill="url(#barGradient)"
-                  rx="6"
-                  class="transition-all duration-500 ease-out hover:brightness-125 cursor-pointer"
+                  rx="8"
+                  class="transition-all duration-700 ease-out hover:brightness-125 cursor-pointer"
+                  style="filter: drop-shadow(0 4px 8px var(--color-accent-dim));"
                   />
                 }
               </svg>
@@ -110,20 +110,21 @@ interface DashboardStat {
           </div>
     
           <!-- System Load / Distribution -->
-          <div class="stat-card-precision">
-            <h3 class="text-lg font-black text-primary uppercase tracking-widest mb-8">System Compliance</h3>
-            <div class="flex flex-col items-center justify-center flex-1">
+          <div class="glass-panel">
+            <h3 class="text-xl font-black text-primary uppercase tracking-widest mb-10">System Compliance</h3>
+            <div class="flex flex-col items-center justify-center h-full">
               <div class="gauge-container scale-150">
                 <svg class="gauge-svg" viewBox="0 0 100 50">
-                  <path class="gauge-track" d="M10 50 A40 40 0 0 1 90 50" stroke-width="12" />
-                  <path class="gauge-fill" d="M10 50 A40 40 0 0 1 90 50" [style.--arc-target]="70" stroke-width="12" />
-                  <text x="50" y="45" class="gauge-text font-black text-xs" fill="var(--text-primary)">84%</text>
+                  <path class="gauge-track" d="M10 50 A40 40 0 0 1 90 50" fill="none" />
+                  <path class="gauge-fill" d="M10 50 A40 40 0 0 1 90 50" [attr.stroke-dashoffset]="dashOffset()" fill="none" />
+                  <text x="50" y="45" class="gauge-text">{{ complianceScore() }}%</text>
                 </svg>
               </div>
-              <p class="text-[10px] text-tertiary mt-12 uppercase tracking-widest text-center font-black">Operational Integrity Status</p>
+              <p class="premium-subtitle mt-12 text-center">Operational Integrity Status</p>
             </div>
           </div>
         </div>
+      </div>
     `,
   styles: [``]
 })
