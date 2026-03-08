@@ -30,7 +30,7 @@ import { CommonModule } from '@angular/common';
           class="tooltip-content-precision absolute z-[600] min-w-[200px] p-4 bg-black/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl animate-fade-in"
           [ngClass]="'position-' + position"
           role="tooltip">
-          <p class="text-[11px] font-medium leading-relaxed text-white/70">{{ content }}</p>
+          <p class="text-[11px] font-medium leading-relaxed text-white/70">{{ content() }}</p>
           <div class="tooltip-arrow-precision absolute w-2 h-2 bg-black border border-white/10 border-t-0 border-l-0 rotate-45"></div>
         </div>
       }

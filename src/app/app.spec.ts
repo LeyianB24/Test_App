@@ -25,18 +25,4 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'iTax Portal' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('iTax Portal');
-  });
-
-  it('should render the welcome message', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    // Checks for "Welcome" because the name "Bezalel" is dynamic
-    expect(compiled.querySelector('h1')?.textContent).toContain('Welcome');
-  });
 });

@@ -11,7 +11,7 @@ import { Component, Input, input, ChangeDetectionStrategy } from '@angular/core'
   template: `
     <div class="skeleton-shell animate-fade-in">
       <!-- High-Precision Card Skeleton -->
-      @if (type === 'card') {
+      @if (type() === 'card') {
         <div class="skeleton-card-precision">
           <div class="skeleton-precision skeleton-title-precision"></div>
           <div class="skeleton-precision skeleton-text-precision" style="width: 90%"></div>
@@ -20,7 +20,7 @@ import { Component, Input, input, ChangeDetectionStrategy } from '@angular/core'
       }
 
       <!-- Operational Stat Skeleton -->
-      @if (type === 'stat') {
+      @if (type() === 'stat') {
         <div class="skeleton-card-precision flex-row items-center gap-6">
           <div class="skeleton-precision skeleton-avatar-precision flex-shrink-0"></div>
           <div class="flex-1 space-y-3">
@@ -31,7 +31,7 @@ import { Component, Input, input, ChangeDetectionStrategy } from '@angular/core'
       }
 
       <!-- Registry Table Skeleton -->
-      @if (type === 'table') {
+      @if (type() === 'table') {
         <div class="skeleton-card-precision p-0 border-white/5 bg-transparent overflow-hidden">
           @for (i of [1,2,3,4,5]; track i) {
             <div class="skeleton-table-row-precision flex items-center gap-8 px-8 border-b border-white/5">
@@ -46,7 +46,7 @@ import { Component, Input, input, ChangeDetectionStrategy } from '@angular/core'
       }
 
       <!-- Protocol List Skeleton -->
-      @if (type === 'list') {
+      @if (type() === 'list') {
         <div class="skeleton-card-precision flex-row gap-4 p-4 border-white/5 mb-4">
           <div class="skeleton-precision h-10 w-10 rounded-xl"></div>
           <div class="flex-1 space-y-2">
@@ -57,7 +57,7 @@ import { Component, Input, input, ChangeDetectionStrategy } from '@angular/core'
       }
 
       <!-- Directive Form Skeleton -->
-      @if (type === 'form') {
+      @if (type() === 'form') {
         <div class="space-y-6">
           <div class="skeleton-precision h-3 w-24"></div>
           <div class="skeleton-precision h-12 w-full rounded-2xl"></div>
@@ -65,7 +65,7 @@ import { Component, Input, input, ChangeDetectionStrategy } from '@angular/core'
       }
 
       <!-- Data Transmission (Chart) Skeleton -->
-      @if (type === 'chart') {
+      @if (type() === 'chart') {
         <div class="skeleton-card-precision h-[240px] flex items-end justify-between gap-4 py-8">
           @for (i of [1,2,3,4,5,6,7,8]; track i) {
             <div class="skeleton-precision rounded-t-xl" [style.height]="getRandomHeight()" style="width: 8%"></div>
@@ -74,7 +74,7 @@ import { Component, Input, input, ChangeDetectionStrategy } from '@angular/core'
       }
 
       <!-- Recursive List Sequence -->
-      @if (type === 'list-multiple') {
+      @if (type() === 'list-multiple') {
         <div class="space-y-4">
           @for (i of [1,2,3,4]; track i) {
             <div class="skeleton-card-precision flex-row gap-4 p-4 border-white/5">
