@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal, computed } from '@angular/core';
+import { Component, inject, input, output, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../core/services/notification.service';

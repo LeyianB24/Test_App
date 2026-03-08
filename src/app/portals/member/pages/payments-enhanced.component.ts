@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect, computed, ViewChild } from '@angular/core';
+import { Component, inject, signal, effect, computed, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PaymentService } from '../../../services/payment.service';

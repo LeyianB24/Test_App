@@ -1,4 +1,4 @@
-import { inject, Component } from '@angular/core';
+import { inject, Component, ChangeDetectionStrategy } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../../environments/environment';
 

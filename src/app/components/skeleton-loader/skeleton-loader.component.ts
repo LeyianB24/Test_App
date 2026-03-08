@@ -1,4 +1,4 @@
-import { Component, Input, input } from '@angular/core';
+import { Component, Input, input, ChangeDetectionStrategy } from '@angular/core';
 /**
  * Skeleton Loading Component
  * Shows animated skeleton placeholders while content is loading

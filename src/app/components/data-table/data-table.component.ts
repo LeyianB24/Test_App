@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, computed, signal, inject, input, output } from '@angular/core';
+import { Component, Input, Output, EventEmitter, computed, signal, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ExportService, ExportColumn } from '../../services/export.service';

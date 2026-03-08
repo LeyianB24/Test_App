@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, signal, input, output } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 
 /**
