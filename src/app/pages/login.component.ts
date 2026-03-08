@@ -1,4 +1,4 @@
-import { Component, inject, signal, ChangeDetectionStrategy, computed } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
@@ -12,137 +12,597 @@ import { environment } from '../../environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ReactiveFormsModule, RouterModule, NgOptimizedImage],
   template: `
-    <div class="login-page-precision">
-      <!-- Left Panel: Brand & Visuals -->
-      <div class="login-left-panel">
-        <div class="login-grid-bg"></div>
-        <div class="login-accent-line"></div>
-    
-        <div class="login-branding">
-          <img ngSrc="assets/logo.png" width="80" height="80" alt="KRA Logo" priority class="login-logo">
-          <h1 class="login-title">iTax<span class="login-title-accent">Intelligence Suite</span></h1>
-          <p class="login-tagline">Welcome to the unified revenue administration terminal. Authorized access to your operational workspace.</p>
-        </div>
-    
-        @if (systemStatus()) {
-          <div class="login-stats-row">
-            @for (portal of systemStatus(); track portal.name) {
-              <div class="login-stat-item">
-                <span class="login-stat-number">{{ portal.online ? 'ONLINE' : 'OFFLINE' }}</span>
-                <span class="login-stat-label">{{ portal.name }}</span>
-              </div>
-            }
-          </div>
+    <div class="login-root" [attr.data-theme]="theme()">
+
+      <!-- Theme Toggle -->
+      <button class="theme-toggle" type="button" (click)="toggleTheme()"
+        [attr.aria-label]="theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
+        @if (theme() === 'dark') {
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+        } @else {
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+          </svg>
         }
-      </div>
-    
-      <!-- Right Panel: Authentication Form -->
-      <div class="login-right-panel">
-        <div class="login-card-precision animate-fade-in">
-          <div class="login-form-header">
-            <h3 class="login-form-title">Portal Login</h3>
-            <p class="login-form-subtitle">Enter your credentials to establish a secure session.</p>
+      </button>
+
+      <!-- Left Panel -->
+      <div class="left-panel">
+        <div class="left-grid"></div>
+        <div class="left-glow"></div>
+        <span class="corner-mark corner-tl"></span>
+        <span class="corner-mark corner-tr"></span>
+        <span class="corner-mark corner-bl"></span>
+        <span class="corner-mark corner-br"></span>
+
+        <div class="left-inner">
+
+          <div class="brand-block">
+            <div class="logo-wrap">
+              <img ngSrc="assets/logo.png" width="52" height="52" alt="KRA Logo" priority class="logo-img">
+              <div class="logo-ring"></div>
+            </div>
+            <div class="brand-text">
+              <p class="brand-eyebrow">Kenya Revenue Authority</p>
+              <h1 class="brand-name">iTax<span class="brand-accent">IS</span></h1>
+              <p class="brand-sub">Intelligence Suite</p>
+            </div>
           </div>
-    
-          <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form-precision">
-            <div class="form-group-precision mb-6">
-              <label class="kra-label-precision">Taxpayer PIN / ID</label>
-              <input
-                type="text"
-                formControlName="taxpayer_id"
-                placeholder="e.g. A000123456Z"
-                class="kra-input-precision"
-                autocomplete="username"
-                />
+
+          <p class="brand-tagline">
+            The official KRA tax management portal.<br>Sign in to access your account and services.
+          </p>
+
+          <div class="divider-rule"></div>
+
+          @if (systemStatus()) {
+            <div class="status-grid">
+              <p class="status-heading">
+                <span class="status-dot"></span>
+                System Status
+              </p>
+              <div class="status-list">
+                @for (portal of systemStatus(); track portal.name) {
+                  <div class="status-item">
+                    <span class="status-indicator" [class.online]="portal.online" [class.offline]="!portal.online"></span>
+                    <span class="status-name">{{ portal.name }}</span>
+                    <span class="status-badge" [class.online]="portal.online">
+                      {{ portal.online ? 'ONLINE' : 'OFFLINE' }}
+                    </span>
+                  </div>
+                }
               </div>
-    
-              <div class="form-group-precision mb-6">
-                <div class="flex justify-between items-center mb-2">
-                  <label class="kra-label-precision">Security Password</label>
-                  <a routerLink="/forgot-password" class="text-xs color-red-base hover:underline">Forgot?</a>
+            </div>
+          }
+
+          <div class="left-footer">
+            <span class="footer-tag">GOK CERTIFIED</span>
+            <span class="footer-tag">ISO 27001</span>
+            <span class="footer-tag">AES-256</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="right-panel">
+        <div class="right-inner">
+          <div class="form-card">
+
+            <div class="form-header">
+              <div class="form-header-top">
+                <div class="session-badge">
+                  <span class="pulse-dot"></span>
+                  SECURE CONNECTION
                 </div>
-                <div class="relative">
+                <span class="form-ref">REF: AUTH-{{ sessionRef() }}</span>
+              </div>
+              <h2 class="form-title">Sign In</h2>
+              <p class="form-subtitle">Enter your PIN and password to access your account.</p>
+            </div>
+
+            <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+
+              <!-- KRA PIN -->
+              <div class="field-group" [class.field-focused]="pinFocused()">
+                <label class="field-label">KRA PIN / ID Number</label>
+                <div class="field-wrap">
+                  <div class="field-icon">
+                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                      <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    formControlName="taxpayer_id"
+                    placeholder="e.g. A000123456Z"
+                    class="field-input"
+                    autocomplete="username"
+                    (focus)="pinFocused.set(true)"
+                    (blur)="pinFocused.set(false)"
+                  />
+                </div>
+              </div>
+
+              <!-- Password -->
+              <div class="field-group" [class.field-focused]="pwFocused()">
+                <div class="field-label-row">
+                  <label class="field-label">Password</label>
+                  <a routerLink="/forgot-password" class="forgot-link">Forgot password?</a>
+                </div>
+                <div class="field-wrap">
+                  <div class="field-icon">
+                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                      <path d="M7 11V7a5 5 0 0110 0v4"/>
+                    </svg>
+                  </div>
                   <input
                     [type]="showPassword() ? 'text' : 'password'"
                     formControlName="password"
                     placeholder="••••••••••••"
-                    class="kra-input-precision"
+                    class="field-input"
                     autocomplete="current-password"
-                    />
-                    <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2" (click)="togglePasswordVisibility()">
-                      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        @if (!showPassword()) {
-                          <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2"/>
-                          }@if (!showPassword()) {
-                          <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-width="2"/>
-                        }
-                        @if (showPassword()) {
-                          <path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" stroke-width="2"/>
-                        }
+                    (focus)="pwFocused.set(true)"
+                    (blur)="pwFocused.set(false)"
+                  />
+                  <button type="button" class="eye-toggle" (click)="togglePasswordVisibility()" tabindex="-1">
+                    @if (!showPassword()) {
+                      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
                       </svg>
-                    </button>
-                  </div>
+                    } @else {
+                      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/>
+                        <line x1="1" y1="1" x2="23" y2="23"/>
+                      </svg>
+                    }
+                  </button>
                 </div>
-    
-                <div class="flex items-center gap-2 mb-8">
-                  <div class="kra-toggle-precision">
-                    <input type="checkbox" formControlName="rememberMe" id="rememberMe">
-                    <label for="rememberMe" class="kra-toggle-slider"></label>
-                  </div>
-                  <label for="rememberMe" class="text-xs color-black-400 cursor-pointer">Remember this terminal</label>
-                </div>
-    
-                @if (errorMessage()) {
-                  <div class="error-msg-precision mb-6">
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-width="2"/></svg>
-                    <span>{{ errorMessage() }}</span>
-                  </div>
-                }
-    
-                <button type="submit" class="btn-precision btn-primary-precision w-full" [disabled]="isLoading() || loginForm.invalid">
-                  @if (!isLoading()) {
-                    Establish Secure Session
-                  } @else {
-                    <span class="flex items-center gap-2 justify-center">
-                      <div class="loader-spinner-tiny"></div>
-                      Authenticating...
-                    </span>
-                  }
-                </button>
-              </form>
-    
-              <div class="login-status-bar">
-                <p class="text-[10px] color-black-500 uppercase tracking-widest flex items-center gap-2">
-                  <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.946-2.597 9.289-6.5 11.534-3.903-2.245-6.5-6.588-6.5-11.534 0-.68.056-1.35.166-2.001zm8.334 1.5a1 1 0 10-2 0V9H7a1 1 0 100 2h1.5v2.5a1 1 0 102 0V11H12a1 1 0 100-2h-1.5V6.499z" clip-rule="evenodd"/></svg>
-                  SHA-256 Government Grade Encryption
-                </p>
               </div>
+
+              <!-- Keep me signed in -->
+              <div class="remember-row">
+                <label class="remember-label">
+                  <input type="checkbox" formControlName="rememberMe" class="remember-cb" id="rememberMe">
+                  <span class="remember-box">
+                    <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </span>
+                  <span class="remember-text">Keep me signed in</span>
+                </label>
+              </div>
+
+              <!-- Error -->
+              @if (errorMessage()) {
+                <div class="error-bar">
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <span>{{ errorMessage() }}</span>
+                </div>
+              }
+
+              <!-- Submit -->
+              <button type="submit" class="submit-btn" [disabled]="isLoading() || loginForm.invalid">
+                <span class="submit-inner">
+                  @if (!isLoading()) {
+                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/>
+                      <polyline points="10 17 15 12 10 7"/>
+                      <line x1="15" y1="12" x2="3" y2="12"/>
+                    </svg>
+                    Sign In to Your Account
+                  } @else {
+                    <span class="spinner"></span>
+                    Signing in...
+                  }
+                </span>
+                <span class="submit-shimmer"></span>
+              </button>
+
+            </form>
+
+            <div class="card-footer">
+              <svg width="11" height="11" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0117.834 5c.11.65.166 1.32.166 2.001 0 4.946-2.597 9.289-6.5 11.534-3.903-2.245-6.5-6.588-6.5-11.534 0-.68.056-1.35.166-2.001zm8.334 1.5a1 1 0 10-2 0V9H7a1 1 0 100 2h1.5v2.5a1 1 0 102 0V11H12a1 1 0 100-2h-1.5V6.499z" clip-rule="evenodd"/>
+              </svg>
+              SHA-256 &bull; Your connection is secure &bull; TLS 1.3
             </div>
+
           </div>
         </div>
-    `,
-  styles: [``]
+      </div>
+
+    </div>
+  `,
+  styles: [`
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+    /* ── Variables ───────────────────────────────────────── */
+    :host { display: block; height: 100dvh; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    .login-root {
+      --r: 8px;
+      --tr: 180ms ease;
+
+      /* Light theme */
+      --bg:             #f4f3f0;
+      --bg-card:        #ffffff;
+      --bg-input:       #f8f7f5;
+      --bg-input-focus: #ffffff;
+      --border:         #e2dfd9;
+      --text-primary:   #141210;
+      --text-secondary: #6b6560;
+      --text-muted:     #a09a94;
+      --accent:         #c1392b;
+      --accent-dim:     #e8b4af;
+      --accent-bg:      #fdf2f1;
+      --left-bg:        #141210;
+      --left-text:      #f4f3f0;
+      --left-muted:     #807a74;
+      --left-border:    #2a2622;
+      --left-accent:    #c1392b;
+      --left-tag-bg:    #1e1a17;
+      --shadow-lg:      0 16px 48px rgba(0,0,0,.12), 0 4px 16px rgba(0,0,0,.06);
+      --submit-bg:      #c1392b;
+      --submit-hover:   #a83224;
+      --error-bg:       #fdf2f1;
+      --error-border:   #f5c2bb;
+      --error-text:     #a83224;
+    }
+
+    /* Dark theme */
+    .login-root[data-theme="dark"] {
+      --bg:             #0e0c0b;
+      --bg-card:        #181512;
+      --bg-input:       #1e1a17;
+      --bg-input-focus: #231f1b;
+      --border:         #2e2924;
+      --text-primary:   #f0ede8;
+      --text-secondary: #9c9590;
+      --text-muted:     #5c5650;
+      --accent:         #e04534;
+      --accent-dim:     #7a2318;
+      --accent-bg:      #1a100e;
+      --left-bg:        #0a0908;
+      --left-text:      #f0ede8;
+      --left-muted:     #5c5650;
+      --left-border:    #1e1a17;
+      --left-accent:    #e04534;
+      --left-tag-bg:    #141210;
+      --shadow-lg:      0 16px 48px rgba(0,0,0,.6), 0 4px 16px rgba(0,0,0,.3);
+      --submit-hover:   #e04534;
+      --error-bg:       #1a100e;
+      --error-border:   #7a2318;
+      --error-text:     #f5887e;
+    }
+
+    /* ── Layout ──────────────────────────────────────────── */
+    .login-root {
+      display: flex; min-height: 100dvh;
+      background: var(--bg); transition: background .3s ease;
+      position: relative;
+    }
+
+    /* ── Theme Toggle ────────────────────────────────────── */
+    .theme-toggle {
+      position: fixed; top: 20px; right: 20px; z-index: 100;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-secondary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      transition: all var(--tr);
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); transform: rotate(20deg); }
+
+    /* ── Left Panel ──────────────────────────────────────── */
+    .left-panel {
+      width: 400px; flex-shrink: 0;
+      background: var(--left-bg);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .left-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--left-border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--left-border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: .35; pointer-events: none;
+    }
+    .left-glow {
+      position: absolute; top: -80px; left: -80px;
+      width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(193,57,43,.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .corner-mark {
+      position: absolute; width: 12px; height: 12px;
+      border-color: var(--left-accent); border-style: solid; opacity: .5;
+    }
+    .corner-tl { top: 16px;    left: 16px;   border-width: 1px 0 0 1px; }
+    .corner-tr { top: 16px;    right: 16px;  border-width: 1px 1px 0 0; }
+    .corner-bl { bottom: 16px; left: 16px;   border-width: 0 0 1px 1px; }
+    .corner-br { bottom: 16px; right: 16px;  border-width: 0 1px 1px 0; }
+
+    .left-inner {
+      position: relative; z-index: 1;
+      padding: 48px 40px;
+      display: flex; flex-direction: column; height: 100%;
+    }
+
+    /* Brand */
+    .brand-block { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+    .logo-wrap   { position: relative; width: 52px; height: 52px; flex-shrink: 0; }
+    .logo-img    { width: 52px; height: 52px; border-radius: 10px; position: relative; z-index: 1; }
+    .logo-ring {
+      position: absolute; inset: -4px; border-radius: 14px;
+      border: 1px solid rgba(193,57,43,.4);
+      animation: ring-pulse 3s ease-in-out infinite;
+    }
+    @keyframes ring-pulse {
+      0%, 100% { opacity: .4; transform: scale(1); }
+      50%       { opacity: .8; transform: scale(1.04); }
+    }
+    .brand-eyebrow {
+      font-size: 9px; font-weight: 600; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--left-accent); margin: 0 0 2px;
+    }
+    .brand-name {
+      font-size: 26px; font-weight: 800; color: var(--left-text);
+      margin: 0; line-height: 1; letter-spacing: -.02em;
+    }
+    .brand-accent { color: var(--left-accent); }
+    .brand-sub {
+      font-size: 10px; font-weight: 500; letter-spacing: .08em;
+      color: var(--left-muted); text-transform: uppercase; margin: 2px 0 0;
+    }
+    .brand-tagline {
+      font-size: 13px; font-weight: 400; line-height: 1.7;
+      color: var(--left-muted); margin: 0 0 28px;
+    }
+    .divider-rule {
+      height: 1px;
+      background: linear-gradient(90deg, var(--left-accent) 0%, transparent 100%);
+      margin-bottom: 28px; opacity: .5;
+    }
+
+    /* Status */
+    .status-heading {
+      font-size: 9px; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--left-muted);
+      display: flex; align-items: center; gap: 6px; margin: 0 0 12px;
+    }
+    .status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,.6);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+    .status-list { display: flex; flex-direction: column; gap: 8px; }
+    .status-item {
+      display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+      background: var(--left-tag-bg); border: 1px solid var(--left-border); border-radius: 6px;
+    }
+    .status-indicator { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .status-indicator.online  { background: #22c55e; box-shadow: 0 0 4px rgba(34,197,94,.5); }
+    .status-indicator.offline { background: #ef4444; }
+    .status-name  { font-size: 11px; font-weight: 500; color: var(--left-text); flex: 1; }
+    .status-badge { font-size: 8px; font-weight: 700; letter-spacing: .1em; color: var(--left-muted); }
+    .status-badge.online { color: #22c55e; }
+    .status-grid { flex: 1; }
+
+    .left-footer { display: flex; gap: 6px; margin-top: 32px; }
+    .footer-tag {
+      font-size: 8px; font-weight: 700; letter-spacing: .1em; padding: 4px 8px; border-radius: 4px;
+      background: var(--left-tag-bg); border: 1px solid var(--left-border);
+      color: var(--left-muted); text-transform: uppercase;
+    }
+
+    /* ── Right Panel ─────────────────────────────────────── */
+    .right-panel {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 32px 24px; background: var(--bg);
+    }
+    .right-inner { width: 100%; max-width: 440px; }
+
+    /* ── Form Card ───────────────────────────────────────── */
+    .form-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 36px; box-shadow: var(--shadow-lg);
+      animation: card-in 400ms cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes card-in {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .form-header { margin-bottom: 28px; }
+    .form-header-top {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+    }
+    .session-badge {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 9px; font-weight: 700; letter-spacing: .12em;
+      color: var(--accent); background: var(--accent-bg);
+      border: 1px solid var(--accent-dim); padding: 4px 10px;
+      border-radius: 20px; text-transform: uppercase;
+    }
+    .pulse-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent); animation: blink 2s ease-in-out infinite;
+    }
+    .form-ref {
+      font-size: 9px; font-weight: 600; letter-spacing: .08em;
+      color: var(--text-muted); font-variant-numeric: tabular-nums;
+    }
+    .form-title {
+      font-size: 22px; font-weight: 800; color: var(--text-primary);
+      margin: 0 0 6px; letter-spacing: -.025em;
+    }
+    .form-subtitle { font-size: 13px; font-weight: 400; color: var(--text-secondary); margin: 0; line-height: 1.5; }
+
+    /* ── Fields ──────────────────────────────────────────── */
+    .login-form { display: flex; flex-direction: column; gap: 20px; }
+    .field-group { display: flex; flex-direction: column; gap: 7px; }
+    .field-label {
+      font-size: 11px; font-weight: 600; letter-spacing: .04em;
+      color: var(--text-secondary); text-transform: uppercase; transition: color var(--tr);
+    }
+    .field-group.field-focused .field-label { color: var(--accent); }
+    .field-label-row { display: flex; align-items: center; justify-content: space-between; }
+    .forgot-link {
+      font-size: 11px; font-weight: 500; color: var(--text-muted);
+      text-decoration: none; transition: color var(--tr);
+    }
+    .forgot-link:hover { color: var(--accent); }
+    .field-wrap { position: relative; display: flex; align-items: center; }
+    .field-icon {
+      position: absolute; left: 14px; color: var(--text-muted);
+      display: flex; pointer-events: none; transition: color var(--tr);
+    }
+    .field-group.field-focused .field-icon { color: var(--accent); }
+    .field-input {
+      width: 100%; height: 46px; padding: 0 44px;
+      background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--r);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px; font-weight: 500; color: var(--text-primary);
+      outline: none; transition: all var(--tr);
+    }
+    .field-input::placeholder { color: var(--text-muted); font-weight: 400; }
+    .field-input:focus {
+      background: var(--bg-input-focus); border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(193,57,43,.12);
+    }
+    .eye-toggle {
+      position: absolute; right: 14px; background: none; border: none;
+      padding: 4px; color: var(--text-muted); cursor: pointer;
+      display: flex; align-items: center; border-radius: 4px; transition: color var(--tr);
+    }
+    .eye-toggle:hover { color: var(--accent); }
+
+    /* ── Remember Me ─────────────────────────────────────── */
+    .remember-row { margin-top: -4px; }
+    .remember-label { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .remember-cb { display: none; }
+    .remember-box {
+      width: 16px; height: 16px; border-radius: 4px;
+      border: 1.5px solid var(--border); background: var(--bg-input);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all var(--tr); color: transparent;
+    }
+    .remember-cb:checked + .remember-box {
+      background: var(--accent); border-color: var(--accent); color: #fff;
+    }
+    .remember-text { font-size: 12px; font-weight: 500; color: var(--text-secondary); user-select: none; }
+
+    /* ── Error ───────────────────────────────────────────── */
+    .error-bar {
+      display: flex; align-items: flex-start; gap: 8px; padding: 11px 14px;
+      background: var(--error-bg); border: 1px solid var(--error-border); border-radius: var(--r);
+      color: var(--error-text); font-size: 12.5px; font-weight: 500; line-height: 1.4;
+      animation: shake 300ms ease;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%       { transform: translateX(-4px); }
+      60%       { transform: translateX(4px); }
+    }
+
+    /* ── Submit ──────────────────────────────────────────── */
+    .submit-btn {
+      position: relative; width: 100%; height: 48px;
+      background: var(--submit-bg); border: none; border-radius: var(--r);
+      cursor: pointer; overflow: hidden; transition: all 200ms ease; margin-top: 4px;
+    }
+    .submit-btn:hover:not(:disabled) {
+      background: var(--submit-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(193,57,43,.35);
+    }
+    .submit-btn:active:not(:disabled) { transform: translateY(0); }
+    .submit-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .submit-inner {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px; font-weight: 700; letter-spacing: .02em; color: #fff;
+    }
+    .submit-shimmer {
+      position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      transform: skewX(-20deg);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0% { left: -100%; } 50%, 100% { left: 160%; } }
+
+    /* ── Spinner ─────────────────────────────────────────── */
+    .spinner {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
+      animation: spin 600ms linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Card Footer ─────────────────────────────────────── */
+    .card-footer {
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border);
+      font-size: 10px; font-weight: 500; letter-spacing: .05em;
+      color: var(--text-muted); text-transform: uppercase;
+    }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .left-panel { display: none; }
+      .right-panel { padding: 20px 16px; }
+      .form-card { padding: 28px 24px; }
+    }
+    @media (max-width: 480px) {
+      .form-card { padding: 24px 20px; border-radius: 12px; }
+      .form-title { font-size: 20px; }
+    }
+  `]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private authService = inject(AuthService);
-  private router = inject(Router);
-  private http = inject(HttpClient);
-  private fb = inject(FormBuilder);
+  private router      = inject(Router);
+  private http        = inject(HttpClient);
+  private fb          = inject(FormBuilder);
 
   loginForm = this.fb.group({
     taxpayer_id: ['', Validators.required],
-    password: ['', Validators.required],
-    rememberMe: [false]
+    password:    ['', Validators.required],
+    rememberMe:  [false]
   });
 
-  isLoading = signal(false);
+  isLoading    = signal(false);
   errorMessage = signal<string>('');
   showPassword = signal(false);
   systemStatus = signal<any>(null);
-  statusKeys: string[] = [];
+  pinFocused   = signal(false);
+  pwFocused    = signal(false);
+  theme        = signal<'light' | 'dark'>('light');
+  sessionRef   = signal('');
 
-  constructor() {
+  ngOnInit() {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    this.theme.set(prefersDark ? 'dark' : 'light');
+    this.sessionRef.set(Math.random().toString(36).substring(2, 8).toUpperCase());
     this.fetchSystemStatus();
+  }
+
+  toggleTheme() {
+    this.theme.update(t => t === 'dark' ? 'light' : 'dark');
   }
 
   onLogin() {
@@ -150,31 +610,26 @@ export class LoginComponent {
 
     this.isLoading.set(true);
     this.errorMessage.set('');
-    
-    const { taxpayer_id, password } = this.loginForm.getRawValue();
-    const credentials: LoginCredentials = { 
-      taxpayer_id: taxpayer_id!, 
-      password: password! 
-    };
 
+    const { taxpayer_id, password } = this.loginForm.getRawValue();
+    const credentials: LoginCredentials = { taxpayer_id: taxpayer_id!, password: password! };
     const rememberMe = !!this.loginForm.get('rememberMe')?.value;
 
     this.authService.login(credentials, rememberMe).subscribe({
       next: (response) => {
         this.isLoading.set(false);
         if (response.success) {
-          // Route to the correct portal based on roleCategory signal
           const portal = this.authService.roleCategory() === 'member'
             ? '/member/dashboard'
             : '/admin-portal/dashboard';
           this.router.navigate([portal], { replaceUrl: true });
         } else {
-          this.errorMessage.set(response.message || 'Authentication sequence failed.');
+          this.errorMessage.set(response.message || 'Incorrect PIN or password. Please try again.');
         }
       },
       error: () => {
         this.isLoading.set(false);
-        this.errorMessage.set('Primary gateway connection timed out.');
+        this.errorMessage.set('Connection failed. Please try again.');
       }
     });
   }
@@ -185,11 +640,7 @@ export class LoginComponent {
 
   private fetchSystemStatus() {
     this.http.get<any>(`${environment.apiUrl}/status_check.php`).subscribe({
-      next: (res) => {
-        if (res && res.success) {
-          this.systemStatus.set(res.data);
-        }
-      },
+      next: (res) => { if (res?.success) this.systemStatus.set(res.data); },
       error: () => { /* Fail silently */ }
     });
   }
