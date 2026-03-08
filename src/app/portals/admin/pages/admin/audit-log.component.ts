@@ -8,248 +8,185 @@ import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit
   imports: [CommonModule, FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="page-container p-8 animate-up">
+    <div class="content-area animate-fade-in">
+      
       <!-- Elite Page Header -->
-      <header class="page-header-elite mb-12">
-        <div class="header-info">
-          <h1 class="premium-title">Audit <span class="gradient-text">Log</span></h1>
-          <p class="premium-subtitle">Track and monitor all system actions</p>
-        </div>
-        <div class="header-actions flex gap-4">
-           <div class="search-premium min-w-[300px]">
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-              <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="search()" placeholder="Search action, user, or IP..." class="search-input-elite">
-           </div>
-           <button class="modern-btn outline-btn btn-icon" (click)="loadData()">
-             <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-             <span>Refresh</span>
-           </button>
+      <header class="mb-10">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="header-titles-complex">
+            <h1 class="text-3xl font-black text-primary tracking-tight">
+              Audit <span class="text-accent">Forensics</span>
+            </h1>
+            <p class="text-[var(--text-secondary)] mt-2 font-semibold tracking-wide uppercase text-[10px]">National Intelligence Registry Trace & Command Log</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-4">
+            <div class="flex-grow md:flex-grow-0 md:min-w-[300px] relative group">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-tertiary transition-colors group-focus-within:text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="search()" 
+                placeholder="Query Trace Action/Identity..." 
+                class="w-full bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-lg py-2 pl-9 pr-4 text-xs font-bold transition-all focus:border-accent outline-none">
+            </div>
+            <button class="btn-precision btn-secondary-precision btn-sm" (click)="loadData()">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mr-2"><path stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              SYNC LOGS
+            </button>
+          </div>
         </div>
       </header>
 
       <!-- Intelligence Row -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        <div class="premium-stat-card p-6 animate-up delay-1">
-          <div class="stat-info">
-            <span class="stat-label">Total Logs</span>
-            <h3 class="stat-number">{{ totalCount() | number }}</h3>
-          </div>
-          <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-slate-600">
-             <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div class="stat-card-precision">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="card-label">Total Logs</span>
+              <h3 class="card-value">{{ totalCount() | number }}</h3>
+            </div>
+            <div class="p-3 rounded-xl bg-primary/5 text-primary">
+               <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            </div>
           </div>
         </div>
         
-        <div class="premium-stat-card p-6 animate-up delay-2">
-          <div class="stat-info">
-            <span class="stat-label">Successful Actions</span>
-            <h3 class="stat-number text-emerald-600">{{ successLogs() | number }}</h3>
-          </div>
-          <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-emerald-600">
-             <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          </div>
-        </div>
-
-        <div class="premium-stat-card p-6 animate-up delay-3">
-          <div class="stat-info">
-            <span class="stat-label">Errors</span>
-            <h3 class="stat-number text-red-600">{{ failedLogs() | number }}</h3>
-          </div>
-          <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-red-600">
-             <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div class="stat-card-precision">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="card-label">Success Rate</span>
+              <h3 class="card-value text-success">{{ successLogs() | number }}</h3>
+            </div>
+            <div class="p-3 rounded-xl bg-success/5 text-success">
+               <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
           </div>
         </div>
 
-        <div class="premium-stat-card p-6 animate-up delay-4">
-          <div class="stat-info">
-            <span class="stat-label">Active IP Addresses</span>
-            <h3 class="stat-number text-blue-600">{{ uniqueIPs() | number }}</h3>
+        <div class="stat-card-precision">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="card-label">Terminal Failures</span>
+              <h3 class="card-value text-accent">{{ failedLogs() | number }}</h3>
+            </div>
+            <div class="p-3 rounded-xl bg-accent/5 text-accent">
+               <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
           </div>
-          <div class="absolute -bottom-2 -right-2 opacity-5 scale-150 text-blue-600">
-             <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+        </div>
+
+        <div class="stat-card-precision">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="card-label">Access Origin nodes</span>
+              <h3 class="card-value text-blue-500">{{ uniqueIPs() | number }}</h3>
+            </div>
+            <div class="p-3 rounded-xl bg-blue-500/5 text-blue-500">
+               <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Forensics Surface -->
-      <div class="content-card-premium relative overflow-hidden animate-up delay-2">
-         <div class="absolute -top-20 -right-20 w-80 h-80 bg-slate-50 rounded-full blur-3xl"></div>
+      <div class="stat-card-precision p-0 overflow-hidden relative border-accent/10">
+        
+        @if (loading()) {
+            <div class="py-32 flex flex-col items-center">
+              <div class="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin"></div>
+              <p class="mt-4 text-[10px] font-black text-tertiary uppercase tracking-widest">Decoding Trace Registry...</p>
+            </div>
+        }
 
-         <div class="relative z-10">
-            @if (loading()) {
-              <div class="py-32 flex flex-col items-center">
-                <div class="w-12 h-12 border-4 border-slate-100 border-t-red-600 rounded-full animate-spin"></div>
-                <p class="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Loading audit log...</p>
-              </div>
-            }
+        @if (error()) {
+            <div class="m-8 p-6 bg-accent/5 border border-accent/10 rounded-2xl text-accent font-bold flex items-center gap-4 animate-shake">
+               <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+               <span class="text-xs uppercase tracking-widest">{{ error() }}</span>
+            </div>
+        }
 
-            @if (error()) {
-              <div class="m-8 p-6 bg-red-50 border border-red-100 rounded-2xl text-red-600 font-bold flex items-center gap-4 animate-scale">
-                 <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                 {{ error() }}
-              </div>
-            }
-
-            @if (!loading() && !error()) {
-               <div class="table-responsive-elite">
-                  <table class="modern-table-elite w-full">
-                    <thead>
-                      <tr>
-                        <th class="pl-8">Date & Time</th>
-                        <th>User</th>
-                        <th>Action</th>
-                        <th>IP Address</th>
-                        <th class="pr-8">Details</th>
+        @if (!loading() && !error()) {
+             <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="bg-[var(--bg-surface-2)]/50">
+                      <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-secondary">Temporal Stamp</th>
+                      <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-secondary">Identity Origin</th>
+                      <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-secondary">Command Unit</th>
+                      <th class="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-secondary text-center">Node IP</th>
+                      <th class="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-secondary">Registry Metadata</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-[var(--border-subtle)]">
+                    @for (log of logs(); track log.id) {
+                      <tr class="hover:bg-[var(--bg-surface-1)] transition-colors group">
+                        <td class="px-8 py-5 whitespace-nowrap">
+                          <div class="flex flex-col">
+                            <span class="text-[10px] font-black text-tertiary uppercase tracking-widest mb-1">{{ log.timestamp | date:'dd MMM yyyy' }}</span>
+                            <span class="text-xs font-black text-primary font-mono tracking-tight">{{ log.timestamp | date:'HH:mm:ss:SSS' }}</span>
+                          </div>
+                        </td>
+                        <td class="px-6 py-5">
+                          <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-[var(--bg-surface-2)] flex items-center justify-center text-[10px] font-black text-tertiary group-hover:bg-accent group-hover:text-white transition-all transform group-hover:scale-110">
+                              {{ log.user.substring(0, 2).toUpperCase() }}
+                            </div>
+                            <span class="text-xs font-black text-primary uppercase tracking-tight">{{ log.user }}</span>
+                          </div>
+                        </td>
+                        <td class="px-6 py-5">
+                          <div class="status-pill-precision synced mb-2">
+                            {{ log.module | uppercase }}
+                          </div>
+                          <span class="text-[9px] font-black uppercase tracking-[0.2em] block ml-1" [class]="getActionEliteColor(log.action)">
+                            {{ log.action }}
+                          </span>
+                        </td>
+                        <td class="px-6 py-5 text-center">
+                          <span class="text-[10px] font-black text-primary bg-[var(--bg-surface-2)] px-3 py-1.5 rounded-lg border border-[var(--border-subtle)] font-mono tracking-tighter">{{ log.ip }}</span>
+                        </td>
+                        <td class="px-8 py-5">
+                          <p class="text-[11px] font-semibold text-secondary max-w-sm line-clamp-1 leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity" [title]="log.details">
+                            {{ log.details }}
+                          </p>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      @for (log of logs(); track log.id) {
-                        <tr class="table-row-hover group">
-                          <td class="pl-8">
-                            <span class="text-[10px] font-black text-slate-400 block mb-1 uppercase tracking-[0.15em]">{{ log.timestamp | date:'dd MMM yyyy' }}</span>
-                            <span class="font-black text-slate-800 tracking-tight text-sm font-mono">{{ log.timestamp | date:'HH:mm:ss' }}</span>
-                          </td>
-                          <td>
-                            <div class="flex items-center gap-3">
-                              <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[10px] font-black text-slate-500 group-hover:bg-red-600 group-hover:text-white transition-all transform group-hover:scale-110">
-                                {{ log.user.substring(0, 2).toUpperCase() }}
-                              </div>
-                              <span class="text-xs font-black text-slate-800">{{ log.user }}</span>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="status-pill-elite mb-2 shadow-sm synced">
-                              <span class="dot"></span>
-                              {{ log.module | uppercase }}
-                            </div>
-                            <span class="text-[9px] font-black uppercase tracking-widest block ml-2" [class]="getActionEliteClass(log.action)">
-                              {{ log.action }}
-                            </span>
-                          </td>
-                          <td>
-                            <span class="text-[11px] font-mono font-bold text-slate-500 bg-slate-50 px-2 py-1 rounded-md">{{ log.ip }}</span>
-                          </td>
-                          <td class="pr-8">
-                            <p class="text-[11px] font-bold text-slate-600 max-w-sm line-clamp-2 leading-relaxed" [title]="log.details">
-                              {{ log.details }}
-                            </p>
-                          </td>
-                        </tr>
-                      }
-                    </tbody>
-                  </table>
-               </div>
+                    }
+                  </tbody>
+                </table>
+             </div>
 
-               @if (logs().length === 0) {
-                 <div class="flex flex-col items-center justify-center py-40 animate-scale">
-                    <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mb-8">
-                       <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                    </div>
-                    <h3 class="text-xl font-black text-slate-800 mb-2">No Logs Found</h3>
-                    <p class="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-8">No audit logs match your search criteria</p>
-                    <button (click)="searchQuery=''; search()" class="modern-btn primary-btn">
-                       Clear Search
-                    </button>
-                 </div>
-               }
-
-               <!-- Pagination -->
-               @if (totalPages() > 1) {
-                  <div class="flex justify-between items-center p-8 border-t border-slate-50 bg-slate-50/30">
-                     <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                        Page {{ currentPage() }} of {{ totalPages() }} • {{ totalCount() }} Actions
-                     </span>
-                     <div class="flex gap-3">
-                        <button class="icon-btn-elite" [disabled]="currentPage() === 1" (click)="loadPage(currentPage() - 1)">
-                           <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path></svg>
-                        </button>
-                        <button class="icon-btn-elite" [disabled]="currentPage() === totalPages()" (click)="loadPage(currentPage() + 1)">
-                           <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
-                        </button>
-                     </div>
+             @if (logs().length === 0) {
+               <div class="flex flex-col items-center justify-center py-40 animate-fade-in">
+                  <div class="w-20 h-20 bg-[var(--bg-surface-2)] rounded-full flex items-center justify-center text-tertiary mb-8">
+                     <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                   </div>
-               }
-            }
-         </div>
+                  <h3 class="text-xl font-black text-primary mb-2">Trace Void</h3>
+                  <p class="text-tertiary font-bold uppercase tracking-widest text-[10px] mb-8">No forensics fragments match current registry synchronization</p>
+                  <button (click)="searchQuery=''; search()" class="btn-precision btn-secondary-precision btn-sm px-10">
+                     RESET TRACE
+                  </button>
+               </div>
+             }
+
+             <!-- Pagination -->
+             @if (totalPages() > 1) {
+                <div class="flex justify-between items-center p-8 border-t border-[var(--border-subtle)] bg-[var(--bg-surface-1)]">
+                   <span class="text-[9px] font-black text-tertiary uppercase tracking-widest">
+                      Node {{ currentPage() }} of {{ totalPages() }} • {{ totalCount() }} Trace Fragments synchronized
+                   </span>
+                   <div class="flex gap-3">
+                      <button class="btn-precision btn-secondary-precision btn-sm px-3" [disabled]="currentPage() === 1" (click)="loadPage(currentPage() - 1)">
+                         <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path></svg>
+                      </button>
+                      <button class="btn-precision btn-secondary-precision btn-sm px-3" [disabled]="currentPage() === totalPages()" (click)="loadPage(currentPage() + 1)">
+                         <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
+                      </button>
+                   </div>
+                </div>
+             }
+        }
       </div>
     </div>
   `,
-  styles: [`
-    .page-container { max-width: 1600px; margin: 0 auto; }
-    
-    .search-premium {
-      display: flex;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(10px);
-      border: 1.5px solid rgba(226, 232, 240, 0.8);
-      border-radius: 1.2rem;
-      padding: 0 1.2rem;
-      height: 3rem;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    }
-    .search-premium:focus-within {
-      border-color: #E31E24;
-      box-shadow: 0 8px 24px rgba(227, 30, 36, 0.12);
-      transform: translateY(-1px);
-      background: white;
-    }
-    .search-premium svg { color: #94A3B8; margin-right: 0.8rem; }
-    .search-input-elite {
-      background: transparent;
-      border: none;
-      outline: none;
-      width: 100%;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #1E293B;
-    }
-    .search-input-elite::placeholder { color: #CBD5E1; font-weight: 600; }
-
-    .table-responsive-elite { overflow-x: auto; }
-    .modern-table-elite { border-collapse: separate; border-spacing: 0; }
-    .modern-table-elite th {
-      padding: 1.5rem 1rem;
-      background: #F8FAFC;
-      text-align: left;
-      font-size: 0.65rem;
-      font-weight: 900;
-      color: #94A3B8;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      border-bottom: 1px solid #F1F5F9;
-    }
-    .table-row-hover { transition: all 0.2s; cursor: default; }
-    .table-row-hover td { padding: 1.5rem 1rem; border-bottom: 1px solid #F8FAFC; }
-    .table-row-hover:hover { background: #FAFAFA; }
-
-    .icon-btn-elite {
-      width: 2.5rem;
-      height: 2.5rem;
-      border-radius: 0.8rem;
-      background: white;
-      border: 1px solid #F1F5F9;
-      color: #94A3B8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    }
-
-    .elite-success { color: #10B981; }
-    .elite-warning { color: #F59E0B; }
-    .elite-error { color: #EF4444; }
-    .elite-info { color: #3B82F6; }
-
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-    .delay-4 { animation-delay: 0.4s; }
-
-    @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .animate-scale { animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-  `]
+  styles: [``]
 })
 export class AuditLogComponent implements OnInit {
   private auditService = inject(AuditLogService);
@@ -264,7 +201,6 @@ export class AuditLogComponent implements OnInit {
   searchQuery = '';
   pageSize = 15;
 
-  // Derived KPI signals
   successLogs = signal(0);
   failedLogs  = signal(0);
   uniqueIPs   = signal(0);
@@ -284,10 +220,9 @@ export class AuditLogComponent implements OnInit {
           this.currentPage.set(res.data.pagination.page);
           this.totalPages.set(res.data.pagination.pages);
           this.totalCount.set(res.data.pagination.total);
-          // Derive KPI counts
           const logList: AuditLog[] = res.data.logs;
-          this.successLogs.set(logList.filter(l => this.getActionColor(l.action) === 'text-success').length);
-          this.failedLogs.set(logList.filter(l => this.getActionColor(l.action) === 'text-error').length);
+          this.successLogs.set(logList.filter(l => this.getActionType(l.action) === 'success').length);
+          this.failedLogs.set(logList.filter(l => this.getActionType(l.action) === 'error').length);
           const ips = new Set(logList.map((l: any) => l.ip).filter(Boolean));
           this.uniqueIPs.set(ips.size);
         } else {
@@ -314,20 +249,20 @@ export class AuditLogComponent implements OnInit {
     }
   }
 
-  getActionEliteClass(action: string) {
-    const color = this.getActionColor(action);
-    if (color === 'text-success') return 'elite-success';
-    if (color === 'text-warning') return 'elite-warning';
-    if (color === 'text-error') return 'elite-error';
-    return 'elite-info';
+  getActionEliteColor(action: string) {
+    const type = this.getActionType(action);
+    if (type === 'success') return 'text-success';
+    if (type === 'warning') return 'text-warning';
+    if (type === 'error') return 'text-accent';
+    return 'text-blue-500';
   }
 
-  getActionColor(action: string) {
-    if (!action) return 'text-info';
+  getActionType(action: string) {
+    if (!action) return 'info';
     const act = action.toUpperCase();
-    if (act.includes('SUCCESS') || act.includes('RESOLVE') || act.includes('CREATE')) return 'text-success';
-    if (act.includes('UPDATE') || act.includes('CHANGE') || act.includes('IMPORT')) return 'text-warning';
-    if (act.includes('ERROR') || act.includes('FAIL') || act.includes('DELETE')) return 'text-error';
-    return 'text-info';
+    if (act.includes('SUCCESS') || act.includes('RESOLVE') || act.includes('CREATE')) return 'success';
+    if (act.includes('UPDATE') || act.includes('CHANGE') || act.includes('IMPORT')) return 'warning';
+    if (act.includes('ERROR') || act.includes('FAIL') || act.includes('DELETE')) return 'error';
+    return 'info';
   }
 }

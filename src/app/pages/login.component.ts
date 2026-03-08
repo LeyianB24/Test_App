@@ -12,566 +12,188 @@ import { environment } from '../../environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ReactiveFormsModule, RouterModule, NgOptimizedImage],
   template: `
-    <div class="login-root" [attr.data-theme]="theme()">
+    <div class="fixed inset-0 flex bg-[var(--bg)] transition-colors duration-500 overflow-hidden font-plus-jakarta" [attr.data-theme]="theme()">
 
-      <!-- Theme Toggle -->
-      <button class="theme-toggle" type="button" (click)="toggleTheme()"
-        [attr.aria-label]="theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
-        @if (theme() === 'dark') {
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5"/>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-          </svg>
-        } @else {
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-          </svg>
-        }
-      </button>
-
-      <!-- Left Panel -->
-      <div class="left-panel">
-        <div class="left-grid"></div>
-        <div class="left-glow"></div>
-        <span class="corner-mark corner-tl"></span>
-        <span class="corner-mark corner-tr"></span>
-        <span class="corner-mark corner-bl"></span>
-        <span class="corner-mark corner-br"></span>
-
-        <div class="left-inner">
-
-          <div class="brand-block">
-            <div class="logo-wrap">
-              <img ngSrc="assets/logo.png" width="52" height="52" alt="KRA Logo" priority class="logo-img">
-              <div class="logo-ring"></div>
+      <!-- Left Panel: Intelligence Matrix -->
+      <div class="hidden lg:flex w-[480px] bg-[var(--text-primary)] relative overflow-hidden flex-col p-12 shrink-0">
+        <!-- Grid Pattern Overlay -->
+        <div class="absolute inset-0 opacity-[0.03] pointer-events-none" 
+          style="background-image: linear-gradient(var(--bg-card) 1px, transparent 1px), linear-gradient(90deg, var(--bg-card) 1px, transparent 1px); background-size: 40px 40px;">
+        </div>
+        
+        <!-- Ambient Glow -->
+        <div class="absolute -top-20 -left-20 w-80 h-80 bg-accent rounded-full blur-[120px] opacity-10"></div>
+        
+        <!-- Content -->
+        <div class="relative z-10 flex flex-col h-full">
+          <div class="flex items-center gap-5 mb-16">
+            <div class="relative w-14 h-14 shrink-0">
+              <img ngSrc="assets/logo.png" width="56" height="56" alt="KRA Logo" priority class="relative z-10 rounded-xl">
+              <div class="absolute -inset-1 border border-accent/30 rounded-2xl animate-pulse"></div>
             </div>
-            <div class="brand-text">
-              <p class="brand-eyebrow">Kenya Revenue Authority</p>
-              <h1 class="brand-name">iTax<span class="brand-accent">IS</span></h1>
-              <p class="brand-sub">Intelligence Suite</p>
+            <div>
+              <p class="text-[10px] font-black text-accent uppercase tracking-[0.2em] mb-1">Kenya Revenue Authority</p>
+              <h1 class="text-3xl font-black text-white tracking-tighter">iTax<span class="text-accent">IS</span></h1>
             </div>
           </div>
 
-          <p class="brand-tagline">
-            The official KRA tax management portal.<br>Sign in to access your account and services.
-          </p>
+          <div class="space-y-8 flex-grow">
+            <div>
+              <h2 class="text-xl font-black text-white uppercase tracking-tight mb-4 leading-tight">National Revenue<br><span class="text-accent">Intelligence Suite</span></h2>
+              <p class="text-xs font-semibold text-white/40 leading-relaxed uppercase tracking-widest">Authorized Personnel Access Only. Protected by AES-256 Protocol Encryption and Real-time Threat Mitigation.</p>
+            </div>
 
-          <div class="divider-rule"></div>
+            <div class="h-px bg-gradient-to-r from-accent/40 to-transparent"></div>
 
-          @if (systemStatus()) {
-            <div class="status-grid">
-              <p class="status-heading">
-                <span class="status-dot"></span>
-                System Status
-              </p>
-              <div class="status-list">
-                @for (portal of systemStatus(); track portal.name) {
-                  <div class="status-item">
-                    <span class="status-indicator" [class.online]="portal.online" [class.offline]="!portal.online"></span>
-                    <span class="status-name">{{ portal.name }}</span>
-                    <span class="status-badge" [class.online]="portal.online">
-                      {{ portal.online ? 'ONLINE' : 'OFFLINE' }}
-                    </span>
-                  </div>
-                }
+            @if (systemStatus()) {
+              <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                  <span class="w-1.5 h-1.5 rounded-full bg-success shadow-[0_0_8px_rgba(var(--success-rgb),0.6)]"></span>
+                  <span class="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Operational Pulse</span>
+                </div>
+                <div class="grid grid-cols-1 gap-3">
+                  @for (portal of systemStatus(); track portal.name) {
+                    <div class="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-xl">
+                      <div class="flex items-center gap-3">
+                        <div class="w-1.5 h-1.5 rounded-full" [class]="portal.online ? 'bg-success' : 'bg-accent'"></div>
+                        <span class="text-[10px] font-black text-white tracking-widest uppercase">{{ portal.name }}</span>
+                      </div>
+                      <span class="text-[9px] font-black" [class]="portal.online ? 'text-success' : 'text-accent'">
+                        {{ portal.online ? 'SYNC' : 'VOID' }}
+                      </span>
+                    </div>
+                  }
+                </div>
               </div>
-            </div>
-          }
-
-          <div class="left-footer">
-            <span class="footer-tag">GOK CERTIFIED</span>
-            <span class="footer-tag">ISO 27001</span>
-            <span class="footer-tag">AES-256</span>
+            }
           </div>
 
+          <div class="flex gap-4 mt-auto opacity-40">
+            <span class="text-[8px] font-black text-white border border-white/20 px-2 py-1 rounded">GOK.SEC.001</span>
+            <span class="text-[8px] font-black text-white border border-white/20 px-2 py-1 rounded">ISO 27001</span>
+            <span class="text-[8px] font-black text-white border border-white/20 px-2 py-1 rounded">TLS 1.3</span>
+          </div>
         </div>
       </div>
 
-      <!-- Right Panel -->
-      <div class="right-panel">
-        <div class="right-inner">
-          <div class="form-card">
+      <!-- Right Panel: Command Input -->
+      <div class="flex-1 flex items-center justify-center p-6 relative">
+        <!-- Background Decor -->
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-accent rounded-full blur-[150px] opacity-[0.03] pointer-events-none"></div>
+        
+        <!-- Theme Toggle -->
+        <button (click)="toggleTheme()" 
+          class="absolute top-8 right-8 w-10 h-10 rounded-xl bg-[var(--bg-card)] border border-[var(--border-subtle)] flex items-center justify-center text-secondary hover:text-accent transition-all hover:scale-110 shadow-sm z-50">
+          @if (theme() === 'dark') {
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          } @else {
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+          }
+        </button>
 
-            <div class="form-header">
-              <div class="form-header-top">
-                <div class="session-badge">
-                  <span class="pulse-dot"></span>
-                  SECURE CONNECTION
+        <div class="w-full max-w-[440px] animate-fade-in">
+          <div class="stat-card-precision !p-10 !bg-[var(--bg-card)]/80 backdrop-blur-xl border-accent/10 shadow-2xl relative overflow-hidden">
+            <!-- Form Header -->
+            <div class="mb-10 text-center lg:text-left">
+              <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+                <div class="status-pill-precision online py-2 px-4 mx-auto lg:mx-0">
+                  <span class="text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+                    Command Auth
+                  </span>
                 </div>
-                <span class="form-ref">REF: AUTH-{{ sessionRef() }}</span>
+                <span class="text-[9px] font-black text-tertiary uppercase tracking-widest">ID: {{ sessionRef() }}</span>
               </div>
-              <h2 class="form-title">Sign In</h2>
-              <p class="form-subtitle">Enter your PIN and password to access your account.</p>
+              <h2 class="text-3xl font-black text-primary tracking-tighter uppercase mb-3">Sign <span class="text-accent">In</span></h2>
+              <p class="text-xs font-semibold text-secondary uppercase tracking-widest leading-loose">Access your strategic identity node.</p>
             </div>
 
-            <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
-
+            <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-6">
               <!-- KRA PIN -->
-              <div class="field-group" [class.field-focused]="pinFocused()">
-                <label class="field-label">KRA PIN / ID Number</label>
-                <div class="field-wrap">
-                  <div class="field-icon">
-                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-                      <circle cx="12" cy="7" r="4"/>
-                    </svg>
+              <div class="space-y-2 group">
+                <label class="text-[10px] font-black uppercase tracking-[0.2em] text-tertiary ml-1 transition-colors group-focus-within:text-accent">Deployment ID (PIN)</label>
+                <div class="relative">
+                  <div class="absolute left-4 top-1/2 -translate-y-1/2 text-tertiary transition-colors group-focus-within:text-accent">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                   </div>
-                  <input
-                    type="text"
-                    formControlName="taxpayer_id"
-                    placeholder="e.g. A000123456Z"
-                    class="field-input"
-                    autocomplete="username"
-                    (focus)="pinFocused.set(true)"
-                    (blur)="pinFocused.set(false)"
-                  />
+                  <input type="text" formControlName="taxpayer_id" 
+                    placeholder="e.g. A001234567X" 
+                    class="w-full h-12 bg-[var(--bg-surface-2)] border border-[var(--border-subtle)] rounded-xl pl-12 pr-4 text-xs font-black focus:border-accent outline-none uppercase transition-all shadow-inner">
                 </div>
               </div>
 
               <!-- Password -->
-              <div class="field-group" [class.field-focused]="pwFocused()">
-                <div class="field-label-row">
-                  <label class="field-label">Password</label>
-                  <a routerLink="/forgot-password" class="forgot-link">Forgot password?</a>
+              <div class="space-y-2 group">
+                <div class="flex items-center justify-between ml-1">
+                  <label class="text-[10px] font-black uppercase tracking-[0.2em] text-tertiary transition-colors group-focus-within:text-accent">Access Key</label>
+                  <a routerLink="/forgot-password" class="text-[9px] font-black text-tertiary hover:text-accent uppercase tracking-widest transition-colors">Recover Key</a>
                 </div>
-                <div class="field-wrap">
-                  <div class="field-icon">
-                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                      <path d="M7 11V7a5 5 0 0110 0v4"/>
-                    </svg>
+                <div class="relative">
+                  <div class="absolute left-4 top-1/2 -translate-y-1/2 text-tertiary transition-colors group-focus-within:text-accent">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                   </div>
-                  <input
-                    [type]="showPassword() ? 'text' : 'password'"
-                    formControlName="password"
-                    placeholder="••••••••••••"
-                    class="field-input"
-                    autocomplete="current-password"
-                    (focus)="pwFocused.set(true)"
-                    (blur)="pwFocused.set(false)"
-                  />
-                  <button type="button" class="eye-toggle" (click)="togglePasswordVisibility()" tabindex="-1">
+                  <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" 
+                    placeholder="••••••••••••" 
+                    class="w-full h-12 bg-[var(--bg-surface-2)] border border-[var(--border-subtle)] rounded-xl pl-12 pr-12 text-xs font-black focus:border-accent outline-none transition-all shadow-inner">
+                  <button type="button" (click)="togglePasswordVisibility()" 
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-tertiary hover:text-accent transition-colors">
                     @if (!showPassword()) {
-                      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                        <circle cx="12" cy="12" r="3"/>
-                      </svg>
+                      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                     } @else {
-                      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/>
-                        <line x1="1" y1="1" x2="23" y2="23"/>
-                      </svg>
+                      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
                     }
                   </button>
                 </div>
               </div>
 
-              <!-- Keep me signed in -->
-              <div class="remember-row">
-                <label class="remember-label">
-                  <input type="checkbox" formControlName="rememberMe" class="remember-cb" id="rememberMe">
-                  <span class="remember-box">
-                    <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                  </span>
-                  <span class="remember-text">Keep me signed in</span>
+              <!-- Persistence Toggle -->
+              <div class="flex items-center gap-3 ml-1 py-1">
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" formControlName="rememberMe" class="sr-only peer">
+                  <div class="w-9 h-5 bg-[var(--bg-surface-2)] border border-[var(--border-subtle)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:bg-accent peer-checked:bg-accent/10 after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-tertiary after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
                 </label>
+                <span class="text-[10px] font-black text-tertiary uppercase tracking-widest">Persist Session</span>
               </div>
 
-              <!-- Error -->
+              <!-- Errors -->
               @if (errorMessage()) {
-                <div class="error-bar">
-                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="12"/>
-                    <line x1="12" y1="16" x2="12.01" y2="16"/>
-                  </svg>
-                  <span>{{ errorMessage() }}</span>
+                <div class="p-4 bg-accent/5 border border-accent/20 rounded-xl text-accent animate-shake">
+                  <div class="flex items-center gap-3">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span class="text-[10px] font-black uppercase tracking-widest">{{ errorMessage() }}</span>
+                  </div>
                 </div>
               }
 
               <!-- Submit -->
-              <button type="submit" class="submit-btn" [disabled]="isLoading() || loginForm.invalid">
-                <span class="submit-inner">
+              <button type="submit" [disabled]="isLoading() || loginForm.invalid"
+                class="btn-precision btn-primary-precision !w-full !h-14 font-black uppercase tracking-[0.2em] relative overflow-hidden group">
+                <div class="relative z-10 flex items-center justify-center gap-3">
                   @if (!isLoading()) {
-                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/>
-                      <polyline points="10 17 15 12 10 7"/>
-                      <line x1="15" y1="12" x2="3" y2="12"/>
-                    </svg>
-                    Sign In to Your Account
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    INITIALIZE ACCESS
                   } @else {
-                    <span class="spinner"></span>
-                    Signing in...
+                    <div class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                    VERIFYING...
                   }
-                </span>
-                <span class="submit-shimmer"></span>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
               </button>
-
             </form>
 
-            <div class="card-footer">
-              <svg width="11" height="11" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0117.834 5c.11.65.166 1.32.166 2.001 0 4.946-2.597 9.289-6.5 11.534-3.903-2.245-6.5-6.588-6.5-11.534 0-.68.056-1.35.166-2.001zm8.334 1.5a1 1 0 10-2 0V9H7a1 1 0 100 2h1.5v2.5a1 1 0 102 0V11H12a1 1 0 100-2h-1.5V6.499z" clip-rule="evenodd"/>
-              </svg>
-              SHA-256 &bull; Your connection is secure &bull; TLS 1.3
+            <div class="mt-8 pt-6 border-t border-[var(--border-subtle)] text-center">
+              <span class="text-[9px] font-black text-tertiary uppercase tracking-[0.3em] flex items-center justify-center gap-2">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20" class="text-accent"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0117.834 5c.11.65.166 1.32.166 2.001 0 4.946-2.597 9.289-6.5 11.534-3.903-2.245-6.5-6.588-6.5-11.534 0-.68.056-1.35.166-2.001zm8.334 1.5a1 1 0 10-2 0V9H7a1 1 0 100 2h1.5v2.5a1 1 0 102 0V11H12a1 1 0 100-2h-1.5V6.499z" clip-rule="evenodd"/></svg>
+                SHA-256 SECURED &bull; TLS 1.3
+              </span>
             </div>
-
           </div>
         </div>
       </div>
 
     </div>
   `,
-  styles: [`
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-
-    /* ── Variables ───────────────────────────────────────── */
-    :host { display: block; height: 100dvh; font-family: 'Plus Jakarta Sans', sans-serif; }
-
-    .login-root {
-      --r: 8px;
-      --tr: 180ms ease;
-
-      /* Light theme */
-      --bg:             #f4f3f0;
-      --bg-card:        #ffffff;
-      --bg-input:       #f8f7f5;
-      --bg-input-focus: #ffffff;
-      --border:         #e2dfd9;
-      --text-primary:   #141210;
-      --text-secondary: #6b6560;
-      --text-muted:     #a09a94;
-      --accent:         #c1392b;
-      --accent-dim:     #e8b4af;
-      --accent-bg:      #fdf2f1;
-      --left-bg:        #141210;
-      --left-text:      #f4f3f0;
-      --left-muted:     #807a74;
-      --left-border:    #2a2622;
-      --left-accent:    #c1392b;
-      --left-tag-bg:    #1e1a17;
-      --shadow-lg:      0 16px 48px rgba(0,0,0,.12), 0 4px 16px rgba(0,0,0,.06);
-      --submit-bg:      #c1392b;
-      --submit-hover:   #a83224;
-      --error-bg:       #fdf2f1;
-      --error-border:   #f5c2bb;
-      --error-text:     #a83224;
-    }
-
-    /* Dark theme */
-    .login-root[data-theme="dark"] {
-      --bg:             #0e0c0b;
-      --bg-card:        #181512;
-      --bg-input:       #1e1a17;
-      --bg-input-focus: #231f1b;
-      --border:         #2e2924;
-      --text-primary:   #f0ede8;
-      --text-secondary: #9c9590;
-      --text-muted:     #5c5650;
-      --accent:         #e04534;
-      --accent-dim:     #7a2318;
-      --accent-bg:      #1a100e;
-      --left-bg:        #0a0908;
-      --left-text:      #f0ede8;
-      --left-muted:     #5c5650;
-      --left-border:    #1e1a17;
-      --left-accent:    #e04534;
-      --left-tag-bg:    #141210;
-      --shadow-lg:      0 16px 48px rgba(0,0,0,.6), 0 4px 16px rgba(0,0,0,.3);
-      --submit-hover:   #e04534;
-      --error-bg:       #1a100e;
-      --error-border:   #7a2318;
-      --error-text:     #f5887e;
-    }
-
-    /* ── Layout ──────────────────────────────────────────── */
-    .login-root {
-      display: flex; min-height: 100dvh;
-      background: var(--bg); transition: background .3s ease;
-      position: relative;
-    }
-
-    /* ── Theme Toggle ────────────────────────────────────── */
-    .theme-toggle {
-      position: fixed; top: 20px; right: 20px; z-index: 100;
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--bg-card); border: 1px solid var(--border);
-      color: var(--text-secondary);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,.08);
-      transition: all var(--tr);
-    }
-    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); transform: rotate(20deg); }
-
-    /* ── Left Panel ──────────────────────────────────────── */
-    .left-panel {
-      width: 400px; flex-shrink: 0;
-      background: var(--left-bg);
-      position: relative; overflow: hidden;
-      display: flex; flex-direction: column;
-    }
-    .left-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(var(--left-border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--left-border) 1px, transparent 1px);
-      background-size: 40px 40px;
-      opacity: .35; pointer-events: none;
-    }
-    .left-glow {
-      position: absolute; top: -80px; left: -80px;
-      width: 320px; height: 320px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(193,57,43,.2) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .corner-mark {
-      position: absolute; width: 12px; height: 12px;
-      border-color: var(--left-accent); border-style: solid; opacity: .5;
-    }
-    .corner-tl { top: 16px;    left: 16px;   border-width: 1px 0 0 1px; }
-    .corner-tr { top: 16px;    right: 16px;  border-width: 1px 1px 0 0; }
-    .corner-bl { bottom: 16px; left: 16px;   border-width: 0 0 1px 1px; }
-    .corner-br { bottom: 16px; right: 16px;  border-width: 0 1px 1px 0; }
-
-    .left-inner {
-      position: relative; z-index: 1;
-      padding: 48px 40px;
-      display: flex; flex-direction: column; height: 100%;
-    }
-
-    /* Brand */
-    .brand-block { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
-    .logo-wrap   { position: relative; width: 52px; height: 52px; flex-shrink: 0; }
-    .logo-img    { width: 52px; height: 52px; border-radius: 10px; position: relative; z-index: 1; }
-    .logo-ring {
-      position: absolute; inset: -4px; border-radius: 14px;
-      border: 1px solid rgba(193,57,43,.4);
-      animation: ring-pulse 3s ease-in-out infinite;
-    }
-    @keyframes ring-pulse {
-      0%, 100% { opacity: .4; transform: scale(1); }
-      50%       { opacity: .8; transform: scale(1.04); }
-    }
-    .brand-eyebrow {
-      font-size: 9px; font-weight: 600; letter-spacing: .12em;
-      text-transform: uppercase; color: var(--left-accent); margin: 0 0 2px;
-    }
-    .brand-name {
-      font-size: 26px; font-weight: 800; color: var(--left-text);
-      margin: 0; line-height: 1; letter-spacing: -.02em;
-    }
-    .brand-accent { color: var(--left-accent); }
-    .brand-sub {
-      font-size: 10px; font-weight: 500; letter-spacing: .08em;
-      color: var(--left-muted); text-transform: uppercase; margin: 2px 0 0;
-    }
-    .brand-tagline {
-      font-size: 13px; font-weight: 400; line-height: 1.7;
-      color: var(--left-muted); margin: 0 0 28px;
-    }
-    .divider-rule {
-      height: 1px;
-      background: linear-gradient(90deg, var(--left-accent) 0%, transparent 100%);
-      margin-bottom: 28px; opacity: .5;
-    }
-
-    /* Status */
-    .status-heading {
-      font-size: 9px; font-weight: 700; letter-spacing: .12em;
-      text-transform: uppercase; color: var(--left-muted);
-      display: flex; align-items: center; gap: 6px; margin: 0 0 12px;
-    }
-    .status-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,.6);
-      animation: blink 2s ease-in-out infinite;
-    }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
-    .status-list { display: flex; flex-direction: column; gap: 8px; }
-    .status-item {
-      display: flex; align-items: center; gap: 8px; padding: 8px 10px;
-      background: var(--left-tag-bg); border: 1px solid var(--left-border); border-radius: 6px;
-    }
-    .status-indicator { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .status-indicator.online  { background: #22c55e; box-shadow: 0 0 4px rgba(34,197,94,.5); }
-    .status-indicator.offline { background: #ef4444; }
-    .status-name  { font-size: 11px; font-weight: 500; color: var(--left-text); flex: 1; }
-    .status-badge { font-size: 8px; font-weight: 700; letter-spacing: .1em; color: var(--left-muted); }
-    .status-badge.online { color: #22c55e; }
-    .status-grid { flex: 1; }
-
-    .left-footer { display: flex; gap: 6px; margin-top: 32px; }
-    .footer-tag {
-      font-size: 8px; font-weight: 700; letter-spacing: .1em; padding: 4px 8px; border-radius: 4px;
-      background: var(--left-tag-bg); border: 1px solid var(--left-border);
-      color: var(--left-muted); text-transform: uppercase;
-    }
-
-    /* ── Right Panel ─────────────────────────────────────── */
-    .right-panel {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      padding: 32px 24px; background: var(--bg);
-    }
-    .right-inner { width: 100%; max-width: 440px; }
-
-    /* ── Form Card ───────────────────────────────────────── */
-    .form-card {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 36px; box-shadow: var(--shadow-lg);
-      animation: card-in 400ms cubic-bezier(.22,1,.36,1) both;
-    }
-    @keyframes card-in {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .form-header { margin-bottom: 28px; }
-    .form-header-top {
-      display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
-    }
-    .session-badge {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 9px; font-weight: 700; letter-spacing: .12em;
-      color: var(--accent); background: var(--accent-bg);
-      border: 1px solid var(--accent-dim); padding: 4px 10px;
-      border-radius: 20px; text-transform: uppercase;
-    }
-    .pulse-dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--accent); animation: blink 2s ease-in-out infinite;
-    }
-    .form-ref {
-      font-size: 9px; font-weight: 600; letter-spacing: .08em;
-      color: var(--text-muted); font-variant-numeric: tabular-nums;
-    }
-    .form-title {
-      font-size: 22px; font-weight: 800; color: var(--text-primary);
-      margin: 0 0 6px; letter-spacing: -.025em;
-    }
-    .form-subtitle { font-size: 13px; font-weight: 400; color: var(--text-secondary); margin: 0; line-height: 1.5; }
-
-    /* ── Fields ──────────────────────────────────────────── */
-    .login-form { display: flex; flex-direction: column; gap: 20px; }
-    .field-group { display: flex; flex-direction: column; gap: 7px; }
-    .field-label {
-      font-size: 11px; font-weight: 600; letter-spacing: .04em;
-      color: var(--text-secondary); text-transform: uppercase; transition: color var(--tr);
-    }
-    .field-group.field-focused .field-label { color: var(--accent); }
-    .field-label-row { display: flex; align-items: center; justify-content: space-between; }
-    .forgot-link {
-      font-size: 11px; font-weight: 500; color: var(--text-muted);
-      text-decoration: none; transition: color var(--tr);
-    }
-    .forgot-link:hover { color: var(--accent); }
-    .field-wrap { position: relative; display: flex; align-items: center; }
-    .field-icon {
-      position: absolute; left: 14px; color: var(--text-muted);
-      display: flex; pointer-events: none; transition: color var(--tr);
-    }
-    .field-group.field-focused .field-icon { color: var(--accent); }
-    .field-input {
-      width: 100%; height: 46px; padding: 0 44px;
-      background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--r);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13.5px; font-weight: 500; color: var(--text-primary);
-      outline: none; transition: all var(--tr);
-    }
-    .field-input::placeholder { color: var(--text-muted); font-weight: 400; }
-    .field-input:focus {
-      background: var(--bg-input-focus); border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(193,57,43,.12);
-    }
-    .eye-toggle {
-      position: absolute; right: 14px; background: none; border: none;
-      padding: 4px; color: var(--text-muted); cursor: pointer;
-      display: flex; align-items: center; border-radius: 4px; transition: color var(--tr);
-    }
-    .eye-toggle:hover { color: var(--accent); }
-
-    /* ── Remember Me ─────────────────────────────────────── */
-    .remember-row { margin-top: -4px; }
-    .remember-label { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .remember-cb { display: none; }
-    .remember-box {
-      width: 16px; height: 16px; border-radius: 4px;
-      border: 1.5px solid var(--border); background: var(--bg-input);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: all var(--tr); color: transparent;
-    }
-    .remember-cb:checked + .remember-box {
-      background: var(--accent); border-color: var(--accent); color: #fff;
-    }
-    .remember-text { font-size: 12px; font-weight: 500; color: var(--text-secondary); user-select: none; }
-
-    /* ── Error ───────────────────────────────────────────── */
-    .error-bar {
-      display: flex; align-items: flex-start; gap: 8px; padding: 11px 14px;
-      background: var(--error-bg); border: 1px solid var(--error-border); border-radius: var(--r);
-      color: var(--error-text); font-size: 12.5px; font-weight: 500; line-height: 1.4;
-      animation: shake 300ms ease;
-    }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%       { transform: translateX(-4px); }
-      60%       { transform: translateX(4px); }
-    }
-
-    /* ── Submit ──────────────────────────────────────────── */
-    .submit-btn {
-      position: relative; width: 100%; height: 48px;
-      background: var(--submit-bg); border: none; border-radius: var(--r);
-      cursor: pointer; overflow: hidden; transition: all 200ms ease; margin-top: 4px;
-    }
-    .submit-btn:hover:not(:disabled) {
-      background: var(--submit-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(193,57,43,.35);
-    }
-    .submit-btn:active:not(:disabled) { transform: translateY(0); }
-    .submit-btn:disabled { opacity: .5; cursor: not-allowed; }
-    .submit-inner {
-      position: relative; z-index: 1;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13.5px; font-weight: 700; letter-spacing: .02em; color: #fff;
-    }
-    .submit-shimmer {
-      position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
-      transform: skewX(-20deg);
-      animation: shimmer 3s ease-in-out infinite;
-    }
-    @keyframes shimmer { 0% { left: -100%; } 50%, 100% { left: 160%; } }
-
-    /* ── Spinner ─────────────────────────────────────────── */
-    .spinner {
-      width: 14px; height: 14px; border-radius: 50%;
-      border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
-      animation: spin 600ms linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── Card Footer ─────────────────────────────────────── */
-    .card-footer {
-      display: flex; align-items: center; justify-content: center; gap: 5px;
-      margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border);
-      font-size: 10px; font-weight: 500; letter-spacing: .05em;
-      color: var(--text-muted); text-transform: uppercase;
-    }
-
-    /* ── Responsive ──────────────────────────────────────── */
-    @media (max-width: 768px) {
-      .left-panel { display: none; }
-      .right-panel { padding: 20px 16px; }
-      .form-card { padding: 28px 24px; }
-    }
-    @media (max-width: 480px) {
-      .form-card { padding: 24px 20px; border-radius: 12px; }
-      .form-title { font-size: 20px; }
-    }
-  `]
+  styles: [``]
 })
 export class LoginComponent implements OnInit {
   private authService = inject(AuthService);
@@ -624,12 +246,12 @@ export class LoginComponent implements OnInit {
             : '/admin-portal/dashboard';
           this.router.navigate([portal], { replaceUrl: true });
         } else {
-          this.errorMessage.set(response.message || 'Incorrect PIN or password. Please try again.');
+          this.errorMessage.set(response.message || 'Access Denied. Identity validation failed.');
         }
       },
       error: () => {
         this.isLoading.set(false);
-        this.errorMessage.set('Connection failed. Please try again.');
+        this.errorMessage.set('Sync Failure. Uplink interrupted.');
       }
     });
   }
