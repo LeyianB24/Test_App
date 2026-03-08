@@ -105,8 +105,8 @@ export class FormFieldComponent {
   focus = output<void>();
   blur = output<void>();
 
-  fieldId = \`form-field-\${Math.random().toString(36).slice(2)}\`;
-  helpId = \`\${this.fieldId}-help\`;
+  fieldId = `form-field-${Math.random().toString(36).slice(2)}`;
+  helpId = `${this.fieldId}-help`;
   isFocused = signal(false);
   isTouched = signal(false);
 
