@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 export interface ValidationRule {
   field: string;
   type: 'required' | 'email' | 'pattern' | 'min' | 'max' | 'minLength' | 'maxLength' | 'custom';

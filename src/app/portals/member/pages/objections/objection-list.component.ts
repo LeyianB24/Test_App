@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-
 import { RouterModule } from '@angular/router';
 
 @Component({

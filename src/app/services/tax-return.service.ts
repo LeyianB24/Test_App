@@ -1,5 +1,4 @@
-import { inject } from '@angular/core';
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { inject, Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';

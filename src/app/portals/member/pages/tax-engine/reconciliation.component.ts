@@ -1,6 +1,4 @@
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
-
-
 interface ReconciliationItem {
   id: string;
   source: 'eTIMS' | 'Payslip' | 'Bank' | 'Manual';

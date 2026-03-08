@@ -1,6 +1,4 @@
 import { Component, inject, signal, effect } from '@angular/core';
-
-
 export interface Toast {
   id: string;
   title: string;

@@ -1,5 +1,4 @@
-import { inject } from '@angular/core';
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { inject, Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';

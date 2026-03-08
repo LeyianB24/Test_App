@@ -1,0 +1,2793 @@
+﻿
+> test-app@0.0.0 build
+> ng build
+
+[33mΓ¥»[39m Building...
+[32mΓ£ö[39m Building...
+Application bundle generation failed. [7.905 seconds] - 2026-03-08T14:53:00.296Z
+
+node.exe : 
+[1m[31m[31mX [41;3
+1m[[41;97mERROR[41;3
+1m][0m [1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+At line:1 char:1
++ & "C:\Program Files\
+nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: ([1m[31m   
+ [31mX...m @angula    
+r/core:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    
+src/app/app.ts:14:19:
+[37m      14 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    
+src/app/app.ts:14:19:
+[37m      14 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    
+src/app/app.ts:14:19:
+[37m      14 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/data-table/data-table
+.component.ts:25:19:
+[37m      25 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    src/app/components
+/data-table/data-table
+.component.ts:25:19:
+[37m      25 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/data-table/data-table
+.component.ts:25:19:
+[37m      25 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2488: Type 
+'InputSignal<any[]>' 
+must have a 
+'[Symbol.iterator]()' 
+method that returns 
+an iterator.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/data-table/data-table
+.component.ts:296:21:
+[37m      296 Γöé    
+ let result = [...[32
+mthis.data[37m];
+          Γò╡         
+             
+[32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2339: Property 
+'map' does not exist 
+on type 'InputSignal<T
+ableColumn[]>'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/data-table/data-table
+.component.ts:376:55:
+[37m      376 Γöé    
+ const exportColumns: 
+ExportColumn[] = this.
+columns.[32mmap[37m(
+col => ({
+          Γò╡         
+                      
+                      
+   [32m~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS7006: Parameter 
+'col' implicitly has 
+an 'any' type.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/data-table/data-table
+.component.ts:376:59:
+[37m      376 Γöé    
+ const exportColumns: 
+ExportColumn[] = this.
+columns.map([32mcol[
+37m => ({
+          Γò╡         
+                      
+                      
+       [32m~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/form-field/form-field
+.component.ts:11:19:
+[37m      11 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    src/app/components
+/form-field/form-field
+.component.ts:11:19:
+[37m      11 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/form-field/form-field
+.component.ts:11:19:
+[37m      11 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2339: Property 
+'set' does not exist 
+on type 'InputSignal<a
+ny>'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/form-field/form-field
+.component.ts:124:15:
+[37m      124 Γöé    
+ this.value.[32mset[
+37m(input.value);
+          Γò╡         
+       [32m~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2339: Property 
+'test' does not exist 
+on type 
+'InputSignal<RegExp | 
+null>'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/form-field/form-field
+.component.ts:129:45:
+[37m      129 Γöé    
+   const isValid = thi
+s.validationPattern.[
+32mtest[37m(input.val
+ue);
+          Γò╡         
+                      
+               
+[32m~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2339: Property 
+'set' does not exist 
+on type 'InputSignal<a
+ny>'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/form-field/form-field
+.component.ts:130:24:
+[37m      130 Γöé    
+   this.errorMessage.
+[32mset[37m(isValid 
+? '' : 'Invalid 
+format');
+          Γò╡         
+                
+[32m~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/logo.component.ts:5:1
+9:
+[37m      5 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Unknown reference.
+
+    src/app/components
+/logo.component.ts:5:1
+9:
+[37m      5 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/logo.component.ts:5:1
+9:
+[37m      5 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/payment-confirmation/
+payment-confirmation.c
+omponent.ts:19:19:
+[37m      19 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    src/app/components
+/payment-confirmation/
+payment-confirmation.c
+omponent.ts:19:19:
+[37m      19 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/payment-confirmation/
+payment-confirmation.c
+omponent.ts:19:19:
+[37m      19 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/payment-form/payment-
+form.component.ts:10:1
+9:
+[37m      10 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    src/app/components
+/payment-form/payment-
+form.component.ts:10:1
+9:
+[37m      10 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/payment-form/payment-
+form.component.ts:10:1
+9:
+[37m      10 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/skeleton-loader/skele
+ton-loader.component.t
+s:10:19:
+[37m      10 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    src/app/components
+/skeleton-loader/skele
+ton-loader.component.t
+s:10:19:
+[37m      10 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/skeleton-loader/skele
+ton-loader.component.t
+s:10:19:
+[37m      10 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/toast-container/toast
+-container.component.t
+s:20:19:
+[37m      20 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    src/app/components
+/toast-container/toast
+-container.component.t
+s:20:19:
+[37m      20 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/toast-container/toast
+-container.component.t
+s:20:19:
+[37m      20 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/tooltip/tooltip.compo
+nent.ts:10:19:
+[37m      10 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    src/app/components
+/tooltip/tooltip.compo
+nent.ts:10:19:
+[37m      10 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/components
+/tooltip/tooltip.compo
+nent.ts:10:19:
+[37m      10 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/guard
+s/admin-portal.guard.t
+s:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/guard
+s/admin-portal.guard.t
+s:2:9:
+[37m      2 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/guard
+s/auth.guard.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/guard
+s/auth.guard.ts:2:9:
+[37m      2 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/guard
+s/guest.guard.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/guard
+s/guest.guard.ts:2:9:
+[37m      2 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/guard
+s/member.guard.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/guard
+s/member.guard.ts:2:9:
+[37m      2 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/guard
+s/permission.guard.ts:
+1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/guard
+s/permission.guard.ts:
+2:9:
+[37m      2 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/inter
+ceptors/auth.intercept
+or.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/inter
+ceptors/auth.intercept
+or.ts:2:9:
+[37m      2 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/servi
+ces/admin/audit-log.se
+rvice.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/core/servi
+ces/admin/audit-log.se
+rvice.ts:2:21:
+[37m      2 Γöé 
+import { Injectable, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+           
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/layout/adm
+in/footer/admin-footer
+.component.ts:5:19:
+[37m      5 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Unknown reference.
+
+    src/app/layout/adm
+in/footer/admin-footer
+.component.ts:5:19:
+[37m      5 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/layout/adm
+in/footer/admin-footer
+.component.ts:5:19:
+[37m      5 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/layout/foo
+ter/footer.component.t
+s:5:19:
+[37m      5 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Unknown reference.
+
+    src/app/layout/foo
+ter/footer.component.t
+s:5:19:
+[37m      5 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/layout/foo
+ter/footer.component.t
+s:5:19:
+[37m      5 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/notificati
+on/notification.compon
+ent.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/notificati
+on/notification.compon
+ent.ts:2:20:
+[37m      2 Γöé 
+import { Component, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/notificati
+on/notification.compon
+ent.ts:7:19:
+[37m      7 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Unknown reference.
+
+    src/app/notificati
+on/notification.compon
+ent.ts:7:19:
+[37m      7 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/notificati
+on/notification.compon
+ent.ts:7:19:
+[37m      7 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/unau
+thorized.component.ts:
+1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/unau
+thorized.component.ts:
+2:20:
+[37m      2 Γöé 
+import { Component, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/unau
+thorized.component.ts:
+7:19:
+[37m      7 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Unknown reference.
+
+    src/app/pages/unau
+thorized.component.ts:
+7:19:
+[37m      7 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/pages/unau
+thorized.component.ts:
+7:19:
+[37m      7 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG2012: Component 
+imports must be 
+standalone 
+components, 
+directives, pipes, or 
+must be 
+NgModules.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/admin-shell.compon
+ent.ts:16:71:
+[37m      16 Γöé ...d
+minSidebarComponent, 
+AdminHeaderComponent, 
+[32mAdminFooterCompon
+ent[37m],
+         Γò╡          
+                      
+                [32m~
+~~~~~~~~~~~~~~~~~~~[0
+m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/admin.guard.ts:1:9
+:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/admin.guard.ts:2:9
+:
+[37m      2 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/admin-report
+s.component.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/admin-report
+s.component.ts:2:20:
+[37m      2 Γöé 
+import { Component, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/admin-report
+s.component.ts:8:19:
+[37m      8 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Unknown reference.
+
+    src/app/portals/ad
+min/pages/admin-report
+s.component.ts:8:19:
+[37m      8 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/admin-report
+s.component.ts:8:19:
+[37m      8 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/admin-role-m
+atrix.component.ts:16:
+19:
+[37m      16 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    src/app/portals/ad
+min/pages/admin-role-m
+atrix.component.ts:16:
+19:
+[37m      16 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/admin-role-m
+atrix.component.ts:16:
+19:
+[37m      16 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/helpdesk/kb-
+list.component.ts:8:19
+:
+[37m      8 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Unknown reference.
+
+    src/app/portals/ad
+min/pages/helpdesk/kb-
+list.component.ts:8:19
+:
+[37m      8 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/helpdesk/kb-
+list.component.ts:8:19
+:
+[37m      8 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/ticket-detai
+l.component.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/ticket-detai
+l.component.ts:2:39:
+[37m      2 Γöé 
+import { Component, 
+OnInit, OnDestroy, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+                      
+       [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/ticket-detai
+l.component.ts:11:19:
+[37m      11 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    src/app/portals/ad
+min/pages/ticket-detai
+l.component.ts:11:19:
+[37m      11 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/ticket-detai
+l.component.ts:11:19:
+[37m      11 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/ticket-list.
+component.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/ticket-list.
+component.ts:2:39:
+[37m      2 Γöé 
+import { Component, 
+OnInit, OnDestroy, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+                      
+       [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/ticket-list.
+component.ts:11:19:
+[37m      11 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    src/app/portals/ad
+min/pages/ticket-list.
+component.ts:11:19:
+[37m      11 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/ad
+min/pages/ticket-list.
+component.ts:11:19:
+[37m      11 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG2012: Component 
+imports must be 
+standalone 
+components, 
+directives, pipes, or 
+must be 
+NgModules.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/member-shell.comp
+onent.ts:16:61:
+[37m      16 Γöé 
+...RouterModule, 
+SidebarComponent, 
+HeaderComponent, [32m
+FooterComponent[37m],
+         Γò╡          
+                      
+                     
+[32m~~~~~~~~~~~~~~~[0
+m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/member.guard.ts:1
+:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/member.guard.ts:2
+:9:
+[37m      2 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/checkers/pi
+n-checker.component.ts
+:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/checkers/pi
+n-checker.component.ts
+:2:53:
+[37m      2 Γöé 
+...nt, signal, ChangeD
+etectionStrategy, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+                      
+        
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/checkers/pr
+n-checker.component.ts
+:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/checkers/pr
+n-checker.component.ts
+:2:53:
+[37m      2 Γöé 
+...nt, signal, ChangeD
+etectionStrategy, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+                      
+        
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/debt.compon
+ent.ts:8:19:
+[37m      8 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Unknown reference.
+
+    src/app/portals/me
+mber/pages/debt.compon
+ent.ts:8:19:
+[37m      8 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/debt.compon
+ent.ts:8:19:
+[37m      8 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/etims.compo
+nent.ts:7:19:
+[37m      7 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Unknown reference.
+
+    src/app/portals/me
+mber/pages/etims.compo
+nent.ts:7:19:
+[37m      7 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/etims.compo
+nent.ts:7:19:
+[37m      7 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/installment
+s/installment-apply.co
+mponent.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/installment
+s/installment-apply.co
+mponent.ts:2:53:
+[37m      2 Γöé 
+...nt, ChangeDetection
+Strategy, signal, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+                      
+        
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/mpesa-payme
+nt.component.ts:17:19:
+[37m      17 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    src/app/portals/me
+mber/pages/mpesa-payme
+nt.component.ts:17:19:
+[37m      17 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/mpesa-payme
+nt.component.ts:17:19:
+[37m      17 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/objections/
+objection-create.compo
+nent.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/objections/
+objection-create.compo
+nent.ts:2:53:
+[37m      2 Γöé 
+...nt, ChangeDetection
+Strategy, signal, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+                      
+        
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/payments-en
+hanced.component.ts:29
+:19:
+[37m      29 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~[0m
+
+  Unknown reference.
+
+    src/app/portals/me
+mber/pages/payments-en
+hanced.component.ts:29
+:19:
+[37m      29 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/payments-en
+hanced.component.ts:29
+:19:
+[37m      29 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+         Γò╡          
+          [32m~~~~~~~
+~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/refunds/ref
+und-apply.component.ts
+:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/refunds/ref
+und-apply.component.ts
+:2:53:
+[37m      2 Γöé 
+...nt, ChangeDetection
+Strategy, signal, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+                      
+        
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/returns.com
+ponent.ts:8:19:
+[37m      8 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Unknown reference.
+
+    src/app/portals/me
+mber/pages/returns.com
+ponent.ts:8:19:
+[37m      8 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/returns.com
+ponent.ts:8:19:
+[37m      8 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/returns/pay
+e-return.component.ts:
+1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/returns/pay
+e-return.component.ts:
+2:53:
+[37m      2 Γöé 
+...nt, ChangeDetection
+Strategy, signal, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+                      
+        
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/returns/vat
+-return.component.ts:1
+:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/returns/vat
+-return.component.ts:2
+:53:
+[37m      2 Γöé 
+...nt, ChangeDetection
+Strategy, signal, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+                      
+        
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mNG1010: 
+changeDetection must 
+be a member of ChangeD
+etectionStrategy enum 
+from @angular/core
+  Value could not be 
+determined 
+statically.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/settings/se
+ttings.component.ts:7:
+19:
+[37m      7 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y.OnPush[37m,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+[0m
+
+  Unknown reference.
+
+    src/app/portals/me
+mber/pages/settings/se
+ttings.component.ts:7:
+19:
+[37m      7 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2304: Cannot 
+find name 'ChangeDetec
+tionStrategy'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/portals/me
+mber/pages/settings/se
+ttings.component.ts:7:
+19:
+[37m      7 Γöé   
+changeDetection: [32m
+ChangeDetectionStrateg
+y[37m.OnPush,
+        Γò╡           
+         [32m~~~~~~~~
+~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/a
+dmin-clients.service.t
+s:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/a
+dmin-clients.service.t
+s:2:21:
+[37m      2 Γöé 
+import { Injectable, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+           
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/a
+dmin-dashboard.service
+.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/a
+dmin-dashboard.service
+.ts:2:21:
+[37m      2 Γöé 
+import { Injectable, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+           
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/a
+dmin.service.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/a
+dmin.service.ts:2:21:
+[37m      2 Γöé 
+import { Injectable, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+           
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/a
+pi.service.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/a
+pi.service.ts:2:21:
+[37m      2 Γöé 
+import { Injectable, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+           
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/e
+xport.service.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/e
+xport.service.ts:2:21:
+[37m      2 Γöé 
+import { Injectable, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+           
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/h
+elpdesk.service.ts:1:9
+:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/h
+elpdesk.service.ts:2:3
+9:
+[37m      2 Γöé 
+import { Injectable, 
+signal, computed, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+                      
+       [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/m
+pesa.service.ts:1:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/m
+pesa.service.ts:2:21:
+[37m      2 Γöé 
+import { Injectable, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+           
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/t
+ax-return.service.ts:1
+:9:
+[37m      1 Γöé 
+import { 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡          
+[32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;9
+7mERROR[41;31m][0m 
+[1mTS2300: Duplicate 
+identifier 
+'inject'.[0m 
+[1m[35m[plugin 
+angular-compiler][0m
+
+    src/app/services/t
+ax-return.service.ts:2
+:39:
+[37m      2 Γöé 
+import { Injectable, 
+signal, computed, 
+[32minject[37m } 
+from '@angular/core';
+        Γò╡           
+                      
+       [32m~~~~~~[0m
+
+[39m[22m

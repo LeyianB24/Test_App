@@ -1,5 +1,4 @@
 import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { KbService, KbCategory, KbArticle } from '../../../../services/kb.service';

@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, signal, inject, computed, ChangeDetectionStrategy, output } from '@angular/core';
-
 import { RouterModule } from '@angular/router';
 import { DashboardDataService } from '../../services/dashboard-data.service';
 import { AuthService } from '../../core/services/auth.service';

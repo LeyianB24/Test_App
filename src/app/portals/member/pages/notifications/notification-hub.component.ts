@@ -1,5 +1,4 @@
 import { Component, inject, ChangeDetectionStrategy, computed } from '@angular/core';
-
 import { NotificationService, Notification } from '../../../../core/services/notification.service';
 
 @Component({

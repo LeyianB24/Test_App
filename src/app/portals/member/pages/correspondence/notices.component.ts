@@ -1,6 +1,4 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-
-
 @Component({
   selector: 'app-notices',
   imports: [],

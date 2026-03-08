@@ -1,5 +1,3 @@
-import { inject } from '@angular/core';
-import { inject } from '@angular/core';
 import { HttpInterceptorFn, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';

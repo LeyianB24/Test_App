@@ -1,5 +1,4 @@
-import { inject } from '@angular/core';
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { NotificationService } from '../core/services/notification.service';
 
 export interface ExportColumn {

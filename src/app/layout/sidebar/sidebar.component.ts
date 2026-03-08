@@ -1,5 +1,4 @@
 import { Component, input, output, inject, computed, ChangeDetectionStrategy } from '@angular/core';
-
 import { RouterModule, Router } from '@angular/router';
 import { LogoComponent } from '../../components/logo.component';
 import { AuthService } from '../../core/services/auth.service';

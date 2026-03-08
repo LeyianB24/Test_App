@@ -1,6 +1,4 @@
-import { inject } from '@angular/core';
-import { Component, inject } from '@angular/core';
-
+import { inject, Component } from '@angular/core';
 import { NotificationService } from '../core/services/notification.service';
 
 @Component({

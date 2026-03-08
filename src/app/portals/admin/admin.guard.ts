@@ -1,5 +1,3 @@
-import { inject } from '@angular/core';
-import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { map, filter, take } from 'rxjs/operators';
 import { toObservable } from '@angular/core/rxjs-interop';

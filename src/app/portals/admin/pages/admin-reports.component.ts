@@ -1,6 +1,4 @@
-import { inject } from '@angular/core';
-import { Component, inject } from '@angular/core';
-
+import { inject, Component } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../../environments/environment';
 

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 export interface MpesaTransaction {
   receiptNo: string;
   completionDate: string;

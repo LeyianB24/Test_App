@@ -1,6 +1,4 @@
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
-
-
 interface Deadline {
   id: number;
   date: string;

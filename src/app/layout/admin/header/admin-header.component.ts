@@ -1,5 +1,4 @@
 import { Component, Output, EventEmitter, OnInit, OnDestroy, signal, inject, computed, ChangeDetectionStrategy, output } from '@angular/core';
-
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService, Notification } from '../../../core/services/notification.service';

@@ -1,6 +1,4 @@
-import { inject } from '@angular/core';
-import { Component, signal, ChangeDetectionStrategy, inject } from '@angular/core';
-
+import { inject, Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 

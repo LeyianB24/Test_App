@@ -1,5 +1,4 @@
-import { inject } from '@angular/core';
-import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
+import { inject, Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';

@@ -1,5 +1,4 @@
 import { Injectable, signal, computed } from '@angular/core';
-
 export interface Notification {
   id: number;
   message: string;

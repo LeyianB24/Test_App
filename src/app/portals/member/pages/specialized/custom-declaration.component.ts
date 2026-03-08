@@ -1,5 +1,4 @@
 import { Component, signal, computed, ChangeDetectionStrategy, inject } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 
 interface DeclarationItem {

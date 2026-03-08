@@ -1,6 +1,4 @@
 import { Component, input, signal, inject } from '@angular/core';
-
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-logo',
