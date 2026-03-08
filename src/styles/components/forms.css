@@ -127,7 +127,7 @@
   width: 18px;
   left: 2px;
   bottom: 2px;
-  background-color: white;
+  background-color: var(--brand-white);
   transition: transform 200ms var(--ease-spring);
   border-radius: 50%;
   box-shadow: var(--shadow-sm);

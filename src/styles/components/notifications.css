@@ -97,9 +97,9 @@
   justify-content: center;
 }
 
-.notif-icon-box-precision.danger { background: var(--bg-danger-subtle); color: var(--text-danger); }
-.notif-icon-box-precision.success { background: var(--bg-success-subtle); color: var(--text-success); }
-.notif-icon-box-precision.info { background: var(--bg-surface-1); color: var(--text-secondary); }
+.notif-icon-box-precision.danger { background: var(--bg-status-danger); color: var(--text-danger); }
+.notif-icon-box-precision.success { background: var(--bg-status-success); color: var(--text-success); }
+.notif-icon-box-precision.info { background: var(--bg-status-info); color: var(--text-info); }
 
 .notif-content-precision {
   flex: 1;

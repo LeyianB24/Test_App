@@ -10,9 +10,9 @@
 .login-left-panel {
   background: linear-gradient(
     145deg,
-    #000000 0%,
-    rgba(218, 56, 50, 0.12) 50%,
-    #000000 100%
+    var(--neutral-000) 0%,
+    var(--bg-accent-panel) 50%,
+    var(--neutral-000) 100%
   );
   display: flex;
   flex-direction: column;
@@ -55,7 +55,7 @@
   font-family: var(--font-display);
   font-size: var(--text-5xl);
   font-weight: var(--weight-bold);
-  color: #FFFFFF;
+  color: var(--brand-white);
   line-height: 1;
 }
 
@@ -67,7 +67,7 @@
 .login-tagline {
   font-family: var(--font-body);
   font-size: var(--text-md);
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-tertiary);
   margin-top: var(--space-4);
   max-width: 480px;
 }
@@ -88,21 +88,21 @@
 .login-stat-number {
   font-family: var(--font-display);
   font-size: var(--text-2xl);
-  color: #FFFFFF;
+  color: var(--brand-white);
   display: block;
 }
 
 .login-stat-label {
   font-family: var(--font-body);
   font-size: var(--text-2xs);
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: var(--tracking-widest);
 }
 
 /* Right Panel */
 .login-right-panel {
-  background: #0A0A0A;
+  background: var(--bg-root);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -113,8 +113,8 @@
 .login-card-precision {
   width: 440px;
   padding: var(--space-10);
-  background: #111111;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-2xl);
   animation: scaleIn var(--duration-400) var(--ease-out) forwards;
@@ -127,13 +127,13 @@
 .login-form-title {
   font-family: var(--font-heading);
   font-size: var(--text-xl);
-  color: #FFFFFF;
+  color: var(--text-primary);
   margin-bottom: var(--space-2);
 }
 
 .login-form-subtitle {
   font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-secondary);
 }
 
 .login-status-bar {

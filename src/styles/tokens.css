@@ -304,6 +304,22 @@
   --sidebar-item-active-bg:    rgba(218, 56, 50, 0.12);
   --sidebar-item-active-color: var(--red-400);
   --sidebar-item-active-icon:  var(--red-500);
+  --sidebar-divider:           var(--neutral-150);
+  --sidebar-section-label:     var(--neutral-500);
+
+  /* ─── Badges ─── */
+  --badge-compliant-bg:     var(--bg-status-success);
+  --badge-compliant-color:  var(--text-success);
+  --badge-compliant-border: var(--border-success);
+  --badge-warning-bg:       var(--bg-status-warning);
+  --badge-warning-color:    var(--text-warning);
+  --badge-warning-border:   var(--border-warning);
+  --badge-danger-bg:        var(--bg-status-danger);
+  --badge-danger-color:     var(--text-danger);
+  --badge-danger-border:    var(--border-danger);
+  --badge-neutral-bg:       var(--neutral-200);
+  --badge-neutral-color:    var(--neutral-550);
+  --badge-neutral-border:   var(--neutral-300);
 }
 
 /* ════════════════════════════════════════════════════
@@ -415,6 +431,22 @@
   --sidebar-item-active-bg:    rgba(218, 56, 50, 0.08);
   --sidebar-item-active-color: var(--red-600);
   --sidebar-item-active-icon:  var(--red-500);
+  --sidebar-divider:           var(--neutral-750);
+  --sidebar-section-label:     var(--neutral-400);
+
+  /* ─── Badges ─── */
+  --badge-compliant-bg:     var(--bg-status-success);
+  --badge-compliant-color:  var(--text-success);
+  --badge-compliant-border: var(--border-success);
+  --badge-warning-bg:       var(--bg-status-warning);
+  --badge-warning-color:    var(--text-warning);
+  --badge-warning-border:   var(--border-warning);
+  --badge-danger-bg:        var(--bg-status-danger);
+  --badge-danger-color:     var(--text-danger);
+  --badge-danger-border:    var(--border-danger);
+  --badge-neutral-bg:       var(--neutral-850);
+  --badge-neutral-color:    var(--neutral-450);
+  --badge-neutral-border:   var(--neutral-750);
 }
 
 /* ════════════════════════════════════════════════════

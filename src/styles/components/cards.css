@@ -77,13 +77,13 @@
   width: fit-content;
 }
 
-.stat-card-precision .delta-badge.positive {
+.stat-card-precision .delta-badge.compliant {
   background: var(--badge-compliant-bg);
   color: var(--badge-compliant-color);
   border: 1px solid var(--badge-compliant-border);
 }
 
-.stat-card-precision .delta-badge.negative {
+.stat-card-precision .delta-badge.danger {
   background: var(--badge-danger-bg);
   color: var(--badge-danger-color);
   border: 1px solid var(--badge-danger-border);
@@ -117,7 +117,7 @@
 }
 
 .gauge-fill {
-  stroke: var(--red-500);
+  stroke: var(--color-accent);
   stroke-width: 8;
   fill: none;
   stroke-linecap: round;
@@ -142,7 +142,7 @@
 }
 
 .spark-line {
-  stroke: var(--red-500);
+  stroke: var(--color-accent);
   stroke-width: 2;
   fill: none;
   animation: lineTraceDraw 800ms var(--ease-out) forwards;
@@ -154,7 +154,7 @@
 }
 
 .spark-dot {
-  fill: var(--red-500);
+  fill: var(--color-accent);
   opacity: 0;
   transition: opacity var(--duration-base) ease;
 }

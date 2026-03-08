@@ -51,7 +51,7 @@
 .logo-accent-dot {
   width: 6px;
   height: 6px;
-  background: var(--red-500);
+  background: var(--color-accent);
   border-radius: 50%;
   animation: pulse 2s ease infinite;
 }

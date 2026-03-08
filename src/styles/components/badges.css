@@ -21,6 +21,7 @@
   box-shadow: 0 0 6px currentColor;
 }
 
+
 .badge-compliant {
   background: var(--badge-compliant-bg);
   color: var(--badge-compliant-color);
@@ -40,15 +41,15 @@
 }
 
 .badge-expired {
-  background: var(--neutral-150);
-  color: var(--neutral-500);
-  border: 1px solid var(--neutral-200);
+  background: var(--badge-neutral-bg);
+  color: var(--badge-neutral-color);
+  border: 1px solid var(--badge-neutral-border);
 }
 
 .badge-active {
-  background: var(--bg-surface-2);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-default);
+  background: var(--badge-compliant-bg);
+  color: var(--badge-compliant-color);
+  border: 1px solid var(--badge-compliant-border);
 }
 
 .badge-critical {

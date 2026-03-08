@@ -72,7 +72,7 @@
 }
 
 .status-pill-precision.online { color: var(--text-secondary); }
-.status-pill-precision.online .status-pill-dot { background: var(--status-success-text); animation: pulse 2s infinite; }
+.status-pill-precision.online .status-pill-dot { background: var(--text-success); animation: pulse 2s infinite; }
 
 .status-pill-precision.offline { color: var(--red-400); border-color: var(--red-500); }
 .status-pill-precision.offline .status-pill-dot { background: var(--red-500); }
@@ -95,7 +95,7 @@
 }
 
 .user-trigger-precision:hover {
-  background: var(--bg-surface-elevated);
+  background: var(--bg-surface-2);
 }
 
 .avatar-circle-precision {
