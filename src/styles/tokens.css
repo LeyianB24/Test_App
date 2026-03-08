@@ -1,516 +1,105 @@
 /* ════════════════════════════════════════════════════
-   GLOBAL — IMMUTABLE TOKENS (same in both themes)
-   These never change regardless of theme.
-════════════════════════════════════════════════════ */
-
-:root {
-
-  /* ─── Brand Core (NEVER override these) ─── */
-  --brand-black:    #000000;
-  --brand-white:    #FFFFFF;
-  --brand-red:      #DA3832;
-
-  /* ─── Red Scale (fixed, used in both themes) ─── */
-  --red-950:   #1A0201;
-  --red-900:   #3B0A08;
-  --red-800:   #5C1210;
-  --red-700:   #8B1C18;
-  --red-600:   #B52520;
-  --red-500:   #DA3832;   /* ← PRIMARY BRAND RED */
-  --red-400:   #E55E59;
-  --red-300:   #EE8A87;
-  --red-200:   #F5B4B2;
-  --red-100:   #FAD8D7;
-  --red-050:   #FDF3F3;
-  --red-025:   #FEF9F9;
-
-  /* ─── Neutral Scale (fixed reference values) ─── */
-  --neutral-000:   #000000;
-  --neutral-025:   #060606;
-  --neutral-050:   #0D0D0D;
-  --neutral-100:   #1A1A1A;
-  --neutral-150:   #222222;
-  --neutral-200:   #2E2E2E;
-  --neutral-250:   #3A3A3A;
-  --neutral-300:   #4A4A4A;
-  --neutral-350:   #5C5C5C;
-  --neutral-400:   #707070;
-  --neutral-450:   #888888;
-  --neutral-500:   #9E9E9E;
-  --neutral-550:   #B4B4B4;
-  --neutral-600:   #C8C8C8;
-  --neutral-650:   #D8D8D8;
-  --neutral-700:   #E4E4E4;
-  --neutral-750:   #EDEDED;
-  --neutral-800:   #F2F2F2;
-  --neutral-850:   #F6F6F6;
-  --neutral-900:   #FAFAFA;
-  --neutral-950:   #FDFDFD;
-  --neutral-1000:  #FFFFFF;
-
-  /* ─── Semantic Status Colours (fixed, both themes) ─── */
-  --success-base:    #16A34A;
-  --success-light:   #22C55E;
-  --success-dim:     rgba(22, 163, 74, 0.12);
-  --success-border:  rgba(22, 163, 74, 0.25);
-
-  --warning-base:    #D97706;
-  --warning-light:   #F59E0B;
-  --warning-dim:     rgba(217, 119, 6, 0.12);
-  --warning-border:  rgba(217, 119, 6, 0.25);
-
-  --danger-base:     var(--red-500);
-  --danger-light:    var(--red-400);
-  --danger-dim:      rgba(218, 56, 50, 0.10);
-  --danger-border:   rgba(218, 56, 50, 0.25);
-
-  --info-base:       #0EA5E9;
-  --info-light:      #38BDF8;
-  --info-dim:        rgba(14, 165, 233, 0.10);
-  --info-border:     rgba(14, 165, 233, 0.20);
-
-  /* ─── Spacing Scale (8pt grid — never changes) ─── */
-  --space-px:   1px;
-  --space-0-5:  2px;
-  --space-1:    4px;
-  --space-2:    8px;
-  --space-3:    12px;
-  --space-4:    16px;
-  --space-5:    20px;
-  --space-6:    24px;
-  --space-7:    28px;
-  --space-8:    32px;
-  --space-9:    36px;
-  --space-10:   40px;
-  --space-12:   48px;
-  --space-14:   56px;
-  --space-16:   64px;
-  --space-20:   80px;
-  --space-24:   96px;
-  --space-32:   128px;
-
-  /* ─── Border Radius Scale ─── */
-  --radius-none:  0px;
-  --radius-xs:    2px;
-  --radius-sm:    4px;
-  --radius-md:    8px;
-  --radius-lg:    12px;
-  --radius-xl:    16px;
-  --radius-2xl:   20px;
-  --radius-3xl:   28px;
-  --radius-full:  9999px;
-
-  /* ─── Animation Tokens ─── */
-  --ease-linear:    linear;
-  --ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in:        cubic-bezier(0.7, 0, 0.84, 0);
-  --ease-in-out:    cubic-bezier(0.45, 0, 0.55, 1);
-  --ease-spring:    cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-bounce:    cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  --ease-smooth:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
-
-  --duration-75:    75ms;
-  --duration-100:   100ms;
-  --duration-150:   150ms;
-  --duration-200:   200ms;
-  --duration-300:   300ms;
-  --duration-400:   400ms;
-  --duration-500:   500ms;
-  --duration-700:   700ms;
-  --duration-1000:  1000ms;
-
-  --theme-transition: 
-    color var(--duration-200) var(--ease-in-out),
-    background-color var(--duration-200) var(--ease-in-out),
-    border-color var(--duration-200) var(--ease-in-out),
-    box-shadow var(--duration-200) var(--ease-in-out),
-    fill var(--duration-200) var(--ease-in-out),
-    stroke var(--duration-200) var(--ease-in-out);
-
-  /* ─── Z-Index Scale ─── */
-  --z-below:      -1;
-  --z-base:       0;
-  --z-raised:     10;
-  --z-dropdown:   100;
-  --z-sticky:     200;
-  --z-overlay:    300;
-  --z-modal:      400;
-  --z-toast:      500;
-  --z-tooltip:    600;
-  --z-max:        9999;
-
-  /* ─── Layout Dimensions ─── */
-  --sidebar-width:           264px;
-  --sidebar-collapsed-width: 72px;
-  --topbar-height:           64px;
-  --footer-height:           56px;
-  --content-max-width:       1440px;
-  --content-padding-x:       var(--space-8);
-  --content-padding-y:       var(--space-6);
-
-  /* ─── Typography (Plus Jakarta Sans) ─── */
-  --font-display:  'Plus Jakarta Sans', 'Syne', sans-serif;
-  --font-heading:  'Plus Jakarta Sans', 'Outfit', sans-serif;
-  --font-body:     'Plus Jakarta Sans', 'IBM Plex Sans', sans-serif;
-  --font-mono:     'IBM Plex Mono', 'Fira Code', 'Consolas', monospace;
-
-  /* Type Scale (Major Third ratio — 1.25×) */
-  --text-2xs:   0.625rem;
-  --text-xs:    0.75rem;
-  --text-sm:    0.875rem;
-  --text-base:  1rem;
-  --text-md:    1.125rem;
-  --text-lg:    1.25rem;
-  --text-xl:    1.5rem;
-  --text-2xl:   1.875rem;
-  --text-3xl:   2.25rem;
-  --text-4xl:   3rem;
-  --text-5xl:   3.75rem;
-  --text-6xl:   4.5rem;
-
-  /* Font Weights */
-  --weight-light:      300;
-  --weight-regular:    400;
-  --weight-medium:     500;
-  --weight-semibold:   600;
-  --weight-bold:       700;
-  --weight-extrabold:  800;
-  --weight-black:      900;
-
-  /* Line Heights */
-  --leading-none:      1;
-  --leading-tight:     1.15;
-  --leading-snug:      1.3;
-  --leading-normal:    1.5;
-  --leading-relaxed:   1.65;
-  --leading-loose:     1.85;
-
-  /* Letter Spacing */
-  --tracking-tightest: -0.04em;
-  --tracking-tight:    -0.025em;
-  --tracking-snug:     -0.01em;
-  --tracking-normal:    0em;
-  --tracking-wide:      0.04em;
-  --tracking-wider:     0.08em;
-  --tracking-widest:    0.14em;
-}
-
-/* ════════════════════════════════════════════════════
-   DARK MODE TOKENS  [data-theme="dark"]
-   The default theme. Admin portal, Tax Engine, Helpdesk.
-════════════════════════════════════════════════════ */
-
-[data-theme="dark"] {
-
-  /* ─── Accent ─── */
-  --color-accent:              var(--red-500);
-  --color-accent-hover:        var(--red-400);
-  --color-accent-active:       var(--red-600);
-  --color-accent-muted:        rgba(218, 56, 50, 0.15);
-  --color-accent-muted-border: rgba(218, 56, 50, 0.30);
-  --color-accent-glow:         rgba(218, 56, 50, 0.35);
-  --color-accent-text:         var(--red-400);
-
-  /* ─── Backgrounds ─── */
-  --bg-root:          #0a0908;
-  --bg-app:           #0e0c0b;
-  --bg-sidebar:       #12100e;
-  --bg-topbar:        #12100e;
-  --bg-footer:        #12100e;
-
-  --bg-surface-0:     #12100e;
-  --bg-surface-1:     #181512;
-  --bg-surface-2:     #1e1a17;
-  --bg-surface-3:     #231f1b;
-  --bg-surface-4:     #2a2622;
-
-  --bg-input:         #1e1a17;
-  --bg-input-hover:   #231f1b;
-  --bg-input-focus:   #2a2622;
-
-  --bg-hover:         rgba(255, 255, 255, 0.06);
-  --bg-active:        rgba(255, 255, 255, 0.10);
-  --bg-selected:      rgba(218, 56, 50, 0.12);
-  --bg-overlay:       rgba(0, 0, 0, 0.85);
-  --bg-tooltip:       var(--neutral-200);
-
-  --bg-accent-subtle: rgba(218, 56, 50, 0.10);
-  --bg-accent-panel:  rgba(218, 56, 50, 0.05);
-  
-  --bg-code:          var(--neutral-150);
-  --bg-table-header:  var(--neutral-100);
-  --bg-table-row:     transparent;
-  --bg-table-row-hover: rgba(255, 255, 255, 0.04);
-  --bg-table-row-selected: rgba(218, 56, 50, 0.12);
-  --bg-table-stripe:  rgba(255, 255, 255, 0.02);
-
-  /* ─── Status Surfaces (Semantic) ─── */
-  --bg-status-success: rgba(22, 163, 74, 0.15);
-  --bg-status-warning: rgba(217, 119, 6, 0.15);
-  --bg-status-danger:  rgba(218, 56, 50, 0.15);
-  --bg-status-info:    rgba(14, 165, 233, 0.15);
-
-  /* ─── Text ─── */
-  --text-primary:     #f0ede8;
-  --text-secondary:   #9c9590;
-  --text-tertiary:    #5c5650;
-  --text-quaternary:  #4a4540;
-  --text-disabled:    #3a3530;
-  --text-placeholder: #5c5650;
-  --text-accent:      #e04534;
-  --text-accent-strong: #f46a5a;
-  --text-inverse:     var(--neutral-000);
-  --text-on-accent:   var(--neutral-1000);
-  --text-link:        var(--red-400);
-  --text-link-hover:  var(--red-300);
-  --text-success:     var(--success-light);
-  --text-warning:     var(--warning-light);
-  --text-danger:      var(--red-400);
-  --text-info:        var(--info-light);
-
-  /* ─── Borders ─── */
-  --border-default:   var(--neutral-200);
-  --border-subtle:    var(--neutral-150);
-  --border-strong:    var(--neutral-300);
-  --border-accent:    var(--red-500);
-  --border-accent-subtle: rgba(218, 56, 50, 0.30);
-  --border-focus:     var(--red-500);
-  --border-input:     var(--neutral-250);
-  --border-input-hover: var(--neutral-400);
-  --border-input-focus: var(--red-500);
-  --border-success:   var(--success-border);
-  --border-warning:   var(--warning-border);
-  --border-danger:    var(--danger-border);
-
-  /* ─── Shadows ─── */
-  --shadow-xs:     0 1px 2px rgba(0, 0, 0, 0.50);
-  --shadow-sm:     0 2px 4px rgba(0, 0, 0, 0.50), 0 1px 2px rgba(0, 0, 0, 0.40);
-  --shadow-md:     0 4px 12px rgba(0, 0, 0, 0.60), 0 2px 4px rgba(0, 0, 0, 0.40);
-  --shadow-lg:     0 12px 32px rgba(0, 0, 0, 0.70), 0 4px 8px rgba(0, 0, 0, 0.40);
-  --shadow-xl:     0 24px 64px rgba(0, 0, 0, 0.80), 0 8px 16px rgba(0, 0, 0, 0.40);
-  --shadow-2xl:    0 48px 96px rgba(0, 0, 0, 0.90);
-  --shadow-inset:  inset 0 1px 3px rgba(0, 0, 0, 0.60);
-  --shadow-accent: 0 0 0 1px var(--red-500), 0 4px 20px rgba(218, 56, 50, 0.30);
-  --shadow-accent-lg: 0 0 0 2px var(--red-500), 0 8px 32px rgba(218, 56, 50, 0.40);
-  --shadow-glow:   0 0 24px rgba(218, 56, 50, 0.45);
-  --shadow-focus:  0 0 0 3px rgba(218, 56, 50, 0.35);
-
-  /* ─── Misc ─── */
-  --sidebar-bg:                var(--neutral-000);
-  --sidebar-border:            var(--neutral-150);
-  --sidebar-item-color:        var(--neutral-500);
-  --sidebar-item-hover-bg:     var(--neutral-100);
-  --sidebar-item-hover-color:  var(--neutral-1000);
-  --sidebar-item-active-bg:    rgba(218, 56, 50, 0.12);
-  --sidebar-item-active-color: var(--red-400);
-  --sidebar-item-active-icon:  var(--red-500);
-  --sidebar-divider:           var(--neutral-150);
-  --sidebar-section-label:     var(--neutral-500);
-
-  /* ─── Badges ─── */
-  --badge-compliant-bg:     var(--bg-status-success);
-  --badge-compliant-color:  var(--text-success);
-  --badge-compliant-border: var(--border-success);
-  --badge-warning-bg:       var(--bg-status-warning);
-  --badge-warning-color:    var(--text-warning);
-  --badge-warning-border:   var(--border-warning);
-  --badge-danger-bg:        var(--bg-status-danger);
-  --badge-danger-color:     var(--text-danger);
-  --badge-danger-border:    var(--border-danger);
-  --badge-neutral-bg:       var(--neutral-200);
-  --badge-neutral-color:    var(--neutral-550);
-  --badge-neutral-border:   var(--neutral-300);
-}
-
-/* ════════════════════════════════════════════════════
-   LIGHT MODE TOKENS  [data-theme="light"]
-   Member portal, public views, printed output.
-════════════════════════════════════════════════════ */
-
-[data-theme="light"] {
-
-  /* ─── Accent ─── */
-  --color-accent:              var(--red-500);
-  --color-accent-hover:        var(--red-600);
-  --color-accent-active:       var(--red-700);
-  --color-accent-muted:        rgba(218, 56, 50, 0.08);
-  --color-accent-muted-border: rgba(218, 56, 50, 0.20);
-  --color-accent-glow:         rgba(218, 56, 50, 0.20);
-  --color-accent-text:         var(--red-600);
-
-  /* ─── Backgrounds ─── */
-  --bg-root:          #f4f3f0;
-  --bg-app:           #f8f7f5;
-  --bg-sidebar:       #ffffff;
-  --bg-topbar:        #ffffff;
-  --bg-footer:        #ffffff;
-
-  --bg-surface-0:     #f4f3f0;
-  --bg-surface-1:     #ffffff;
-  --bg-surface-2:     #fcfbf9;
-  --bg-surface-3:     #f8f7f5;
-  --bg-surface-4:     #f2f0ed;
-
-  --bg-input:         #f8f7f5;
-  --bg-input-hover:   #f2f0ed;
-  --bg-input-focus:   #ffffff;
-
-  --bg-hover:         rgba(0, 0, 0, 0.03);
-  --bg-active:        rgba(0, 0, 0, 0.06);
-  --bg-selected:      rgba(218, 56, 50, 0.06);
-  --bg-overlay:       rgba(0, 0, 0, 0.50);
-  --bg-tooltip:       var(--neutral-100);
-
-  --bg-accent-subtle: rgba(218, 56, 50, 0.05);
-  --bg-accent-panel:  rgba(218, 56, 50, 0.03);
-
-  --bg-code:          var(--neutral-800);
-  --bg-table-header:  var(--neutral-850);
-  --bg-table-row:     var(--neutral-1000);
-  --bg-table-row-hover: rgba(0, 0, 0, 0.02);
-  --bg-table-row-selected: rgba(218, 56, 50, 0.05);
-  --bg-table-stripe:  rgba(0, 0, 0, 0.015);
-
-  /* ─── Status Surfaces (Semantic) ─── */
-  --bg-status-success: #ECFDF5;
-  --bg-status-warning: #FFF7ED;
-  --bg-status-danger:  #FEF2F2;
-  --bg-status-info:    #F0F9FF;
-
-  /* ─── Text ─── */
-  --text-primary:     #141210;
-  --text-secondary:   #6b6560;
-  --text-tertiary:    #8a8580;
-  --text-quaternary:  #a09a94;
-  --text-disabled:    #c0beb9;
-  --text-placeholder: #a09a94;
-  --text-accent:      #c1392b;
-  --text-accent-strong: var(--red-700);
-  --text-inverse:     var(--neutral-1000);
-  --text-on-accent:   var(--neutral-1000);
-  --text-link:        var(--red-600);
-  --text-link-hover:  var(--red-700);
-  --text-success:     var(--success-base);
-  --text-warning:     var(--warning-base);
-  --text-danger:      var(--red-600);
-  --text-info:        var(--info-base);
-
-  /* ─── Borders ─── */
-  --border-default:   var(--neutral-700);
-  --border-subtle:    var(--neutral-750);
-  --border-strong:    var(--neutral-600);
-  --border-accent:    var(--red-500);
-  --border-accent-subtle: rgba(218, 56, 50, 0.25);
-  --border-focus:     var(--red-500);
-  --border-input:     var(--neutral-700);
-  --border-input-hover: var(--neutral-500);
-  --border-input-focus: var(--red-500);
-  --border-success:   var(--success-border);
-  --border-warning:   var(--warning-border);
-  --border-danger:    var(--danger-border);
-
-  /* ─── Shadows ─── */
-  --shadow-xs:     0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-sm:     0 2px 4px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md:     0 4px 12px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-lg:     0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
-  --shadow-xl:     0 24px 64px rgba(0, 0, 0, 0.14), 0 8px 16px rgba(0, 0, 0, 0.06);
-  --shadow-2xl:    0 48px 96px rgba(0, 0, 0, 0.18);
-  --shadow-inset:  inset 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-accent: 0 0 0 1px var(--red-500), 0 4px 20px rgba(218, 56, 50, 0.18);
-  --shadow-accent-lg: 0 0 0 2px var(--red-500), 0 8px 32px rgba(218, 56, 50, 0.22);
-  --shadow-glow:   0 0 24px rgba(218, 56, 50, 0.20);
-  --shadow-focus:  0 0 0 3px rgba(218, 56, 50, 0.20);
-
-  /* ─── Sidebar ─── */
-  --sidebar-bg:                var(--neutral-1000);
-  --sidebar-border:            var(--neutral-700);
-  --sidebar-item-color:        var(--neutral-400);
-  --sidebar-item-hover-bg:     var(--neutral-850);
-  --sidebar-item-hover-color:  var(--neutral-025);
-  --sidebar-item-active-bg:    rgba(218, 56, 50, 0.08);
-  --sidebar-item-active-color: var(--red-600);
-  --sidebar-item-active-icon:  var(--red-500);
-  --sidebar-divider:           var(--neutral-750);
-  --sidebar-section-label:     var(--neutral-400);
-
-  /* ─── Badges ─── */
-  --badge-compliant-bg:     var(--bg-status-success);
-  --badge-compliant-color:  var(--text-success);
-  --badge-compliant-border: var(--border-success);
-  --badge-warning-bg:       var(--bg-status-warning);
-  --badge-warning-color:    var(--text-warning);
-  --badge-warning-border:   var(--border-warning);
-  --badge-danger-bg:        var(--bg-status-danger);
-  --badge-danger-color:     var(--text-danger);
-  --badge-danger-border:    var(--border-danger);
-  --badge-neutral-bg:       var(--neutral-850);
-  --badge-neutral-color:    var(--neutral-450);
-  --badge-neutral-border:   var(--neutral-750);
-}
-
-/* ════════════════════════════════════════════════════
-   TYPOGRAPHY UTILITIES
-   Named text styles for consistent application.
+   ELITE 2.0 GLOBAL TOKENS
+   Single Source of Truth for Design System
    ════════════════════════════════════════════════════ */
 
-.style-display-hero {
-  font-family: var(--font-display);
-  font-size: var(--text-4xl);
-  font-weight: var(--weight-black);
-  letter-spacing: var(--tracking-tightest);
-  line-height: var(--leading-tight);
+:root {
+  /* ─── SECTION 1: FONTS ─── */
+  --font-heading: 'Plus Jakarta Sans', Inter, system-ui, sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
+
+  --weight-light:     300;
+  --weight-regular:   400;
+  --weight-medium:    500;
+  --weight-semibold:  600;
+  --weight-bold:      700;
+  --weight-extrabold: 800;
+  --weight-black:     900;
+
+  --text-2xs: 10px;
+  --text-xs:  12px;
+  --text-sm:  14px;
+  --text-base: 16px;
+  --text-xl:  24px;
+  --text-3xl: 36px;
+
+  /* ─── SECTION 2: BRAND PRIMITIVES ─── */
+  --red-500:     #DA3832;
+  --brand-black: #000000;
+  --brand-white: #FFFFFF;
+
+  /* ─── SEMANTIC STATUS ─── */
+  --color-success: #16A34A;
+  --color-warning: #D97706;
+  --color-danger:  #DA3832;
+  --color-info:    #0EA5E9;
+
+  /* ─── SECTION 3: SPACING & LAYOUT ─── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  28px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  --radius-sm:  6px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-full: 9999px;
+
+  --sidebar-width: 264px;
+  --topbar-height: 64px;
+
+  /* ─── SECTION 5: MOTION ─── */
+  --duration-fast:   150ms;
+  --duration-base:   200ms;
+  --duration-slow:   400ms;
+  --ease-out:        cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out:     ease-in-out;
+
+  /* Default Theme (Light/Compliance) */
+  --bg-root:        #f4f3f0;
+  --bg-surface-1:   #ffffff;
+  --bg-surface-2:   #f8f7f5;
+  --bg-surface-3:   #ffffff;
+  --text-primary:   #141210;
+  --text-secondary: #6b6560;
+  --text-muted:     #a09a94;
+  --border-subtle:  #E4E4E4;
+  --border-default: #e2dfd9;
+  --color-accent:   #DA3832;
+  --color-accent-bg:#fdf2f1;
+  --color-accent-dim:#e8b4af;
+  --shadow-glow:    0 0 24px rgba(218,56,50,.12);
+  --shadow-focus:   0 0 0 3px rgba(218,56,50,.12);
+  --shadow-sm:      0 1px 3px rgba(0,0,0,.06);
+  --shadow-md:      0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg:      0 16px 48px rgba(0,0,0,.12);
 }
 
-.style-display-title {
-  font-family: var(--font-display);
-  font-size: var(--text-3xl);
-  font-weight: var(--weight-extrabold);
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--leading-tight);
-}
-
-.style-section-heading {
-  font-family: var(--font-heading);
-  font-size: var(--text-xl);
-  font-weight: var(--weight-bold);
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--leading-snug);
-}
-
-.style-card-title {
-  font-family: var(--font-heading);
-  font-size: var(--text-lg);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--leading-snug);
-}
-
-.style-body {
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  font-weight: var(--weight-regular);
-  line-height: var(--leading-normal);
-}
-
-.style-body-sm {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-regular);
-  line-height: var(--leading-normal);
-}
-
-.style-data {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  letter-spacing: var(--tracking-normal);
-}
-
-.style-label {
-  font-family: var(--font-heading);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-bold);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-widest);
+/* Dark theme (Intelligence Mode) */
+[data-theme="dark"] {
+  --bg-root:        #0a0908;
+  --bg-surface-1:   #181512;
+  --bg-surface-2:   #1e1a17;
+  --bg-surface-3:   #231f1b;
+  --text-primary:   #f0ede8;
+  --text-secondary: #9c9590;
+  --text-muted:     #5c5650;
+  --border-subtle:  #222222;
+  --border-default: #2e2924;
+  --color-accent:   #DA3832;
+  --color-accent-bg:#1a100e;
+  --color-accent-dim:#7a2318;
+  --shadow-glow:    0 0 24px rgba(218,56,50,.2);
+  --shadow-focus:   0 0 0 3px rgba(218,56,50,.25);
+  --shadow-sm:      0 1px 3px rgba(0,0,0,.4);
+  --shadow-md:      0 4px 16px rgba(0,0,0,.5);
+  --shadow-lg:      0 16px 48px rgba(0,0,0,.7);
 }
