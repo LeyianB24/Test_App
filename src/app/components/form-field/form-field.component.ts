@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter, signal, input, output, ChangeDetectionStrategy } from '@angular/core';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { Component, model, signal, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 /**
  * Enhanced Form Field Component
@@ -13,10 +13,10 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
   template: `
     <div class="form-group-precision animate-fade-in">
       <!-- Label with Tactical Indicator -->
-      @if (label) {
+      @if (label()) {
         <label class="label-precision" [for]="fieldId">
-          {{ label }}
-          @if (required) {
+          {{ label() }}
+          @if (required()) {
             <span class="text-red-base ml-1">*</span>
           }
         </label>
@@ -26,24 +26,24 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
       <div class="input-wrapper-precision relative group">
         <input
           [id]="fieldId"
-          [type]="type"
+          [type]="type()"
           class="input-precision w-full"
           [class.input-error-precision]="isError()"
           [class.input-success-precision]="isSuccess()"
-          [placeholder]="placeholder"
-          [disabled]="disabled"
+          [placeholder]="placeholder()"
+          [disabled]="disabled()"
           [value]="value()"
           (input)="onInputChange($event)"
           (blur)="onBlur()"
           (focus)="onFocus()"
-          [attr.aria-label]="label"
+          [attr.aria-label]="label()"
           [attr.aria-describedby]="helpId"
           [attr.aria-invalid]="isError()">
         
         <!-- Tactical Icon Display -->
-        @if (icon) {
+        @if (icon()) {
           <span class="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-red-base transition-colors pointer-events-none">
-            {{ icon }}
+            {{ icon() }}
           </span>
         }
 
@@ -61,11 +61,11 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
         } @else if (isSuccess()) {
           <p class="success-state-precision flex items-center gap-2 text-[10px] font-bold">
              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="4" d="M5 13l4 4L19 7"/></svg>
-             <span class="uppercase tracking-wider">{{ successMessage || 'Validation Sequence Clear' }}</span>
+             <span class="uppercase tracking-wider">{{ successMessage() || 'Validation Sequence Clear' }}</span>
           </p>
-        } @else if (helpText) {
+        } @else if (helpText()) {
           <p [id]="helpId" class="text-white/20 text-[9px] font-black uppercase tracking-widest pl-1">
-            {{ helpText }}
+            {{ helpText() }}
           </p>
         }
       </div>
@@ -92,21 +92,21 @@ export class FormFieldComponent {
   label = input<string>('');
   placeholder = input<string>('');
   type = input<'text' | 'email' | 'password' | 'number' | 'tel' | 'date' | 'url'>('text');
-  value = input<any>(signal<string>(''));
+  value = model<any>('');
   disabled = input<boolean>(false);
   required = input<boolean>(false);
   icon = input<string>('');
   helpText = input<string>('');
   successMessage = input<string>('');
-  errorMessage = input<any>(signal<string>(''));
+  errorMessage = signal<string>('');
   validationPattern = input<RegExp | null>(null);
 
   valueChange = output<string>();
   focus = output<void>();
   blur = output<void>();
 
-  fieldId = `form-field-${Math.random().toString(36).slice(2)}`;
-  helpId = `${this.fieldId}-help`;
+  fieldId = \`form-field-\${Math.random().toString(36).slice(2)}\`;
+  helpId = \`\${this.fieldId}-help\`;
   isFocused = signal(false);
   isTouched = signal(false);
 
@@ -124,8 +124,8 @@ export class FormFieldComponent {
     this.valueChange.emit(input.value);
 
     // Validate if pattern provided
-    if (this.validationPattern && input.value) {
-      const isValid = this.validationPattern.test(input.value);
+    if (this.validationPattern() && input.value) {
+      const isValid = this.validationPattern()!.test(input.value);
       this.errorMessage.set(isValid ? '' : 'Invalid format');
     }
   }

@@ -92,7 +92,7 @@ export interface TableAction {
           <table class="table-precision w-full border-collapse">
             <thead>
               <tr class="bg-surface-2/30">
-                @for (col of columns; track col.key) {
+                @for (col of columns(); track col.key) {
                   <th [style.width]="col.width || 'auto'"
                     [class.sortable-precision]="col.sortable"
                     (click)="col.sortable && toggleSort(col.key)"
@@ -111,7 +111,7 @@ export interface TableAction {
                     </div>
                   </th>
                 }
-                @if (actions.length > 0) {
+                @if (actions().length > 0) {
                   <th style="width: 140px;" class="text-right px-8 py-5 border-b border-subtle style-label text-tertiary">Actions</th>
                 }
               </tr>
@@ -119,7 +119,7 @@ export interface TableAction {
             <tbody class="divide-y divide-subtle">
               @for (row of paginatedData(); track $index) {
                 <tr class="table-row-precision transition-all bg-table-row hover:bg-table-row-hover">
-                  @for (col of columns; track col.key) {
+                  @for (col of columns(); track col.key) {
                     <td class="px-8 py-5" [style.width]="col.width || 'auto'">
                       <div>
                         @switch (col.type) {
@@ -163,10 +163,10 @@ export interface TableAction {
                   }
     
                   <!-- Reactive Actions -->
-                  @if (actions.length > 0) {
+                  @if (actions().length > 0) {
                     <td class="px-8 py-5 text-right">
                       <div class="flex justify-end gap-2">
-                        @for (action of actions; track action.label) {
+                        @for (action of actions(); track action.label) {
                           <button (click)="onAction(action.action, row)"
                             class="btn-precision btn-secondary-precision btn-sm px-2.5 border-subtle hover:border-accent/40 bg-surface-2/30"
                             [title]="action.label">
@@ -182,7 +182,7 @@ export interface TableAction {
               <!-- Null State Matrix -->
               @if (filteredData().length === 0) {
                 <tr>
-                  <td [attr.colspan]="columns.length + (actions.length > 0 ? 1 : 0)" class="py-32">
+                  <td [attr.colspan]="columns().length + (actions().length > 0 ? 1 : 0)" class="py-32">
                     <div class="null-state-precision text-center max-w-sm mx-auto">
                       <div class="icon-orb-precision w-20 h-20 bg-surface-2/40 rounded-full flex items-center justify-center mx-auto mb-6 border border-subtle">
                         <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-tertiary"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" stroke-width="1.5"/></svg>
@@ -293,7 +293,7 @@ export class DataTableComponent {
   pageSize = signal(10);
 
   filteredData = computed(() => {
-    let result = [...this.data];
+    let result = [...this.data()];
 
     // Search filter
     if (this.searchQuery) {
@@ -373,7 +373,7 @@ export class DataTableComponent {
   }
 
   exportTable(format: 'excel' | 'pdf' | 'csv' | 'json'): void {
-    const exportColumns: ExportColumn[] = this.columns.map(col => ({
+    const exportColumns: ExportColumn[] = this.columns().map((col: any) => ({
       key: col.key,
       label: col.label,
       format: col.type as any
