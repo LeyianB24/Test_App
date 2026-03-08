@@ -1,34 +1,72 @@
-.app-shell {
-  display: flex;
-  min-height: 100vh;
-  background-color: var(--bg-app);
+/* Floating Canvas Layout (HD) */
+:root {
+  --canvas-gap: 24px;
+  --canvas-radius: var(--radius-xl);
 }
 
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: var(--bg-root);
+  padding: var(--canvas-gap);
+  gap: var(--canvas-gap);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Sidebar as a floating panel */
+app-sidebar {
+  height: 100%;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+/* Main Content as a floating panel */
 .main-content {
   flex: 1;
-  margin-left: var(--sidebar-width);
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  transition: margin-left var(--duration-slow) var(--ease-out);
+  background-color: var(--bg-surface-1);
+  border-radius: var(--canvas-radius);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  position: relative;
+  transition: all var(--duration-slow) var(--ease-out);
 }
 
-.main-content.sidebar-collapsed {
-  margin-left: var(--sidebar-collapsed-width);
-}
-
-.content-area {
+/* Content Area inside the floating panel */
+.content-wrapper {
   flex: 1;
-  padding: var(--content-padding);
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  width: 100%;
+  padding: var(--space-8);
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: var(--bg-surface-2); /* Subtle contrast to the card edge */
 }
 
-.container-fluid {
-    width: 100%;
-    padding-right: var(--space-6);
-    padding-left: var(--space-6);
-    margin-right: auto;
-    margin-left: auto;
+/* Sticky Header Integration */
+app-header {
+  flex-shrink: 0;
+  z-index: 5;
+}
+
+/* Modern Mobile Breakpoints */
+@media (max-width: 1024px) {
+  .dashboard-container {
+    padding: var(--space-4);
+    gap: var(--space-4);
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 0;
+    gap: 0;
+  }
+  .main-content {
+    border-radius: 0;
+    border: none;
+  }
 }
