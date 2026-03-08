@@ -11,7 +11,7 @@ import { AuthService } from '../core/services/auth.service';
   template: `
     <div class="fixed inset-0 flex bg-[var(--bg-root)] transition-all duration-300 overflow-hidden font-plus-jakarta" [attr.data-theme]="theme()">
 
-      <!-- Left Panel: Security Intelligence (Always Dark for Contrast) -->
+      <!-- Left Panel: Security (Always Dark for Contrast) -->
       <div class="hidden lg:flex w-[400px] bg-[var(--brand-black)] relative overflow-hidden flex-col p-12 shrink-0">
         <!-- Grid Pattern Overlay -->
         <div class="absolute inset-0 opacity-[0.05] pointer-events-none" 
@@ -33,29 +33,29 @@ import { AuthService } from '../core/services/auth.service';
 
           <div class="space-y-8 flex-grow">
             <div>
-              <h2 class="text-lg font-black text-[var(--brand-white)] uppercase tracking-tight mb-3">Identity Recovery</h2>
-              <p class="text-[10px] font-semibold text-[var(--brand-white)]/40 leading-relaxed uppercase tracking-widest">Official identity restoration protocol. Protected by secure transmission and MFA verification.</p>
+              <h2 class="text-lg font-black text-[var(--brand-white)] uppercase tracking-tight mb-3">Forgot Password</h2>
+              <p class="text-[10px] font-semibold text-[var(--brand-white)]/40 leading-relaxed uppercase tracking-widest">Follow the steps to reset your password and regain access to your account.</p>
             </div>
 
-            <div class="h-[1px] bg-gradient-to-r from-[var(--color-accent)]/40 to-transparent"></div>
+            <div class="h-[px] bg-gradient-to-r from-[var(--color-accent)]/40 to-transparent"></div>
 
             <div class="space-y-4">
               <div class="flex items-center gap-3">
                 <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] shadow-[0_0_8px_rgba(218,56,50,0.6)]"></span>
-                <span class="text-[10px] font-black text-[var(--brand-white)]/40 uppercase tracking-[0.2em]">Security Protocol Active</span>
+                <span class="text-[10px] font-black text-[var(--brand-white)]/40 uppercase tracking-[0.2em]">Security Check active</span>
               </div>
-              <p class="text-[10px] font-semibold text-[var(--brand-white)]/40 leading-relaxed uppercase tracking-widest">Ensure you have access to your registered security channels (Email/Phone) before proceeding.</p>
+              <p class="text-[10px] font-semibold text-[var(--brand-white)]/40 leading-relaxed uppercase tracking-widest">Make sure you have access to your registered email or phone number.</p>
             </div>
           </div>
 
           <div class="flex gap-4 mt-auto opacity-40">
-            <span class="text-[8px] font-black text-[var(--brand-white)] border border-[var(--brand-white)]/20 px-2 py-1 rounded">GOK.RECOVERY.SEC</span>
-            <span class="text-[8px] font-black text-[var(--brand-white)] border border-[var(--brand-white)]/20 px-2 py-1 rounded">TLS 1.3</span>
+            <span class="text-[8px] font-black text-[var(--brand-white)] border border-[var(--brand-white)]/20 px-2 py-1 rounded">SECURE RECOVERY</span>
+            <span class="text-[8px] font-black text-[var(--brand-white)] border border-[var(--brand-white)]/20 px-2 py-1 rounded">SSL PROTECTED</span>
           </div>
         </div>
       </div>
 
-      <!-- Right Panel: Command Input -->
+      <!-- Right Panel: Reset Password Form -->
       <div class="flex-1 flex items-center justify-center p-6 relative">
         <!-- Theme Toggle -->
         <button (click)="toggleTheme()" 
@@ -74,17 +74,17 @@ import { AuthService } from '../core/services/auth.service';
               <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
                 <div class="inline-flex items-center gap-2 px-3 py-1 bg-[var(--color-accent-bg)] border border-[var(--color-accent-dim)] rounded-full animate-pulse shadow-sm mx-auto lg:mx-0">
                   <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)]"></span>
-                  <span class="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--color-accent)]">Recovery Node</span>
+                  <span class="text-[9px] font-black uppercase tracking-[0.2em] text-[var(--color-accent)]">Password Recovery</span>
                 </div>
-                <span class="text-[9px] font-mono font-medium text-[var(--text-muted)] uppercase tracking-widest">REF: RC-{{ sessionRef() }}</span>
+                <span class="text-[9px] font-mono font-medium text-[var(--text-muted)] uppercase tracking-widest">REF: {{ sessionRef() }}</span>
               </div>
               
               @if (!showSuccess()) {
-                <h2 class="text-[var(--text-3xl)] font-black text-[var(--text-primary)] tracking-tighter uppercase mb-3">Reset <span class="text-[var(--color-accent)]">Key</span></h2>
-                <p class="text-[var(--text-xs)] font-semibold text-[var(--text-secondary)] uppercase tracking-widest leading-loose">Verify your identity to restore access.</p>
+                <h2 class="text-[var(--text-3xl)] font-black text-[var(--text-primary)] tracking-tighter uppercase mb-3">Reset <span class="text-[var(--color-accent)]">Password</span></h2>
+                <p class="text-[var(--text-xs)] font-semibold text-[var(--text-secondary)] uppercase tracking-widest leading-loose">Enter your details to reset your password.</p>
               } @else {
-                <h2 class="text-[var(--text-3xl)] font-black text-[var(--text-primary)] tracking-tighter uppercase mb-3 text-[var(--color-success)]">Link <span class="text-[var(--color-success)]">Dispatched</span></h2>
-                <p class="text-[var(--text-xs)] font-semibold text-[var(--text-secondary)] uppercase tracking-widest leading-loose">Identity verified. Transmission complete.</p>
+                <h2 class="text-[var(--text-3xl)] font-black text-[var(--text-primary)] tracking-tighter uppercase mb-3 text-[var(--color-success)]">Reset <span class="text-[var(--color-success)]">Link Sent</span></h2>
+                <p class="text-[var(--text-xs)] font-semibold text-[var(--text-secondary)] uppercase tracking-widest leading-loose">Check your email for the reset instructions.</p>
               }
             </div>
 
@@ -92,7 +92,7 @@ import { AuthService } from '../core/services/auth.service';
               <form [formGroup]="recoveryForm" (ngSubmit)="onSubmit()" class="space-y-8">
                 <!-- KRA PIN -->
                 <div class="space-y-2 group">
-                  <label class="text-[var(--text-xs)] font-semibold uppercase tracking-[0.06em] text-[var(--text-secondary)] ml-1 transition-colors group-focus-within:text-[var(--color-accent)]">Taxpayer Identification (PIN)</label>
+                  <label class="text-[var(--text-xs)] font-semibold uppercase tracking-[0.06em] text-[var(--text-secondary)] ml-1 transition-colors group-focus-within:text-[var(--color-accent)]">Taxpayer PIN</label>
                   <div class="relative">
                     <div class="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] transition-colors group-focus-within:text-[var(--color-accent)]">
                       <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
@@ -118,30 +118,30 @@ import { AuthService } from '../core/services/auth.service';
                   class="w-full h-12 px-6 bg-[var(--color-accent)] text-[var(--brand-white)] rounded-[var(--radius-lg)] font-heading font-semibold text-[var(--text-sm)] uppercase tracking-[0.1em] relative overflow-hidden group transition-all hover:brightness-110 hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)] disabled:opacity-45 disabled:cursor-not-allowed">
                   <span class="relative z-10 flex items-center justify-center gap-3">
                     @if (!isSubmitting()) {
-                      AUTHORIZE RECOVERY
+                      RESET PASSWORD
                     } @else {
                       <div class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
-                      TRACING RECORDS...
+                      CHECKING...
                     }
                   </span>
                   <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[3000ms]"></div>
                 </button>
 
                 <div class="text-center">
-                  <a routerLink="/login" class="text-[var(--text-xs)] font-black text-[var(--text-muted)] hover:text-[var(--color-accent)] uppercase tracking-widest transition-colors">Return to Security Node</a>
+                  <a routerLink="/login" class="text-[var(--text-xs)] font-black text-[var(--text-muted)] hover:text-[var(--color-accent)] uppercase tracking-widest transition-colors">Back to Login</a>
                 </div>
               </form>
             } @else {
               <div class="space-y-8 animate-fade-in">
                 <div class="p-8 bg-[var(--color-success)]/5 border border-[var(--color-success)]/20 rounded-2xl text-center">
                   <p class="text-[11px] font-black text-[var(--text-secondary)] uppercase tracking-widest leading-loose">
-                    Identity verified. A secure reset token has been dispatched to your registered security channel:<br>
+                    We've sent a reset link to your registered email:<br>
                     <span class="text-[var(--text-primary)] italic mt-2 block tracking-tight">{{ maskedEmail() }}</span>
                   </p>
                 </div>
                 
                 <button class="w-full h-14 px-6 border border-[var(--border-default)] text-[var(--text-secondary)] rounded-[var(--radius-lg)] font-heading font-semibold text-[var(--text-sm)] uppercase tracking-[0.2em] hover:bg-[var(--bg-surface-2)] transition-all" routerLink="/login">
-                  RETURN TO GATEWAY
+                  BACK TO LOGIN
                 </button>
               </div>
             }
