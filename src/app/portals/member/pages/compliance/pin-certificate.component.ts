@@ -309,8 +309,7 @@ import { environment } from '../../../../../environments/environment';
       .cert-content-inner { padding: 20px 20px 20px 45px; }
       #branding-bar { width: 10mm; min-height: 100%; }
     }
-  `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  `]
 })
 export class PinCertificateComponent implements OnInit {
   private authService = inject(AuthService);
