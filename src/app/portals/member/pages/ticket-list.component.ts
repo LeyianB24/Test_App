@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed, effect, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HelpdeskService, Ticket } from '../../../services/helpdesk.service';
@@ -7,7 +7,7 @@ import { HelpdeskService, Ticket } from '../../../services/helpdesk.service';
 @Component({
   selector: 'app-ticket-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink],
   template: `
     <div class="dashboard-precision animate-fade-in">
       

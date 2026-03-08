@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
 import { NotificationService } from '../core/services/notification.service';
@@ -10,7 +10,7 @@ import { PinCertificateComponent } from '../portals/member/pages/compliance/pin-
 @Component({
   selector: 'app-registration',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, NgOptimizedImage, PinCertificateComponent],
+  imports: [ReactiveFormsModule, RouterModule, NgOptimizedImage, PinCertificateComponent],
   template: `
     <div class="auth-layout login-scene animate-fade-in">
       <!-- High-Performance Background -->

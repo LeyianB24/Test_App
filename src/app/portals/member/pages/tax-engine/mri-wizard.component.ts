@@ -15,7 +15,6 @@ interface Property {
 
 @Component({
   selector: 'app-mri-wizard',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, FilingWizardShellComponent],
   template: `

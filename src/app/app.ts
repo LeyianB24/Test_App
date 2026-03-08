@@ -11,6 +11,7 @@ import { RouterOutlet } from '@angular/router';
  * Auth screens (login, forgot-password, register) render full-page with no layout.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-root',
   imports: [RouterOutlet],
   template: `<router-outlet />`

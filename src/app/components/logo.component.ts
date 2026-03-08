@@ -1,10 +1,10 @@
 import { Component, input, signal, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-logo',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="logo-container-precision"
          [style.height]="height()"

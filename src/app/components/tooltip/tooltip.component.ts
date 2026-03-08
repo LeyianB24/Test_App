@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, signal, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 /**
@@ -7,8 +7,8 @@ import { CommonModule } from '@angular/common';
  * Supports multiple positions and themes
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-tooltip',
-  standalone: true,
   imports: [CommonModule],
   template: `
     <div class="tooltip-wrapper-precision inline-flex items-center relative" [class.active-precision]="isVisible()">
@@ -50,8 +50,8 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class TooltipComponent {
-  @Input() content: string = '';
-  @Input() position: 'top' | 'bottom' | 'left' | 'right' = 'top';
+  content = input<string>('');
+  position = input<'top' | 'bottom' | 'left' | 'right'>('top');
 
   isVisible = signal(false);
 

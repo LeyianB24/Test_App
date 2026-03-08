@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -7,8 +8,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ticket-detail',
-  standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
     <div class="page-container p-8 animate-up">
@@ -316,10 +317,10 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   isSubmitting = false;
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private route: ActivatedRoute,
-    public helpdeskService: HelpdeskService
-  ) {}
+  // TODO: Check constructor replacements
+  private route = inject(ActivatedRoute);
+  public helpdeskService = inject(HelpdeskService);
+  constructor() {}
 
   ngOnInit(): void {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {

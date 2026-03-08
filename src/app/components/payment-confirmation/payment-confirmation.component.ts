@@ -16,8 +16,8 @@ export interface PaymentSummary {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-payment-confirmation',
-  standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
     <div class="modal-backdrop-precision" (click)="onCancel()">
@@ -37,10 +37,10 @@ export interface PaymentSummary {
             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
-
+    
         <!-- Tactical Modal Body -->
         <div class="modal-body-precision space-y-8 scrollbar-thin">
-          
+    
           <!-- Summary Component -->
           <div class="ops-card-precision">
             <h3 class="text-[10px] font-black uppercase tracking-widest text-red-base mb-4 flex items-center gap-2">
@@ -62,7 +62,7 @@ export interface PaymentSummary {
               </div>
             </div>
           </div>
-
+    
           <!-- Financial Breakdown -->
           <div class="grid grid-cols-1 gap-6">
             <div class="card-precision p-6 border-white/5 bg-white/[0.02]">
@@ -72,14 +72,14 @@ export interface PaymentSummary {
                   <span class="text-[11px] font-bold text-white/50 uppercase tracking-widest">Base Amount</span>
                   <span class="text-lg font-black text-white">KES {{ summary().amount | number:'1.0-2' }}</span>
                 </div>
-                
+    
                 @if (showFee()) {
                   <div class="flex justify-between items-end border-b border-white/5 pb-3">
                     <span class="text-[11px] font-bold text-white/50 uppercase tracking-widest">{{ summary().paymentMethod }} Processor Fee</span>
                     <span class="text-md font-bold text-white/70">KES {{ fee() | number:'1.0-2' }}</span>
                   </div>
                 }
-
+    
                 <div class="flex justify-between items-end pt-2">
                   <span class="text-[12px] font-black text-red-base uppercase tracking-[0.2em]">Total Authorization</span>
                   <span class="text-2xl font-black text-white tracking-tighter">KES {{ totalAmount() | number:'1.0-2' }}</span>
@@ -87,59 +87,63 @@ export interface PaymentSummary {
               </div>
             </div>
           </div>
-
+    
           <!-- Channel Allocation -->
           <div class="ops-card-precision border-red-base/10">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-10 h-10 rounded-xl bg-red-base/10 border border-red-base/20 flex items-center justify-center text-xl">
-                 @if (summary().paymentMethod === 'mpesa') { 📱 }
-                 @else if (summary().paymentMethod === 'bank_transfer') { 🏦 }
-                 @else { 📄 }
+                @if (summary().paymentMethod === 'mpesa') { 📱 }
+                  @else if (summary().paymentMethod === 'bank_transfer') { 🏦 }
+                  @else { 📄 }
+                </div>
+                <div>
+                  <h4 class="text-xs font-black uppercase tracking-wider text-white">Channel: {{ formatLabel(summary().paymentMethod) }}</h4>
+                  <p class="text-[10px] text-white/40 font-medium">Standard processing protocol applied</p>
+                </div>
               </div>
-              <div>
-                <h4 class="text-xs font-black uppercase tracking-wider text-white">Channel: {{ formatLabel(summary().paymentMethod) }}</h4>
-                <p class="text-[10px] text-white/40 font-medium">Standard processing protocol applied</p>
+            </div>
+    
+            <!-- Tactical Requirements -->
+            <div class="protocol-stack-precision">
+              <label class="flex items-start gap-4 cursor-pointer group">
+                <input type="checkbox" [(ngModel)]="acceptedTerms" class="mt-1 w-5 h-5 rounded-lg border-2 border-white/10 bg-black/40 text-red-base focus:ring-red-base/20 transition-all checked:bg-red-base">
+                <span class="text-[11px] font-medium leading-relaxed text-white/60 group-hover:text-white/90 transition-colors">
+                  I hereby authorize the KRA to initiate this transaction. I acknowledge that this financial directive is irreversible once committed.
+                  <a href="#" target="_blank" class="text-red-base underline decoration-red-base/30 hover:decoration-red-base ml-1">Directive Policy v2.0</a>
+                </span>
+              </label>
+            </div>
+    
+            <!-- Sentinel Warning -->
+            <div class="error-state-precision/10 p-4 border border-red-base/20 rounded-2xl flex gap-4 bg-red-base/[0.02]">
+              <svg width="20" height="20" class="text-red-base mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              <div class="space-y-1">
+                <h5 class="text-[10px] font-black uppercase tracking-widest text-red-base">Irreversible Sequence</h5>
+                <p class="text-[11px] text-white/50 leading-relaxed">System verification required. Misallocation of funds may lead to compliance flags.</p>
               </div>
             </div>
           </div>
-
-          <!-- Tactical Requirements -->
-          <div class="protocol-stack-precision">
-            <label class="flex items-start gap-4 cursor-pointer group">
-              <input type="checkbox" [(ngModel)]="acceptedTerms" class="mt-1 w-5 h-5 rounded-lg border-2 border-white/10 bg-black/40 text-red-base focus:ring-red-base/20 transition-all checked:bg-red-base">
-              <span class="text-[11px] font-medium leading-relaxed text-white/60 group-hover:text-white/90 transition-colors">
-                I hereby authorize the KRA to initiate this transaction. I acknowledge that this financial directive is irreversible once committed.
-                <a href="#" target="_blank" class="text-red-base underline decoration-red-base/30 hover:decoration-red-base ml-1">Directive Policy v2.0</a>
-              </span>
-            </label>
+    
+          <!-- Operational Footer -->
+          <div class="modal-footer-precision flex gap-4">
+            <button class="btn-precision btn-secondary-precision flex-1 py-4" (click)="onCancel()">
+              Abort
+            </button>
+            <button
+              class="btn-precision btn-primary-precision flex-1 py-4"
+              (click)="onConfirm()"
+              [disabled]="!acceptedTerms || isProcessing()">
+              @if (!isProcessing()) {
+                <span>{{ getConfirmButtonText() }}</span>
+              }
+              @if (isProcessing()) {
+                <span>Synchronizing...</span>
+              }
+            </button>
           </div>
-
-          <!-- Sentinel Warning -->
-          <div class="error-state-precision/10 p-4 border border-red-base/20 rounded-2xl flex gap-4 bg-red-base/[0.02]">
-            <svg width="20" height="20" class="text-red-base mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            <div class="space-y-1">
-              <h5 class="text-[10px] font-black uppercase tracking-widest text-red-base">Irreversible Sequence</h5>
-              <p class="text-[11px] text-white/50 leading-relaxed">System verification required. Misallocation of funds may lead to compliance flags.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Operational Footer -->
-        <div class="modal-footer-precision flex gap-4">
-          <button class="btn-precision btn-secondary-precision flex-1 py-4" (click)="onCancel()">
-            Abort
-          </button>
-          <button
-            class="btn-precision btn-primary-precision flex-1 py-4"
-            (click)="onConfirm()"
-            [disabled]="!acceptedTerms || isProcessing()">
-            <span *ngIf="!isProcessing()">{{ getConfirmButtonText() }}</span>
-            <span *ngIf="isProcessing()">Synchronizing...</span>
-          </button>
         </div>
       </div>
-    </div>
-  `,
+    `,
   styles: [`
     :host { display: block; }
     .scrollbar-thin::-webkit-scrollbar { width: 4px; }

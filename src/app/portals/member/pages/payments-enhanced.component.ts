@@ -1,5 +1,5 @@
 import { Component, inject, signal, effect, computed, ViewChild } from '@angular/core';
-import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PaymentService } from '../../../services/payment.service';
 import { ApiService } from '../../../services/api.service';
@@ -26,9 +26,9 @@ interface Payment {
 
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-payments-enhanced',
-  standalone: true,
-  imports: [CommonModule, NgFor, NgIf, FormsModule, PaymentFormComponent, SkeletonLoaderComponent, ToastContainerComponent],
+  imports: [CommonModule, FormsModule, PaymentFormComponent, SkeletonLoaderComponent, ToastContainerComponent],
   template: `
     <div class="payments-container">
       <!-- Breadcrumb Navigation -->
@@ -39,7 +39,7 @@ interface Payment {
         <span class="breadcrumb-separator">/</span>
         <div class="breadcrumb-item active"><span>Payments</span></div>
       </nav>
-
+    
       <!-- Enhanced Header -->
       <header class="page-header-elite animate-up delay-1" style="margin-bottom: 32px;">
         <div class="header-info">
@@ -48,26 +48,36 @@ interface Payment {
         </div>
         <div style="display: flex; gap: 12px; align-items: center;">
           <button class="modern-btn secondary-btn" (click)="refreshPayments()" [disabled]="loading()" title="Refresh payment data">
-            <span *ngIf="!loading()">🔄 Refresh</span>
-            <span *ngIf="loading()">⏳ Loading...</span>
+            @if (!loading()) {
+              <span>🔄 Refresh</span>
+            }
+            @if (loading()) {
+              <span>⏳ Loading...</span>
+            }
           </button>
           <button class="modern-btn primary-btn" (click)="togglePaymentForm()" [disabled]="loading()">
-            <span *ngIf="!showPaymentForm()">➕ New Payment</span>
-            <span *ngIf="showPaymentForm()">✕ Close Form</span>
+            @if (!showPaymentForm()) {
+              <span>➕ New Payment</span>
+            }
+            @if (showPaymentForm()) {
+              <span>✕ Close Form</span>
+            }
           </button>
         </div>
       </header>
-
+    
       <!-- Payment Form (Collapsible) -->
-      <div *ngIf="showPaymentForm()" class="animate-up delay-2" style="margin-bottom: 32px;">
-        <div class="content-card-premium" style="background: linear-gradient(135deg, rgba(227, 30, 36, 0.05) 0%, rgba(212, 175, 55, 0.05) 100%); border: 2px solid #E31E24;">
-          <div style="padding: 24px;">
-            <h3 class="premium-subtitle" style="margin: 0 0 16px; color: #1A365D;">New Payment Form</h3>
-            <app-payment-form #paymentForm></app-payment-form>
+      @if (showPaymentForm()) {
+        <div class="animate-up delay-2" style="margin-bottom: 32px;">
+          <div class="content-card-premium" style="background: linear-gradient(135deg, rgba(227, 30, 36, 0.05) 0%, rgba(212, 175, 55, 0.05) 100%); border: 2px solid #E31E24;">
+            <div style="padding: 24px;">
+              <h3 class="premium-subtitle" style="margin: 0 0 16px; color: #1A365D;">New Payment Form</h3>
+              <app-payment-form #paymentForm></app-payment-form>
+            </div>
           </div>
         </div>
-      </div>
-
+      }
+    
       <!-- Action Bar with Search and Filters -->
       <section class="animate-up delay-2" style="margin-bottom: 32px;">
         <div class="action-bar-glass">
@@ -77,344 +87,376 @@ interface Payment {
               <path d="m21 21-4.35-4.35"></path>
             </svg>
             <input type="search"
-                   class="search-input-elite"
-                    placeholder="Search by taxpayer, PRN or reference..."
-                    (input)="filterPayments($event)"
-                   aria-label="Search payments">
+              class="search-input-elite"
+              placeholder="Search by taxpayer, PRN or reference..."
+              (input)="filterPayments($event)"
+              aria-label="Search payments">
+            </div>
+            <div class="filter-pills-elite">
+              <button class="pill-btn" [class.active]="statusFilter() === 'all'"
+                (click)="filterByStatus('all')"
+                title="Show all payments">
+                All <span class="badge">{{ payments().length }}</span>
+              </button>
+              <button class="pill-btn" [class.active]="statusFilter() === 'pending'"
+                (click)="filterByStatus('pending')"
+                title="Show pending payments">
+                Pending <span class="badge">{{ pendingCount() }}</span>
+              </button>
+              <button class="pill-btn" [class.active]="statusFilter() === 'completed'"
+                (click)="filterByStatus('completed')"
+                title="Show completed payments">
+                Completed <span class="badge">{{ completedCount() }}</span>
+              </button>
+              <button class="pill-btn" [class.active]="statusFilter() === 'failed'"
+                (click)="filterByStatus('failed')"
+                title="Show failed payments">
+                Failed <span class="badge">{{ failedCount() }}</span>
+              </button>
+            </div>
           </div>
-          <div class="filter-pills-elite">
-            <button class="pill-btn" [class.active]="statusFilter() === 'all'"
-                    (click)="filterByStatus('all')"
-                    title="Show all payments">
-              All <span class="badge">{{ payments().length }}</span>
-            </button>
-            <button class="pill-btn" [class.active]="statusFilter() === 'pending'"
-                    (click)="filterByStatus('pending')"
-                    title="Show pending payments">
-              Pending <span class="badge">{{ pendingCount() }}</span>
-            </button>
-            <button class="pill-btn" [class.active]="statusFilter() === 'completed'"
-                    (click)="filterByStatus('completed')"
-                    title="Show completed payments">
-              Completed <span class="badge">{{ completedCount() }}</span>
-            </button>
-            <button class="pill-btn" [class.active]="statusFilter() === 'failed'"
-                    (click)="filterByStatus('failed')"
-                    title="Show failed payments">
-              Failed <span class="badge">{{ failedCount() }}</span>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Statistics Cards -->
-      <section class="animate-up delay-3" style="margin-bottom: 32px;">
-        <div class="stats-grid-premium">
-          <!-- Pending Payments -->
-          <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-1" style="cursor: pointer;" (click)="filterByStatus('pending')">
-            <div class="stat-icon-wrapper red me-3" style="font-size: 28px;">💰</div>
-            <div class="stat-info flex-grow-1">
-              <div class="stat-label">Pending Payments</div>
-              <div class="stat-value-group">
-                <h3 class="stat-number" style="amount in KES">KES {{ totalPending() | number:'1.2-2' }}</h3>
-                <span class="stat-trend" style="font-size: 12px; color: #F59E0B;">{{ pendingCount() }} payments</span>
+        </section>
+    
+        <!-- Statistics Cards -->
+        <section class="animate-up delay-3" style="margin-bottom: 32px;">
+          <div class="stats-grid-premium">
+            <!-- Pending Payments -->
+            <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-1" style="cursor: pointer;" (click)="filterByStatus('pending')">
+              <div class="stat-icon-wrapper red me-3" style="font-size: 28px;">💰</div>
+              <div class="stat-info flex-grow-1">
+                <div class="stat-label">Pending Payments</div>
+                <div class="stat-value-group">
+                  <h3 class="stat-number" style="amount in KES">KES {{ totalPending() | number:'1.2-2' }}</h3>
+                  <span class="stat-trend" style="font-size: 12px; color: #F59E0B;">{{ pendingCount() }} payments</span>
+                </div>
+              </div>
+            </div>
+    
+            <!-- Completed Payments -->
+            <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-2" style="cursor: pointer;" (click)="filterByStatus('completed')">
+              <div class="stat-icon-wrapper green me-3" style="font-size: 28px;">✓</div>
+              <div class="stat-info flex-grow-1">
+                <div class="stat-label">Completed This Month</div>
+                <div class="stat-value-group">
+                  <h3 class="stat-number">KES {{ totalCompleted() | number:'1.2-2' }}</h3>
+                  <span class="stat-trend" style="font-size: 12px; color: #10B981;">{{ completedCount() }} transactions</span>
+                </div>
+              </div>
+            </div>
+    
+            <!-- Total Transactions -->
+            <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-3">
+              <div class="stat-icon-wrapper blue me-3" style="font-size: 28px;">📊</div>
+              <div class="stat-info flex-grow-1">
+                <div class="stat-label">Total Transactions</div>
+                <div class="stat-value-group">
+                  <h3 class="stat-number">{{ payments().length }}</h3>
+                  <span class="stat-trend" style="font-size: 12px; color: #3B82F6;">on record</span>
+                </div>
+              </div>
+            </div>
+    
+            <!-- Failed Payments -->
+            <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-4" style="cursor: pointer;" (click)="filterByStatus('failed')">
+              <div class="stat-icon-wrapper gold me-3" style="font-size: 28px;">⚠️</div>
+              <div class="stat-info flex-grow-1">
+                <div class="stat-label">Failed Payments</div>
+                <div class="stat-value-group">
+                  <h3 class="stat-number">{{ failedCount() }}</h3>
+                  <span class="stat-trend" style="font-size: 12px; color: #EF4444;">need attention</span>
+                </div>
               </div>
             </div>
           </div>
-
-          <!-- Completed Payments -->
-          <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-2" style="cursor: pointer;" (click)="filterByStatus('completed')">
-            <div class="stat-icon-wrapper green me-3" style="font-size: 28px;">✓</div>
-            <div class="stat-info flex-grow-1">
-              <div class="stat-label">Completed This Month</div>
-              <div class="stat-value-group">
-                <h3 class="stat-number">KES {{ totalCompleted() | number:'1.2-2' }}</h3>
-                <span class="stat-trend" style="font-size: 12px; color: #10B981;">{{ completedCount() }} transactions</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Total Transactions -->
-          <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-3">
-            <div class="stat-icon-wrapper blue me-3" style="font-size: 28px;">📊</div>
-            <div class="stat-info flex-grow-1">
-              <div class="stat-label">Total Transactions</div>
-              <div class="stat-value-group">
-                <h3 class="stat-number">{{ payments().length }}</h3>
-                <span class="stat-trend" style="font-size: 12px; color: #3B82F6;">on record</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Failed Payments -->
-          <div class="premium-stat-card d-flex align-items-center p-4 animate-scale delay-4" style="cursor: pointer;" (click)="filterByStatus('failed')">
-            <div class="stat-icon-wrapper gold me-3" style="font-size: 28px;">⚠️</div>
-            <div class="stat-info flex-grow-1">
-              <div class="stat-label">Failed Payments</div>
-              <div class="stat-value-group">
-                <h3 class="stat-number">{{ failedCount() }}</h3>
-                <span class="stat-trend" style="font-size: 12px; color: #EF4444;">need attention</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Payments Data Table -->
-      <section class="animate-up delay-4">
-        <div class="content-card-premium">
-          <!-- Table Header -->
-          <div class="table-header-elite"
+        </section>
+    
+        <!-- Payments Data Table -->
+        <section class="animate-up delay-4">
+          <div class="content-card-premium">
+            <!-- Table Header -->
+            <div class="table-header-elite"
                style="display: flex; justify-content: space-between; align-items: center;
                       background: linear-gradient(135deg, #f8fafc 0%, #f3f4f6 100%);
                       padding: 20px 24px;
                       border-bottom: 2px solid var(--border-color);
                       border-radius: 20px 20px 0 0;">
-            <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-main); font-weight: 700;">
-              Payment Transactions
-            </h3>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn-link" (click)="exportPayments()"
-                      title="Export as CSV"
-                      style="color: #E31E24; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: 8px; border: none; background: rgba(227, 30, 36, 0.1); transition: all 0.3s;">
-                📥 Export
-              </button>
-              <button class="btn-link" (click)="printPayments()"
-                      title="Print transactions"
-                      style="color: #1A365D; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: 8px; border: none; background: rgba(26, 54, 93, 0.1); transition: all 0.3s;">
-                🖨️ Print
-              </button>
+              <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-main); font-weight: 700;">
+                Payment Transactions
+              </h3>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn-link" (click)="exportPayments()"
+                  title="Export as CSV"
+                  style="color: #E31E24; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: 8px; border: none; background: rgba(227, 30, 36, 0.1); transition: all 0.3s;">
+                  📥 Export
+                </button>
+                <button class="btn-link" (click)="printPayments()"
+                  title="Print transactions"
+                  style="color: #1A365D; font-weight: 600; cursor: pointer; padding: 8px 12px; border-radius: 8px; border: none; background: rgba(26, 54, 93, 0.1); transition: all 0.3s;">
+                  🖨️ Print
+                </button>
+              </div>
             </div>
-          </div>
-
-          <!-- Loading State with Skeleton Loaders -->
-          <div *ngIf="loading()" style="padding: 40px 24px;">
-            <app-skeleton-loader type="table"></app-skeleton-loader>
-            <app-skeleton-loader type="table" style="margin-top: 12px;"></app-skeleton-loader>
-            <app-skeleton-loader type="table" style="margin-top: 12px;"></app-skeleton-loader>
-          </div>
-
-          <!-- Data Table -->
-          <div *ngIf="!loading()" class="table-responsive-elite">
-            <table class="modern-table-elite" *ngIf="filteredPayments().length > 0">
-              <thead>
-                <tr>
-                  <th (click)="sortByColumn('id')"
-                      [class.sorted]="sortColumn() === 'id'"
-                      style="cursor: pointer; user-select: none;">
-                    Transaction
-                    <span *ngIf="sortColumn() === 'id'" class="sort-indicator">
-                      <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
-                    </span>
-                  </th>
-                  <th (click)="sortByColumn('taxpayerName')"
-                      [class.sorted]="sortColumn() === 'taxpayerName'"
-                      style="cursor: pointer; user-select: none;">
-                    Taxpayer
-                    <span *ngIf="sortColumn() === 'taxpayerName'" class="sort-indicator">
-                      <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
-                    </span>
-                  </th>
-                  <th (click)="sortByColumn('amount')"
-                      [class.sorted]="sortColumn() === 'amount'"
-                      style="cursor: pointer; user-select: none;">
-                    Amount
-                    <span *ngIf="sortColumn() === 'amount'" class="sort-indicator">
-                      <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
-                    </span>
-                  </th>
-                  <th (click)="sortByColumn('paymentMethod')"
-                      [class.sorted]="sortColumn() === 'paymentMethod'"
-                      style="cursor: pointer; user-select: none;">
-                    Method
-                    <span *ngIf="sortColumn() === 'paymentMethod'" class="sort-indicator">
-                      <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
-                    </span>
-                  </th>
-                  <th (click)="sortByColumn('paymentDate')"
-                      [class.sorted]="sortColumn() === 'paymentDate'"
-                      style="cursor: pointer; user-select: none;">
-                    Date
-                    <span *ngIf="sortColumn() === 'paymentDate'" class="sort-indicator">
-                      <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
-                    </span>
-                  </th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let payment of filteredPayments(); let i = index"
-                    class="table-row-elite"
-                    [style.animation]="'slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) ' + (i * 50) + 'ms both'">
-                  <td><strong>#{{ payment.id }}</strong></td>
-                  <td>{{ payment.taxpayerName }}</td>
-                  <td class="currency">KES {{ payment.amount | number:'1.2-2' }}</td>
-                  <td><span class="method-badge">{{ payment.paymentMethod | titlecase }}</span></td>
-                  <td>{{ payment.paymentDate | date:'short' }}</td>
-                  <td>
-                    <span [ngClass]="'status-pill-elite ' + 'status-' + payment.status">
-                      <span class="dot" [style.background]="getStatusColor(payment.status)"></span>
-                      {{ payment.status | titlecase }}
-                    </span>
-                  </td>
-                  <td>
-                    <div class="action-group-elite">
-                      <button class="icon-btn-elite"
-                              (click)="viewPayment(payment)"
-                              [attr.aria-label]="'View details for payment ' + payment.id"
+    
+            <!-- Loading State with Skeleton Loaders -->
+            @if (loading()) {
+              <div style="padding: 40px 24px;">
+                <app-skeleton-loader type="table"></app-skeleton-loader>
+                <app-skeleton-loader type="table" style="margin-top: 12px;"></app-skeleton-loader>
+                <app-skeleton-loader type="table" style="margin-top: 12px;"></app-skeleton-loader>
+              </div>
+            }
+    
+            <!-- Data Table -->
+            @if (!loading()) {
+              <div class="table-responsive-elite">
+                @if (filteredPayments().length > 0) {
+                  <table class="modern-table-elite">
+                    <thead>
+                      <tr>
+                        <th (click)="sortByColumn('id')"
+                          [class.sorted]="sortColumn() === 'id'"
+                          style="cursor: pointer; user-select: none;">
+                          Transaction
+                          @if (sortColumn() === 'id') {
+                            <span class="sort-indicator">
+                              <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
+                            </span>
+                          }
+                        </th>
+                        <th (click)="sortByColumn('taxpayerName')"
+                          [class.sorted]="sortColumn() === 'taxpayerName'"
+                          style="cursor: pointer; user-select: none;">
+                          Taxpayer
+                          @if (sortColumn() === 'taxpayerName') {
+                            <span class="sort-indicator">
+                              <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
+                            </span>
+                          }
+                        </th>
+                        <th (click)="sortByColumn('amount')"
+                          [class.sorted]="sortColumn() === 'amount'"
+                          style="cursor: pointer; user-select: none;">
+                          Amount
+                          @if (sortColumn() === 'amount') {
+                            <span class="sort-indicator">
+                              <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
+                            </span>
+                          }
+                        </th>
+                        <th (click)="sortByColumn('paymentMethod')"
+                          [class.sorted]="sortColumn() === 'paymentMethod'"
+                          style="cursor: pointer; user-select: none;">
+                          Method
+                          @if (sortColumn() === 'paymentMethod') {
+                            <span class="sort-indicator">
+                              <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
+                            </span>
+                          }
+                        </th>
+                        <th (click)="sortByColumn('paymentDate')"
+                          [class.sorted]="sortColumn() === 'paymentDate'"
+                          style="cursor: pointer; user-select: none;">
+                          Date
+                          @if (sortColumn() === 'paymentDate') {
+                            <span class="sort-indicator">
+                              <span class="sort-arrow">{{ sortAsc() ? '↑' : '↓' }}</span>
+                            </span>
+                          }
+                        </th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (payment of filteredPayments(); track payment; let i = $index) {
+                        <tr
+                          class="table-row-elite"
+                          [style.animation]="'slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) ' + (i * 50) + 'ms both'">
+                          <td><strong>#{{ payment.id }}</strong></td>
+                          <td>{{ payment.taxpayerName }}</td>
+                          <td class="currency">KES {{ payment.amount | number:'1.2-2' }}</td>
+                          <td><span class="method-badge">{{ payment.paymentMethod | titlecase }}</span></td>
+                          <td>{{ payment.paymentDate | date:'short' }}</td>
+                          <td>
+                            <span [ngClass]="'status-pill-elite ' + 'status-' + payment.status">
+                              <span class="dot" [style.background]="getStatusColor(payment.status)"></span>
+                              {{ payment.status | titlecase }}
+                            </span>
+                          </td>
+                          <td>
+                            <div class="action-group-elite">
+                              <button class="icon-btn-elite"
+                                (click)="viewPayment(payment)"
+                                [attr.aria-label]="'View details for payment ' + payment.id"
                               title="View details">👁️</button>
-                      <button class="icon-btn-elite"
-                              *ngIf="payment.status === 'completed'"
-                              (click)="downloadReceipt(payment)"
-                              [attr.aria-label]="'Download receipt for payment ' + payment.id"
-                              title="Download receipt">📥</button>
-                      <button class="icon-btn-elite"
-                              *ngIf="payment.status === 'failed'"
-                              (click)="retryPayment(payment)"
-                              [attr.aria-label]="'Retry payment ' + payment.id"
-                              title="Retry payment">🔄</button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                              @if (payment.status === 'completed') {
+                                <button class="icon-btn-elite"
+                                  (click)="downloadReceipt(payment)"
+                                  [attr.aria-label]="'Download receipt for payment ' + payment.id"
+                                title="Download receipt">📥</button>
+                              }
+                              @if (payment.status === 'failed') {
+                                <button class="icon-btn-elite"
+                                  (click)="retryPayment(payment)"
+                                  [attr.aria-label]="'Retry payment ' + payment.id"
+                                title="Retry payment">🔄</button>
+                              }
+                            </div>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                }
+              </div>
+            }
+    
+            <!-- Empty State -->
+            @if (!loading() && filteredPayments().length === 0) {
+              <div class="empty-state animate-up">
+                <div class="empty-icon">💳</div>
+                <h3 class="empty-title">No Payments Found</h3>
+                <p class="empty-message">
+                  @if (statusFilter() === 'all') {
+                    <span>You haven't made any payments yet. Click "New Payment" to get started.</span>
+                  }
+                  @if (statusFilter() !== 'all') {
+                    <span>No {{ statusFilter() }} payments found. Try a different filter.</span>
+                  }
+                </p>
+                <div class="empty-action">
+                  <button class="modern-btn primary-btn" (click)="togglePaymentForm()">
+                    ➕ Make Payment
+                  </button>
+                  @if (statusFilter() !== 'all') {
+                    <button class="modern-btn secondary-btn" (click)="filterByStatus('all')">
+                      View All Payments
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+    
+            <!-- Pagination -->
+            @if (!loading() && filteredPayments().length > 0) {
+              <div class="pagination-elite">
+                <button class="pagination-btn"
+                  [disabled]="currentPage() === 1"
+                  (click)="previousPage()"
+                  aria-label="Previous page">
+                  ← Previous
+                </button>
+                <span class="pagination-info">Page {{ currentPage() }} of {{ totalPages() }}</span>
+                <button class="pagination-btn"
+                  [disabled]="currentPage() === totalPages()"
+                  (click)="nextPage()"
+                  aria-label="Next page">
+                  Next →
+                </button>
+                <select class="pagination-select"
+                  [(ngModel)]="itemsPerPageValue"
+                  (change)="onPageSizeChange()"
+                  aria-label="Items per page">
+                  <option value="10">10 per page</option>
+                  <option value="25">25 per page</option>
+                  <option value="50">50 per page</option>
+                  <option value="100">100 per page</option>
+                </select>
+              </div>
+            }
           </div>
-
-          <!-- Empty State -->
-          <div *ngIf="!loading() && filteredPayments().length === 0" class="empty-state animate-up">
-            <div class="empty-icon">💳</div>
-            <h3 class="empty-title">No Payments Found</h3>
-            <p class="empty-message">
-              <span *ngIf="statusFilter() === 'all'">You haven't made any payments yet. Click "New Payment" to get started.</span>
-              <span *ngIf="statusFilter() !== 'all'">No {{ statusFilter() }} payments found. Try a different filter.</span>
-            </p>
-            <div class="empty-action">
-              <button class="modern-btn primary-btn" (click)="togglePaymentForm()">
-                ➕ Make Payment
-              </button>
-              <button class="modern-btn secondary-btn" (click)="filterByStatus('all')" *ngIf="statusFilter() !== 'all'">
-                View All Payments
-              </button>
-            </div>
-          </div>
-
-          <!-- Pagination -->
-          <div *ngIf="!loading() && filteredPayments().length > 0" class="pagination-elite">
-            <button class="pagination-btn"
-                    [disabled]="currentPage() === 1"
-                    (click)="previousPage()"
-                    aria-label="Previous page">
-              ← Previous
-            </button>
-            <span class="pagination-info">Page {{ currentPage() }} of {{ totalPages() }}</span>
-            <button class="pagination-btn"
-                    [disabled]="currentPage() === totalPages()"
-                    (click)="nextPage()"
-                    aria-label="Next page">
-              Next →
-            </button>
-            <select class="pagination-select"
-                    [(ngModel)]="itemsPerPageValue"
-                    (change)="onPageSizeChange()"
-                    aria-label="Items per page">
-              <option value="10">10 per page</option>
-              <option value="25">25 per page</option>
-              <option value="50">50 per page</option>
-              <option value="100">100 per page</option>
-            </select>
-          </div>
-        </div>
-      </section>
-
-      <!-- Payment Details Modal -->
-      <div *ngIf="selectedPayment()" class="modal-overlay-elite animate-up" (click)="selectedPayment.set(null)">
-        <div class="modal-elite" (click)="$event.stopPropagation()">
-          <div class="modal-header-elite">
-            <h3 class="premium-title">Payment Details</h3>
-            <button class="modal-close-elite"
-                    (click)="selectedPayment.set(null)"
-                    aria-label="Close modal">✕</button>
-          </div>
-          <div class="modal-content-elite">
-            <div class="detail-group">
-              <label>Transaction ID</label>
-              <div class="detail-value strong">{{ selectedPayment()?.transaction_id || '#' + selectedPayment()?.id }}</div>
-            </div>
-            <div class="detail-group">
-              <label>Taxpayer Name</label>
-              <div class="detail-value">{{ selectedPayment()?.taxpayerName }}</div>
-            </div>
-            <div class="detail-group">
-              <label>Amount Paid</label>
-              <div class="detail-value strong currency">KES {{ selectedPayment()?.amount | number:'1.2-2' }}</div>
-            </div>
-            <div class="detail-group">
-              <label>Payment Date</label>
-              <div class="detail-value">{{ selectedPayment()?.paymentDate | date:'medium' }}</div>
-            </div>
-            <div class="detail-group">
-              <label>Payment Method</label>
-              <div class="detail-value">{{ selectedPayment()?.paymentMethod | titlecase }}</div>
-            </div>
-            <div class="detail-group">
-              <label>Status</label>
-              <div class="detail-value">
-                <span [ngClass]="'status-pill-elite status-' + selectedPayment()?.status">
-                  <span class="dot" [style.background]="getStatusColor(selectedPayment()?.status || '')"></span>
-                  {{ selectedPayment()?.status | titlecase }}
-                </span>
+        </section>
+    
+        <!-- Payment Details Modal -->
+        @if (selectedPayment()) {
+          <div class="modal-overlay-elite animate-up" (click)="selectedPayment.set(null)">
+            <div class="modal-elite" (click)="$event.stopPropagation()">
+              <div class="modal-header-elite">
+                <h3 class="premium-title">Payment Details</h3>
+                <button class="modal-close-elite"
+                  (click)="selectedPayment.set(null)"
+                aria-label="Close modal">✕</button>
+              </div>
+              <div class="modal-content-elite">
+                <div class="detail-group">
+                  <label>Transaction ID</label>
+                  <div class="detail-value strong">{{ selectedPayment()?.transaction_id || '#' + selectedPayment()?.id }}</div>
+                </div>
+                <div class="detail-group">
+                  <label>Taxpayer Name</label>
+                  <div class="detail-value">{{ selectedPayment()?.taxpayerName }}</div>
+                </div>
+                <div class="detail-group">
+                  <label>Amount Paid</label>
+                  <div class="detail-value strong currency">KES {{ selectedPayment()?.amount | number:'1.2-2' }}</div>
+                </div>
+                <div class="detail-group">
+                  <label>Payment Date</label>
+                  <div class="detail-value">{{ selectedPayment()?.paymentDate | date:'medium' }}</div>
+                </div>
+                <div class="detail-group">
+                  <label>Payment Method</label>
+                  <div class="detail-value">{{ selectedPayment()?.paymentMethod | titlecase }}</div>
+                </div>
+                <div class="detail-group">
+                  <label>Status</label>
+                  <div class="detail-value">
+                    <span [ngClass]="'status-pill-elite status-' + selectedPayment()?.status">
+                      <span class="dot" [style.background]="getStatusColor(selectedPayment()?.status || '')"></span>
+                      {{ selectedPayment()?.status | titlecase }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-actions-elite">
+                <button class="modern-btn secondary-btn" (click)="selectedPayment.set(null)">Close</button>
+                <button class="modern-btn primary-btn" (click)="downloadReceipt(selectedPayment()!)">
+                  📥 Download Receipt
+                </button>
               </div>
             </div>
           </div>
-          <div class="modal-actions-elite">
-            <button class="modern-btn secondary-btn" (click)="selectedPayment.set(null)">Close</button>
-            <button class="modern-btn primary-btn" (click)="downloadReceipt(selectedPayment()!)">
-              📥 Download Receipt
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Help Section -->
-      <section class="animate-up delay-5"
+        }
+    
+        <!-- Help Section -->
+        <section class="animate-up delay-5"
                style="margin-top: 40px; background: var(--kra-gradient); color: white;
                       border-radius: 20px; padding: 40px; box-shadow: var(--shadow-premium-red);">
-        <h2 style="margin: 0 0 24px 0; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px;">
-          💡 Payment Help &amp; Support
-        </h2>
-        <div class="stats-grid-premium">
-          <div class="help-card">
-            <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">✓ Payment Methods</h4>
-            <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
-              We accept M-PESA, bank transfer, cheque, and online card payments.
-            </p>
+          <h2 style="margin: 0 0 24px 0; font-size: 1.5rem; font-weight: 900; letter-spacing: -0.5px;">
+            💡 Payment Help &amp; Support
+          </h2>
+          <div class="stats-grid-premium">
+            <div class="help-card">
+              <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">✓ Payment Methods</h4>
+              <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+                We accept M-PESA, bank transfer, cheque, and online card payments.
+              </p>
+            </div>
+            <div class="help-card">
+              <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">📄 Receipt &amp; Proof</h4>
+              <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+                Download payment receipts immediately after successful transaction.
+              </p>
+            </div>
+            <div class="help-card">
+              <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">📅 Payment Plans</h4>
+              <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+                Contact support for assistance with payment plans or arrangements.
+              </p>
+            </div>
+            <div class="help-card">
+              <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">🔄 Failed Payments</h4>
+              <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+                Retry failed payments or contact support for troubleshooting.
+              </p>
+            </div>
           </div>
-          <div class="help-card">
-            <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">📄 Receipt &amp; Proof</h4>
-            <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
-              Download payment receipts immediately after successful transaction.
-            </p>
-          </div>
-          <div class="help-card">
-            <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">📅 Payment Plans</h4>
-            <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
-              Contact support for assistance with payment plans or arrangements.
-            </p>
-          </div>
-          <div class="help-card">
-            <h4 style="margin: 0 0 8px 0; font-weight: 700; color: white;">🔄 Failed Payments</h4>
-            <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
-              Retry failed payments or contact support for troubleshooting.
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- Toast Notifications -->
-    <app-toast-container #toastContainer></app-toast-container>
-  `,
+        </section>
+      </div>
+    
+      <!-- Toast Notifications -->
+      <app-toast-container #toastContainer></app-toast-container>
+    `,
   styles: [`
     .payments-container {
       padding: 24px;

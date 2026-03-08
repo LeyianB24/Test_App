@@ -14,183 +14,190 @@ interface PaymentFormData {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-mpesa-payment',
-  standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   template: `
     <div class="mpesa-payment-container">
       <!-- Payment Dialog -->
-      <div class="payment-modal" *ngIf="showPaymentModal()">
-        <div class="modal-overlay" (click)="closePaymentModal()"></div>
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2>M-PESA Payment</h2>
-            <button class="close-btn" (click)="closePaymentModal()">✕</button>
-          </div>
-
-          <div class="modal-body">
-            <!-- Loading State -->
-            <div *ngIf="isProcessing()" class="processing-state">
-              <div class="spinner"></div>
-              <p>Sending payment prompt to your M-PESA phone...</p>
+      @if (showPaymentModal()) {
+        <div class="payment-modal">
+          <div class="modal-overlay" (click)="closePaymentModal()"></div>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2>M-PESA Payment</h2>
+              <button class="close-btn" (click)="closePaymentModal()">✕</button>
             </div>
-
-            <!-- Success State -->
-            <div *ngIf="!isProcessing() && paymentSuccess()" class="success-state">
-              <div class="success-icon">✓</div>
-              <h3>Payment Initiated Successfully</h3>
-              <p>A payment prompt has been sent to <strong>{{ lastPaymentPhone() }}</strong></p>
-              <p class="info-text">Please enter your M-PESA PIN when you receive the prompt.</p>
-
-              <div class="transaction-details">
-                <div class="detail-row">
-                  <span>Transaction ID:</span>
-                  <strong>{{ lastTransactionId() }}</strong>
+            <div class="modal-body">
+              <!-- Loading State -->
+              @if (isProcessing()) {
+                <div class="processing-state">
+                  <div class="spinner"></div>
+                  <p>Sending payment prompt to your M-PESA phone...</p>
                 </div>
-                <div class="detail-row">
-                  <span>Amount:</span>
-                  <strong>KES {{ lastPaymentAmount() | number:'1.0-2' }}</strong>
+              }
+              <!-- Success State -->
+              @if (!isProcessing() && paymentSuccess()) {
+                <div class="success-state">
+                  <div class="success-icon">✓</div>
+                  <h3>Payment Initiated Successfully</h3>
+                  <p>A payment prompt has been sent to <strong>{{ lastPaymentPhone() }}</strong></p>
+                  <p class="info-text">Please enter your M-PESA PIN when you receive the prompt.</p>
+                  <div class="transaction-details">
+                    <div class="detail-row">
+                      <span>Transaction ID:</span>
+                      <strong>{{ lastTransactionId() }}</strong>
+                    </div>
+                    <div class="detail-row">
+                      <span>Amount:</span>
+                      <strong>KES {{ lastPaymentAmount() | number:'1.0-2' }}</strong>
+                    </div>
+                    <div class="detail-row">
+                      <span>Status:</span>
+                      <span class="status-badge pending">Awaiting PIN Entry</span>
+                    </div>
+                  </div>
+                  <button class="modern-btn primary-btn full-width" (click)="closePaymentModal()">
+                    Close
+                  </button>
                 </div>
-                <div class="detail-row">
-                  <span>Status:</span>
-                  <span class="status-badge pending">Awaiting PIN Entry</span>
+              }
+              <!-- Error State -->
+              @if (!isProcessing() && paymentError()) {
+                <div class="error-state">
+                  <div class="error-icon">✕</div>
+                  <h3>Payment Failed</h3>
+                  <p>{{ paymentErrorMessage() }}</p>
+                  <button class="modern-btn primary-btn full-width" (click)="resetPaymentForm()">
+                    Try Again
+                  </button>
                 </div>
-              </div>
-
-              <button class="modern-btn primary-btn full-width" (click)="closePaymentModal()">
-                Close
-              </button>
-            </div>
-
-            <!-- Error State -->
-            <div *ngIf="!isProcessing() && paymentError()" class="error-state">
-              <div class="error-icon">✕</div>
-              <h3>Payment Failed</h3>
-              <p>{{ paymentErrorMessage() }}</p>
-              <button class="modern-btn primary-btn full-width" (click)="resetPaymentForm()">
-                Try Again
-              </button>
-            </div>
-
-            <!-- Form State -->
-            <form *ngIf="!isProcessing() && !paymentSuccess() && !paymentError()"
+              }
+              <!-- Form State -->
+              @if (!isProcessing() && !paymentSuccess() && !paymentError()) {
+                <form
                   [formGroup]="paymentForm"
                   (ngSubmit)="submitPayment()"
                   class="payment-form">
-
-              <!-- Phone Number Input -->
-              <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input
-                  id="phone"
-                  type="tel"
-                  formControlName="phone"
-                  placeholder="e.g., +254700000000 or 0700000000"
-                  class="form-input"
-                  [class.error]="hasPhoneError()">
-                <small class="hint-text">Must be registered with M-PESA</small>
-                <div *ngIf="hasPhoneError()" class="error-text">
-                  {{ getPhoneError() }}
+                  <!-- Phone Number Input -->
+                  <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input
+                      id="phone"
+                      type="tel"
+                      formControlName="phone"
+                      placeholder="e.g., +254700000000 or 0700000000"
+                      class="form-input"
+                      [class.error]="hasPhoneError()">
+                      <small class="hint-text">Must be registered with M-PESA</small>
+                      @if (hasPhoneError()) {
+                        <div class="error-text">
+                          {{ getPhoneError() }}
+                        </div>
+                      }
+                    </div>
+                    <!-- Amount Input -->
+                    <div class="form-group">
+                      <label for="amount">Amount (KES)</label>
+                      <div class="amount-input-group">
+                        <span class="currency-prefix">KES</span>
+                        <input
+                          id="amount"
+                          type="number"
+                          formControlName="amount"
+                          placeholder="100 - 150,000"
+                          class="form-input amount-input"
+                          [class.error]="hasAmountError()">
+                        </div>
+                        <small class="hint-text">Minimum: KES 100, Maximum: KES 150,000</small>
+                        @if (hasAmountError()) {
+                          <div class="error-text">
+                            {{ getAmountError() }}
+                          </div>
+                        }
+                      </div>
+                      <!-- Amount Fee Info -->
+                      @if (paymentForm.get('amount')?.value) {
+                        <div class="fee-breakdown">
+                          <div class="fee-row">
+                            <span>Amount:</span>
+                            <span>KES {{ paymentForm.get('amount')?.value | number:'1.0-2' }}</span>
+                          </div>
+                          <div class="fee-row">
+                            <span>M-PESA Fee:</span>
+                            <span>KES {{ calculateFee().fee | number:'1.0-2' }}</span>
+                          </div>
+                          <div class="fee-row total">
+                            <span>Total to Pay:</span>
+                            <strong>KES {{ calculateFee().total | number:'1.0-2' }}</strong>
+                          </div>
+                        </div>
+                      }
+                      <!-- Description -->
+                      <div class="form-group">
+                        <label for="description">Payment Description</label>
+                        <textarea
+                          id="description"
+                          formControlName="description"
+                          placeholder="e.g., Payment for tax return 2024"
+                          class="form-input textarea"
+                        rows="2"></textarea>
+                      </div>
+                      <!-- Form Actions -->
+                      <div class="form-actions">
+                        <button
+                          type="button"
+                          class="modern-btn outline-btn"
+                          (click)="closePaymentModal()">
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          class="modern-btn primary-btn"
+                          [disabled]="!paymentForm.valid || isProcessing()">
+                          Initiate M-PESA Payment
+                        </button>
+                      </div>
+                    </form>
+                  }
                 </div>
-              </div>
-
-              <!-- Amount Input -->
-              <div class="form-group">
-                <label for="amount">Amount (KES)</label>
-                <div class="amount-input-group">
-                  <span class="currency-prefix">KES</span>
-                  <input
-                    id="amount"
-                    type="number"
-                    formControlName="amount"
-                    placeholder="100 - 150,000"
-                    class="form-input amount-input"
-                    [class.error]="hasAmountError()">
-                </div>
-                <small class="hint-text">Minimum: KES 100, Maximum: KES 150,000</small>
-                <div *ngIf="hasAmountError()" class="error-text">
-                  {{ getAmountError() }}
-                </div>
-              </div>
-
-              <!-- Amount Fee Info -->
-              <div *ngIf="paymentForm.get('amount')?.value" class="fee-breakdown">
-                <div class="fee-row">
-                  <span>Amount:</span>
-                  <span>KES {{ paymentForm.get('amount')?.value | number:'1.0-2' }}</span>
-                </div>
-                <div class="fee-row">
-                  <span>M-PESA Fee:</span>
-                  <span>KES {{ calculateFee().fee | number:'1.0-2' }}</span>
-                </div>
-                <div class="fee-row total">
-                  <span>Total to Pay:</span>
-                  <strong>KES {{ calculateFee().total | number:'1.0-2' }}</strong>
-                </div>
-              </div>
-
-              <!-- Description -->
-              <div class="form-group">
-                <label for="description">Payment Description</label>
-                <textarea
-                  id="description"
-                  formControlName="description"
-                  placeholder="e.g., Payment for tax return 2024"
-                  class="form-input textarea"
-                  rows="2"></textarea>
-              </div>
-
-              <!-- Form Actions -->
-              <div class="form-actions">
-                <button
-                  type="button"
-                  class="modern-btn outline-btn"
-                  (click)="closePaymentModal()">
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  class="modern-btn primary-btn"
-                  [disabled]="!paymentForm.valid || isProcessing()">
-                  Initiate M-PESA Payment
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <!-- Active Payments Tracker -->
-      <div class="active-payments-panel" *ngIf="(activePayments$ | async)?.size as paymentCount">
-        <div class="panel-header">
-          <h3>Active Payments (<span class="count">{{ paymentCount }}</span>)</h3>
-          <button class="clean-btn" (click)="clearCompletedPayments()">Clear Completed</button>
-        </div>
-
-        <div class="payments-list">
-          <div *ngFor="let tracking of getActivePaymentsList()" class="payment-item">
-            <div class="payment-info">
-              <div class="phone-info">
-                <span class="label">Phone:</span>
-                <strong>{{ maskPhoneNumber(tracking.phone) }}</strong>
-              </div>
-              <div class="amount-info">
-                <span class="label">Amount:</span>
-                <strong>KES {{ tracking.amount | number:'1.0-2' }}</strong>
               </div>
             </div>
-
-            <div class="payment-status">
-              <span class="status-badge" [class]="getStatusClass(tracking.status)">
-                {{ getStatusDisplay(tracking.status) }}
-              </span>
-              <span class="timestamp">{{ tracking.timestamp | date:'short' }}</span>
+          }
+    
+          <!-- Active Payments Tracker -->
+          @if ((activePayments$ | async)?.size; as paymentCount) {
+            <div class="active-payments-panel">
+              <div class="panel-header">
+                <h3>Active Payments (<span class="count">{{ paymentCount }}</span>)</h3>
+                <button class="clean-btn" (click)="clearCompletedPayments()">Clear Completed</button>
+              </div>
+              <div class="payments-list">
+                @for (tracking of getActivePaymentsList(); track tracking) {
+                  <div class="payment-item">
+                    <div class="payment-info">
+                      <div class="phone-info">
+                        <span class="label">Phone:</span>
+                        <strong>{{ maskPhoneNumber(tracking.phone) }}</strong>
+                      </div>
+                      <div class="amount-info">
+                        <span class="label">Amount:</span>
+                        <strong>KES {{ tracking.amount | number:'1.0-2' }}</strong>
+                      </div>
+                    </div>
+                    <div class="payment-status">
+                      <span class="status-badge" [class]="getStatusClass(tracking.status)">
+                        {{ getStatusDisplay(tracking.status) }}
+                      </span>
+                      <span class="timestamp">{{ tracking.timestamp | date:'short' }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
             </div>
-          </div>
+          }
         </div>
-      </div>
-    </div>
-  `,
+    `,
   styles: [`
     .mpesa-payment-container {
       position: relative;

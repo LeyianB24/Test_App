@@ -1,5 +1,6 @@
+import { inject } from '@angular/core';
 import { Component, signal, ChangeDetectionStrategy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
@@ -14,7 +15,7 @@ interface PinDetails {
 @Component({
   selector: 'app-pin-checker',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   template: `
     <div class="dashboard-precision animate-fade-in">
       

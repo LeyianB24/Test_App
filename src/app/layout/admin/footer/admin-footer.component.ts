@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-admin-footer',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <footer class="main-footer admin-footer">
       <div class="footer-content">

@@ -1,6 +1,6 @@
 import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { SidebarComponent } from '../../layout/sidebar/sidebar.component';
 import { HeaderComponent } from '../../layout/header/header.component';
 import { FooterComponent } from '../../layout/footer/footer.component';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
  */
 @Component({
   selector: 'app-member-shell',
-  imports: [CommonModule, RouterModule, SidebarComponent, HeaderComponent, FooterComponent],
+  imports: [RouterModule, SidebarComponent, HeaderComponent, FooterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="dashboard-container">

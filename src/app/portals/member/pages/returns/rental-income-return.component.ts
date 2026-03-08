@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-rental-income-return',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   template: `
     <div class="mri-return-container p-6 animate-fade-in">

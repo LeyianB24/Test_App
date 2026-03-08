@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-assessments',
-  standalone: true,
   imports: [CommonModule],
   template: `
     <div class="assessments-container p-6 animate-fade-in">

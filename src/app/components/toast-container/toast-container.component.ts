@@ -1,5 +1,5 @@
 import { Component, inject, signal, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 export interface Toast {
   id: string;
@@ -17,9 +17,9 @@ export interface Toast {
  * Integrates with NotificationService for app-wide notifications
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-toast-container',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="toast-container-precision" role="region" aria-label="Notifications" aria-live="polite">
       @for (toast of toasts(); track toast.id) {

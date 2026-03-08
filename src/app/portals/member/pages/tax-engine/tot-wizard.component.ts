@@ -13,7 +13,6 @@ interface MonthlyTurnover {
 
 @Component({
   selector: 'app-tot-wizard',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, FilingWizardShellComponent],
   template: `

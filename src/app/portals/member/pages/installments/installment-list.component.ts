@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-installment-list',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
     <div class="installments-list-container p-6 animate-fade-in">

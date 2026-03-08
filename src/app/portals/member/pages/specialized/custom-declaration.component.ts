@@ -1,5 +1,5 @@
 import { Component, signal, computed, ChangeDetectionStrategy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 
 interface DeclarationItem {
@@ -13,7 +13,7 @@ interface DeclarationItem {
 @Component({
   selector: 'app-custom-declaration',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   template: `
     <div class="page-container p-8 animate-fade-in">
       <header class="mb-12">

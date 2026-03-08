@@ -5,8 +5,8 @@ import { RouterModule } from '@angular/router';
 import { KbService, KbCategory } from '../../../../services/kb.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-kb-list',
-  standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   template: `
     <div class="page-container p-8 animate-fade-in">

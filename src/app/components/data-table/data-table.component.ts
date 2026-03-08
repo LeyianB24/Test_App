@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, computed, signal, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, computed, signal, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ExportService, ExportColumn } from '../../services/export.service';
@@ -22,8 +22,8 @@ export interface TableAction {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-data-table',
-  standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
     <div class="card-precision dashboard-content-precision overflow-hidden border border-subtle relative">
@@ -40,181 +40,189 @@ export interface TableAction {
               [(ngModel)]="searchQuery"
               (input)="onSearch()"
               class="input-precision sm pl-10 w-[280px] bg-surface-2/50">
+            </div>
+    
+            <div class="filter-wrapper-precision relative">
+              <select [(ngModel)]="selectedStatus" (change)="onFilter()" class="input-precision sm appearance-none pr-10 bg-surface-2/50 text-xs font-bold uppercase tracking-wider">
+                <option value="">Operational Status</option>
+                <option value="completed">Verified</option>
+                <option value="pending">Synchronizing</option>
+                <option value="failed">Halted</option>
+              </select>
+              <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20">
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+            </div>
           </div>
-
-          <div class="filter-wrapper-precision relative">
-            <select [(ngModel)]="selectedStatus" (change)="onFilter()" class="input-precision sm appearance-none pr-10 bg-surface-2/50 text-xs font-bold uppercase tracking-wider">
-              <option value="">Operational Status</option>
-              <option value="completed">Verified</option>
-              <option value="pending">Synchronizing</option>
-              <option value="failed">Halted</option>
-            </select>
-            <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20">
-              <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="2"/></svg>
+    
+          <div class="toolbar-right flex items-center gap-4">
+            <button (click)="refreshData()" class="btn-precision btn-secondary-precision btn-sm px-3" title="Refresh Feed">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 5H15" stroke-width="2.5"/>
+              </svg>
+            </button>
+    
+            <div class="relative">
+              <button (click)="showExportMenu.set(!showExportMenu())" class="btn-precision btn-secondary-precision btn-sm gap-2" [class.active-precision]="showExportMenu()">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/>
+                </svg>
+                <span class="style-label">Export</span>
+              </button>
+    
+              @if (showExportMenu()) {
+                <div class="absolute right-0 top-full mt-2 z-50 bg-overlay backdrop-blur-xl border border-default rounded-2xl shadow-2xl p-2 min-w-[200px] animate-fade-in">
+                  <button (click)="exportTable('excel')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-hover rounded-xl transition-all text-xs font-bold text-secondary">
+                    <span class="text-success">📊</span> Excel Record
+                  </button>
+                  <button (click)="exportTable('pdf')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-hover rounded-xl transition-all text-xs font-bold text-secondary">
+                    <span class="text-danger">📄</span> PDF Document
+                  </button>
+                  <button (click)="exportTable('csv')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-hover rounded-xl transition-all text-xs font-bold text-secondary">
+                    <span class="text-info">📋</span> CSV Manifest
+                  </button>
+                </div>
+              }
             </div>
           </div>
         </div>
-
-        <div class="toolbar-right flex items-center gap-4">
-          <button (click)="refreshData()" class="btn-precision btn-secondary-precision btn-sm px-3" title="Refresh Feed">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 5H15" stroke-width="2.5"/>
-            </svg>
-          </button>
-
-          <div class="relative">
-            <button (click)="showExportMenu.set(!showExportMenu())" class="btn-precision btn-secondary-precision btn-sm gap-2" [class.active-precision]="showExportMenu()">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2"/>
-              </svg>
-              <span class="style-label">Export</span>
-            </button>
-            
-            @if (showExportMenu()) {
-              <div class="absolute right-0 top-full mt-2 z-50 bg-overlay backdrop-blur-xl border border-default rounded-2xl shadow-2xl p-2 min-w-[200px] animate-fade-in">
-                <button (click)="exportTable('excel')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-hover rounded-xl transition-all text-xs font-bold text-secondary">
-                  <span class="text-success">📊</span> Excel Record
-                </button>
-                <button (click)="exportTable('pdf')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-hover rounded-xl transition-all text-xs font-bold text-secondary">
-                  <span class="text-danger">📄</span> PDF Document
-                </button>
-                <button (click)="exportTable('csv')" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-hover rounded-xl transition-all text-xs font-bold text-secondary">
-                  <span class="text-info">📋</span> CSV Manifest
-                </button>
-              </div>
-            }
-          </div>
-        </div>
-      </div>
-
-      <!-- High-Precision Data Grid -->
-      <div class="table-container-precision overflow-x-auto scrollbar-thin">
-        <table class="table-precision w-full border-collapse">
-          <thead>
-            <tr class="bg-surface-2/30">
-              @for (col of columns; track col.key) {
-                <th [style.width]="col.width || 'auto'"
+    
+        <!-- High-Precision Data Grid -->
+        <div class="table-container-precision overflow-x-auto scrollbar-thin">
+          <table class="table-precision w-full border-collapse">
+            <thead>
+              <tr class="bg-surface-2/30">
+                @for (col of columns; track col.key) {
+                  <th [style.width]="col.width || 'auto'"
                     [class.sortable-precision]="col.sortable"
                     (click)="col.sortable && toggleSort(col.key)"
                     class="group px-8 py-5 border-b border-subtle">
-                  <div class="flex items-center justify-between gap-4">
-                    <span class="style-label text-tertiary group-hover:text-primary transition-colors">{{ col.label }}</span>
-                    @if (col.sortable) {
-                      <div class="sort-icon-precision opacity-20 group-hover:opacity-100 transition-opacity" [class.active-precision]="sortBy() === col.key">
-                        @if (sortBy() === col.key && sortOrder() === 'desc') {
-                          <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 4L4 1L7 4" stroke="var(--color-accent)" stroke-width="2"/></svg>
-                        } @else {
-                          <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="2"/></svg>
-                        }
-                      </div>
-                    }
-                  </div>
-                </th>
-              }
-              @if (actions.length > 0) {
-                <th style="width: 140px;" class="text-right px-8 py-5 border-b border-subtle style-label text-tertiary">Actions</th>
-              }
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-subtle">
-            @for (row of paginatedData(); track $index) {
-              <tr class="table-row-precision transition-all bg-table-row hover:bg-table-row-hover">
-                @for (col of columns; track col.key) {
-                  <td class="px-8 py-5" [style.width]="col.width || 'auto'">
-                    <div [ngSwitch]="col.type">
-                      <!-- Standard Text -->
-                      <span *ngSwitchCase="'text'" class="text-primary font-medium text-sm leading-none block">
-                        {{ row[col.key] }}
-                      </span>
-
-                      <!-- Financial Intensity -->
-                      <span *ngSwitchCase="'currency'" class="style-data text-primary tabular-nums">
-                        {{ row[col.key] | currency:'KES ':'code':'1.0-0' }}
-                      </span>
-
-                      <!-- Chronological Identity -->
-                      <div *ngSwitchCase="'date'" class="date-identity">
-                        <span class="style-data text-secondary block">{{ row[col.key] | date:'dd MMM yyyy' }}</span>
-                        <span class="text-tertiary font-black text-[9px] uppercase tracking-widest block mt-1">{{ row[col.key] | date:'HH:mm' }}</span>
-                      </div>
-
-                      <!-- Operational Status -->
-                      <div *ngSwitchCase="'status'">
-                        <span class="status-badge-elite" [class]="getStatusClass(row[col.key])">
-                          <span class="dot"></span>
-                          {{ row[col.key] }}
-                        </span>
-                      </div>
-
-                      <!-- Mathematical units -->
-                      <span *ngSwitchCase="'number'" class="style-data text-tertiary tabular-nums">
-                        {{ row[col.key] | number:'1.0-0' }}
-                      </span>
-                    </div>
-                  </td>
-                }
-
-                <!-- Reactive Actions -->
-                @if (actions.length > 0) {
-                  <td class="px-8 py-5 text-right">
-                    <div class="flex justify-end gap-2">
-                      @for (action of actions; track action.label) {
-                        <button (click)="onAction(action.action, row)" 
-                                class="btn-precision btn-secondary-precision btn-sm px-2.5 border-subtle hover:border-accent/40 bg-surface-2/30" 
-                                [title]="action.label">
-                          <span class="text-xs">{{ action.icon }}</span>
-                        </button>
+                    <div class="flex items-center justify-between gap-4">
+                      <span class="style-label text-tertiary group-hover:text-primary transition-colors">{{ col.label }}</span>
+                      @if (col.sortable) {
+                        <div class="sort-icon-precision opacity-20 group-hover:opacity-100 transition-opacity" [class.active-precision]="sortBy() === col.key">
+                          @if (sortBy() === col.key && sortOrder() === 'desc') {
+                            <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 4L4 1L7 4" stroke="var(--color-accent)" stroke-width="2"/></svg>
+                          } @else {
+                            <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1L4 4L7 1" stroke="currentColor" stroke-width="2"/></svg>
+                          }
+                        </div>
                       }
                     </div>
-                  </td>
+                  </th>
+                }
+                @if (actions.length > 0) {
+                  <th style="width: 140px;" class="text-right px-8 py-5 border-b border-subtle style-label text-tertiary">Actions</th>
                 }
               </tr>
-            }
-
-            <!-- Null State Matrix -->
-            @if (filteredData().length === 0) {
-              <tr>
-                <td [attr.colspan]="columns.length + (actions.length > 0 ? 1 : 0)" class="py-32">
-                  <div class="null-state-precision text-center max-w-sm mx-auto">
-                    <div class="icon-orb-precision w-20 h-20 bg-surface-2/40 rounded-full flex items-center justify-center mx-auto mb-6 border border-subtle">
-                      <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-tertiary"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" stroke-width="1.5"/></svg>
+            </thead>
+            <tbody class="divide-y divide-subtle">
+              @for (row of paginatedData(); track $index) {
+                <tr class="table-row-precision transition-all bg-table-row hover:bg-table-row-hover">
+                  @for (col of columns; track col.key) {
+                    <td class="px-8 py-5" [style.width]="col.width || 'auto'">
+                      <div>
+                        @switch (col.type) {
+                          <!-- Standard Text -->
+                          @case ('text') {
+                            <span class="text-primary font-medium text-sm leading-none block">
+                              {{ row[col.key] }}
+                            </span>
+                          }
+                          <!-- Financial Intensity -->
+                          @case ('currency') {
+                            <span class="style-data text-primary tabular-nums">
+                              {{ row[col.key] | currency:'KES ':'code':'1.0-0' }}
+                            </span>
+                          }
+                          <!-- Chronological Identity -->
+                          @case ('date') {
+                            <div class="date-identity">
+                              <span class="style-data text-secondary block">{{ row[col.key] | date:'dd MMM yyyy' }}</span>
+                              <span class="text-tertiary font-black text-[9px] uppercase tracking-widest block mt-1">{{ row[col.key] | date:'HH:mm' }}</span>
+                            </div>
+                          }
+                          <!-- Operational Status -->
+                          @case ('status') {
+                            <div>
+                              <span class="status-badge-elite" [class]="getStatusClass(row[col.key])">
+                                <span class="dot"></span>
+                                {{ row[col.key] }}
+                              </span>
+                            </div>
+                          }
+                          <!-- Mathematical units -->
+                          @case ('number') {
+                            <span class="style-data text-tertiary tabular-nums">
+                              {{ row[col.key] | number:'1.0-0' }}
+                            </span>
+                          }
+                        }
+                      </div>
+                    </td>
+                  }
+    
+                  <!-- Reactive Actions -->
+                  @if (actions.length > 0) {
+                    <td class="px-8 py-5 text-right">
+                      <div class="flex justify-end gap-2">
+                        @for (action of actions; track action.label) {
+                          <button (click)="onAction(action.action, row)"
+                            class="btn-precision btn-secondary-precision btn-sm px-2.5 border-subtle hover:border-accent/40 bg-surface-2/30"
+                            [title]="action.label">
+                            <span class="text-xs">{{ action.icon }}</span>
+                          </button>
+                        }
+                      </div>
+                    </td>
+                  }
+                </tr>
+              }
+    
+              <!-- Null State Matrix -->
+              @if (filteredData().length === 0) {
+                <tr>
+                  <td [attr.colspan]="columns.length + (actions.length > 0 ? 1 : 0)" class="py-32">
+                    <div class="null-state-precision text-center max-w-sm mx-auto">
+                      <div class="icon-orb-precision w-20 h-20 bg-surface-2/40 rounded-full flex items-center justify-center mx-auto mb-6 border border-subtle">
+                        <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-tertiary"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" stroke-width="1.5"/></svg>
+                      </div>
+                      <h3 class="text-primary font-bold text-lg mb-2">No Records Localized</h3>
+                      <p class="text-tertiary text-xs font-medium">{{ searchQuery ? 'Your search query yielded zero operational matches.' : 'Registry pipeline currently contains no synchronized data.' }}</p>
                     </div>
-                    <h3 class="text-primary font-bold text-lg mb-2">No Records Localized</h3>
-                    <p class="text-tertiary text-xs font-medium">{{ searchQuery ? 'Your search query yielded zero operational matches.' : 'Registry pipeline currently contains no synchronized data.' }}</p>
-                  </div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Tactical Pagination Shell -->
-      @if (totalPages() > 1) {
-        <div class="pagination-shell-precision px-8 py-5 border-t border-subtle flex justify-between items-center glass-effect">
-          <div class="pagination-telemetry">
-            <span class="style-label text-tertiary opacity-60">Telemetry: </span>
-            <span class="style-data text-secondary text-xs">{{ startIndex() + 1 }} - {{ endIndex() }} <span class="text-tertiary mx-1">of</span> {{ filteredData().length }} Units</span>
-          </div>
-          
-          <div class="pagination-controls-precision flex items-center gap-3">
-            <button [disabled]="currentPage() === 1" (click)="previousPage()" class="btn-precision btn-secondary-precision btn-sm px-4 disabled:opacity-10 transition-all border-subtle">
-              Prev Transmission
-            </button>
-            <div class="page-indicator-precision px-5 py-1.5 bg-surface-3/50 border border-subtle rounded-xl shadow-inner">
-               <span class="style-label text-[10px] text-tertiary">Phase</span>
-               <span class="text-primary font-black text-xs ml-2">{{ currentPage() }}</span>
-               <span class="text-tertiary mx-1.5">/</span>
-               <span class="text-tertiary font-bold text-xs">{{ totalPages() }}</span>
-            </div>
-            <button [disabled]="currentPage() === totalPages()" (click)="nextPage()" class="btn-precision btn-secondary-precision btn-sm px-4 disabled:opacity-10 transition-all border-subtle">
-              Next Transmission
-            </button>
-          </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
         </div>
-      }
-    </div>
-  `,
+    
+        <!-- Tactical Pagination Shell -->
+        @if (totalPages() > 1) {
+          <div class="pagination-shell-precision px-8 py-5 border-t border-subtle flex justify-between items-center glass-effect">
+            <div class="pagination-telemetry">
+              <span class="style-label text-tertiary opacity-60">Telemetry: </span>
+              <span class="style-data text-secondary text-xs">{{ startIndex() + 1 }} - {{ endIndex() }} <span class="text-tertiary mx-1">of</span> {{ filteredData().length }} Units</span>
+            </div>
+    
+            <div class="pagination-controls-precision flex items-center gap-3">
+              <button [disabled]="currentPage() === 1" (click)="previousPage()" class="btn-precision btn-secondary-precision btn-sm px-4 disabled:opacity-10 transition-all border-subtle">
+                Prev Transmission
+              </button>
+              <div class="page-indicator-precision px-5 py-1.5 bg-surface-3/50 border border-subtle rounded-xl shadow-inner">
+                <span class="style-label text-[10px] text-tertiary">Phase</span>
+                <span class="text-primary font-black text-xs ml-2">{{ currentPage() }}</span>
+                <span class="text-tertiary mx-1.5">/</span>
+                <span class="text-tertiary font-bold text-xs">{{ totalPages() }}</span>
+              </div>
+              <button [disabled]="currentPage() === totalPages()" (click)="nextPage()" class="btn-precision btn-secondary-precision btn-sm px-4 disabled:opacity-10 transition-all border-subtle">
+                Next Transmission
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    `,
   styles: [`
     :host { display: block; width: 100%; }
     .glass-effect {
@@ -268,10 +276,10 @@ export interface TableAction {
   `]
 })
 export class DataTableComponent {
-  @Input() data: any[] = [];
-  @Input() columns: TableColumn[] = [];
-  @Input() actions: TableAction[] = [];
-  @Output() actionTriggered = new EventEmitter<{action: string; row: any}>();
+  data = input<any[]>([]);
+  columns = input<TableColumn[]>([]);
+  actions = input<TableAction[]>([]);
+  actionTriggered = output<{action: string; row: any}>();
 
   private exportService = inject(ExportService);
   private notificationService = inject(NotificationService);

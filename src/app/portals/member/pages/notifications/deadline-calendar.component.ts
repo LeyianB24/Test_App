@@ -1,5 +1,5 @@
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 interface Deadline {
   id: number;
@@ -12,7 +12,7 @@ interface Deadline {
 
 @Component({
   selector: 'app-deadline-calendar',
-  imports: [CommonModule],
+  imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="page-container p-8 animate-fade-in">

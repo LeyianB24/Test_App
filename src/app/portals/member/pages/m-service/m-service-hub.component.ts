@@ -1,11 +1,10 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-m-service-hub',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   template: `
     <div class="m-service-container p-6 animate-fade-in max-w-lg mx-auto">
       <header class="mb-10 text-center">

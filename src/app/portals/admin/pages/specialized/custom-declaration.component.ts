@@ -1,11 +1,10 @@
 import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-custom-declaration',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="page-container p-8 animate-up">
@@ -15,24 +14,24 @@ import { FormsModule } from '@angular/forms';
           <p class="premium-subtitle">Declare goods and assets at the port of entry</p>
         </div>
         <div class="header-actions">
-           <div class="status-pill-elite active">
-              <span class="dot"></span>
-              Secure Form
-           </div>
+          <div class="status-pill-elite active">
+            <span class="dot"></span>
+            Secure Form
+          </div>
         </div>
       </header>
-
+    
       <div class="max-w-4xl mx-auto">
         <!-- Elite Stepper -->
         <div class="elite-stepper mb-12">
           @for (s of steps; track s; let i = $index) {
             <div class="elite-step" [class.active]="currentStep() === i" [class.done]="currentStep() > i">
               <div class="step-blob">
-                 @if (currentStep() > i) {
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                 } @else {
-                    {{ i + 1 }}
-                 }
+                @if (currentStep() > i) {
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                } @else {
+                  {{ i + 1 }}
+                }
               </div>
               <span class="step-text">{{ s }}</span>
             </div>
@@ -41,15 +40,15 @@ import { FormsModule } from '@angular/forms';
             }
           }
         </div>
-
+    
         <div class="content-card-premium p-10 relative overflow-hidden">
           <div class="absolute -top-20 -left-20 w-60 h-60 bg-red-50 rounded-full blur-3xl opacity-40"></div>
-          
+    
           @if (currentStep() === 0) {
             <div class="step-content animate-fade-in relative z-10">
               <div class="flex items-center gap-3 mb-8">
-                 <div class="w-1 h-6 bg-red-600 rounded-full"></div>
-                 <h3 class="text-xl font-black text-slate-800">Traveler Details</h3>
+                <div class="w-1 h-6 bg-red-600 rounded-full"></div>
+                <h3 class="text-xl font-black text-slate-800">Traveler Details</h3>
               </div>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="field-group">
@@ -71,24 +70,24 @@ import { FormsModule } from '@angular/forms';
               </div>
             </div>
           }
-
+    
           @if (currentStep() === 1) {
             <div class="step-content animate-fade-in relative z-10">
               <div class="flex items-center gap-3 mb-8">
-                 <div class="w-1 h-6 bg-red-600 rounded-full"></div>
-                 <h3 class="text-xl font-black text-slate-800">Declare Goods</h3>
+                <div class="w-1 h-6 bg-red-600 rounded-full"></div>
+                <h3 class="text-xl font-black text-slate-800">Declare Goods</h3>
               </div>
-              
+    
               <div class="space-y-4 mb-10">
                 @for (item of formData.items; track item.id; let i = $index) {
                   <div class="item-row-elite flex gap-4 items-center">
                     <input type="text" [(ngModel)]="item.description" class="search-input-elite flex-[3] py-4 px-6" placeholder="Item Description"/>
                     <div class="relative flex-1">
-                       <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
-                       <input type="number" [(ngModel)]="item.value" class="search-input-elite w-full py-4 pl-8 pr-4" placeholder="Value"/>
+                      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                      <input type="number" [(ngModel)]="item.value" class="search-input-elite w-full py-4 pl-8 pr-4" placeholder="Value"/>
                     </div>
                     <button (click)="removeItem(i)" class="icon-btn-elite text-red-500">
-                       <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                     </button>
                   </div>
                 }
@@ -97,20 +96,20 @@ import { FormsModule } from '@angular/forms';
                   Add Item
                 </button>
               </div>
-
+    
               <div class="p-8 bg-slate-900 rounded-[2rem] text-white shadow-2xl relative overflow-hidden group">
                 <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-red-600 rounded-full blur-3xl opacity-20 transition-transform group-hover:scale-150"></div>
                 <div class="flex justify-between items-center relative z-10">
                   <div>
-                     <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Total Value</span>
-                     <p class="text-xs text-slate-500 mt-1">Total value of declared items</p>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Total Value</span>
+                    <p class="text-xs text-slate-500 mt-1">Total value of declared items</p>
                   </div>
                   <span class="text-4xl font-black gradient-text">USD {{ calculateTotal().toLocaleString() }}</span>
                 </div>
               </div>
             </div>
           }
-
+    
           @if (currentStep() === 2) {
             <div class="step-content text-center py-10 animate-fade-in relative z-10">
               @if (!isSubmitted()) {
@@ -143,22 +142,24 @@ import { FormsModule } from '@angular/forms';
             </div>
           }
         </div>
-
+    
         @if (!isSubmitted()) {
           <div class="nav-btns flex justify-between mt-12 px-2">
             <button class="modern-btn outline-btn" [disabled]="currentStep() === 0" (click)="prev()">
-               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mr-2"><path stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
-               Back
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mr-2"><path stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
+              Back
             </button>
             <button class="modern-btn primary-btn px-10" [disabled]="!canNext()" (click)="next()">
               {{ currentStep() === 2 ? 'Submit Declaration' : 'Next' }}
-              <svg *ngIf="currentStep() < 2" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="ml-2"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+              @if (currentStep() < 2) {
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="ml-2"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+              }
             </button>
           </div>
         }
       </div>
     </div>
-  `,
+    `,
   styles: [`
     .page-container { max-width: 1200px; margin: 0 auto; }
     .animate-up { animation: up 0.6s cubic-bezier(0.16, 1, 0.3, 1); }

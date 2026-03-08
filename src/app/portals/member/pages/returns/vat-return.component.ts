@@ -1,3 +1,4 @@
+import { inject } from '@angular/core';
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
@@ -5,7 +6,6 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-vat-return',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   template: `
     <div class="vat-return-container p-6 animate-fade-in">

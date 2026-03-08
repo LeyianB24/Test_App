@@ -5,7 +5,6 @@ import { KbService, KbArticle, KbCategory } from '../../../../services/kb.servic
 
 @Component({
   selector: 'app-kb-category',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
     <div class="page-container p-8 animate-fade-in">

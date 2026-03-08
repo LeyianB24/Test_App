@@ -1,6 +1,6 @@
 import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { AdminSidebarComponent } from '../../layout/admin/sidebar/admin-sidebar.component';
 import { AdminHeaderComponent } from '../../layout/admin/header/admin-header.component';
 import { AdminFooterComponent } from '../../layout/admin/footer/admin-footer.component';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
  */
 @Component({
   selector: 'app-admin-shell',
-  imports: [CommonModule, RouterModule, AdminSidebarComponent, AdminHeaderComponent, AdminFooterComponent],
+  imports: [RouterModule, AdminSidebarComponent, AdminHeaderComponent, AdminFooterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="dashboard-container admin-portal-theme">

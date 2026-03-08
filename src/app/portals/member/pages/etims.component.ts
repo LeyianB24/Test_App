@@ -4,12 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { EtimsService } from '../../../services/etims.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-etims',
-  standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
     <div class="page-container animate-up">
-      
+    
       <!-- Elite Page Header -->
       <header class="page-header-elite">
         <div class="header-info">
@@ -17,13 +17,13 @@ import { EtimsService } from '../../../services/etims.service';
           <p class="premium-subtitle">Create and manage your electronic tax invoices</p>
         </div>
         <div class="header-actions">
-           <button class="modern-btn primary-btn" (click)="showInvoiceDialog.set(true)">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="3"/></svg>
-              Create Invoice
-           </button>
+          <button class="modern-btn primary-btn" (click)="showInvoiceDialog.set(true)">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="3"/></svg>
+            Create Invoice
+          </button>
         </div>
       </header>
-
+    
       <!-- Elite Metrics Grid -->
       <div class="stats-grid-premium">
         <div class="premium-stat-card animate-up delay-1">
@@ -33,11 +33,11 @@ import { EtimsService } from '../../../services/etims.service';
           <div class="stat-info">
             <span class="stat-label">Total Invoices</span>
             <div class="stat-value-group">
-               <h3 class="stat-number">{{ allInvoices().length }}</h3>
+              <h3 class="stat-number">{{ allInvoices().length }}</h3>
             </div>
           </div>
         </div>
-
+    
         <div class="premium-stat-card animate-up delay-2">
           <div class="stat-icon-wrapper green">
             <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2.2"/></svg>
@@ -45,180 +45,179 @@ import { EtimsService } from '../../../services/etims.service';
           <div class="stat-info">
             <span class="stat-label">Total Revenue</span>
             <div class="stat-value-group">
-               <h3 class="stat-number">KES {{ totalRevenue() | number:'1.0-0' }}</h3>
+              <h3 class="stat-number">KES {{ totalRevenue() | number:'1.0-0' }}</h3>
             </div>
           </div>
         </div>
-
+    
         <div class="premium-stat-card animate-up delay-3">
           <div class="stat-icon-wrapper red">
-             <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-width="2.2"/></svg>
+            <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-width="2.2"/></svg>
           </div>
           <div class="stat-info">
             <span class="stat-label">Total VAT</span>
             <div class="stat-value-group">
-               <h3 class="stat-number">KES {{ totalTax() | number:'1.0-0' }}</h3>
+              <h3 class="stat-number">KES {{ totalTax() | number:'1.0-0' }}</h3>
             </div>
           </div>
         </div>
-
+    
         <div class="premium-stat-card animate-up delay-3">
           <div class="stat-icon-wrapper grey">
-             <div class="pulse-ring"></div>
-             <div class="pulse-dot"></div>
+            <div class="pulse-ring"></div>
+            <div class="pulse-dot"></div>
           </div>
           <div class="stat-info">
             <span class="stat-label">System Status</span>
             <div class="stat-value-group">
-               <h3 class="stat-number status-online" style="font-size: 0.95rem;">ONLINE</h3>
+              <h3 class="stat-number status-online" style="font-size: 0.95rem;">ONLINE</h3>
             </div>
           </div>
         </div>
       </div>
-
+    
       <!-- Action & Filter Surface -->
       <div class="action-bar-glass mt-32 animate-up delay-2">
         <div class="filter-pills-elite">
-           <button class="pill-btn" [class.active]="activeFilter === 'all'" (click)="activeFilter = 'all'">
-              All Invoices <span class="badge">{{ allInvoices().length }}</span>
-           </button>
-           <button class="pill-btn" [class.active]="activeFilter === 'synced'" (click)="activeFilter = 'synced'">
-              Synced
-           </button>
-           <button class="pill-btn" [class.active]="activeFilter === 'pending'" (click)="activeFilter = 'pending'">
-              Pending
-           </button>
+          <button class="pill-btn" [class.active]="activeFilter === 'all'" (click)="activeFilter = 'all'">
+            All Invoices <span class="badge">{{ allInvoices().length }}</span>
+          </button>
+          <button class="pill-btn" [class.active]="activeFilter === 'synced'" (click)="activeFilter = 'synced'">
+            Synced
+          </button>
+          <button class="pill-btn" [class.active]="activeFilter === 'pending'" (click)="activeFilter = 'pending'">
+            Pending
+          </button>
         </div>
         <div class="search-premium">
-           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2.5"/></svg>
-           <input type="text" placeholder="Search invoice number or customer..." class="search-input-elite" [(ngModel)]="searchQuery" (input)="onSearch()">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2.5"/></svg>
+          <input type="text" placeholder="Search invoice number or customer..." class="search-input-elite" [(ngModel)]="searchQuery" (input)="onSearch()">
         </div>
       </div>
-
+    
       <!-- Main Registry Table -->
       <div class="content-card-premium animate-up delay-3">
-         <div class="table-responsive-elite">
-            <table class="modern-table-elite">
-              <thead>
-                <tr>
-                  <th>Invoice Number</th>
-                  <th>Date</th>
-                  <th>Customer</th>
-                  <th>Amount</th>
-                  <th>Tax Amount</th>
-                  <th>Status</th>
-                  <th class="text-center">Action</th>
+        <div class="table-responsive-elite">
+          <table class="modern-table-elite">
+            <thead>
+              <tr>
+                <th>Invoice Number</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Amount</th>
+                <th>Tax Amount</th>
+                <th>Status</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (invoice of filteredInvoices(); track invoice.id) {
+                <tr class="table-row-hover">
+                  <td><span class="invoice-id-elite">{{ invoice.invoiceNumber }}</span></td>
+                  <td><span class="date-label-elite">{{ invoice.date }}</span></td>
+                  <td>
+                    <div class="customer-block">
+                      <div class="avatar-ref">{{ invoice.customerName.charAt(0) }}</div>
+                      <span class="customer-title">{{ invoice.customerName }}</span>
+                    </div>
+                  </td>
+                  <td><span class="amount-val-elite">KES {{ invoice.amount | number:'1.0-0' }}</span></td>
+                  <td><span class="tax-amt-elite">KES {{ invoice.taxAmount | number:'1.0-0' }}</span></td>
+                  <td>
+                    <div class="status-pill-elite" [ngClass]="invoice.status">
+                      <span class="dot"></span>
+                      {{ invoice.status }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="action-center">
+                      @if (invoice.status === 'pending') {
+                        <button class="modern-btn primary-btn sm" (click)="syncInvoice(invoice.id)" [disabled]="syncing() === invoice.id">
+                          {{ syncing() === invoice.id ? 'SYNCING' : 'SYNC NOW' }}
+                        </button>
+                      } @else if (invoice.status === 'error') {
+                        <button class="modern-btn outline-btn sm danger" (click)="retrySync(invoice.id)">
+                          RETRY SYNC
+                        </button>
+                      } @else {
+                        <button class="icon-btn-elite" title="Download Invoice">
+                          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2.2"/></svg>
+                        </button>
+                      }
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                @for (invoice of filteredInvoices(); track invoice.id) {
-                  <tr class="table-row-hover">
-                    <td><span class="invoice-id-elite">{{ invoice.invoiceNumber }}</span></td>
-                    <td><span class="date-label-elite">{{ invoice.date }}</span></td>
-                    <td>
-                      <div class="customer-block">
-                        <div class="avatar-ref">{{ invoice.customerName.charAt(0) }}</div>
-                        <span class="customer-title">{{ invoice.customerName }}</span>
-                      </div>
-                    </td>
-                    <td><span class="amount-val-elite">KES {{ invoice.amount | number:'1.0-0' }}</span></td>
-                    <td><span class="tax-amt-elite">KES {{ invoice.taxAmount | number:'1.0-0' }}</span></td>
-                    <td>
-                      <div class="status-pill-elite" [ngClass]="invoice.status">
-                        <span class="dot"></span>
-                        {{ invoice.status }}
-                      </div>
-                    </td>
-                    <td>
-                      <div class="action-center">
-                        @if (invoice.status === 'pending') {
-                          <button class="modern-btn primary-btn sm" (click)="syncInvoice(invoice.id)" [disabled]="syncing() === invoice.id">
-                            {{ syncing() === invoice.id ? 'SYNCING' : 'SYNC NOW' }}
-                          </button>
-                        } @else if (invoice.status === 'error') {
-                          <button class="modern-btn outline-btn sm danger" (click)="retrySync(invoice.id)">
-                            RETRY SYNC
-                          </button>
-                        } @else {
-                          <button class="icon-btn-elite" title="Download Invoice">
-                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2.2"/></svg>
-                          </button>
-                        }
-                      </div>
-                    </td>
-                  </tr>
                 } @empty {
-                  <tr>
-                    <td colspan="7" class="empty-placeholder">
-                       <div class="empty-state-luxury">
-                          <div class="e-icon">∅</div>
-                          <p>No invoices found. Create a new one below.</p>
-                          <button class="modern-btn outline-btn sm mt-16" (click)="showInvoiceDialog.set(true)">Create First Invoice</button>
-                       </div>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-         </div>
+                <tr>
+                  <td colspan="7" class="empty-placeholder">
+                    <div class="empty-state-luxury">
+                      <div class="e-icon">∅</div>
+                      <p>No invoices found. Create a new one below.</p>
+                      <button class="modern-btn outline-btn sm mt-16" (click)="showInvoiceDialog.set(true)">Create First Invoice</button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
-
+    
       <!-- Elite Dialog: Smart Generation -->
-      <div class="dialog-overlay-elite animate-fade" *ngIf="showInvoiceDialog()" (click)="cancelInvoiceDialog()">
-         <div class="elite-dialog-card animate-scale" (click)="$event.stopPropagation()">
+      @if (showInvoiceDialog()) {
+        <div class="dialog-overlay-elite animate-fade" (click)="cancelInvoiceDialog()">
+          <div class="elite-dialog-card animate-scale" (click)="$event.stopPropagation()">
             <div class="dialog-header-luxury">
-               <div class="header-icon-ring">
-                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="white"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="3"/></svg>
-               </div>
-               <div class="header-text-v">
-                  <h3>Create New Invoice</h3>
-                  <p>Fill out the details to generate an eTIMS invoice</p>
-               </div>
-               <button class="close-luxury-circular" (click)="cancelInvoiceDialog()">✕</button>
+              <div class="header-icon-ring">
+                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="white"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="3"/></svg>
+              </div>
+              <div class="header-text-v">
+                <h3>Create New Invoice</h3>
+                <p>Fill out the details to generate an eTIMS invoice</p>
+              </div>
+              <button class="close-luxury-circular" (click)="cancelInvoiceDialog()">✕</button>
             </div>
-
             <div class="dialog-content-luxury">
-               <div class="luxury-form-stack">
+              <div class="luxury-form-stack">
+                <div class="form-item-elite">
+                  <label>Customer Name</label>
+                  <input type="text" [(ngModel)]="newInvoice.customerName" placeholder="Customer Name" class="luxury-input-elite">
+                </div>
+                <div class="form-row-elite">
                   <div class="form-item-elite">
-                     <label>Customer Name</label>
-                     <input type="text" [(ngModel)]="newInvoice.customerName" placeholder="Customer Name" class="luxury-input-elite">
-                  </div>
-                  <div class="form-row-elite">
-                    <div class="form-item-elite">
-                       <label>Amount (KES)</label>
-                       <div class="luxury-input-wrapper">
-                          <span class="currency-tag">KES</span>
-                          <input type="number" [(ngModel)]="newInvoice.amount" placeholder="0.00" class="luxury-input-elite with-tag">
-                       </div>
-                    </div>
-                    <div class="form-item-elite">
-                       <label>VAT Rate</label>
-                       <select class="luxury-select-elite" [(ngModel)]="newInvoice.taxRate">
-                          <option [ngValue]="0.16">16% Standard Rate</option>
-                          <option [ngValue]="0">0% Zero Rated</option>
-                          <option [ngValue]="0.08">8% Reduced Rate</option>
-                       </select>
+                    <label>Amount (KES)</label>
+                    <div class="luxury-input-wrapper">
+                      <span class="currency-tag">KES</span>
+                      <input type="number" [(ngModel)]="newInvoice.amount" placeholder="0.00" class="luxury-input-elite with-tag">
                     </div>
                   </div>
-               </div>
-               
-               <div class="policy-notice-luxury">
-                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-width="2.5"/></svg>
-                  <span>The invoice will be synced with KRA immediately.</span>
-               </div>
+                  <div class="form-item-elite">
+                    <label>VAT Rate</label>
+                    <select class="luxury-select-elite" [(ngModel)]="newInvoice.taxRate">
+                      <option [ngValue]="0.16">16% Standard Rate</option>
+                      <option [ngValue]="0">0% Zero Rated</option>
+                      <option [ngValue]="0.08">8% Reduced Rate</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="policy-notice-luxury">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-width="2.5"/></svg>
+                <span>The invoice will be synced with KRA immediately.</span>
+              </div>
             </div>
-
             <div class="dialog-footer-luxury">
-               <button class="modern-btn outline-btn sm" (click)="cancelInvoiceDialog()">Cancel</button>
-               <button class="modern-btn primary-btn" (click)="createInvoice()" [disabled]="!newInvoice.customerName || !newInvoice.amount">
+              <button class="modern-btn outline-btn sm" (click)="cancelInvoiceDialog()">Cancel</button>
+              <button class="modern-btn primary-btn" (click)="createInvoice()" [disabled]="!newInvoice.customerName || !newInvoice.amount">
                 Create & Sync
-               </button>
+              </button>
             </div>
-         </div>
-      </div>
-
+          </div>
+        </div>
+      }
+    
     </div>
-  `,
+    `,
   styles: [`
     .invoice-id-elite { font-weight: 900; color: var(--color-accent); font-family: 'Courier New', monospace; font-size: 0.95rem; background: var(--bg-accent-subtle); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--border-accent-subtle); }
     .customer-block { display: flex; align-items: center; gap: 14px; }

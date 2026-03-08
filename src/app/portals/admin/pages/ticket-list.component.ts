@@ -1,5 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HelpdeskService, Ticket } from '../../../services/helpdesk.service';
@@ -7,9 +8,9 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-ticket-list',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink],
   template: `
     <div class="page-container p-8 animate-up">
       <!-- Elite Page Header -->
@@ -192,7 +193,9 @@ export class TicketListComponent implements OnInit, OnDestroy {
   priorityFilter = '';
   private destroy$ = new Subject<void>();
 
-  constructor(public helpdeskService: HelpdeskService) {}
+  // TODO: Check constructor replacements
+  public helpdeskService = inject(HelpdeskService);
+  constructor() {}
 
   ngOnInit(): void {
     this.loadTickets();

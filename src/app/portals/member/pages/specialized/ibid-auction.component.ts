@@ -1,5 +1,5 @@
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 
 interface AuctionItem {
@@ -17,7 +17,7 @@ interface AuctionItem {
 @Component({
   selector: 'app-ibid-auction',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   template: `
     <div class="page-container p-8 animate-fade-in">
       <header class="mb-12 flex justify-between items-end">

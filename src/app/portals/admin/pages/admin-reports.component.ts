@@ -1,11 +1,13 @@
+import { inject } from '@angular/core';
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../../environments/environment';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-admin-reports',
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="page-container p-8 animate-up">
       <!-- Elite Header -->

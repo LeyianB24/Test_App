@@ -5,7 +5,6 @@ import { AdminClientsService, ClientData } from '../../../services/admin-clients
 
 @Component({
   selector: 'app-admin-clients',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   template: `

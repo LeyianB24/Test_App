@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
@@ -12,7 +12,7 @@ interface DailyItem { day: string; count: number; }
 @Component({
   selector: 'app-helpdesk-dashboard',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   template: `
     <div class="hd-dash p-6">
       <header class="mb-8 flex items-center justify-between">

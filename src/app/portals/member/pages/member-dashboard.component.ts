@@ -1,5 +1,5 @@
 import { Component, inject, computed, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 import { DashboardDataService } from '../../../services/dashboard-data.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -18,7 +18,7 @@ interface DashboardStat {
 @Component({
   selector: 'app-member-dashboard',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   template: `
     <div class="content-area animate-fade-in">
       <!-- Top Intelligence Bar -->
@@ -46,7 +46,7 @@ interface DashboardStat {
           </div>
         </div>
       </header>
-
+    
       <div class="dashboard-grid-precision mb-10">
         @for (stat of stats(); track stat.label) {
           <div class="stat-card-precision">
@@ -59,15 +59,19 @@ interface DashboardStat {
             <span class="card-value">{{ stat.formattedValue }}</span>
             <div class="delta-badge" [class.positive]="stat.trendDirection === 'up'" [class.negative]="stat.trendDirection === 'down'">
               <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path *ngIf="stat.trendDirection === 'up'" d="M5 10l7-7 7 7M12 3v18" stroke-width="2.5"/>
-                <path *ngIf="stat.trendDirection === 'down'" d="M19 14l-7 7-7-7M12 21V3" stroke-width="2.5"/>
+                @if (stat.trendDirection === 'up') {
+                  <path d="M5 10l7-7 7 7M12 3v18" stroke-width="2.5"/>
+                }
+                @if (stat.trendDirection === 'down') {
+                  <path d="M19 14l-7 7-7-7M12 21V3" stroke-width="2.5"/>
+                }
               </svg>
               {{ stat.trend }}
             </div>
           </div>
         }
       </div>
-
+    
       <div class="dashboard-charts-grid">
         <!-- Revenue Analytics Surface -->
         <div class="stat-card-precision">
@@ -78,22 +82,22 @@ interface DashboardStat {
             </div>
             <span class="status-pill-precision">REAL-TIME TELEMETRY</span>
           </div>
-          
+    
           <div class="relative h-[300px] w-full">
             <svg class="w-full h-full overflow-visible">
               <defs>
-                 <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#DA3832" />
-                    <stop offset="100%" stop-color="#8B1E1A" />
-                 </linearGradient>
-                 <filter id="glow">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                 </filter>
+                <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#DA3832" />
+                  <stop offset="100%" stop-color="#8B1E1A" />
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
               </defs>
               <!-- Bar iteration would go here based on real data -->
-               @for (bar of [50, 70, 40, 90, 60, 80, 55, 75, 65, 85, 95, 100]; track $index) {
-                <rect 
+              @for (bar of [50, 70, 40, 90, 60, 80, 55, 75, 65, 85, 95, 100]; track $index) {
+                <rect
                   [attr.x]="$index * (100 / 12) + '%'"
                   [attr.y]="100 - bar + '%'"
                   [attr.width]="(100 / 12) - 1 + '%'"
@@ -102,28 +106,28 @@ interface DashboardStat {
                   rx="4"
                   filter="url(#glow)"
                   style="transition: all 0.5s ease"
-                />
-              }
-            </svg>
-          </div>
-        </div>
-
-        <!-- System Load / Distribution -->
-        <div class="stat-card-precision">
-          <h3 class="text-lg font-bold text-primary uppercase tracking-widest mb-8">System Compliance</h3>
-          <div class="flex flex-col items-center justify-center h-full">
-            <div class="gauge-container">
-              <svg class="gauge-svg" viewBox="0 0 100 50">
-                <path class="gauge-track" d="M10 50 A40 40 0 0 1 90 50" />
-                <path class="gauge-fill" d="M10 50 A40 40 0 0 1 90 50" [style.--arc-target]="70" />
-                <text x="50" y="45" class="gauge-text">84%</text>
+                  />
+                }
               </svg>
             </div>
-            <p class="text-[10px] text-tertiary mt-6 uppercase tracking-widest text-center">Operational Integrity Status</p>
+          </div>
+    
+          <!-- System Load / Distribution -->
+          <div class="stat-card-precision">
+            <h3 class="text-lg font-bold text-primary uppercase tracking-widest mb-8">System Compliance</h3>
+            <div class="flex flex-col items-center justify-center h-full">
+              <div class="gauge-container">
+                <svg class="gauge-svg" viewBox="0 0 100 50">
+                  <path class="gauge-track" d="M10 50 A40 40 0 0 1 90 50" />
+                  <path class="gauge-fill" d="M10 50 A40 40 0 0 1 90 50" [style.--arc-target]="70" />
+                  <text x="50" y="45" class="gauge-text">84%</text>
+                </svg>
+              </div>
+              <p class="text-[10px] text-tertiary mt-6 uppercase tracking-widest text-center">Operational Integrity Status</p>
+            </div>
           </div>
         </div>
-      </div>
-  `,
+    `,
   styles: [``]
 })
 export class MemberDashboardComponent implements OnInit {

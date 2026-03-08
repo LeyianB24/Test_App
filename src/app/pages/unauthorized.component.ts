@@ -1,10 +1,11 @@
+import { inject } from '@angular/core';
 import { Component, inject } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-unauthorized',
-  standalone: true,
   imports: [RouterModule],
   template: `
     <div class="unauthorized-container">

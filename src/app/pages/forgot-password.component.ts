@@ -1,5 +1,5 @@
 import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
@@ -8,18 +8,18 @@ import { NotificationService } from '../core/services/notification.service';
 @Component({
   selector: 'app-forgot-password',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, NgOptimizedImage],
+  imports: [ReactiveFormsModule, RouterModule, NgOptimizedImage],
   template: `
     <div class="auth-layout login-scene">
       <!-- Fixed Background Layer -->
       <div class="bg-image-container">
         <div class="bg-overlay"></div>
       </div>
-      
+    
       <div class="auth-view-scroller">
         <div class="auth-container animate-up">
           <div class="glass-card elite-auth-card">
-            
+    
             <!-- Luxury Branding -->
             <div class="auth-brand-box">
               <div class="logo-wrapper-luxury">
@@ -30,75 +30,82 @@ import { NotificationService } from '../core/services/notification.service';
                 <h1 class="auth-title-elite">Reset <span class="gradient-text">Cipher</span></h1>
               </div>
             </div>
-
+    
             <!-- Recovery Header -->
-            <div class="auth-header-mini mt-40" *ngIf="!showSuccess()">
-              <h2>Identity Restoration</h2>
-              <p>Enter your Taxpayer PIN to initiate secure recovery</p>
-            </div>
-
-            <!-- Form Area -->
-            <div class="auth-form-luxury mt-32" *ngIf="!showSuccess()">
-              <form [formGroup]="recoveryForm" (ngSubmit)="onSubmit()" class="recovery-form">
-                
-                <div class="form-group-luxury">
-                  <label>Registered Taxpayer PIN</label>
-                  <div class="luxury-input-wrapper">
-                    <svg class="input-icon-elite" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-width="2.5"/></svg>
-                    <input 
-                      type="text" 
-                      class="elite-input-luxury with-icon" 
-                      formControlName="taxpayer_id" 
-                      placeholder="e.g. A000123456Z"
-                    >
-                  </div>
-                </div>
-
-                <!-- Error Message -->
-                <div *ngIf="errorMessage()" class="auth-error-glass animate-up mt-24">
-                   <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-width="2.5"/></svg>
-                   <span>{{ errorMessage() }}</span>
-                </div>
-
-                <div class="stage-footer mt-40">
-                  <button type="button" class="modern-btn outline-btn" routerLink="/login">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    Back to Authentication
-                  </button>
-                  <button type="submit" class="modern-btn primary-btn elite-glow" [disabled]="recoveryForm.invalid || isSubmitting()">
-                    <span *ngIf="!isSubmitting()">Authorize Recovery</span>
-                    <span *ngIf="isSubmitting()" class="loader-flex">
-                       <div class="mini-spinner"></div>
-                       Tracing Records...
-                    </span>
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- Success Reveal -->
-            <div class="success-reveal animate-scale" *ngIf="showSuccess()">
-              <div class="stamp-luxury-blue">
-                 <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-width="2.5"/></svg>
+            @if (!showSuccess()) {
+              <div class="auth-header-mini mt-40">
+                <h2>Identity Restoration</h2>
+                <p>Enter your Taxpayer PIN to initiate secure recovery</p>
               </div>
-              
-              <h2 class="success-title-elite">Transmission Complete</h2>
-              <p class="success-msg-elite">Identity verified. A secure reset token has been dispatched to: <br><strong class="highlight-text">{{ maskedEmail() }}</strong></p>
-
-              <button class="modern-btn primary-btn full-width mt-40" routerLink="/login">Return to Security Gateway</button>
+            }
+    
+            <!-- Form Area -->
+            @if (!showSuccess()) {
+              <div class="auth-form-luxury mt-32">
+                <form [formGroup]="recoveryForm" (ngSubmit)="onSubmit()" class="recovery-form">
+                  <div class="form-group-luxury">
+                    <label>Registered Taxpayer PIN</label>
+                    <div class="luxury-input-wrapper">
+                      <svg class="input-icon-elite" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-width="2.5"/></svg>
+                      <input
+                        type="text"
+                        class="elite-input-luxury with-icon"
+                        formControlName="taxpayer_id"
+                        placeholder="e.g. A000123456Z"
+                        >
+                      </div>
+                    </div>
+                    <!-- Error Message -->
+                    @if (errorMessage()) {
+                      <div class="auth-error-glass animate-up mt-24">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-width="2.5"/></svg>
+                        <span>{{ errorMessage() }}</span>
+                      </div>
+                    }
+                    <div class="stage-footer mt-40">
+                      <button type="button" class="modern-btn outline-btn" routerLink="/login">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Back to Authentication
+                      </button>
+                      <button type="submit" class="modern-btn primary-btn elite-glow" [disabled]="recoveryForm.invalid || isSubmitting()">
+                        @if (!isSubmitting()) {
+                          <span>Authorize Recovery</span>
+                        }
+                        @if (isSubmitting()) {
+                          <span class="loader-flex">
+                            <div class="mini-spinner"></div>
+                            Tracing Records...
+                          </span>
+                        }
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              }
+    
+              <!-- Success Reveal -->
+              @if (showSuccess()) {
+                <div class="success-reveal animate-scale">
+                  <div class="stamp-luxury-blue">
+                    <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-width="2.5"/></svg>
+                  </div>
+                  <h2 class="success-title-elite">Transmission Complete</h2>
+                  <p class="success-msg-elite">Identity verified. A secure reset token has been dispatched to: <br><strong class="highlight-text">{{ maskedEmail() }}</strong></p>
+                  <button class="modern-btn primary-btn full-width mt-40" routerLink="/login">Return to Security Gateway</button>
+                </div>
+              }
+    
+              <!-- Branding Seal -->
+              <div class="security-seal-mini mt-48">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.946-2.597 9.289-6.5 11.534-3.903-2.245-6.5-6.588-6.5-11.534 0-.68.056-1.35.166-2.001zm8.334 1.5a1 1 0 10-2 0V9H7a1 1 0 100 2h1.5v2.5a1 1 0 102 0V11H12a1 1 0 100-2h-1.5V6.499z" clip-rule="evenodd"/></svg>
+                <span>Trusted Government Identity Protocol</span>
+              </div>
+    
             </div>
-
-            <!-- Branding Seal -->
-            <div class="security-seal-mini mt-48">
-               <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.946-2.597 9.289-6.5 11.534-3.903-2.245-6.5-6.588-6.5-11.534 0-.68.056-1.35.166-2.001zm8.334 1.5a1 1 0 10-2 0V9H7a1 1 0 100 2h1.5v2.5a1 1 0 102 0V11H12a1 1 0 100-2h-1.5V6.499z" clip-rule="evenodd"/></svg>
-               <span>Trusted Government Identity Protocol</span>
-            </div>
-
           </div>
         </div>
       </div>
-    </div>
-  `,
+    `,
   styles: [`
     .login-scene { 
       min-height: 100vh; position: relative; background: #0a0a0b; overflow: hidden;

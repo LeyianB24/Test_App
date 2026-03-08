@@ -8,7 +8,6 @@ import { TaxReturnService } from '../../../../services/tax-return.service';
 
 @Component({
   selector: 'app-vat-wizard',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, FilingWizardShellComponent],
   template: `

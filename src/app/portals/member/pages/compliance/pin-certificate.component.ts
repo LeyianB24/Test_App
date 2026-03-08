@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed, Input, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../core/services/auth.service';
 import { DashboardDataService } from '../../../../services/dashboard-data.service';
@@ -6,7 +6,6 @@ import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-pin-certificate',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   template: `
@@ -328,9 +327,9 @@ export class PinCertificateComponent implements OnInit {
   readonly today = new Date();
   
   // Optional inputs for use in registration success or other flows
-  @Input() pin?: string;
-  @Input() name?: string;
-  @Input() email?: string;
+  pin = input<string>();
+  name = input<string>();
+  email = input<string>();
   
   // Auth signals with input fallbacks
   userName = computed(() => this.name || this.authService.userName());

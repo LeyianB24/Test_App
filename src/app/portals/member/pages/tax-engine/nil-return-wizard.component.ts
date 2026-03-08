@@ -1,5 +1,5 @@
 import { Component, signal, inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TaxReturnService } from '../../../../services/tax-return.service';
@@ -7,9 +7,8 @@ import { FilingWizardShellComponent } from './shared/filing-wizard-shell.compone
 
 @Component({
   selector: 'app-nil-return-wizard',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule, FilingWizardShellComponent],
+  imports: [FormsModule, FilingWizardShellComponent],
   template: `
     <app-filing-wizard-shell
       title="File NIL Return"
@@ -21,33 +20,35 @@ import { FilingWizardShellComponent } from './shared/filing-wizard-shell.compone
       (next)="next()"
       (back)="prev()"
       (submit)="submit()"
-    >
+      >
       <!-- Step 1: Select Tax Obligation -->
       @if (currentStep() === 0) {
         <div class="step-content animate-fade-in">
           <h3 class="premium-card-title mb-6">Select Tax Obligation</h3>
           <div class="obligation-grid">
             @for (ob of obligations; track ob.code) {
-              <button 
-                class="ob-card" 
-                [class.selected]="selectedObligation() === ob.code" 
+              <button
+                class="ob-card"
+                [class.selected]="selectedObligation() === ob.code"
                 (click)="selectedObligation.set(ob.code)"
-              >
+                >
                 <div class="ob-indicator"></div>
                 <div class="flex flex-col">
                   <span class="ob-code-label">{{ ob.code }}</span>
                   <span class="ob-name-label">{{ ob.name }}</span>
                 </div>
                 <div class="flex-grow"></div>
-                <div class="check-circle" *ngIf="selectedObligation() === ob.code">
-                  <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                </div>
+                @if (selectedObligation() === ob.code) {
+                  <div class="check-circle">
+                    <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  </div>
+                }
               </button>
             }
           </div>
         </div>
       }
-
+    
       <!-- Step 2: Select Period -->
       @if (currentStep() === 1) {
         <div class="step-content animate-fade-in">
@@ -72,12 +73,12 @@ import { FilingWizardShellComponent } from './shared/filing-wizard-shell.compone
           </div>
         </div>
       }
-
+    
       <!-- Step 3: Confirm & Submit -->
       @if (currentStep() === 2) {
         <div class="step-content animate-fade-in">
           <h3 class="premium-card-title mb-6">Confirm Declaration</h3>
-          
+    
           <div class="summary-box p-6 bg-slate-50/50 rounded-3xl border border-slate-100 flex flex-col gap-4">
             <div class="summary-line">
               <span class="label">Tax Obligation</span>
@@ -95,7 +96,7 @@ import { FilingWizardShellComponent } from './shared/filing-wizard-shell.compone
               <p class="text-xs text-red-400 mt-1">I hereby declare that I had NO taxable income during this specified period.</p>
             </div>
           </div>
-
+    
           @if (submitSuccess()) {
             <div class="success-nexus mt-8 p-6 bg-emerald-50 border border-emerald-100 rounded-3xl animate-up">
               <div class="flex items-center gap-4 text-emerald-700">
@@ -113,7 +114,7 @@ import { FilingWizardShellComponent } from './shared/filing-wizard-shell.compone
         </div>
       }
     </app-filing-wizard-shell>
-  `,
+    `,
   styles: [`
     .step-content { min-height: 300px; }
     .premium-card-title { font-size: 1.25rem; font-weight: 850; color: #1E293B; letter-spacing: -0.5px; }

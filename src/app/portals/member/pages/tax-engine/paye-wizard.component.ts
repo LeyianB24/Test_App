@@ -19,7 +19,6 @@ interface EmployeeRecord {
 
 @Component({
   selector: 'app-paye-wizard',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, FilingWizardShellComponent],
   template: `

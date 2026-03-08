@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, input } from '@angular/core';
+
 
 /**
  * Skeleton Loading Component
@@ -7,9 +7,9 @@ import { CommonModule } from '@angular/common';
  * Prevents layout shift and improves perceived performance
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-skeleton-loader',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="skeleton-shell animate-fade-in">
       <!-- High-Precision Card Skeleton -->
@@ -97,9 +97,9 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class SkeletonLoaderComponent {
-  @Input() type: 'card' | 'stat' | 'table' | 'list' | 'form' | 'chart' | 'list-multiple' = 'card';
-  @Input() width: string = '100%';
-  @Input() count: number = 1;
+  type = input<'card' | 'stat' | 'table' | 'list' | 'form' | 'chart' | 'list-multiple'>('card');
+  width = input<string>('100%');
+  count = input<number>(1);
 
   getRandomHeight(): string {
     const heights = ['60%', '70%', '50%', '80%', '65%'];

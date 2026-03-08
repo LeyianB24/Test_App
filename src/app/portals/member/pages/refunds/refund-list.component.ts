@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-refund-list',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
     <div class="refunds-list-container p-6 animate-fade-in">

@@ -1,5 +1,5 @@
 import { Component, input, output, inject, computed, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule, Router } from '@angular/router';
 import { LogoComponent } from '../../../components/logo.component';
 import { AuthService } from '../../../core/services/auth.service';
@@ -76,70 +76,74 @@ const ADMIN_NAV_MAP: MenuItem[] = [
 
 @Component({
   selector: 'app-admin-sidebar',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="modal-backdrop-precision"
-         *ngIf="isMobileOpen()"
-         (click)="closeMobileMenu()">
-    </div>
-
+    @if (isMobileOpen()) {
+      <div class="modal-backdrop-precision"
+        (click)="closeMobileMenu()">
+      </div>
+    }
+    
     <aside class="sidebar-precision"
-           [class.collapsed]="collapsed()"
-           [class.mobile-open]="isMobileOpen()">
-
+      [class.collapsed]="collapsed()"
+      [class.mobile-open]="isMobileOpen()">
+    
       <!-- Branding -->
       <div class="sidebar-logo-precision">
         <img src="assets/logo.png" class="sidebar-logo-img" alt="KRA Logo">
         <span class="sidebar-logo-text">Staff Portal<span class="logo-accent-dot"></span></span>
       </div>
-
+    
       <div class="nav-scroller-precision custom-scrollbar">
         <nav class="sidebar-nav-precision">
           @if (!collapsed()) {
             <p class="nav-section-label-precision">Administration Suite</p>
           }
-
+    
           @for (item of menuItems; track item.route) {
             <a [routerLink]="item.route"
-               routerLinkActive="active"
-               class="nav-link-precision"
-               [title]="item.label"
-               (click)="closeMobileMenu()">
-
+              routerLinkActive="active"
+              class="nav-link-precision"
+              [title]="item.label"
+              (click)="closeMobileMenu()">
+    
               <svg class="nav-link-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" [attr.d]="item.iconPath" />
               </svg>
-
+    
               <span class="nav-link-label">{{ item.label }}</span>
             </a>
           }
         </nav>
       </div>
-
+    
       <!-- Footer -->
       <div class="sidebar-footer-precision">
-          <button class="btn-precision btn-ghost-precision w-full justify-start mb-2" (click)="themeService.toggleTheme()">
-             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path *ngIf="isDarkMode()" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                <path *ngIf="!isDarkMode()" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-             </svg>
-             <span class="nav-link-label">{{ isDarkMode() ? 'Light Mode' : 'Dark Mode' }}</span>
-          </button>
-
-          <button class="btn-precision btn-ghost-precision w-full justify-start text-danger-precision"
-                  (click)="handleLogout()">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            @if (!collapsed()) {
-              <span class="nav-link-label">Logout</span>
+        <button class="btn-precision btn-ghost-precision w-full justify-start mb-2" (click)="themeService.toggleTheme()">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            @if (isDarkMode()) {
+              <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
             }
-          </button>
+            @if (!isDarkMode()) {
+              <path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            }
+          </svg>
+          <span class="nav-link-label">{{ isDarkMode() ? 'Light Mode' : 'Dark Mode' }}</span>
+        </button>
+    
+        <button class="btn-precision btn-ghost-precision w-full justify-start text-danger-precision"
+          (click)="handleLogout()">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          @if (!collapsed()) {
+            <span class="nav-link-label">Logout</span>
+          }
+        </button>
       </div>
     </aside>
-  `,
+    `,
   styles: [``]
 })
 export class AdminSidebarComponent {

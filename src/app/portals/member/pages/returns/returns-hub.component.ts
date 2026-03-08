@@ -5,7 +5,6 @@ import { TaxReturnService } from '../../../../services/tax-return.service';
 
 @Component({
   selector: 'app-returns-hub',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
     <div class="returns-hub-container p-8 animate-fade-in">

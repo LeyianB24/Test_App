@@ -1,4 +1,5 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { inject } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -98,7 +99,9 @@ export class TaxReturnService {
   itemTypes = ['Income', 'Deduction', 'Adjustment', 'Relief', 'Withholding'];
   incomeCategories = ['Employment', 'Trade', 'Farming', 'Interest', 'Dividend', 'Capital Gains', 'Rent', 'Other'];
 
-  constructor(private http: HttpClient) {
+  // TODO: Check constructor replacements
+  private http = inject(HttpClient);
+  constructor() {
     this.loadDeadlines();
   }
 

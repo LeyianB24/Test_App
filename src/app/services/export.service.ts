@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { NotificationService } from '../core/services/notification.service';
 
 export interface ExportColumn {
@@ -21,7 +22,9 @@ export interface ExportOptions {
 })
 export class ExportService {
 
-  constructor(private notificationService: NotificationService) {}
+  // TODO: Check constructor replacements
+  private notificationService = inject(NotificationService);
+  constructor() {}
 
   /**
    * Export data to Excel/CSV format

@@ -1,15 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-settings',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   template: `
     <div class="page-container animate-up">
-      
+    
       <!-- Elite Page Header -->
       <header class="page-header-elite">
         <div class="header-info">
@@ -17,179 +17,174 @@ import { AuthService } from '../../../../core/services/auth.service';
           <p class="premium-subtitle">Manage your account and security settings</p>
         </div>
       </header>
-
+    
       <div class="settings-grid-luxury mt-32">
-        
+    
         <!-- Strategy Sidebar -->
         <div class="settings-nav-sidebar animate-up delay-1">
-           <div class="nav-card-luxury">
-              <button class="nav-item-elite" [class.active]="activeTab === 'general'" (click)="activeTab = 'general'">
-                 <div class="ni-icon"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-width="2.2"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2.2"/></svg></div>
-                 <span>General Settings</span>
-              </button>
-              <button class="nav-item-elite" [class.active]="activeTab === 'security'" (click)="activeTab = 'security'">
-                 <div class="ni-icon"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2.2"/></svg></div>
-                 <span>Security Settings</span>
-              </button>
-              <button class="nav-item-elite" [class.active]="activeTab === 'notifications'" (click)="activeTab = 'notifications'">
-                 <div class="ni-icon"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="2.2"/></svg></div>
-                 <span>Notification Preferences</span>
-              </button>
-           </div>
-
-           <div class="integrity-card mt-32">
-              <div class="i-header">System Status</div>
-              <div class="i-ver">Version 4.2.5 (Stable)</div>
-              <div class="status-flex-elite">
-                 <span class="pulse-dot green"></span>
-                 <span>System Online</span>
-              </div>
-           </div>
+          <div class="nav-card-luxury">
+            <button class="nav-item-elite" [class.active]="activeTab === 'general'" (click)="activeTab = 'general'">
+              <div class="ni-icon"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-width="2.2"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2.2"/></svg></div>
+              <span>General Settings</span>
+            </button>
+            <button class="nav-item-elite" [class.active]="activeTab === 'security'" (click)="activeTab = 'security'">
+              <div class="ni-icon"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2.2"/></svg></div>
+              <span>Security Settings</span>
+            </button>
+            <button class="nav-item-elite" [class.active]="activeTab === 'notifications'" (click)="activeTab = 'notifications'">
+              <div class="ni-icon"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="2.2"/></svg></div>
+              <span>Notification Preferences</span>
+            </button>
+          </div>
+    
+          <div class="integrity-card mt-32">
+            <div class="i-header">System Status</div>
+            <div class="i-ver">Version 4.2.5 (Stable)</div>
+            <div class="status-flex-elite">
+              <span class="pulse-dot green"></span>
+              <span>System Online</span>
+            </div>
+          </div>
         </div>
-
+    
         <!-- Configuration Main Surface -->
         <div class="settings-content-surface animate-up delay-2">
-           
-           <!-- General Protocol Section -->
-           <div *ngIf="activeTab === 'general'" class="content-card-premium animate-fade">
+    
+          <!-- General Protocol Section -->
+          @if (activeTab === 'general') {
+            <div class="content-card-premium animate-fade">
               <div class="card-p-header">
-                 <div class="ch-icon-ring blue">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-width="2.2"/></svg>
-                 </div>
-                 <div class="p-title-group">
-                    <h3 class="card-p-title">General Settings</h3>
-                    <p class="card-p-subtitle">Language and time zone preferences</p>
-                 </div>
+                <div class="ch-icon-ring blue">
+                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-width="2.2"/></svg>
+                </div>
+                <div class="p-title-group">
+                  <h3 class="card-p-title">General Settings</h3>
+                  <p class="card-p-subtitle">Language and time zone preferences</p>
+                </div>
               </div>
-
               <div class="luxury-form-stack p-40">
-                 <div class="form-row-elite">
-                    <div class="form-item-elite">
-                       <label>System Language</label>
-                       <select class="luxury-select-elite">
-                          <option>English</option>
-                          <option>Kiswahili</option>
-                       </select>
-                    </div>
-                    <div class="form-item-elite">
-                       <label>Time Zone</label>
-                       <select class="luxury-select-elite">
-                          <option>(GMT+03:00) NAIROBI / EAST AFRICA</option>
-                          <option>(GMT+00:00) UTC</option>
-                       </select>
-                    </div>
-                 </div>
-
-                 <div class="surface-footer-flush mt-32">
-                    <button class="modern-btn primary-btn" (click)="saveGeneral()" [disabled]="isSavingGeneral()">
-                       {{ isSavingGeneral() ? 'SAVING...' : 'SAVE SETTINGS' }}
-                    </button>
-                 </div>
+                <div class="form-row-elite">
+                  <div class="form-item-elite">
+                    <label>System Language</label>
+                    <select class="luxury-select-elite">
+                      <option>English</option>
+                      <option>Kiswahili</option>
+                    </select>
+                  </div>
+                  <div class="form-item-elite">
+                    <label>Time Zone</label>
+                    <select class="luxury-select-elite">
+                      <option>(GMT+03:00) NAIROBI / EAST AFRICA</option>
+                      <option>(GMT+00:00) UTC</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="surface-footer-flush mt-32">
+                  <button class="modern-btn primary-btn" (click)="saveGeneral()" [disabled]="isSavingGeneral()">
+                    {{ isSavingGeneral() ? 'SAVING...' : 'SAVE SETTINGS' }}
+                  </button>
+                </div>
               </div>
-           </div>
-
-           <!-- Security & Cipher Section -->
-           <div *ngIf="activeTab === 'security'" class="content-card-premium animate-fade">
+            </div>
+          }
+    
+          <!-- Security & Cipher Section -->
+          @if (activeTab === 'security') {
+            <div class="content-card-premium animate-fade">
               <div class="card-p-header">
-                 <div class="ch-icon-ring red">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2.2"/></svg>
-                 </div>
-                 <div class="p-title-group">
-                    <h3 class="card-p-title">Security Management</h3>
-                    <p class="card-p-subtitle">Update your password and security settings</p>
-                 </div>
+                <div class="ch-icon-ring red">
+                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2.2"/></svg>
+                </div>
+                <div class="p-title-group">
+                  <h3 class="card-p-title">Security Management</h3>
+                  <p class="card-p-subtitle">Update your password and security settings</p>
+                </div>
               </div>
-
               <div class="luxury-form-stack p-40">
-                 <div class="form-item-elite">
-                    <label>Current Password</label>
-                    <input type="password" class="luxury-input-elite" [(ngModel)]="currentPassword" placeholder="••••••••••••">
-                 </div>
-
-                 <div class="form-row-elite">
-                    <div class="form-item-elite">
-                       <label>New Password</label>
-                       <input type="password" class="luxury-input-elite" [(ngModel)]="newPassword" placeholder="Enter new password">
-                    </div>
-                    <div class="form-item-elite">
-                       <label>Confirm Password</label>
-                       <input type="password" class="luxury-input-elite" [(ngModel)]="confirmPassword" placeholder="Type new password again">
-                    </div>
-                 </div>
-
-                 <div class="surface-footer-flush mt-32 text-right">
-                    <button class="modern-btn primary-btn" (click)="updatePassword()" [disabled]="isUpdating()">
-                       {{ isUpdating() ? 'UPDATING...' : 'UPDATE PASSWORD' }}
-                    </button>
-                 </div>
-
-                 <div class="elite-divider mt-40"><span>Advanced Security</span></div>
-
-                 <div class="toggle-card-luxury mt-24">
-                    <div class="tc-text">
-                       <h4>Multi-Factor Authentication (MFA)</h4>
-                       <p>Require a verification code when logging in.</p>
-                    </div>
-                    <label class="switch-luxury">
-                       <input type="checkbox" checked>
-                       <span class="slider-luxury round"></span>
-                    </label>
-                 </div>
+                <div class="form-item-elite">
+                  <label>Current Password</label>
+                  <input type="password" class="luxury-input-elite" [(ngModel)]="currentPassword" placeholder="••••••••••••">
+                </div>
+                <div class="form-row-elite">
+                  <div class="form-item-elite">
+                    <label>New Password</label>
+                    <input type="password" class="luxury-input-elite" [(ngModel)]="newPassword" placeholder="Enter new password">
+                  </div>
+                  <div class="form-item-elite">
+                    <label>Confirm Password</label>
+                    <input type="password" class="luxury-input-elite" [(ngModel)]="confirmPassword" placeholder="Type new password again">
+                  </div>
+                </div>
+                <div class="surface-footer-flush mt-32 text-right">
+                  <button class="modern-btn primary-btn" (click)="updatePassword()" [disabled]="isUpdating()">
+                    {{ isUpdating() ? 'UPDATING...' : 'UPDATE PASSWORD' }}
+                  </button>
+                </div>
+                <div class="elite-divider mt-40"><span>Advanced Security</span></div>
+                <div class="toggle-card-luxury mt-24">
+                  <div class="tc-text">
+                    <h4>Multi-Factor Authentication (MFA)</h4>
+                    <p>Require a verification code when logging in.</p>
+                  </div>
+                  <label class="switch-luxury">
+                    <input type="checkbox" checked>
+                    <span class="slider-luxury round"></span>
+                  </label>
+                </div>
               </div>
-           </div>
-
-           <!-- Broadcasting Strategy Section -->
-           <div *ngIf="activeTab === 'notifications'" class="content-card-premium animate-fade">
+            </div>
+          }
+    
+          <!-- Broadcasting Strategy Section -->
+          @if (activeTab === 'notifications') {
+            <div class="content-card-premium animate-fade">
               <div class="card-p-header">
-                 <div class="ch-icon-ring green">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-width="2.2"/></svg>
-                 </div>
-                 <div class="p-title-group">
-                    <h3 class="card-p-title">Notification Preferences</h3>
-                    <p class="card-p-subtitle">Choose which notifications you receive</p>
-                 </div>
+                <div class="ch-icon-ring green">
+                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-width="2.2"/></svg>
+                </div>
+                <div class="p-title-group">
+                  <h3 class="card-p-title">Notification Preferences</h3>
+                  <p class="card-p-subtitle">Choose which notifications you receive</p>
+                </div>
               </div>
-
               <div class="luxury-check-grid p-40">
-                 <label class="check-item-elite">
-                    <input type="checkbox" checked>
-                    <span class="custom-check-lux"></span>
-                    <div class="ci-text-v">
-                       <strong>Submission Confirmations</strong>
-                       <p>Receive an email confirmation after successful filing.</p>
-                    </div>
-                 </label>
-
-                 <label class="check-item-elite">
-                    <input type="checkbox" checked>
-                    <span class="custom-check-lux"></span>
-                    <div class="ci-text-v">
-                       <strong>Payment Receipts</strong>
-                       <p>Digital confirmation of your payments and PRN generation.</p>
-                    </div>
-                 </label>
-
-                 <label class="check-item-elite">
-                    <input type="checkbox">
-                    <span class="custom-check-lux"></span>
-                    <div class="ci-text-v">
-                       <strong>Important Updates</strong>
-                       <p>Receive notices about system updates and rule changes.</p>
-                    </div>
-                 </label>
-
-                 <div class="surface-footer-flush mt-40">
-                    <button class="modern-btn primary-btn" (click)="saveNotifications()" [disabled]="isSavingNotifications()">
-                       {{ isSavingNotifications() ? 'SAVING...' : 'SAVE PREFERENCES' }}
-                    </button>
-                 </div>
+                <label class="check-item-elite">
+                  <input type="checkbox" checked>
+                  <span class="custom-check-lux"></span>
+                  <div class="ci-text-v">
+                    <strong>Submission Confirmations</strong>
+                    <p>Receive an email confirmation after successful filing.</p>
+                  </div>
+                </label>
+                <label class="check-item-elite">
+                  <input type="checkbox" checked>
+                  <span class="custom-check-lux"></span>
+                  <div class="ci-text-v">
+                    <strong>Payment Receipts</strong>
+                    <p>Digital confirmation of your payments and PRN generation.</p>
+                  </div>
+                </label>
+                <label class="check-item-elite">
+                  <input type="checkbox">
+                  <span class="custom-check-lux"></span>
+                  <div class="ci-text-v">
+                    <strong>Important Updates</strong>
+                    <p>Receive notices about system updates and rule changes.</p>
+                  </div>
+                </label>
+                <div class="surface-footer-flush mt-40">
+                  <button class="modern-btn primary-btn" (click)="saveNotifications()" [disabled]="isSavingNotifications()">
+                    {{ isSavingNotifications() ? 'SAVING...' : 'SAVE PREFERENCES' }}
+                  </button>
+                </div>
               </div>
-           </div>
-
+            </div>
+          }
+    
         </div>
       </div>
     </div>
-  `,
+    `,
   styles: [`
     .settings-grid-luxury { display: grid; grid-template-columns: 320px 1fr; gap: 40px; }
     

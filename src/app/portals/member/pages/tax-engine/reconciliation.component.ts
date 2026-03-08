@@ -1,5 +1,5 @@
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 interface ReconciliationItem {
   id: string;
@@ -15,8 +15,7 @@ interface ReconciliationItem {
 
 @Component({
   selector: 'app-reconciliation',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="reconciliation-page p-6">

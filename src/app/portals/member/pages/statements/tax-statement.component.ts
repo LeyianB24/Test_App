@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-tax-statement',
-  standalone: true,
   imports: [CommonModule],
   template: `
     <div class="tax-statement-container p-6 animate-fade-in">

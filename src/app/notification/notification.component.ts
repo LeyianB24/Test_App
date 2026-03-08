@@ -1,11 +1,12 @@
+import { inject } from '@angular/core';
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { NotificationService } from '../core/services/notification.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-notification',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="toast-container-precision" role="region" aria-label="Notifications" aria-live="polite">
       @for (note of notificationService.notifications(); track note.id) {

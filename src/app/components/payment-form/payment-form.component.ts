@@ -7,13 +7,13 @@ import { NotificationService } from '../../core/services/notification.service';
 import { MpesaService } from '../../services/mpesa.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-payment-form',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="dashboard-content-precision animate-fade-in">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        
+    
         <!-- Primary Directive Input -->
         <div class="lg:col-span-8 space-y-10">
           <div class="card-precision p-8">
@@ -24,7 +24,7 @@ import { MpesaService } from '../../services/mpesa.service';
                 <p class="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">Transaction Pipeline Configuration</p>
               </div>
             </div>
-
+    
             <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()" class="form-stack-precision">
               <!-- Entity Selector -->
               <div class="form-group-precision">
@@ -32,16 +32,18 @@ import { MpesaService } from '../../services/mpesa.service';
                 <div class="input-wrapper-precision">
                   <select formControlName="taxpayerId" id="taxpayer" class="input-precision w-full appearance-none">
                     <option value="">-- IDENTIFY ENTITY --</option>
-                    <option *ngFor="let tp of taxpayers()" [value]="tp.id">
-                      {{ tp.name }} // {{ tp.pin }}
-                    </option>
+                    @for (tp of taxpayers(); track tp) {
+                      <option [value]="tp.id">
+                        {{ tp.name }} // {{ tp.pin }}
+                      </option>
+                    }
                   </select>
                 </div>
                 @if (hasError('taxpayerId')) {
                   <p class="error-state-precision mt-2 text-[10px] uppercase font-bold">{{ getError('taxpayerId') }}</p>
                 }
               </div>
-
+    
               <!-- Classification -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="form-group-precision">
@@ -56,7 +58,7 @@ import { MpesaService } from '../../services/mpesa.service';
                     </select>
                   </div>
                 </div>
-
+    
                 <!-- Numerical Payload -->
                 <div class="form-group-precision">
                   <label for="amount" class="label-precision">Payload Value (KES) <span class="text-red-base">*</span></label>
@@ -69,140 +71,140 @@ import { MpesaService } from '../../services/mpesa.service';
                       placeholder="0.00"
                       class="input-precision w-full pl-12 text-right font-mono text-lg tracking-tighter"
                       [class.input-error-precision]="hasError('amount')">
+                    </div>
+                    @if (hasError('amount')) {
+                      <p class="error-state-precision mt-2 text-[10px] uppercase font-bold">{{ getError('amount') }}</p>
+                    }
                   </div>
-                  @if (hasError('amount')) {
-                    <p class="error-state-precision mt-2 text-[10px] uppercase font-bold">{{ getError('amount') }}</p>
-                  }
                 </div>
-              </div>
-
-              <!-- Channel Allocation -->
-              <div class="form-group-precision mt-4">
-                <label class="label-precision mb-4">Transmission Channel <span class="text-red-base">*</span></label>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <label class="card-precision p-4 flex items-start gap-4 cursor-pointer hover:border-red-base/40 transition-all" [class.border-red-base]="paymentForm.get('paymentMethod')?.value === 'mpesa'">
-                    <input type="radio" formControlName="paymentMethod" value="mpesa" class="mt-1 accent-red-base">
-                    <div class="flex flex-col">
-                      <span class="text-xs font-black uppercase text-white">M-PESA</span>
-                      <span class="text-[9px] font-bold text-white/40 uppercase tracking-widest mt-1">Mobile Instant</span>
-                    </div>
-                  </label>
-                  <label class="card-precision p-4 flex items-start gap-4 cursor-pointer hover:border-red-base/40 transition-all" [class.border-red-base]="paymentForm.get('paymentMethod')?.value === 'bank_transfer'">
-                    <input type="radio" formControlName="paymentMethod" value="bank_transfer" class="mt-1 accent-red-base">
-                    <div class="flex flex-col">
-                      <span class="text-xs font-black uppercase text-white">EFT/RTGS</span>
-                      <span class="text-[9px] font-bold text-white/40 uppercase tracking-widest mt-1">Institutional</span>
-                    </div>
-                  </label>
-                  <label class="card-precision p-4 flex items-start gap-4 cursor-pointer hover:border-red-base/40 transition-all" [class.border-red-base]="paymentForm.get('paymentMethod')?.value === 'cheque'">
-                    <input type="radio" formControlName="paymentMethod" value="cheque" class="mt-1 accent-red-base">
-                    <div class="flex flex-col">
-                      <span class="text-xs font-black uppercase text-white">Instrument</span>
-                      <span class="text-[9px] font-bold text-white/40 uppercase tracking-widest mt-1">Cheque/Bankers</span>
-                    </div>
-                  </label>
-                </div>
-              </div>
-
-              <!-- Tactical Contact (M-PESA specific) -->
-              @if (paymentForm.get('paymentMethod')?.value === 'mpesa') {
-                <div class="form-group-precision animate-fade-in">
-                  <label for="phone" class="label-precision">Target Mobile Sequence <span class="text-red-base">*</span></label>
-                  <div class="input-wrapper-precision">
-                    <input
-                      type="tel"
-                      formControlName="phone"
-                      id="phone"
-                      placeholder="+254 XXX XXX XXX"
-                      class="input-precision w-full font-mono tracking-widest"
-                      [class.input-error-precision]="hasError('phone')">
+    
+                <!-- Channel Allocation -->
+                <div class="form-group-precision mt-4">
+                  <label class="label-precision mb-4">Transmission Channel <span class="text-red-base">*</span></label>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <label class="card-precision p-4 flex items-start gap-4 cursor-pointer hover:border-red-base/40 transition-all" [class.border-red-base]="paymentForm.get('paymentMethod')?.value === 'mpesa'">
+                      <input type="radio" formControlName="paymentMethod" value="mpesa" class="mt-1 accent-red-base">
+                      <div class="flex flex-col">
+                        <span class="text-xs font-black uppercase text-white">M-PESA</span>
+                        <span class="text-[9px] font-bold text-white/40 uppercase tracking-widest mt-1">Mobile Instant</span>
+                      </div>
+                    </label>
+                    <label class="card-precision p-4 flex items-start gap-4 cursor-pointer hover:border-red-base/40 transition-all" [class.border-red-base]="paymentForm.get('paymentMethod')?.value === 'bank_transfer'">
+                      <input type="radio" formControlName="paymentMethod" value="bank_transfer" class="mt-1 accent-red-base">
+                      <div class="flex flex-col">
+                        <span class="text-xs font-black uppercase text-white">EFT/RTGS</span>
+                        <span class="text-[9px] font-bold text-white/40 uppercase tracking-widest mt-1">Institutional</span>
+                      </div>
+                    </label>
+                    <label class="card-precision p-4 flex items-start gap-4 cursor-pointer hover:border-red-base/40 transition-all" [class.border-red-base]="paymentForm.get('paymentMethod')?.value === 'cheque'">
+                      <input type="radio" formControlName="paymentMethod" value="cheque" class="mt-1 accent-red-base">
+                      <div class="flex flex-col">
+                        <span class="text-xs font-black uppercase text-white">Instrument</span>
+                        <span class="text-[9px] font-bold text-white/40 uppercase tracking-widest mt-1">Cheque/Bankers</span>
+                      </div>
+                    </label>
                   </div>
-                  @if (hasError('phone')) {
-                    <p class="error-state-precision mt-2 text-[10px] uppercase font-bold">{{ getError('phone') }}</p>
+                </div>
+    
+                <!-- Tactical Contact (M-PESA specific) -->
+                @if (paymentForm.get('paymentMethod')?.value === 'mpesa') {
+                  <div class="form-group-precision animate-fade-in">
+                    <label for="phone" class="label-precision">Target Mobile Sequence <span class="text-red-base">*</span></label>
+                    <div class="input-wrapper-precision">
+                      <input
+                        type="tel"
+                        formControlName="phone"
+                        id="phone"
+                        placeholder="+254 XXX XXX XXX"
+                        class="input-precision w-full font-mono tracking-widest"
+                        [class.input-error-precision]="hasError('phone')">
+                      </div>
+                      @if (hasError('phone')) {
+                        <p class="error-state-precision mt-2 text-[10px] uppercase font-bold">{{ getError('phone') }}</p>
+                      }
+                    </div>
                   }
+    
+                  <!-- Narrative -->
+                  <div class="form-group-precision">
+                    <label for="description" class="label-precision">Directive Narrative</label>
+                    <div class="input-wrapper-precision">
+                      <textarea
+                        formControlName="description"
+                        id="description"
+                        placeholder="Provide context for this transaction..."
+                        class="input-precision w-full min-h-[100px] py-4"
+                      rows="3"></textarea>
+                    </div>
+                  </div>
+    
+                  <!-- Action Interface -->
+                  <div class="flex gap-4 pt-6">
+                    <button type="reset" class="btn-precision btn-secondary-precision flex-1 py-4" (click)="resetForm()">
+                      CLEAR BUFFER
+                    </button>
+                    <button type="submit" class="btn-precision btn-primary-precision flex-[2] py-4" [disabled]="!paymentForm.valid || isSubmitting()">
+                      @if (!isSubmitting()) { <span>COMMIT DIRECTIVE</span> }
+                      @else { <span>SYNCHRONIZING...</span> }
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+    
+            <!-- Sidebar Analytics -->
+            <div class="lg:col-span-4 space-y-8">
+              @if (paymentForm.get('taxpayerId')?.value) {
+                <div class="ops-card-precision animate-scale-in">
+                  <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-red-base mb-6">Real-time Allocation Summary</h3>
+    
+                  <div class="ledger-stack-precision">
+                    <div class="ledger-row-precision">
+                      <span class="label">Taxpayer</span>
+                      <span class="value text-white">{{ getSelectedTaxpayer()?.name }}</span>
+                    </div>
+                    <div class="ledger-row-precision">
+                      <span class="label">PIN Sequence</span>
+                      <span class="value font-mono tracking-tighter text-white">{{ getSelectedTaxpayer()?.pin }}</span>
+                    </div>
+                  </div>
+    
+                  <div class="mt-10 pt-6 border-t border-white/5 space-y-6">
+                    <div class="flex justify-between items-center">
+                      <span class="text-xs font-bold text-white/30 uppercase tracking-widest">Payload</span>
+                      <span class="text-xl font-black text-white">KES {{ paymentForm.get('amount')?.value || '0' | number:'1.0-2' }}</span>
+                    </div>
+    
+                    @if (paymentForm.get('paymentMethod')?.value === 'mpesa') {
+                      <div class="flex justify-between items-center opacity-60">
+                        <span class="text-[10px] font-bold text-white/30 uppercase tracking-widest">M-PESA Fee</span>
+                        <span class="text-sm font-bold text-white">KES {{ calculateMpesaFee() | number:'1.0-2' }}</span>
+                      </div>
+                    }
+    
+                    <div class="p-4 bg-red-base/10 border border-red-base/20 rounded-xl">
+                      <div class="flex justify-between items-end">
+                        <span class="text-[10px] font-black text-red-base uppercase tracking-[0.2em]">Total Remittance</span>
+                        <span class="text-2xl font-black text-white">KES {{ getTotalAmount() | number:'1.0-2' }}</span>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div class="mt-8 p-4 bg-white/[0.02] border border-white/5 rounded-xl flex gap-4 items-start">
+                    <svg width="18" height="18" class="text-white/20 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <p class="text-[10px] font-medium leading-relaxed text-white/40">Deployment of this payload requires second-factor authorization. Ensure your transmission channel is secure.</p>
+                  </div>
+                </div>
+              } @else {
+                <div class="card-precision p-12 text-center border-dashed border-white/10 opacity-30">
+                  <svg width="48" height="48" class="mx-auto mb-6 text-white/20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  <p class="text-xs font-bold uppercase tracking-widest text-white/40 leading-relaxed">Select taxpayer to initialize<br>summary pipeline</p>
                 </div>
               }
-
-              <!-- Narrative -->
-              <div class="form-group-precision">
-                <label for="description" class="label-precision">Directive Narrative</label>
-                <div class="input-wrapper-precision">
-                  <textarea
-                    formControlName="description"
-                    id="description"
-                    placeholder="Provide context for this transaction..."
-                    class="input-precision w-full min-h-[100px] py-4"
-                    rows="3"></textarea>
-                </div>
-              </div>
-
-              <!-- Action Interface -->
-              <div class="flex gap-4 pt-6">
-                <button type="reset" class="btn-precision btn-secondary-precision flex-1 py-4" (click)="resetForm()">
-                  CLEAR BUFFER
-                </button>
-                <button type="submit" class="btn-precision btn-primary-precision flex-[2] py-4" [disabled]="!paymentForm.valid || isSubmitting()">
-                  @if (!isSubmitting()) { <span>COMMIT DIRECTIVE</span> }
-                  @else { <span>SYNCHRONIZING...</span> }
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
         </div>
-
-        <!-- Sidebar Analytics -->
-        <div class="lg:col-span-4 space-y-8">
-          @if (paymentForm.get('taxpayerId')?.value) {
-            <div class="ops-card-precision animate-scale-in">
-              <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-red-base mb-6">Real-time Allocation Summary</h3>
-              
-              <div class="ledger-stack-precision">
-                <div class="ledger-row-precision">
-                  <span class="label">Taxpayer</span>
-                  <span class="value text-white">{{ getSelectedTaxpayer()?.name }}</span>
-                </div>
-                <div class="ledger-row-precision">
-                  <span class="label">PIN Sequence</span>
-                  <span class="value font-mono tracking-tighter text-white">{{ getSelectedTaxpayer()?.pin }}</span>
-                </div>
-              </div>
-
-              <div class="mt-10 pt-6 border-t border-white/5 space-y-6">
-                <div class="flex justify-between items-center">
-                  <span class="text-xs font-bold text-white/30 uppercase tracking-widest">Payload</span>
-                  <span class="text-xl font-black text-white">KES {{ paymentForm.get('amount')?.value || '0' | number:'1.0-2' }}</span>
-                </div>
-
-                @if (paymentForm.get('paymentMethod')?.value === 'mpesa') {
-                  <div class="flex justify-between items-center opacity-60">
-                    <span class="text-[10px] font-bold text-white/30 uppercase tracking-widest">M-PESA Fee</span>
-                    <span class="text-sm font-bold text-white">KES {{ calculateMpesaFee() | number:'1.0-2' }}</span>
-                  </div>
-                }
-
-                <div class="p-4 bg-red-base/10 border border-red-base/20 rounded-xl">
-                  <div class="flex justify-between items-end">
-                    <span class="text-[10px] font-black text-red-base uppercase tracking-[0.2em]">Total Remittance</span>
-                    <span class="text-2xl font-black text-white">KES {{ getTotalAmount() | number:'1.0-2' }}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="mt-8 p-4 bg-white/[0.02] border border-white/5 rounded-xl flex gap-4 items-start">
-                <svg width="18" height="18" class="text-white/20 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <p class="text-[10px] font-medium leading-relaxed text-white/40">Deployment of this payload requires second-factor authorization. Ensure your transmission channel is secure.</p>
-              </div>
-            </div>
-          } @else {
-            <div class="card-precision p-12 text-center border-dashed border-white/10 opacity-30">
-              <svg width="48" height="48" class="mx-auto mb-6 text-white/20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-              <p class="text-xs font-bold uppercase tracking-widest text-white/40 leading-relaxed">Select taxpayer to initialize<br>summary pipeline</p>
-            </div>
-          }
-        </div>
-      </div>
-    </div>
-  `,
+    `,
   styles: [`
     :host { display: block; width: 100%; }
     .input-precision option { background: #0A0A0A; color: white; }

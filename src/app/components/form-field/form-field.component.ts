@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter, signal, input, output } from '@angular/core';
+
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 
 /**
@@ -8,9 +8,9 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
  * Supports text, email, password, number, tel, date inputs
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-form-field',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   template: `
     <div class="form-group-precision animate-fade-in">
       <!-- Label with Tactical Indicator -->
@@ -90,21 +90,21 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
   `]
 })
 export class FormFieldComponent {
-  @Input() label: string = '';
-  @Input() placeholder: string = '';
-  @Input() type: 'text' | 'email' | 'password' | 'number' | 'tel' | 'date' | 'url' = 'text';
-  @Input() value = signal<string>('');
-  @Input() disabled: boolean = false;
-  @Input() required: boolean = false;
-  @Input() icon: string = '';
-  @Input() helpText: string = '';
-  @Input() successMessage: string = '';
-  @Input() errorMessage = signal<string>('');
-  @Input() validationPattern: RegExp | null = null;
+  label = input<string>('');
+  placeholder = input<string>('');
+  type = input<'text' | 'email' | 'password' | 'number' | 'tel' | 'date' | 'url'>('text');
+  value = input<any>(signal<string>(''));
+  disabled = input<boolean>(false);
+  required = input<boolean>(false);
+  icon = input<string>('');
+  helpText = input<string>('');
+  successMessage = input<string>('');
+  errorMessage = input<any>(signal<string>(''));
+  validationPattern = input<RegExp | null>(null);
 
-  @Output() valueChange = new EventEmitter<string>();
-  @Output() focus = new EventEmitter<void>();
-  @Output() blur = new EventEmitter<void>();
+  valueChange = output<string>();
+  focus = output<void>();
+  blur = output<void>();
 
   fieldId = `form-field-${Math.random().toString(36).slice(2)}`;
   helpId = `${this.fieldId}-help`;

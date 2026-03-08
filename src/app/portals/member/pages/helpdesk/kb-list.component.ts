@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { KbService, KbCategory, KbArticle } from '../../../../services/kb.service';
@@ -7,7 +7,7 @@ import { KbService, KbCategory, KbArticle } from '../../../../services/kb.servic
 @Component({
   selector: 'app-kb-list',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink],
   template: `
     <div class="page-container p-8 animate-fade-in">
       <!-- Elite Hero Search -->

@@ -5,7 +5,6 @@ import { KbService, KbArticle } from '../../../../services/kb.service';
 
 @Component({
   selector: 'app-kb-article',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
     <div class="page-container p-8 animate-fade-in">

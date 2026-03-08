@@ -1,10 +1,9 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-notices',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="notices-container p-6 animate-fade-in">
       <header class="mb-10">

@@ -1,11 +1,11 @@
 import { Component, inject, ChangeDetectionStrategy, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { NotificationService, Notification } from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-notification-hub',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="page-container p-8 animate-fade-in">
       <header class="mb-12 flex justify-between items-end">
