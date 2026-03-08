@@ -1,60 +1,54 @@
 .topbar-precision {
   height: var(--topbar-height);
-  background: var(--bg-topbar);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  background: var(--bg-surface-3);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
-  padding: 0 var(--space-6);
+  padding: 0 var(--space-8);
   gap: var(--space-4);
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
 }
 
-[data-theme="light"] .topbar-precision {
-  background: rgba(255, 255, 255, 0.85);
-}
-
-[data-theme="dark"] .topbar-precision {
-  background: rgba(18, 16, 14, 0.85);
-}
-
-/* Breadcrumbs */
+/* Breadcrumbs (HD) */
 .breadcrumb-container-precision {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
+  gap: var(--space-3);
   flex: 1;
 }
 
 .breadcrumb-parent {
-  color: var(--text-secondary);
+  color: var(--text-muted);
   font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: var(--weight-black);
+  text-transform: uppercase;
+  letter-spacing: 1px;
   text-decoration: none;
-  transition: color var(--duration-200) ease;
+  transition: all var(--duration-base) var(--ease-out);
 }
 
 .breadcrumb-parent:hover {
-  color: var(--text-primary);
+  color: var(--color-accent);
 }
 
 .breadcrumb-separator {
   color: var(--border-default);
-  font-weight: var(--weight-bold);
-  font-family: var(--font-body);
+  font-size: 14px;
 }
 
 .breadcrumb-current {
   color: var(--text-primary);
   font-family: var(--font-heading);
-  font-weight: var(--weight-semibold);
+  font-size: 14px;
+  font-weight: var(--weight-extrabold);
 }
 
-/* Portal Status Pills */
+/* Portal Status Pills (Glassy) */
 .status-pills-container {
   display: flex;
   align-items: center;
@@ -64,61 +58,116 @@
 .status-pill-precision {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  padding: 6px 14px;
   border-radius: var(--radius-full);
-  border: 1px solid var(--border-default);
+  border: 1px solid var(--border-subtle);
   background: var(--bg-surface-2);
   color: var(--text-secondary);
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.status-pill-precision:hover {
+  border-color: var(--text-muted);
 }
 
 .status-pill-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--text-disabled);
+  background: var(--text-muted);
 }
 
-.status-pill-precision.online { color: var(--text-secondary); }
-.status-pill-precision.online .status-pill-dot { background: var(--text-success); animation: pulse 2s infinite; }
+.status-pill-precision.online { color: var(--text-primary); }
+.status-pill-precision.online .status-pill-dot { 
+  background: var(--color-success); 
+  box-shadow: 0 0 10px var(--color-success);
+  animation: pulse-glow 2s infinite; 
+}
 
-.status-pill-precision.offline { color: var(--red-400); border-color: var(--red-500); }
-.status-pill-precision.offline .status-pill-dot { background: var(--red-500); }
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
 
-/* Right Zone */
+/* Right Zone (HD Actions) */
 .topbar-right-zone {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-6);
 }
 
-.user-trigger-precision {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  cursor: pointer;
-  padding: var(--space-1);
-  border-radius: var(--radius-full);
-  transition: background var(--duration-fast) ease;
-}
-
-.user-trigger-precision:hover {
-  background: var(--bg-surface-2);
-}
-
-.avatar-circle-precision {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--color-accent);
+.notification-bell-precision {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-heading);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-bold);
-  color: var(--text-on-accent);
-  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.notification-bell-precision:hover {
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+.unread-badge-precision {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: var(--color-accent);
+  color: white;
+  font-size: 10px;
+  font-weight: var(--weight-black);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--bg-surface-1);
+}
+
+/* User Trigger (Premium) */
+.user-trigger-precision {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  cursor: pointer;
+  padding: 4px;
+  padding-right: var(--space-4);
+  background: var(--bg-surface-2);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.user-trigger-precision:hover {
+  background: var(--bg-surface-1);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.avatar-circle-precision {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-accent) 0%, #B91C1C 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--weight-black);
+  font-size: 14px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(218, 56, 50, 0.2);
 }
