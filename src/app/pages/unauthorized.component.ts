@@ -1,4 +1,4 @@
-import { inject, Component, ChangeDetectionStrategy } from '@angular/core';
+import { inject, Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 
@@ -7,59 +7,72 @@ import { AuthService } from '../core/services/auth.service';
   selector: 'app-unauthorized',
   imports: [RouterModule],
   template: `
-    <div class="unauthorized-container">
-      <div class="glass-card text-center animate-up">
-        <div class="icon-box-denied mb-24">
-          <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2"/>
-          </svg>
-        </div>
-        <h1 class="gradient-text">Access Denied</h1>
-        <p>You do not have the required permissions to access this terminal. This might be due to an expired session or insufficient privileges.</p>
+    <div class="fixed inset-0 flex items-center justify-center bg-[var(--bg)] p-6 font-plus-jakarta animate-fade-in" [attr.data-theme]="theme()">
+      
+      <!-- Background Decor -->
+      <div class="absolute top-0 right-0 w-96 h-96 bg-accent rounded-full blur-[150px] opacity-[0.03] pointer-events-none"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-accent rounded-full blur-[150px] opacity-[0.03] pointer-events-none"></div>
+
+      <div class="stat-card-precision !p-12 !bg-[var(--bg-card)]/80 backdrop-blur-xl border-accent/10 shadow-2xl max-w-lg w-full text-center relative overflow-hidden">
         
-        <div class="action-stack mt-40">
-          <a routerLink="/" class="modern-btn primary-btn full-width">Return to Security Perimeter</a>
-          <button (click)="onSignOut()" class="modern-btn secondary-btn full-width mt-12">
-            Clear Session & Sign In Again
+        <!-- Forensics Icon -->
+        <div class="relative w-20 h-20 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto mb-10 group">
+          <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="transition-transform group-hover:scale-110">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          <div class="absolute -inset-2 border border-accent/20 rounded-full animate-ping opacity-20"></div>
+        </div>
+
+        <!-- Security Message -->
+        <div class="mb-10">
+          <div class="status-pill-precision online py-2 px-4 shadow-sm inline-flex mb-8">
+            <span class="text-[9px] font-black uppercase tracking-[0.2em] text-accent flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
+              Security Breach Detected
+            </span>
+          </div>
+          <h2 class="text-3xl font-black text-primary tracking-tighter uppercase mb-4">Access <span class="text-accent">Denied</span></h2>
+          <p class="text-[11px] font-semibold text-secondary uppercase tracking-[0.15em] leading-loose">
+            Your current identity node does not possess the requisite clearance for this sector. 
+            Verification sequence mismatch or session expiration.
+          </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="space-y-4">
+          <button routerLink="/" class="btn-precision btn-primary-precision !w-full !h-14 font-black uppercase tracking-[0.2em]">
+            RETURN TO PERIMETER
+          </button>
+          
+          <button (click)="onSignOut()" class="btn-precision btn-secondary-precision !w-full !h-12 font-black uppercase tracking-[0.2em]">
+            CLEAR TRACE & RE-AUTHENTICATE
           </button>
         </div>
 
         @if (userRole()) {
-          <div class="debug-hint mt-32">
-            <span class="label">Identified Role:</span>
-            <span class="value">{{ userRole() }}</span>
+          <div class="mt-10 pt-8 border-t border-[var(--border-subtle)]">
+            <div class="flex items-center justify-center gap-4 text-[9px] font-black uppercase tracking-widest text-tertiary">
+              <span>IDENTIFIED CLEARANCE:</span>
+              <span class="text-accent bg-accent/5 px-3 py-1 rounded-lg border border-accent/10">{{ userRole() }}</span>
+            </div>
           </div>
         }
+
+        <div class="mt-8 text-center">
+          <span class="text-[9px] font-black text-tertiary uppercase tracking-[0.3em] flex items-center justify-center gap-2">
+             GOK INTEL &bull; SHA-256 ENCRYPTED
+          </span>
+        </div>
       </div>
     </div>
   `,
-  styles: [`
-    .unauthorized-container {
-      height: 100vh; display: flex; align-items: center; justify-content: center; background: #0a0a0b;
-    }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1); padding: 60px; border-radius: 40px; max-width: 540px;
-    }
-    .icon-box-denied { color: var(--kra-red); display: flex; justify-content: center; }
-    h1 { font-size: 2.5rem; font-weight: 900; margin: 0; }
-    p { color: rgba(255,255,255,0.6); margin-top: 20px; font-size: 1.1rem; line-height: 1.6; }
-    .gradient-text { background: var(--kra-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .mt-40 { margin-top: 40px; }
-    .mt-12 { margin-top: 12px; }
-    .mt-32 { margin-top: 32px; }
-    .mb-24 { margin-bottom: 24px; }
-    .full-width { width: 100%; display: block; }
-    .action-stack { display: flex; flex-direction: column; }
-    
-    .debug-hint { font-size: 0.8rem; color: rgba(255,255,255,0.3); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px; }
-    .debug-hint .label { font-weight: 800; text-transform: uppercase; margin-right: 8px; }
-    .debug-hint .value { color: var(--kra-red); }
-  `]
+  styles: [``]
 })
 export class UnauthorizedComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+
+  theme = signal<'light' | 'dark'>('light');
 
   userRole = () => this.authService.userRole();
 
