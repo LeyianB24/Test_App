@@ -1,4 +1,3 @@
-```typescript
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 interface ReconciliationItem {
   id: string;
@@ -175,4 +174,4 @@ export class ReconciliationComponent {
 
   totalVariance = computed(() => this.items().reduce((acc, i) => acc + i.variance, 0));
 }
-```
+
