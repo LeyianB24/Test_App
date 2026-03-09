@@ -25,49 +25,55 @@ import { TaxReturnService } from '../../../../services/tax-return.service';
       <!-- Step 0: Period & Pre-population -->
       @if (currentStep() === 0) {
         <div class="step-content animate-fade-in">
-          <h3 class="premium-heading mb-8">Section 1: Period & Sync</h3>
+          <h3 class="text-2xl font-black text-primary mb-8 tracking-tight">Section 1: Period & Sync</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="card-glass p-6">
-              <label class="label-elite uppercase">Filing Month</label>
-              <select class="input-elite w-full font-black mt-2" [(ngModel)]="selectedMonth">
-                @for (m of months; track m.value) {
-                  <option [value]="m.value">{{ m.label }}</option>
-                }
-              </select>
+            <div class="glass-panel p-8">
+              <label class="premium-subtitle !mt-0 !mb-4 uppercase tracking-widest text-[10px]">Filing Month</label>
+              <div class="search-input-precision !w-full !px-6">
+                <select class="w-full bg-transparent border-none appearance-none font-black text-xs text-primary focus:outline-none" [(ngModel)]="selectedMonth">
+                  @for (m of months; track m.value) {
+                    <option [value]="m.value">{{ m.label }}</option>
+                  }
+                </select>
+              </div>
             </div>
-            <div class="card-glass p-6">
-              <label class="label-elite uppercase">Sync Status</label>
+            <div class="glass-panel p-8">
+              <label class="premium-subtitle !mt-0 !mb-4 uppercase tracking-widest text-[10px]">Sync Status</label>
               <div class="flex items-center gap-4 mt-2">
                  @if (loadingPreFill()) {
-                   <div class="flex items-center gap-2 text-info font-bold text-xs uppercase tracking-widest">
-                     <div class="spinner-sm"></div> eTIMS Ledger Hooking...
+                   <div class="flex items-center gap-3 text-[var(--color-info)] font-black text-[10px] uppercase tracking-widest">
+                     <div class="w-4 h-4 border-2 border-[var(--color-info)] border-t-transparent rounded-full animate-spin"></div>
+                     eTIMS Ledger Hooking...
                    </div>
                  } @else {
-                   <div class="badge-precision badge-compliant">eTIMS Data Loaded</div>
-                   <button (click)="fetchPreFill()" class="text-[10px] font-black uppercase text-accent hover:underline">Refresh</button>
+                   <div class="status-pill-precision online">
+                     <span class="status-pill-dot animate-pulse"></span>
+                     eTIMS DATA SYNCHRONIZED
+                   </div>
+                   <button (click)="fetchPreFill()" class="text-[10px] font-black uppercase text-[var(--color-accent)] hover:underline ml-4">Pull Fresh Data</button>
                  }
               </div>
             </div>
           </div>
 
           @if (preFillData(); as data) {
-            <div class="mt-8 p-6 bg-surface-2 rounded-3xl border border-default animate-up">
-              <h4 class="text-primary font-black mb-4 flex items-center gap-2">
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Data Summary for {{ data.baseInfo.taxpayer_name }}
+            <div class="mt-8 p-8 glass-panel animate-scale-in">
+              <h4 class="text-lg font-black text-primary mb-6 flex items-center gap-3">
+                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Telemetry Dashboard for {{ data.baseInfo.taxpayer_name }}
               </h4>
-              <div class="grid grid-cols-3 gap-4">
-                 <div class="p-4 bg-app rounded-2xl">
-                    <span class="text-[10px] uppercase font-black text-tertiary block mb-1">Expected Sales</span>
-                    <span class="text-primary font-black">KES {{ (preFillData()?.incomeItems?.[0]?.amount || 0) | number }}</span>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                 <div class="bg-surface-2 border border-subtle p-6 rounded-2xl">
+                    <span class="text-[10px] uppercase font-black text-muted block mb-2 tracking-widest">Expected Sales Volume</span>
+                    <span class="text-xl font-black text-primary">KES {{ (preFillData()?.incomeItems?.[0]?.amount || 0) | number }}</span>
                  </div>
-                 <div class="p-4 bg-app rounded-2xl">
-                    <span class="text-[10px] uppercase font-black text-tertiary block mb-1">Expected Purchases</span>
-                    <span class="text-primary font-black">KES {{ (preFillData()?.incomeItems?.[1]?.amount || 0) | number }}</span>
+                 <div class="bg-surface-2 border border-subtle p-6 rounded-2xl">
+                    <span class="text-[10px] uppercase font-black text-muted block mb-2 tracking-widest">Expected Procurement</span>
+                    <span class="text-xl font-black text-primary">KES {{ (preFillData()?.incomeItems?.[1]?.amount || 0) | number }}</span>
                  </div>
-                 <div class="p-4 bg-app rounded-2xl">
-                    <span class="text-[10px] uppercase font-black text-tertiary block mb-1">VAT Rate</span>
-                    <span class="text-info font-black">16% (Standard)</span>
+                 <div class="bg-surface-2 border border-subtle p-6 rounded-2xl">
+                    <span class="text-[10px] uppercase font-black text-muted block mb-2 tracking-widest">Active VAT Rate</span>
+                    <span class="text-xl font-black text-[var(--color-info)]">16% (Standard)</span>
                  </div>
               </div>
             </div>
@@ -78,33 +84,39 @@ import { TaxReturnService } from '../../../../services/tax-return.service';
       <!-- Step 1: Sales / Output Tax -->
       @if (currentStep() === 1) {
         <div class="step-content animate-fade-in">
-          <h3 class="premium-heading mb-8">Section 2: Sales & Output Tax</h3>
+          <h3 class="text-2xl font-black text-primary mb-8 tracking-tight">Section 2: Sales & Output Tax</h3>
           <div class="space-y-6">
-            <div class="card-glass p-8">
-               <h4 class="text-primary font-black text-lg mb-6">Standard Rated Sales (16%)</h4>
+            <div class="glass-panel p-8">
+               <h4 class="text-primary font-black text-lg mb-8">Standard Rated Sales (16%)</h4>
                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div class="form-group">
-                    <label class="label-elite">Taxable Amount (Excl. VAT)</label>
-                    <input type="number" class="input-elite" [(ngModel)]="sales.standard" (ngModelChange)="recalculate()">
+                  <div class="space-y-4">
+                    <label class="premium-subtitle !mt-0 uppercase tracking-widest text-[10px]">Taxable Amount (Excl. VAT)</label>
+                    <div class="search-input-precision !w-full !px-6">
+                       <input type="number" class="!bg-transparent font-black w-full" [(ngModel)]="sales.standard" (ngModelChange)="recalculate()">
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label class="label-elite">Output Tax (Calculated)</label>
-                    <div class="input-elite bg-app flex items-center justify-between">
-                       <span>KES {{ (sales.standard * 0.16) | number }}</span>
-                       <svg width="16" height="16" fill="var(--text-success)" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <div class="space-y-4">
+                    <label class="premium-subtitle !mt-0 uppercase tracking-widest text-[10px]">Output Tax (Calculated)</label>
+                    <div class="search-input-precision !w-full !px-6 bg-surface-3 border-transparent justify-between opacity-80 cursor-not-allowed">
+                       <span class="font-black text-primary">KES {{ (sales.standard * 0.16) | number }}</span>
+                       <svg width="20" height="20" fill="var(--color-success)" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                     </div>
                   </div>
                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="card-glass p-6">
-                 <label class="label-elite uppercase">Zero Rated Sales</label>
-                 <input type="number" class="input-elite" [(ngModel)]="sales.zero" (ngModelChange)="recalculate()">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="glass-panel p-8">
+                 <label class="premium-subtitle !mt-0 !mb-4 uppercase tracking-widest text-[10px]">Zero Rated Sales</label>
+                 <div class="search-input-precision !w-full !px-6">
+                    <input type="number" class="!bg-transparent font-black w-full" [(ngModel)]="sales.zero" (ngModelChange)="recalculate()">
+                 </div>
               </div>
-              <div class="card-glass p-6">
-                 <label class="label-elite uppercase">Exempt Sales</label>
-                 <input type="number" class="input-elite" [(ngModel)]="sales.exempt" (ngModelChange)="recalculate()">
+              <div class="glass-panel p-8">
+                 <label class="premium-subtitle !mt-0 !mb-4 uppercase tracking-widest text-[10px]">Exempt Sales</label>
+                 <div class="search-input-precision !w-full !px-6">
+                    <input type="number" class="!bg-transparent font-black w-full" [(ngModel)]="sales.exempt" (ngModelChange)="recalculate()">
+                 </div>
               </div>
             </div>
           </div>
@@ -114,22 +126,27 @@ import { TaxReturnService } from '../../../../services/tax-return.service';
       <!-- Step 2: Purchases / Input Tax -->
       @if (currentStep() === 2) {
         <div class="step-content animate-fade-in">
-          <h3 class="premium-heading mb-8">Section 3: Purchases & Input Tax</h3>
-          <div class="card-glass p-8">
-             <h4 class="text-primary font-black text-lg mb-6 group flex items-center gap-3">
+          <h3 class="text-2xl font-black text-primary mb-8 tracking-tight">Section 3: Purchases & Input Tax</h3>
+          <div class="glass-panel p-8">
+             <h4 class="text-primary font-black text-lg mb-8 flex items-center justify-between">
                Standard Purchases (16%)
-               <span class="badge-precision badge-compliant ml-auto">Verified by eTIMS</span>
+               <div class="status-pill-precision online">
+                 <span class="status-pill-dot"></span>
+                 VERIFIED BY eTIMS
+               </div>
              </h4>
              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="form-group">
-                  <label class="label-elite">Taxable Purchases (Excl. VAT)</label>
-                  <input type="number" class="input-elite border-accent/30" [(ngModel)]="purchases.standard" (ngModelChange)="recalculate()">
+                <div class="space-y-4">
+                  <label class="premium-subtitle !mt-0 uppercase tracking-widest text-[10px]">Taxable Purchases (Excl. VAT)</label>
+                  <div class="search-input-precision border-[var(--color-info)]/30 focus-within:border-[var(--color-info)] !w-full !px-6">
+                     <input type="number" class="!bg-transparent font-black w-full" [(ngModel)]="purchases.standard" (ngModelChange)="recalculate()">
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label class="label-elite">Input Tax (Claimable)</label>
-                  <div class="input-elite bg-app flex items-center justify-between">
-                     <span>KES {{ (purchases.standard * 0.16) | number }}</span>
-                     <svg width="16" height="16" fill="var(--text-info)" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                <div class="space-y-4">
+                  <label class="premium-subtitle !mt-0 uppercase tracking-widest text-[10px]">Input Tax (Claimable)</label>
+                  <div class="search-input-precision !w-full !px-6 bg-[var(--color-info)]/5 border-[var(--color-info)]/20 justify-between opacity-90 cursor-not-allowed">
+                     <span class="font-black text-[var(--color-info)]">KES {{ (purchases.standard * 0.16) | number }}</span>
+                     <svg width="20" height="20" fill="var(--color-info)" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
                   </div>
                 </div>
              </div>
@@ -140,32 +157,33 @@ import { TaxReturnService } from '../../../../services/tax-return.service';
       <!-- Step 3: VAT Computation -->
       @if (currentStep() === 3) {
         <div class="step-content animate-fade-in">
-          <h3 class="premium-heading mb-10 text-center">VAT Compliance Summary</h3>
+          <h3 class="text-2xl font-black text-primary mb-10 text-center tracking-tight">Compliance Signature Protocol</h3>
           
           <div class="flex flex-col items-center">
-             <div class="vault-box p-12 bg-app rounded-[3rem] border border-default w-full max-w-2xl relative shadow-2xl overflow-hidden">
-                <div class="absolute top-0 right-0 p-8">
-                   <div class="orb w-32 h-32 bg-accent/5 rounded-full blur-3xl"></div>
+             <div class="glass-panel p-12 w-full max-w-2xl relative shadow-2xl overflow-hidden animate-scale-in">
+                <div class="absolute top-0 right-0 p-8 opacity-40">
+                   <div class="w-32 h-32 bg-[var(--color-accent)]/20 rounded-full blur-3xl"></div>
                 </div>
                 
                 <div class="space-y-6 relative z-10">
-                   <div class="flex justify-between items-center text-tertiary font-bold uppercase text-xs tracking-widest">
-                      <span>Total Output Tax</span>
-                      <span class="text-primary font-black text-lg">KES {{ totalOutput() | number }}</span>
+                   <div class="flex justify-between items-center premium-subtitle uppercase">
+                      <span>Total Output Liability</span>
+                      <span class="font-black text-primary text-lg tracking-normal">KES {{ totalOutput() | number }}</span>
                    </div>
-                   <div class="flex justify-between items-center text-tertiary font-bold uppercase text-xs tracking-widest">
-                      <span>Total Input Tax</span>
-                      <span class="text-info font-black text-lg">- KES {{ totalInput() | number }}</span>
+                   <div class="flex justify-between items-center premium-subtitle uppercase">
+                      <span>Total Input Claimable</span>
+                      <span class="font-black text-[var(--color-info)] text-lg tracking-normal">- KES {{ totalInput() | number }}</span>
                    </div>
-                   <div class="h-px bg-default my-4"></div>
+                   <div class="h-px bg-subtle my-8 border-t border-[var(--border-subtle)] border-dashed"></div>
                    <div class="flex flex-col items-center py-6">
-                      <span class="text-[10px] font-black uppercase text-tertiary mb-2">Net VAT Payable / (Refund)</span>
-                      <h2 class="text-6xl font-black text-primary" [class.text-success]="netVat() < 0">
+                      <span class="premium-subtitle uppercase tracking-widest block mb-4">Net VAT Payable / (Refund)</span>
+                      <h2 class="text-6xl font-black tracking-tighter" [ngClass]="netVat() < 0 ? 'text-[var(--color-success)]' : 'text-primary'">
                         KES {{ Math.abs(netVat()) | number }}
                       </h2>
-                      <p class="mt-4 text-xs font-bold text-tertiary uppercase tracking-widest text-center">
-                        {{ netVat() > 0 ? 'Filing requires subsequent payment' : 'VAT Credit Carry Forward' }}
-                      </p>
+                      <div class="mt-8 status-pill-precision" [ngClass]="netVat() > 0 ? 'pending' : 'online'">
+                         <span class="status-pill-dot animate-pulse"></span>
+                         {{ netVat() > 0 ? 'FUNDS TRANSFER REQUIRED' : 'CREDIT CARRY FORWARD ASSIGNED' }}
+                      </div>
                    </div>
                 </div>
              </div>
@@ -176,16 +194,7 @@ import { TaxReturnService } from '../../../../services/tax-return.service';
   `,
   styles: [`
     .step-content { min-height: 480px; }
-    .premium-heading { font-size: 1.5rem; font-weight: 950; color: var(--text-primary); letter-spacing: -1px; }
-    .label-elite { display: block; font-size: 0.65rem; font-weight: 900; color: var(--text-tertiary); letter-spacing: 1px; margin-bottom: 8px; }
-    .card-glass { background: var(--bg-surface-1); border: 1px solid var(--border-subtle); border-radius: 24px; }
-    .input-elite { 
-      width: 100%; padding: 16px 20px; background: var(--bg-surface-2); border: 1px solid var(--border-subtle);
-      border-radius: 16px; color: var(--text-primary); font-weight: 800; outline: none; transition: 0.3s;
-    }
-    .input-elite:focus { border-color: var(--color-accent); box-shadow: var(--shadow-focus); }
-    .spinner-sm { width: 14px; height: 14px; border: 2px solid var(--info-dim); border-top: 2px solid var(--info-base); border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .animate-scale-in { animation: scaleIn var(--duration-base) var(--ease-out); }
   `]
 })
 export class VatWizardComponent implements OnInit {
