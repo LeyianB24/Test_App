@@ -8,6 +8,7 @@ import { PaymentFormComponent } from '../../../components/payment-form/payment-f
 import { NotificationService } from '../../../core/services/notification.service';
 import { SkeletonLoaderComponent } from '../../../components/skeleton-loader/skeleton-loader.component';
 import { ToastContainerComponent } from '../../../components/toast-container/toast-container.component';
+import { MpesaService } from '../../../services/mpesa.service';
 
 interface Payment {
   id: number;
@@ -46,6 +47,12 @@ interface Payment {
             <button class="px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 transition-colors flex items-center gap-2 shadow-sm text-sm disabled:opacity-50" (click)="refreshPayments()" [disabled]="loading()">
               <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
               {{ loading() ? 'SYNCHRONIZING...' : 'REFRESH INTEL' }}
+            </button>
+            <button
+              class="px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 shadow-lg transition-all bg-green-700/30 hover:bg-green-700/50 text-green-400 border border-green-500/30"
+              (click)="openMpesaQuickPay()">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              M-PESA QUICK PAY
             </button>
             <button class="btn-primary py-3 px-6 shadow-lg shadow-emerald-500/25 bg-emerald-600 hover:bg-emerald-500" (click)="togglePaymentForm()">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
@@ -326,6 +333,105 @@ interface Payment {
     }
 
     <app-toast-container #toastContainer></app-toast-container>
+
+    <!-- M-Pesa Quick Pay Modal -->
+    @if (showMpesaQuickPay()) {
+      <div class="fixed inset-0 z-[900] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="quick-pay-title">
+        <div class="absolute inset-0 bg-black/75 backdrop-blur-md" (click)="closeMpesaQuickPay()"></div>
+        <div class="relative z-10 bg-slate-800 border border-white/10 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+
+          <!-- Header -->
+          <div class="flex items-start justify-between p-6 border-b border-white/8 bg-white/[0.02]">
+            <div>
+              <div class="text-[10px] font-black text-green-400 uppercase tracking-widest mb-1">M-PESA STK PUSH</div>
+              <h2 id="quick-pay-title" class="text-lg font-black text-white">Quick Pay</h2>
+              <p class="text-slate-400 text-xs mt-0.5">Instantly initiate an M-PESA payment.</p>
+            </div>
+            <button class="w-8 h-8 rounded-lg bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 flex items-center justify-center transition-all border-none cursor-pointer" (click)="closeMpesaQuickPay()" aria-label="Close">✕</button>
+          </div>
+
+          <!-- Body -->
+          <div class="p-6">
+            @if (qpProcessing()) {
+              <div class="text-center py-8">
+                <div class="w-14 h-14 border-4 border-white/10 border-t-green-500 rounded-full animate-spin mx-auto" role="status" aria-label="Processing"></div>
+                <p class="text-white font-bold mt-5">Sending prompt to your phone…</p>
+                <p class="text-slate-400 text-sm mt-1">Enter your M-PESA PIN when prompted.</p>
+              </div>
+            } @else if (qpSuccess()) {
+              <div class="text-center py-6">
+                <div class="w-16 h-16 rounded-full bg-green-500/10 text-green-400 text-3xl font-black flex items-center justify-center mx-auto border-2 border-green-500/30" aria-hidden="true">✓</div>
+                <h3 class="text-white font-bold text-lg mt-4">Prompt Sent!</h3>
+                <p class="text-slate-400 text-sm mt-1">Check <strong class="text-white">{{ qpPhone() }}</strong> for the M-PESA PIN prompt.</p>
+                @if (qpTransactionId()) {
+                  <p class="text-green-400 text-xs mt-3 bg-green-500/10 px-4 py-2 rounded-lg">Txn ID: {{ qpTransactionId() }}</p>
+                }
+                <button class="mt-6 w-full py-3 rounded-xl bg-green-700 hover:bg-green-600 text-white font-bold transition-all border-none cursor-pointer" (click)="closeMpesaQuickPay()">Done</button>
+              </div>
+            } @else if (qpError()) {
+              <div class="text-center py-6">
+                <div class="w-16 h-16 rounded-full bg-red-500/10 text-red-400 text-3xl font-black flex items-center justify-center mx-auto border-2 border-red-500/30" aria-hidden="true">✕</div>
+                <h3 class="text-white font-bold text-lg mt-4">Payment Failed</h3>
+                <p class="text-slate-400 text-sm mt-1">{{ qpErrorMessage() }}</p>
+                <button class="mt-6 w-full py-3 rounded-xl bg-green-700 hover:bg-green-600 text-white font-bold transition-all border-none cursor-pointer" (click)="resetQpState()">Try Again</button>
+              </div>
+            } @else {
+              <!-- Quick Pay Form -->
+              <div class="space-y-5">
+                <div class="flex flex-col gap-1.5">
+                  <label for="qp-phone" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">M-PESA Phone Number <span class="text-red-400">*</span></label>
+                  <input
+                    id="qp-phone"
+                    type="tel"
+                    [(ngModel)]="qpPhoneInput"
+                    name="qp_phone"
+                    placeholder="e.g. 0712 345 678"
+                    autocomplete="tel"
+                    class="bg-slate-900/60 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-green-500/50 focus:outline-none transition-colors">
+                  <span class="text-slate-500 text-[10px]">Must be a Safaricom or Airtel M-PESA number</span>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label for="qp-amount" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Amount (KES) <span class="text-red-400">*</span></label>
+                  <input
+                    id="qp-amount"
+                    type="number"
+                    [(ngModel)]="qpAmountInput"
+                    name="qp_amount"
+                    placeholder="e.g. 5000"
+                    min="100"
+                    max="150000"
+                    class="bg-slate-900/60 border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-sm text-right focus:border-green-500/50 focus:outline-none transition-colors">
+                  <span class="text-slate-500 text-[10px]">Min: KES 100 &middot; Max: KES 150,000</span>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                  <label for="qp-desc" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Description</label>
+                  <input
+                    id="qp-desc"
+                    type="text"
+                    [(ngModel)]="qpDescInput"
+                    name="qp_desc"
+                    placeholder="e.g. Tax payment reference"
+                    class="bg-slate-900/60 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:border-green-500/50 focus:outline-none transition-colors">
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                  <button type="button" class="px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-400 font-semibold text-sm hover:bg-white/10 transition-all cursor-pointer" (click)="closeMpesaQuickPay()">Cancel</button>
+                  <button
+                    type="button"
+                    class="flex-1 py-3 rounded-xl bg-green-700 hover:bg-green-600 text-white font-bold text-sm transition-all border-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                    [disabled]="!qpPhoneInput || !qpAmountInput || qpAmountInput < 100"
+                    (click)="submitMpesaQuickPay()">
+                    Initiate M-PESA Payment
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
   `,
   styles: [`
     .dialog-overlay-elite { position: fixed; inset: 0; background: var(--bg-overlay); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 2rem; }
@@ -338,6 +444,20 @@ export class PaymentsEnhancedComponent implements OnInit {
   private paymentService = inject(PaymentService);
   private apiService = inject(ApiService);
   private notificationService = inject(NotificationService);
+  private mpesaService = inject(MpesaService);
+
+  // M-Pesa Quick Pay state
+  showMpesaQuickPay = signal(false);
+  qpProcessing = signal(false);
+  qpSuccess = signal(false);
+  qpError = signal(false);
+  qpErrorMessage = signal('');
+  qpTransactionId = signal('');
+  qpPhone = signal('');
+  qpPhoneInput = '';
+  qpAmountInput: number | null = null;
+  qpDescInput = '';
+
 
   // State Signals
   payments = signal<Payment[]>([]);
@@ -487,6 +607,58 @@ export class PaymentsEnhancedComponent implements OnInit {
 
   exportPayments(): void {
     this.showSuccess('Ledger export protocol initiated');
+  }
+
+  openMpesaQuickPay(): void {
+    this.qpPhoneInput = '';
+    this.qpAmountInput = null;
+    this.qpDescInput = '';
+    this.resetQpState();
+    this.showMpesaQuickPay.set(true);
+  }
+
+  closeMpesaQuickPay(): void {
+    this.showMpesaQuickPay.set(false);
+  }
+
+  resetQpState(): void {
+    this.qpProcessing.set(false);
+    this.qpSuccess.set(false);
+    this.qpError.set(false);
+    this.qpErrorMessage.set('');
+    this.qpTransactionId.set('');
+  }
+
+  async submitMpesaQuickPay(): Promise<void> {
+    const phone = this.qpPhoneInput?.trim();
+    const amount = this.qpAmountInput;
+    if (!phone || !amount) return;
+
+    if (!this.mpesaService.isValidMpesaPhone(phone)) {
+      this.qpError.set(true);
+      this.qpErrorMessage.set('Invalid M-PESA phone number. Use a Safaricom or Airtel number.');
+      return;
+    }
+
+    this.qpPhone.set(phone);
+    this.qpProcessing.set(true);
+    try {
+      const ref = this.qpDescInput || 'KRA-QUICK-PAY';
+      const result = await this.mpesaService.processPayment(phone, amount, ref);
+      if (result.success) {
+        this.qpTransactionId.set(result.transactionId ?? '');
+        this.qpSuccess.set(true);
+        this.showSuccess('M-PESA prompt sent! Enter your PIN to complete payment.');
+      } else {
+        this.qpError.set(true);
+        this.qpErrorMessage.set(result.message);
+      }
+    } catch (err: unknown) {
+      this.qpError.set(true);
+      this.qpErrorMessage.set(err instanceof Error ? err.message : 'Payment failed. Please try again.');
+    } finally {
+      this.qpProcessing.set(false);
+    }
   }
 
   previousPage(): void {
