@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ApiService, ApiResponse } from './api.service';
 import { NotificationService } from '../core/services/notification.service';
+import { environment } from '../../environments/environment';
 
 export interface MpesaConfig {
   consumerKey: string;
@@ -68,13 +69,12 @@ export class MpesaService {
    * In production, load this from secure environment/backend
    */
   private initializeConfig(): void {
-    // Configuration should come from backend/environment
-    // For now, we initialize the structure
+    const config = environment.mpesa;
     this.mpesaConfig = {
-      consumerKey: '', // Load from backend
-      consumerSecret: '', // Load from backend
-      passkey: '', // Load from backend
-      businessShortCode: '174379', // Safaricom test code
+      consumerKey: config.consumerKey,
+      consumerSecret: config.consumerSecret,
+      passkey: config.passkey,
+      businessShortCode: config.shortcode,
       accountReference: 'KRA-ITAX',
       transactionDescription: 'KRA Tax Payment',
       callbackUrl: `${window.location.origin}/api/mpesa/callback`

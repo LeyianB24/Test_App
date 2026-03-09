@@ -49,8 +49,8 @@ export const environment = {
     environment: 'sandbox',
 
     // Reuse existing sandbox app from Test_App project
-    consumerKey: 'GHIhl6RDankAZKubSkAg6EFBZrt5qZHzLH4HTGVvqOpadEK9',
-    consumerSecret: 'jb3WEDJ2zDvBGG0U43VM7B9XyZdRAFrWVS4r3CjV9OLkikqnEVEZBpKknq45e3gp',
+    consumerKey: 'S7VWa91v8dfBt4Zd5lL8GkQH8Ys2naiteO6zCB5eHdtHCUoI',
+    consumerSecret: 'PUNdBuECV9ZNKdnvHOG5YrMKgf2BUZzecvLSGlna0aJOlK2VxEYApvISgPvs0Gvx',
     shortcode: '174379',
     passkey: 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919',
 
