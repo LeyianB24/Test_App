@@ -28,7 +28,7 @@ import { AuthService } from '../../../../core/services/auth.service';
               <div class="space-y-2">
                  @for (tab of tabs; track tab.id) {
                     <button 
-                       (click)="activeTab = tab.id"
+                       (click)="activeTab = tab.id as any"
                        class="w-full flex items-center gap-4 px-6 py-4 rounded-xl transition-all group relative overflow-hidden"
                        [class.bg-blue-600]="activeTab === tab.id"
                        [class.text-white]="activeTab === tab.id"
