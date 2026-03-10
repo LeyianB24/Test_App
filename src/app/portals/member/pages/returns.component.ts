@@ -9,172 +9,163 @@ import { environment } from '../../../../environments/environment';
   selector: 'app-returns',
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="db-root animate-fade-in">
+    <div class="db-root">
       <div class="noise-overlay"></div>
       <div class="accent-bleed"></div>
 
-      <div class="db-inner animate-stagger">
+      <div class="db-inner">
         <!-- Elite Header -->
-        <header class="db-header-elite">
+        <header class="db-header-elite animate-fade-in">
           <div class="header-left">
             <div class="live-badge">
-              <span class="live-dot"></span>
-              COMPLIANCE MODULE
+              <div class="live-dot"></div>
+              COMPLIANCE REGISTRY
             </div>
-            <h1 class="premium-title">Compliance <span class="text-red">Registry</span></h1>
-            <p class="premium-subtitle">Authorized gateway for tax returns processing and fiscal history monitoring</p>
+            <h1 class="premium-title">Submission <span class="text-red">Archive</span></h1>
+            <p class="premium-subtitle">Authorized fiscal gateway for statutory returns and compliance monitoring</p>
           </div>
           
           <div class="header-right">
             <button class="btn-primary-elite" (click)="showFileDialog.set(true)">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-              INITIATE FILING
+              NEW FILING
             </button>
           </div>
         </header>
 
         <!-- HD Metrics Grid -->
-        <div class="main-grid">
+        <div class="main-grid animate-fade-in" style="animation-delay: 0.1s">
           <div class="elite-card metric-card group">
-            <div class="card-icon bg-red-pale text-red">
+            <div class="card-glow"></div>
+            <div class="card-icon">
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             </div>
             <div class="metric-content">
-              <span class="metric-label">Total Submissions</span>
+              <span class="metric-label">TOTAL SUBMISSIONS</span>
               <div class="metric-value">{{ allReturns().length }}</div>
             </div>
-            <div class="card-glow"></div>
           </div>
 
           <div class="elite-card metric-card group">
-            <div class="card-icon bg-red-pale text-red">
+            <div class="card-glow"></div>
+            <div class="card-icon">
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
             <div class="metric-content">
-              <span class="metric-label">Verified Filings</span>
+              <span class="metric-label">VERIFIED FILINGS</span>
               <div class="metric-value">{{ submittedReturns().length }}</div>
             </div>
-            <div class="card-glow"></div>
           </div>
 
           <div class="elite-card metric-card group">
-            <div class="card-icon bg-red-pale text-red">
+            <div class="card-glow"></div>
+            <div class="card-icon">
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
             <div class="metric-content">
-              <span class="metric-label">Pending Reviews</span>
+              <span class="metric-label">PENDING REVIEWS</span>
               <div class="metric-value">{{ pendingReturns().length }}</div>
             </div>
-            <div class="card-glow"></div>
           </div>
         </div>
 
         <!-- Registry Table Section -->
-        <div class="elite-card table-section">
-          <div class="table-header">
-            <div class="table-title">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-              Compliance Records
+        <div class="elite-card table-panel animate-fade-in" style="animation-delay: 0.2s">
+          <div class="card-glow"></div>
+          <div class="panel-header-elite">
+            <div class="header-left-stack">
+              <h2 class="panel-title">Compliance <span class="text-red">Records</span></h2>
+              <p class="panel-desc">Statutory record sequence for active obligations</p>
             </div>
-            <div class="search-box">
+            <div class="search-box-elite">
               <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
               <input type="text" placeholder="Trace filings..." [(ngModel)]="searchQuery" (input)="onSearch()">
             </div>
           </div>
 
-          <div class="table-responsive">
-            <table class="elite-table">
-              <thead>
-                <tr>
-                  <th>Filing Head</th>
-                  <th>Fiscal Period</th>
-                  <th>Transmission Date</th>
-                  <th>Status</th>
-                  <th class="text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (r of filteredReturns(); track r.id) {
-                  <tr class="table-row">
-                    <td><span class="font-bold text-pri">{{ r.type }}</span></td>
-                    <td><span class="period-chip">{{ r.period }}</span></td>
-                    <td><span class="text-sec">{{ r.dateSubmitted || 'NOT TRANSMITTED' }}</span></td>
-                    <td>
-                      <span class="status-chip" [attr.data-status]="r.status">
-                        <span class="status-dot"></span>
-                        {{ r.status }}
-                      </span>
-                    </td>
-                    <td class="text-center">
-                      <button class="icon-btn" (click)="downloadAcknowledgement(r.id.toString())" title="Download Acknowledgement">
-                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                      </button>
-                    </td>
-                  </tr>
-                } @empty {
-                  <tr>
-                    <td colspan="5" class="empty-state">
-                      <div class="empty-icon">
-                        <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                      </div>
-                      <p>Registry Clear. No matching records traced.</p>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
+          <div class="registry-list">
+            @for (r of filteredReturns(); track r.id) {
+              <div class="registry-item animate-fade-in" [class]="r.status">
+                <div class="ri-left">
+                  <div class="ri-type">{{ r.type }}</div>
+                  <div class="ri-period">{{ r.period }}</div>
+                </div>
+                <div class="ri-center">
+                  <div class="ri-label">TRANSMISSION DATE</div>
+                  <div class="ri-date">{{ r.dateSubmitted || 'NOT TRANSMITTED' }}</div>
+                </div>
+                <div class="ri-right">
+                  <span class="status-badge" [class]="r.status === 'submitted' ? 'success' : 'alert'">
+                    {{ r.status }}
+                  </span>
+                  <button class="icon-btn-elite" (click)="downloadAcknowledgement(r.id.toString())" title="Download Acknowledgement">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                  </button>
+                </div>
+              </div>
+            } @empty {
+              <div class="empty-state-elite">
+                <div class="empty-icon">
+                  <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                </div>
+                <p>Registry Clear. No matching records traced.</p>
+              </div>
+            }
           </div>
         </div>
 
-        <!-- Theme Adherence Disclaimer -->
-        <footer class="db-footer-elite">
+        <!-- Statutory Footer -->
+        <footer class="db-footer-elite animate-fade-in" style="animation-delay: 0.3s">
            <p>STATUTORY IDENTIFICATION ARCHIVE. AUTHORIZED ACCESS ONLY. THIS RECORD IS SYNCHRONIZED WITH THE CENTRAL TAXPAYER REGISTRY.</p>
         </footer>
       </div>
 
-      <!-- Filing Dialog -->
+      <!-- Filing Modal -->
       @if (showFileDialog()) {
-        <div class="elite-modal-overlay" (click)="cancelFileDialog()">
-          <div class="elite-modal-content" (click)="$event.stopPropagation()">
-            <div class="modal-header">
-              <div class="modal-title">
-                <h3>Secure Filing Sequence</h3>
-                <p>Configure return parameters for valid transmission</p>
+        <div class="modal-overlay-elite animate-fade-in">
+          <div class="modal-box elite-card animate-scale-in">
+            <div class="card-glow"></div>
+            <div class="panel-header-elite">
+              <div class="header-left-stack">
+                <h3 class="panel-title">Secure Filing <span class="text-red">Sequence</span></h3>
+                <p class="panel-desc">Configure return parameters for valid transmission</p>
               </div>
               <button class="close-btn" (click)="cancelFileDialog()">✕</button>
             </div>
             
-            <div class="modal-body">
-              <div class="form-group">
-                <label>Revenue Head (Obligation)</label>
-                <div class="select-wrapper">
-                  <select [(ngModel)]="newReturn.type">
-                    <option value="">Select an active obligation...</option>
-                    <option value="Monthly VAT Return">Monthly VAT Return (Section A)</option>
-                    <option value="Income Tax Return">Income Tax Return (Resident Individual)</option>
-                    <option value="PAYE Return">PAYE Systematic Return</option>
-                    <option value="Withholding Tax Return">Withholding Statutory Return</option>
-                    <option value="Rental Income">Rental Income Tax (Residential)</option>
-                  </select>
+            <div class="modal-body-elite">
+              <div class="mpesa-form-elite">
+                <div class="input-group-elite">
+                  <label>REVENUE HEAD (OBLIGATION)</label>
+                  <div class="select-wrap-elite">
+                    <select [(ngModel)]="newReturn.type">
+                      <option value="">Select an active obligation...</option>
+                      <option value="Monthly VAT Return">Monthly VAT Return (Section A)</option>
+                      <option value="Income Tax Return">Income Tax Return (Resident Individual)</option>
+                      <option value="PAYE Return">PAYE Systematic Return</option>
+                      <option value="Withholding Tax Return">Withholding Statutory Return</option>
+                      <option value="Rental Income">Rental Income Tax (Residential)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="input-group-elite">
+                  <label>FISCAL PERIOD (MONTH/YEAR)</label>
+                  <input type="text" [(ngModel)]="newReturn.period" placeholder="e.g. November 2025">
+                </div>
+
+                <div class="info-alert-elite">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <span>Legal Compliance Check: Ensure all data is accurate before authorizing transmission.</span>
+                </div>
+
+                <div class="form-actions-elite">
+                  <button class="btn-ghost-elite" (click)="cancelFileDialog()" style="flex: 1">DISCARD</button>
+                  <button class="btn-primary-elite" (click)="fileReturn()" [disabled]="!newReturn.type || !newReturn.period" style="flex: 2">
+                    AUTHORIZE SUBMISSION
+                  </button>
                 </div>
               </div>
-
-              <div class="form-group">
-                <label>Fiscal Period (Month/Year)</label>
-                <input type="text" [(ngModel)]="newReturn.period" placeholder="e.g. November 2025">
-              </div>
-
-              <div class="info-alert">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <span>Ensure all data is accurate. This initiates a legal filing sequence.</span>
-              </div>
-            </div>
-
-            <div class="modal-footer">
-              <button class="btn-ghost-elite" (click)="cancelFileDialog()">Discard</button>
-              <button class="btn-primary-elite" (click)="fileReturn()" [disabled]="!newReturn.type || !newReturn.period">
-                Authorize Submission
-              </button>
             </div>
           </div>
         </div>
@@ -200,97 +191,110 @@ import { environment } from '../../../../environments/environment';
       --bdr:          rgba(255, 255, 255, 0.08);
       --bdr-md:       rgba(255, 255, 255, 0.14);
 
+      --duration-base: 0.4s;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
       font-family: 'Plus Jakarta Sans', sans-serif;
       display: block;
     }
 
-    @media (prefers-color-scheme: light) {
-      :host {
-        --bg-root:    #F2F2F4;
-        --bg-card:    #FFFFFF;
-        --bg-card-2:  #F8F8FA;
-        --text-pri:   #111111;
-        --text-sec:   #555560;
-        --text-mut:   #9999A8;
-        --bdr:        rgba(0, 0, 0, 0.08);
-        --bdr-md:     rgba(0, 0, 0, 0.12);
-      }
-    }
-
     .db-root { min-height: 100vh; background: var(--bg-root); color: var(--text-pri); position: relative; overflow-x: hidden; }
-    .db-inner { max-width: 1400px; margin: 0 auto; padding: 40px 28px 80px; display: flex; flex-direction: column; gap: 40px; position: relative; z-index: 10; }
+    .noise-overlay { position: fixed; inset: 0; background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAA6f7sBAAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAD1JREFUeNoVjEkOACAIA53/f9qFA9S0mSBYhS6Yp7mXqR8B1Zp6InoSpOqJ6EnUInoStYieRC2iF9GLaE30JPojDPoA9WpU6YIAAAAASUVORK5CYII=') repeat; opacity: 0.03; pointer-events: none; z-index: 1; }
+    .accent-bleed { position: fixed; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, var(--red-pale) 0%, transparent 70%); filter: blur(60px); pointer-events: none; z-index: 2; }
+    .db-inner { max-width: 1400px; margin: 0 auto; padding: 40px 28px 80px; position: relative; z-index: 10; display: flex; flex-direction: column; gap: 40px; }
 
+    /* Header */
     .db-header-elite { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
     .premium-title { font-size: clamp(32px, 5vw, 48px); font-weight: 950; letter-spacing: -1.5px; line-height: 1; margin: 12px 0 8px; }
     .text-red { color: var(--red); }
     .premium-subtitle { font-size: 14px; font-weight: 500; color: var(--text-sec); max-width: 500px; }
-
     .live-badge { display: flex; align-items: center; gap: 7px; padding: 5px 12px; border-radius: 50px; background: var(--red-pale); border: 1px solid var(--red-border); font-size: 9px; font-weight: 900; letter-spacing: 1.5px; color: var(--red-bright); }
     .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 10px var(--red); animation: blink 1.5s infinite; }
+
+    /* Cards & Grid */
+    .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .elite-card { background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 32px; position: relative; overflow: hidden; }
+    .card-glow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top right, var(--red-pale), transparent 40%); pointer-events: none; opacity: 0.6; }
+
+    .metric-card { padding: 32px; display: flex; align-items: center; gap: 24px; transition: transform 0.3s; }
+    .metric-card:hover { transform: translateY(-4px); }
+    .card-icon { width: 64px; height: 64px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: var(--bg-card-2); border: 1px solid var(--bdr); color: var(--red); }
+    .metric-label { font-size: 10px; font-weight: 800; color: var(--text-sec); letter-spacing: 1.5px; }
+    .metric-value { font-size: 32px; font-weight: 950; color: var(--text-pri); }
+
+    /* Table/Registry Panel */
+    .table-panel { padding: 0; }
+    .panel-header-elite { padding: 32px; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; border-bottom: 1px solid var(--bdr); }
+    .panel-title { font-size: 20px; font-weight: 900; margin: 0; }
+    .panel-desc { font-size: 12px; color: var(--text-sec); margin-top: 4px; }
+    
+    .search-box-elite { position: relative; width: 100%; max-width: 320px; }
+    .search-box-elite svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-mut); pointer-events: none; }
+    .search-box-elite input { width: 100%; background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 16px; padding: 12px 16px 12px 48px; color: var(--text-pri); font-size: 14px; outline: none; transition: all 0.2s; }
+    .search-box-elite input:focus { border-color: var(--red); box-shadow: 0 0 0 4px var(--red-pale); background: var(--bg-card); }
+
+    .registry-list { display: flex; flex-direction: column; }
+    .registry-item { display: grid; grid-template-columns: 1.5fr 1fr 1fr; align-items: center; padding: 24px 32px; border-bottom: 1px solid var(--bdr); transition: all 0.2s; border-left: 0 solid var(--red); }
+    .registry-item:hover { background: var(--bg-card-2); transform: translateX(8px); border-left-width: 4px; }
+    .registry-item.submitted { border-left-color: #00C853; }
+    .registry-item.pending { border-left-color: #FFAB00; }
+
+    .ri-type { font-size: 15px; font-weight: 800; color: var(--text-pri); }
+    .ri-period { font-size: 12px; color: var(--text-sec); font-weight: 600; margin-top: 2px; }
+    .ri-label { font-size: 9px; font-weight: 800; color: var(--text-mut); letter-spacing: 1px; }
+    .ri-date { font-size: 13px; font-weight: 700; color: var(--text-pri); }
+    .ri-right { display: flex; justify-content: flex-end; align-items: center; gap: 16px; }
+
+    .status-badge { padding: 4px 12px; border-radius: 50px; font-size: 9px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+    .status-badge.alert { background: rgba(255, 171, 0, 0.1); color: #FFAB00; border: 1px solid rgba(255, 171, 0, 0.2); }
+    .status-badge.success { background: rgba(0, 200, 83, 0.1); color: #00C853; border: 1px solid rgba(0, 200, 83, 0.2); }
+
+    .icon-btn-elite { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--bg-card-2); border: 1px solid var(--bdr); color: var(--text-sec); cursor: pointer; transition: all 0.2s; }
+    .icon-btn-elite:hover { background: var(--red); color: #fff; border-color: var(--red); transform: scale(1.1); }
+
+    .empty-state-elite { padding: 80px 0; text-align: center; color: var(--text-mut); }
+    .empty-icon { margin-bottom: 20px; opacity: 0.15; }
+
+    /* Modals */
+    .modal-overlay-elite { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .modal-box { width: 100%; max-width: 500px; }
+    .modal-body-elite { padding: 32px; }
+    
+    .mpesa-form-elite { display: flex; flex-direction: column; gap: 24px; }
+    .input-group-elite label { font-size: 10px; font-weight: 800; color: var(--text-mut); letter-spacing: 1.5px; margin-bottom: 10px; display: block; }
+    .input-group-elite input, .select-wrap-elite select { width: 100%; background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 14px; padding: 14px 20px; font-size: 15px; color: var(--text-pri); outline: none; transition: all 0.2s; }
+    .input-group-elite input:focus, .select-wrap-elite select:focus { border-color: var(--red); background: var(--bg-card); box-shadow: 0 0 0 4px var(--red-pale); }
+
+    .info-alert-elite { display: flex; gap: 12px; padding: 16px; background: var(--red-pale); border: 1px solid var(--red-border); border-radius: 16px; color: var(--red-bright); font-size: 12px; font-weight: 600; line-height: 1.5; }
+    .form-actions-elite { display: flex; gap: 16px; margin-top: 8px; }
+
+    /* Buttons */
+    .btn-primary-elite { background: var(--red); color: #fff; border: none; padding: 16px 28px; border-radius: 14px; font-size: 11px; font-weight: 900; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 16px -4px var(--red-glow); display: flex; align-items: center; justify-content: center; gap: 10px; text-transform: uppercase; }
+    .btn-primary-elite:hover:not(:disabled) { background: var(--red-bright); transform: translateY(-2px); box-shadow: 0 12px 24px -6px var(--red-glow); }
+    .btn-primary-elite:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-ghost-elite { background: var(--bg-card-2); color: var(--text-sec); border: 1px solid var(--bdr); padding: 16px 24px; border-radius: 14px; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; }
+    .btn-ghost-elite:hover { background: var(--bg-card); color: var(--text-pri); border-color: var(--bdr-md); }
+
+    .close-btn { width: 32px; height: 32px; border-radius: 10px; border: none; background: var(--bg-card-2); color: var(--text-sec); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 16px; }
+    .close-btn:hover { color: var(--text-pri); background: var(--bdr); }
+
+    /* Footer */
+    .db-footer-elite { padding: 40px; border: 1px solid var(--bdr); border-radius: 32px; text-align: center; background: var(--bg-card-2); }
+    .db-footer-elite p { font-size: 10px; font-weight: 800; color: var(--text-mut); letter-spacing: 4px; line-height: 1.8; max-width: 800px; margin: 0 auto; text-transform: uppercase; }
+
+    /* Animations */
+    .animate-fade-in { animation: fadeIn var(--duration-base) var(--ease-out) both; }
+    .animate-scale-in { animation: scaleIn var(--duration-base) var(--ease-out) both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
-    .elite-card { background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 32px; padding: 32px; position: relative; overflow: hidden; }
-    
-    .metric-card { display: flex; align-items: center; gap: 24px; }
-    .card-icon { width: 64px; height: 64px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: var(--bg-card-2); border: 1px solid var(--bdr); }
-    .metric-label { font-size: 12px; font-weight: 700; color: var(--text-sec); uppercase; letter-spacing: 1px; }
-    .metric-value { font-size: 32px; font-weight: 900; color: var(--text-pri); }
-
-    .table-section { padding: 0; }
-    .table-header { padding: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; border-bottom: 1px solid var(--bdr); }
-    .table-title { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 12px; color: var(--text-pri); }
-    
-    .search-box { position: relative; width: 100%; max-width: 320px; }
-    .search-box svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-mut); }
-    .search-box input { width: 100%; background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 16px; padding: 12px 16px 12px 48px; color: var(--text-pri); font-size: 14px; outline: none; transition: all 0.2s; }
-    .search-box input:focus { border-color: var(--red); box-shadow: 0 0 0 4px var(--red-pale); }
-
-    .elite-table { width: 100%; border-collapse: collapse; }
-    .elite-table th { padding: 16px 32px; text-align: left; font-size: 11px; font-weight: 800; color: var(--text-mut); text-transform: uppercase; letter-spacing: 1px; background: var(--bg-card-2); }
-    .elite-table td { padding: 20px 32px; border-bottom: 1px solid var(--bdr); font-size: 14px; }
-    .table-row:hover { background: var(--bg-card-2); }
-
-    .period-chip { padding: 4px 10px; background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--text-sec); }
-    
-    .status-chip { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 50px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-    .status-chip[data-status="submitted"] { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-    .status-chip[data-status="pending"] { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
-    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-
-    .icon-btn { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: var(--bg-card-2); border: 1px solid var(--bdr); color: var(--text-sec); cursor: pointer; transition: all 0.2s; }
-    .icon-btn:hover { background: var(--red); color: #fff; border-color: var(--red); }
-
-    .empty-state { padding: 80px 0; text-align: center; color: var(--text-mut); }
-    .empty-icon { margin-bottom: 16px; opacity: 0.2; }
-
-    .btn-primary-elite { background: var(--red); color: #fff; border: none; padding: 14px 28px; border-radius: 16px; font-size: 12px; font-weight: 800; letter-spacing: 1.5px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px var(--red-glow); }
-    .btn-primary-elite:hover { background: var(--red-bright); transform: translateY(-2px); }
-    .btn-primary-elite:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-    .btn-ghost-elite { background: var(--bg-card-2); color: var(--text-sec); border: 1px solid var(--bdr); padding: 14px 28px; border-radius: 16px; font-size: 12px; font-weight: 800; cursor: pointer; transition: all 0.2s; }
-    .btn-ghost-elite:hover { background: var(--bdr); color: var(--text-pri); }
-
-    .elite-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; }
-    .elite-modal-content { background: var(--bg-card); border: 1px solid var(--bdr-md); border-radius: 32px; width: 100%; max-width: 540px; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
-    
-    .modal-header { padding: 32px; border-bottom: 1px solid var(--bdr); display: flex; justify-content: space-between; align-items: flex-start; }
-    .modal-title h3 { font-size: 24px; font-weight: 900; margin: 0; }
-    .modal-title p { font-size: 14px; color: var(--text-sec); margin: 4px 0 0; }
-    .close-btn { background: none; border: none; font-size: 20px; color: var(--text-mut); cursor: pointer; }
-
-    .modal-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
-    .form-group { display: flex; flex-direction: column; gap: 8px; }
-    .form-group label { font-size: 12px; font-weight: 800; color: var(--text-mut); text-transform: uppercase; }
-    .form-group input, .select-wrapper select { width: 100%; background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 12px; padding: 14px; color: var(--text-pri); outline: none; font-size: 14px; }
-    .form-group input:focus { border-color: var(--red); }
-    
-    .info-alert { display: flex; gap: 12px; padding: 16px; background: var(--red-pale); border: 1px solid var(--red-border); border-radius: 16px; color: var(--red-bright); font-size: 13px; font-weight: 500; }
-
-    .modal-footer { padding: 24px 32px; border-top: 1px solid var(--bdr); display: flex; justify-content: flex-end; gap: 12px; }
-
-    .db-footer-elite { margin-top: 40px; padding: 40px; border: 1px solid var(--bdr); border-radius: 32px; text-align: center; background: var(--bg-card-2); }
-    .db-footer-elite p { font-size: 10px; font-weight: 800; color: var(--text-mut); letter-spacing: 4px; line-height: 1.8; max-width: 800px; margin: 0 auto; }
+    @media (max-width: 768px) {
+      .registry-item { grid-template-columns: 1fr; gap: 16px; padding: 24px; }
+      .ri-right { justify-content: space-between; }
+      .form-actions-elite { flex-direction: column; }
+    }
   `]
 })
 export class ReturnsComponent implements OnInit {

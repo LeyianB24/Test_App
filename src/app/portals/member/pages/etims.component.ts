@@ -8,299 +8,219 @@ import { EtimsService } from '../../../services/etims.service';
   selector: 'app-etims',
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="etims-root">
+    <div class="db-root">
+      <div class="noise-overlay"></div>
+      <div class="accent-bleed"></div>
 
-      <!-- Ambient Background -->
-      <div class="ambient-bg">
-        <div class="ambient-orb orb-1"></div>
-        <div class="ambient-orb orb-2"></div>
-        <div class="grid-overlay"></div>
-      </div>
-
-      <div class="etims-content">
-
-        <!-- ══════════ HEADER ══════════ -->
-        <header class="page-header">
-          <div class="header-brand">
-            <div class="kra-badge">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span>KRA</span>
+      <div class="db-inner">
+        <!-- Elite Header -->
+        <header class="db-header-elite animate-fade-in">
+          <div class="header-left">
+            <div class="live-badge">
+              <div class="live-dot"></div>
+              FISCAL GATEWAY
             </div>
-            <div class="header-title-block">
-              <h1 class="page-title">e<span class="title-accent">TIMS</span> Portal</h1>
-              <p class="page-subtitle">Electronic Tax Invoice Management System · Kenya Revenue Authority</p>
-            </div>
+            <h1 class="premium-title">e<span class="text-red">TIMS</span> Registry</h1>
+            <p class="premium-subtitle">Electronic Tax Invoice Management System · Statutory Fiscal Synch</p>
           </div>
-          <div class="header-actions">
-            <div class="live-indicator">
+          
+          <div class="header-right">
+            <div class="sync-status">
               <span class="live-dot"></span>
-              <span>LIVE SYNC</span>
+              LIVE SYNC ACTIVE
             </div>
-            <button class="btn-generate" (click)="showInvoiceDialog.set(true)">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-              <span>New Invoice</span>
+            <button class="btn-primary-elite" (click)="showInvoiceDialog.set(true)">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+              NEW INVOICE
             </button>
           </div>
         </header>
 
-        <!-- ══════════ STAT CARDS ══════════ -->
-        <div class="stats-grid">
-
-          <div class="stat-card stat-invoices">
-            <div class="stat-header">
-              <span class="stat-label">TOTAL INVOICES</span>
-              <div class="stat-icon-wrap icon-blue">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-              </div>
+        <!-- HD Metrics Grid -->
+        <div class="main-grid animate-fade-in" style="animation-delay: 0.1s">
+          <div class="elite-card metric-card group">
+            <div class="card-glow"></div>
+            <div class="card-icon">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             </div>
-            <div class="stat-value">{{ allInvoices().length }}</div>
-            <div class="stat-footer">
-              <span class="stat-delta positive">+12% this month</span>
-            </div>
-            <div class="stat-bar">
-              <div class="stat-bar-fill" style="width: 72%; background: var(--kra-blue)"></div>
+            <div class="metric-content">
+              <span class="metric-label">TOTAL INVOICES</span>
+              <div class="metric-value">{{ allInvoices().length }}</div>
             </div>
           </div>
 
-          <div class="stat-card stat-revenue">
-            <div class="stat-header">
-              <span class="stat-label">NET REVENUE</span>
-              <div class="stat-icon-wrap icon-green">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/></svg>
-              </div>
+          <div class="elite-card metric-card group">
+            <div class="card-glow"></div>
+            <div class="card-icon">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/></svg>
             </div>
-            <div class="stat-value compact">KES {{ totalRevenue() | number:'1.0-0' }}</div>
-            <div class="stat-footer">
-              <span class="stat-delta positive">+8.4% YoY</span>
-            </div>
-            <div class="stat-bar">
-              <div class="stat-bar-fill" style="width: 85%; background: var(--kra-green)"></div>
+            <div class="metric-content">
+              <span class="metric-label">NET REVENUE</span>
+              <div class="metric-value">KES {{ totalRevenue() | number:'1.0-0' }}</div>
             </div>
           </div>
 
-          <div class="stat-card stat-vat">
-            <div class="stat-header">
-              <span class="stat-label">VAT OBLIGATION</span>
-              <div class="stat-icon-wrap icon-red">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-              </div>
+          <div class="elite-card metric-card group">
+            <div class="card-glow"></div>
+            <div class="card-icon text-red">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
             </div>
-            <div class="stat-value compact">KES {{ totalTax() | number:'1.0-0' }}</div>
-            <div class="stat-footer">
-              <span class="stat-delta neutral">16% std. rate</span>
-            </div>
-            <div class="stat-bar">
-              <div class="stat-bar-fill" style="width: 55%; background: var(--kra-red)"></div>
+            <div class="metric-content">
+              <span class="metric-label">VAT OBLIGATION</span>
+              <div class="metric-value text-red">KES {{ totalTax() | number:'1.0-0' }}</div>
             </div>
           </div>
 
-          <div class="stat-card stat-status">
-            <div class="stat-header">
-              <span class="stat-label">GATEWAY STATUS</span>
-              <div class="stat-icon-wrap icon-green">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 0 0112 2.944a11.955 0 01-8.618 3.04A12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-              </div>
+          <div class="elite-card metric-card group">
+            <div class="card-glow"></div>
+            <div class="card-icon text-green">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 0 0112 2.944a11.955 0 01-8.618 3.04A12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
             </div>
-            <div class="stat-value gateway-online">ONLINE</div>
-            <div class="stat-footer">
-              <span class="stat-delta positive">All systems operational</span>
+            <div class="metric-content">
+              <span class="metric-label">GATEWAY STATUS</span>
+              <div class="metric-value text-green">ONLINE</div>
             </div>
-            <div class="gateway-bars">
-              <div class="gbar h-2"></div>
-              <div class="gbar h-3"></div>
-              <div class="gbar h-5"></div>
-              <div class="gbar h-4"></div>
-              <div class="gbar h-6"></div>
-              <div class="gbar h-3"></div>
-              <div class="gbar h-5"></div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- ══════════ TABLE PANEL ══════════ -->
-        <div class="table-panel">
-
-          <!-- Toolbar -->
-          <div class="table-toolbar">
-            <div class="filter-tabs">
-              <button class="filter-tab" [class.active]="activeFilter === 'all'" (click)="activeFilter = 'all'">
-                All <span class="tab-count">{{ allInvoices().length }}</span>
-              </button>
-              <button class="filter-tab" [class.active]="activeFilter === 'synced'" (click)="activeFilter = 'synced'">
-                Synced <span class="tab-count synced">{{ syncedInvoices().length }}</span>
-              </button>
-              <button class="filter-tab" [class.active]="activeFilter === 'pending'" (click)="activeFilter = 'pending'">
-                Pending <span class="tab-count pending">{{ pendingInvoices().length }}</span>
-              </button>
-              <button class="filter-tab" [class.active]="activeFilter === 'error'" (click)="activeFilter = 'error'">
-                Error <span class="tab-count error">{{ errorInvoices().length }}</span>
-              </button>
-            </div>
-            <div class="search-box">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-              <input type="text" placeholder="Search invoices or customers…" [(ngModel)]="searchQuery" (input)="onSearch()">
-            </div>
-          </div>
-
-          <!-- Table -->
-          <div class="table-scroll">
-            <table class="invoice-table">
-              <thead>
-                <tr>
-                  <th>INVOICE NO.</th>
-                  <th>DATE & TIME</th>
-                  <th>CUSTOMER</th>
-                  <th>NET AMT.</th>
-                  <th>VAT</th>
-                  <th>STATUS</th>
-                  <th class="text-right">ACTION</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (invoice of filteredInvoices(); track invoice.id) {
-                  <tr class="invoice-row">
-                    <td>
-                      <span class="invoice-number">{{ invoice.invoiceNumber }}</span>
-                    </td>
-                    <td>
-                      <span class="date-cell">{{ invoice.date }}</span>
-                    </td>
-                    <td>
-                      <div class="customer-cell">
-                        <div class="customer-avatar">{{ invoice.customerName.charAt(0) }}</div>
-                        <span class="customer-name">{{ invoice.customerName }}</span>
-                      </div>
-                    </td>
-                    <td><span class="amount-cell">KES {{ invoice.amount | number:'1.0-0' }}</span></td>
-                    <td><span class="tax-cell">KES {{ invoice.taxAmount | number:'1.0-0' }}</span></td>
-                    <td>
-                      <div class="status-badge" [ngClass]="'status-' + invoice.status">
-                        <span class="status-dot"></span>
-                        {{ invoice.status | uppercase }}
-                      </div>
-                    </td>
-                    <td class="text-right">
-                      @if (invoice.status === 'pending') {
-                        <button class="action-btn action-sync" (click)="syncInvoice(invoice.id)" [disabled]="syncing() === invoice.id">
-                          @if (syncing() === invoice.id) {
-                            <svg class="spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-                            Syncing…
-                          } @else {
-                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                            Sync Now
-                          }
-                        </button>
-                      } @else if (invoice.status === 'error') {
-                        <button class="action-btn action-retry" (click)="retrySync(invoice.id)">
-                          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                          Retry
-                        </button>
-                      } @else {
-                        <button class="action-btn action-download" title="Download Invoice">
-                          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                          Download
-                        </button>
-                      }
-                    </td>
-                  </tr>
-                } @empty {
-                  <tr>
-                    <td colspan="7">
-                      <div class="empty-state">
-                        <div class="empty-icon">
-                          <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        </div>
-                        <p class="empty-title">No invoices found</p>
-                        <p class="empty-sub">No fiscal transactions match your current filters.</p>
-                        <button class="btn-generate mt-4" (click)="showInvoiceDialog.set(true)">
-                          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                          Create First Invoice
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
           </div>
         </div>
 
-      </div><!-- /etims-content -->
+        <!-- Toolbar / Registry Panel -->
+        <div class="elite-card table-panel animate-fade-in" style="animation-delay: 0.2s">
+          <div class="card-glow"></div>
+          <div class="table-toolbar-elite">
+            <div class="filter-tabs-elite">
+              <button class="filter-tab-elite" [class.active]="activeFilter === 'all'" (click)="activeFilter = 'all'">
+                All <span class="tab-count-elite">{{ allInvoices().length }}</span>
+              </button>
+              <button class="filter-tab-elite" [class.active]="activeFilter === 'synced'" (click)="activeFilter = 'synced'">
+                Synced <span class="tab-count-elite synced">{{ syncedInvoices().length }}</span>
+              </button>
+              <button class="filter-tab-elite" [class.active]="activeFilter === 'pending'" (click)="activeFilter = 'pending'">
+                Pending <span class="tab-count-elite alert">{{ pendingInvoices().length }}</span>
+              </button>
+            </div>
+            <div class="search-box-elite">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" placeholder="Trace invoices..." [(ngModel)]="searchQuery" (input)="onSearch()">
+            </div>
+          </div>
 
-      <!-- ══════════ MODAL ══════════ -->
+          <div class="registry-list">
+            @for (invoice of filteredInvoices(); track invoice.id) {
+              <div class="registry-item animate-fade-in" [class]="invoice.status">
+                <div class="ri-left">
+                  <div class="ri-type">{{ invoice.invoiceNumber }}</div>
+                  <div class="ri-period">{{ invoice.date }}</div>
+                </div>
+                <div class="ri-center">
+                  <div class="customer-info-elite">
+                    <div class="customer-avatar-elite">{{ invoice.customerName.charAt(0) }}</div>
+                    <div class="customer-details-elite">
+                      <div class="customer-name-elite">{{ invoice.customerName }}</div>
+                      <div class="ri-period">Verified Entity</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="ri-stats-stack">
+                  <div class="ri-stat-row">
+                    <span class="ri-stat-label">NET</span>
+                    <span class="ri-stat-val text-pri">KES {{ invoice.amount | number:'1.0-0' }}</span>
+                  </div>
+                  <div class="ri-stat-row">
+                    <span class="ri-stat-label">VAT</span>
+                    <span class="ri-stat-val text-red">KES {{ invoice.taxAmount | number:'1.0-0' }}</span>
+                  </div>
+                </div>
+                <div class="ri-right">
+                  <span class="status-badge" [class]="invoice.status === 'synced' ? 'success' : (invoice.status === 'pending' ? 'alert' : 'danger')">
+                    {{ invoice.status | uppercase }}
+                  </span>
+                  <div class="action-stack-elite">
+                    @if (invoice.status === 'pending') {
+                      <button class="btn-primary-elite btn-table-action" (click)="syncInvoice(invoice.id)" [disabled]="syncing() === invoice.id">
+                        {{ syncing() === invoice.id ? 'SYNCING...' : 'SYNC NOW' }}
+                      </button>
+                    } @else if (invoice.status === 'error') {
+                      <button class="btn-primary-elite btn-table-action danger" (click)="retrySync(invoice.id)">RETRY</button>
+                    } @else {
+                      <button class="icon-btn-elite" (click)="downloadInvoice(invoice)"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
+                    }
+                  </div>
+                </div>
+              </div>
+            } @empty {
+              <div class="empty-state-elite">
+                <div class="empty-icon text-muted">
+                  <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                </div>
+                <p>Registry Clear. No fiscal transactions match your search.</p>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Filing Modal -->
       @if (showInvoiceDialog()) {
-        <div class="modal-overlay" (click)="cancelInvoiceDialog()">
-          <div class="modal-card" (click)="$event.stopPropagation()">
-
-            <div class="modal-header">
-              <div class="modal-header-icon">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <div class="modal-overlay-elite animate-fade-in">
+          <div class="modal-box elite-card animate-scale-in">
+            <div class="card-glow"></div>
+            <div class="panel-header-elite">
+              <div class="header-left-stack">
+                <h3 class="panel-title">Filing <span class="text-red">Sequence</span></h3>
+                <p class="panel-desc">Generate eTIMS Synchronized Transaction</p>
               </div>
-              <div>
-                <h3 class="modal-title">Generate Invoice</h3>
-                <p class="modal-sub">eTIMS Synchronized Transaction</p>
-              </div>
-              <button class="modal-close" (click)="cancelInvoiceDialog()">
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
-              </button>
+              <button class="close-btn" (click)="cancelInvoiceDialog()">✕</button>
             </div>
-
-            <div class="modal-body">
-              <div class="field-group">
-                <label class="field-label">Customer / Entity Name</label>
-                <input class="field-input" type="text" [(ngModel)]="newInvoice.customerName" placeholder="e.g. Safaricom PLC or A000000000Z">
-              </div>
-
-              <div class="field-row">
-                <div class="field-group">
-                  <label class="field-label">Transaction Amount (KES)</label>
-                  <input class="field-input" type="number" [(ngModel)]="newInvoice.amount" placeholder="0.00">
+            
+            <div class="modal-body-elite">
+              <div class="mpesa-form-elite">
+                <div class="input-group-elite">
+                  <label>CUSTOMER / ENTITY NAME</label>
+                  <input type="text" [(ngModel)]="newInvoice.customerName" placeholder="e.g. Safaricom PLC or A000000000Z">
                 </div>
-                <div class="field-group">
-                  <label class="field-label">VAT Protocol</label>
-                  <select class="field-select" [(ngModel)]="newInvoice.taxRate">
-                    <option [ngValue]="0.16">16% — Standard Rate</option>
-                    <option [ngValue]="0">0% — Zero Rated</option>
-                    <option [ngValue]="0.08">8% — Reduced Rate</option>
-                  </select>
-                </div>
-              </div>
 
-              @if (newInvoice.amount > 0) {
-                <div class="tax-preview">
-                  <div class="tax-preview-row">
-                    <span>Net Amount</span>
-                    <span>KES {{ newInvoice.amount | number:'1.0-0' }}</span>
+                <div class="ri-center-grid">
+                  <div class="input-group-elite">
+                    <label>NET AMOUNT (KES)</label>
+                    <input type="number" [(ngModel)]="newInvoice.amount" placeholder="0.00">
                   </div>
-                  <div class="tax-preview-row">
-                    <span>VAT ({{ newInvoice.taxRate * 100 }}%)</span>
-                    <span>KES {{ (newInvoice.amount * newInvoice.taxRate) | number:'1.0-0' }}</span>
-                  </div>
-                  <div class="tax-preview-row total">
-                    <span>Total Payable</span>
-                    <span>KES {{ (newInvoice.amount * (1 + newInvoice.taxRate)) | number:'1.0-0' }}</span>
+                  <div class="input-group-elite">
+                    <label>VAT PROTOCOL</label>
+                    <div class="select-wrap-elite">
+                      <select [(ngModel)]="newInvoice.taxRate">
+                        <option [ngValue]="0.16">16% — Standard Rate</option>
+                        <option [ngValue]="0">0% — Zero Rated</option>
+                        <option [ngValue]="0.08">8% — Reduced Rate</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
-              }
 
-              <div class="kra-notice">
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <p>This invoice will be immediately registered on the <strong>KRA National Ledger</strong> and cannot be deleted once committed.</p>
+                @if (newInvoice.amount > 0) {
+                  <div class="tax-matrix-preview">
+                    <div class="tm-row"><span>NET AMOUNT</span><span>KES {{ newInvoice.amount | number:'1.0-0' }}</span></div>
+                    <div class="tm-row"><span>VAT ({{ newInvoice.taxRate * 100 }}%)</span><span class="text-red">KES {{ (newInvoice.amount * newInvoice.taxRate) | number:'1.0-0' }}</span></div>
+                    <div class="tm-row total"><span>TOTAL PAYABLE</span><span class="text-red">KES {{ (newInvoice.amount * (1 + newInvoice.taxRate)) | number:'1.0-0' }}</span></div>
+                  </div>
+                }
+
+                <div class="info-alert-elite">
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  <span>This invoice will be immediately registered on the <strong>KRA National Ledger</strong> and cannot be revoked once committed.</span>
+                </div>
+
+                <div class="form-actions-elite">
+                  <button class="btn-ghost-elite" (click)="cancelInvoiceDialog()" style="flex: 1">DISCARD</button>
+                  <button class="btn-primary-elite" (click)="createInvoice()" [disabled]="!newInvoice.customerName || !newInvoice.amount" style="flex: 2">
+                    COMMIT & SYNC TO KRA
+                  </button>
+                </div>
               </div>
             </div>
-
-            <div class="modal-footer">
-              <button class="btn-cancel" (click)="cancelInvoiceDialog()">Cancel</button>
-              <button class="btn-commit" (click)="createInvoice()" [disabled]="!newInvoice.customerName || !newInvoice.amount">
-                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 0 0112 2.944a11.955 0 01-8.618 3.04A12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                Commit & Sync to KRA
-              </button>
-            </div>
-
           </div>
         </div>
       }
+    </div>
 
     </div>
   `,

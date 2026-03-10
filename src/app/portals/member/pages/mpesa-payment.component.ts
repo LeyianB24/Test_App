@@ -176,6 +176,7 @@ interface PaymentFormData {
       }
     </div>
     `,
+  styles: [`
     :host {
       --red:          #D92B2B;
       --red-bright:   #EF3B3B;
@@ -304,6 +305,7 @@ interface PaymentFormData {
       .ti-right { grid-column: span 2; justify-content: flex-start; }
       .form-actions-elite { flex-direction: column; }
     }
+  `]
 })
 export class MpesaPaymentComponent {
   private mpesaService = inject(MpesaService);
