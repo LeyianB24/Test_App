@@ -1,9 +1,10 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-objection-list',
-  imports: [RouterModule],
+  imports: [CommonModule, RouterModule],
   template: `
     <div class="page-container animate-fade-in">
       <header class="mb-10 lg:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">

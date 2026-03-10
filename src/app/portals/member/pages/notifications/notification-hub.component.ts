@@ -108,8 +108,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
     .get-warning { color: #f59e0b; }
     .get-error   { color: #ef4444; }
     .get-info    { color: #3b82f6; }
-  `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  `]
 })
 export class NotificationHubComponent {
   ns = inject(NotificationService);
