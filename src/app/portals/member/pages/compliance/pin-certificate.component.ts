@@ -9,22 +9,26 @@ import { environment } from '../../../../../environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   template: `
-    <div class="content-area animate-stagger print-container">
+    <div class="page-container animate-fade-in print-container">
       <!-- ── Dashboard Header (Hidden on Print) ─────────────── -->
-      <header class="mb-12 no-print">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+      <header class="mb-10 lg:mb-14 no-print">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <h1 class="premium-title">
-              PIN <span class="text-[var(--color-accent)]">Certificate</span>
-            </h1>
-            <p class="premium-subtitle">Official acknowledgement of registered taxpayer status</p>
+            <div class="flex items-center gap-3 mb-2">
+              <span class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                OFFICIAL REGISTRY
+              </span>
+            </div>
+            <h1 class="premium-title">PIN <span class="gradient-text">Certificate</span></h1>
+            <p class="premium-subtitle">Authorized acknowledgement of registered taxpayer status and obligations</p>
           </div>
           <div class="flex items-center gap-4">
-            <button class="btn-precision btn-secondary-precision" (click)="print()">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4"/></svg>
-              Print
+            <button class="modern-btn outline-btn py-3 px-6 shadow-xl shadow-black/10" (click)="print()">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4"/></svg>
+              Print Record
             </button>
-            <button class="btn-precision btn-primary-precision" (click)="downloadPdf()">
+            <button class="modern-btn primary-btn py-3 px-6 shadow-xl shadow-emerald-500/20 elite-glow" (click)="downloadPdf()">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
               Download PDF
             </button>
