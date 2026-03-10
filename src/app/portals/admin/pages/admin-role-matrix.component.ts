@@ -168,35 +168,47 @@ import { AdminService, Role, ModulePermission } from '../../../services/admin.se
   styles: [`
     .db-root {
       min-height: 100vh;
-      background: #050505;
+      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background-size: cover;
       position: relative;
       overflow-x: hidden;
       color: #e2e8f0;
       padding: 3.5rem;
     }
 
-    .noise-overlay {
-      position: fixed;
+    .db-root::before {
+      content: "";
+      position: absolute;
       inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      opacity: 0.015;
+      background: radial-gradient(circle at top left, rgba(217, 43, 43, 0.1), transparent 40%),
+                  radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8), transparent 60%);
       pointer-events: none;
       z-index: 1;
     }
 
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.02;
+      pointer-events: none;
+      z-index: 2;
+    }
+
     .content-area {
       position: relative;
-      z-index: 2;
+      z-index: 10;
       max-width: 1700px;
       margin: 0 auto;
     }
 
     .glass-panel {
-      background: rgba(255, 255, 255, 0.02);
-      backdrop-filter: blur(32px);
-      -webkit-backdrop-filter: blur(32px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(15, 15, 15, 0.4);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 2.5rem;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.4);
     }
 
     .status-pill-precision {
@@ -232,9 +244,9 @@ import { AdminService, Role, ModulePermission } from '../../../services/admin.se
     .toggle-manifold {
       position: absolute;
       inset: 0;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.03);
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.08);
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .toggle-core {
@@ -243,30 +255,30 @@ import { AdminService, Role, ModulePermission } from '../../../services/admin.se
       top: 4px;
       width: 14px;
       height: 14px;
-      background: #4a5568;
+      background: rgba(255,255,255,0.15);
       border-radius: 8px;
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     
     .matrix-toggle input:checked + .toggle-manifold {
-      background: rgba(16, 185, 129, 0.1);
-      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.25);
     }
     .matrix-toggle input:checked + .toggle-manifold .toggle-core {
       transform: translateX(24px);
       background: #10b981;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
     }
 
     /* Override for mod/purge/extract if needed for distinct colors */
-    .matrix-toggle input:checked + .toggle-manifold.mod { background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3); }
-    .matrix-toggle input:checked + .toggle-manifold.mod .toggle-core { background: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+    .matrix-toggle input:checked + .toggle-manifold.mod { background: rgba(59, 130, 246, 0.08); border-color: rgba(59, 130, 246, 0.25); }
+    .matrix-toggle input:checked + .toggle-manifold.mod .toggle-core { background: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
     
-    .matrix-toggle input:checked + .toggle-manifold.purge { background: rgba(217, 43, 43, 0.1); border-color: rgba(217, 43, 43, 0.3); }
-    .matrix-toggle input:checked + .toggle-manifold.purge .toggle-core { background: var(--color-accent); box-shadow: 0 0 10px var(--color-accent); }
+    .matrix-toggle input:checked + .toggle-manifold.purge { background: rgba(217, 43, 43, 0.08); border-color: rgba(217, 43, 43, 0.25); }
+    .matrix-toggle input:checked + .toggle-manifold.purge .toggle-core { background: var(--color-accent); box-shadow: 0 0 15px var(--color-accent); }
 
-    .matrix-toggle input:checked + .toggle-manifold.extract { background: rgba(140, 82, 255, 0.1); border-color: rgba(140, 82, 255, 0.3); }
-    .matrix-toggle input:checked + .toggle-manifold.extract .toggle-core { background: #8c52ff; box-shadow: 0 0 10px rgba(140, 82, 255, 0.5); }
+    .matrix-toggle input:checked + .toggle-manifold.extract { background: rgba(140, 82, 255, 0.08); border-color: rgba(140, 82, 255, 0.25); }
+    .matrix-toggle input:checked + .toggle-manifold.extract .toggle-core { background: #8c52ff; box-shadow: 0 0 15px rgba(140, 82, 255, 0.6); }
 
     .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
@@ -300,7 +312,7 @@ export class AdminRoleMatrixComponent implements OnInit {
   loadRoles() {
     this.loading.set(true);
     this.adminService.getRoles().subscribe({
-      next: (res) => {
+      next: (res: { success: boolean; data: Role[] }) => {
         if (res.success && res.data) {
           this.roles.set(res.data);
         }
@@ -314,7 +326,7 @@ export class AdminRoleMatrixComponent implements OnInit {
     this.selectedRole.set(role);
     this.loading.set(true);
     this.adminService.getModulePermissions(role.id).subscribe({
-      next: (res) => {
+      next: (res: { success: boolean; data: ModulePermission[] }) => {
         if (res.success && res.data) {
           this.permissions.set(res.data);
         }
@@ -330,9 +342,9 @@ export class AdminRoleMatrixComponent implements OnInit {
 
     this.saving.set(true);
     this.adminService.upsertPermissions(role.id, this.permissions()).subscribe({
-      next: (res) => {
+      next: (res: { success: boolean }) => {
         if (res.success) {
-          // Protocol update success feedback could be added here
+          // Protocol update success feedback
         }
         this.saving.set(false);
       },
