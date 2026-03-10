@@ -336,9 +336,7 @@ import { RouterModule } from '@angular/router';
 
     /* Animations */
     .animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    `]
 })
 export class VatReturnComponent {
   currentStep = signal(1);
