@@ -7,259 +7,191 @@ import { AuthService } from '../../../../core/services/auth.service';
   selector: 'app-settings',
   imports: [FormsModule],
   template: `
-    <div class="page-container animate-up">
-    
-      <!-- Elite Page Header -->
-      <header class="page-header-elite">
-        <div class="header-info">
+    <div class="page-container animate-fade-in">
+      <header class="mb-10 lg:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-slate-500/10 border border-white/5 text-slate-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-500 animate-pulse"></span>
+              CORE CONFIGURATION
+            </span>
+          </div>
           <h1 class="premium-title">System <span class="gradient-text">Settings</span></h1>
-          <p class="premium-subtitle">Manage your account and security settings</p>
+          <p class="premium-subtitle">Authorized management of account security, communication protocols, and interface preferences</p>
         </div>
       </header>
-    
-      <div class="settings-grid-luxury mt-32">
-    
-        <!-- Strategy Sidebar -->
-        <div class="settings-nav-sidebar animate-up delay-1">
-          <div class="nav-card-luxury">
-            <button class="nav-item-elite" [class.active]="activeTab === 'general'" (click)="activeTab = 'general'">
-              <div class="ni-icon"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-width="2.2"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2.2"/></svg></div>
-              <span>General Settings</span>
-            </button>
-            <button class="nav-item-elite" [class.active]="activeTab === 'security'" (click)="activeTab = 'security'">
-              <div class="ni-icon"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2.2"/></svg></div>
-              <span>Security Settings</span>
-            </button>
-            <button class="nav-item-elite" [class.active]="activeTab === 'notifications'" (click)="activeTab = 'notifications'">
-              <div class="ni-icon"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-width="2.2"/></svg></div>
-              <span>Notification Preferences</span>
-            </button>
-          </div>
-    
-          <div class="integrity-card mt-32">
-            <div class="i-header">System Status</div>
-            <div class="i-ver">Version 4.2.5 (Stable)</div>
-            <div class="status-flex-elite">
-              <span class="pulse-dot green"></span>
-              <span>System Online</span>
-            </div>
-          </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-10">
+        <!-- Sidebar Navigation -->
+        <div class="space-y-8 animate-up">
+           <div class="glass-panel p-3 border-white/5 bg-white/[0.01]">
+              <div class="space-y-2">
+                 @for (tab of tabs; track tab.id) {
+                    <button 
+                       (click)="activeTab = tab.id"
+                       class="w-full flex items-center gap-4 px-6 py-4 rounded-xl transition-all group relative overflow-hidden"
+                       [class.bg-blue-600]="activeTab === tab.id"
+                       [class.text-white]="activeTab === tab.id"
+                       [class.shadow-xl]="activeTab === tab.id"
+                       [class.shadow-blue-500/20]="activeTab === tab.id"
+                       [class.text-slate-500]="activeTab !== tab.id"
+                       [class.hover:bg-white/5]="activeTab !== tab.id"
+                    >
+                       <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all bg-white/5 group-hover:bg-white/10"
+                          [class.!bg-white/20]="activeTab === tab.id">
+                          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path [attr.d]="tab.icon" /></svg>
+                       </div>
+                       <span class="text-[10px] font-black uppercase tracking-widest">{{ tab.label }}</span>
+                    </button>
+                 }
+              </div>
+           </div>
+
+           <div class="glass-panel p-8 space-y-4 bg-white/[0.01] border-white/5 relative overflow-hidden">
+              <div class="absolute -right-12 -bottom-12 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl"></div>
+              <h4 class="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 relative z-10">System Integrity</h4>
+              <div class="flex items-center justify-between relative z-10">
+                 <span class="text-[10px] font-black text-slate-400">CORE VERSION</span>
+                 <span class="text-[10px] font-black text-white">4.2.5-STABLE</span>
+              </div>
+              <div class="flex items-center gap-3 relative z-10">
+                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-lg shadow-emerald-500/50"></span>
+                 <span class="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Protocol Online</span>
+              </div>
+           </div>
         </div>
-    
-        <!-- Configuration Main Surface -->
-        <div class="settings-content-surface animate-up delay-2">
-    
-          <!-- General Protocol Section -->
-          @if (activeTab === 'general') {
-            <div class="content-card-premium animate-fade">
-              <div class="card-p-header">
-                <div class="ch-icon-ring blue">
-                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-width="2.2"/></svg>
-                </div>
-                <div class="p-title-group">
-                  <h3 class="card-p-title">General Settings</h3>
-                  <p class="card-p-subtitle">Language and time zone preferences</p>
-                </div>
-              </div>
-              <div class="luxury-form-stack p-40">
-                <div class="form-row-elite">
-                  <div class="form-item-elite">
-                    <label>System Language</label>
-                    <select class="luxury-select-elite">
-                      <option>English</option>
-                      <option>Kiswahili</option>
-                    </select>
-                  </div>
-                  <div class="form-item-elite">
-                    <label>Time Zone</label>
-                    <select class="luxury-select-elite">
-                      <option>(GMT+03:00) NAIROBI / EAST AFRICA</option>
-                      <option>(GMT+00:00) UTC</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="surface-footer-flush mt-32">
-                  <button class="modern-btn primary-btn" (click)="saveGeneral()" [disabled]="isSavingGeneral()">
-                    {{ isSavingGeneral() ? 'SAVING...' : 'SAVE SETTINGS' }}
-                  </button>
-                </div>
-              </div>
-            </div>
-          }
-    
-          <!-- Security & Cipher Section -->
-          @if (activeTab === 'security') {
-            <div class="content-card-premium animate-fade">
-              <div class="card-p-header">
-                <div class="ch-icon-ring red">
-                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2.2"/></svg>
-                </div>
-                <div class="p-title-group">
-                  <h3 class="card-p-title">Security Management</h3>
-                  <p class="card-p-subtitle">Update your password and security settings</p>
-                </div>
-              </div>
-              <div class="luxury-form-stack p-40">
-                <div class="form-item-elite">
-                  <label>Current Password</label>
-                  <input type="password" class="luxury-input-elite" [(ngModel)]="currentPassword" placeholder="••••••••••••">
-                </div>
-                <div class="form-row-elite">
-                  <div class="form-item-elite">
-                    <label>New Password</label>
-                    <input type="password" class="luxury-input-elite" [(ngModel)]="newPassword" placeholder="Enter new password">
-                  </div>
-                  <div class="form-item-elite">
-                    <label>Confirm Password</label>
-                    <input type="password" class="luxury-input-elite" [(ngModel)]="confirmPassword" placeholder="Type new password again">
-                  </div>
-                </div>
-                <div class="surface-footer-flush mt-32 text-right">
-                  <button class="modern-btn primary-btn" (click)="updatePassword()" [disabled]="isUpdating()">
-                    {{ isUpdating() ? 'UPDATING...' : 'UPDATE PASSWORD' }}
-                  </button>
-                </div>
-                <div class="elite-divider mt-40"><span>Advanced Security</span></div>
-                <div class="toggle-card-luxury mt-24">
-                  <div class="tc-text">
-                    <h4>Multi-Factor Authentication (MFA)</h4>
-                    <p>Require a verification code when logging in.</p>
-                  </div>
-                  <label class="switch-luxury">
-                    <input type="checkbox" checked>
-                    <span class="slider-luxury round"></span>
-                  </label>
-                </div>
-              </div>
-            </div>
-          }
-    
-          <!-- Broadcasting Strategy Section -->
-          @if (activeTab === 'notifications') {
-            <div class="content-card-premium animate-fade">
-              <div class="card-p-header">
-                <div class="ch-icon-ring green">
-                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-width="2.2"/></svg>
-                </div>
-                <div class="p-title-group">
-                  <h3 class="card-p-title">Notification Preferences</h3>
-                  <p class="card-p-subtitle">Choose which notifications you receive</p>
-                </div>
-              </div>
-              <div class="luxury-check-grid p-40">
-                <label class="check-item-elite">
-                  <input type="checkbox" checked>
-                  <span class="custom-check-lux"></span>
-                  <div class="ci-text-v">
-                    <strong>Submission Confirmations</strong>
-                    <p>Receive an email confirmation after successful filing.</p>
-                  </div>
-                </label>
-                <label class="check-item-elite">
-                  <input type="checkbox" checked>
-                  <span class="custom-check-lux"></span>
-                  <div class="ci-text-v">
-                    <strong>Payment Receipts</strong>
-                    <p>Digital confirmation of your payments and PRN generation.</p>
-                  </div>
-                </label>
-                <label class="check-item-elite">
-                  <input type="checkbox">
-                  <span class="custom-check-lux"></span>
-                  <div class="ci-text-v">
-                    <strong>Important Updates</strong>
-                    <p>Receive notices about system updates and rule changes.</p>
-                  </div>
-                </label>
-                <div class="surface-footer-flush mt-40">
-                  <button class="modern-btn primary-btn" (click)="saveNotifications()" [disabled]="isSavingNotifications()">
-                    {{ isSavingNotifications() ? 'SAVING...' : 'SAVE PREFERENCES' }}
-                  </button>
-                </div>
-              </div>
-            </div>
-          }
-    
+
+        <!-- Main Configuration Panel -->
+        <div class="animate-up delay-1">
+           <div class="glass-panel p-0 overflow-hidden relative">
+              <!-- Animated Background -->
+              <div class="absolute inset-0 bg-blue-600/[0.01] opacity-50"></div>
+
+              @if (activeTab === 'general') {
+                 <div class="relative z-10 animate-fade-in">
+                    <div class="p-8 border-b border-white/5 bg-white/[0.01]">
+                       <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest">General Environment Preferences</h3>
+                    </div>
+                    <div class="p-10 space-y-10">
+                       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          <div class="form-group">
+                             <label class="block text-slate-500 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">Interface Language</label>
+                             <select class="form-select bg-slate-900 border-white/5 text-white rounded-xl focus:border-blue-500/50 transition-all font-black text-xs uppercase tracking-widest">
+                                <option>English (International)</option>
+                                <option>Kiswahili (East Africa)</option>
+                             </select>
+                          </div>
+                          <div class="form-group">
+                             <label class="block text-slate-500 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">Temporal Zone</label>
+                             <select class="form-select bg-slate-900 border-white/5 text-white rounded-xl focus:border-blue-500/50 transition-all font-black text-xs uppercase tracking-widest">
+                                <option>(GMT+03:00) NAIROBI / EAT</option>
+                                <option>(GMT+00:00) UTC</option>
+                             </select>
+                          </div>
+                       </div>
+                       <div class="pt-8 border-t border-white/5 flex justify-end">
+                          <button class="modern-btn primary-btn py-4 px-10 shadow-xl shadow-blue-500/20 elite-glow !rounded-2xl" (click)="saveGeneral()" [disabled]="isSavingGeneral()">
+                             {{ isSavingGeneral() ? 'SYNCHRONIZING...' : 'COMMIT CHANGES' }}
+                          </button>
+                       </div>
+                    </div>
+                 </div>
+              }
+
+              @if (activeTab === 'security') {
+                 <div class="relative z-10 animate-fade-in">
+                    <div class="p-8 border-b border-white/5 bg-white/[0.01]">
+                       <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest">Cryptographic & Security Protocols</h3>
+                    </div>
+                    <div class="p-10 space-y-10">
+                       <div class="max-w-xl space-y-8">
+                          <div class="form-group">
+                             <label class="block text-slate-500 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">Current Credential</label>
+                             <input type="password" class="form-input bg-slate-900 border-white/5 text-white rounded-xl focus:border-blue-500/50 transition-all" [(ngModel)]="currentPassword" placeholder="••••••••••••">
+                          </div>
+                          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                             <div class="form-group">
+                                <label class="block text-slate-500 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">New Credential</label>
+                                <input type="password" class="form-input bg-slate-900 border-white/5 text-white rounded-xl focus:border-blue-500/50 transition-all" [(ngModel)]="newPassword" placeholder="Minimum 12 chars">
+                             </div>
+                             <div class="form-group">
+                                <label class="block text-slate-500 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">Confirm Protocol</label>
+                                <input type="password" class="form-input bg-slate-900 border-white/5 text-white rounded-xl focus:border-blue-500/50 transition-all" [(ngModel)]="confirmPassword" placeholder="Verify credential">
+                             </div>
+                          </div>
+                          <div class="pt-8 flex justify-end">
+                             <button class="modern-btn primary-btn py-4 px-10 shadow-xl shadow-blue-500/20 elite-glow !rounded-2xl" (click)="updatePassword()" [disabled]="isUpdating()">
+                                {{ isUpdating() ? 'ROTATING KEYS...' : 'UPDATE CIPHER' }}
+                             </button>
+                          </div>
+                       </div>
+
+                       <div class="elite-divider my-10 relative h-px bg-white/5 flex items-center justify-center">
+                          <span class="bg-slate-950 px-6 text-[9px] font-black text-slate-600 uppercase tracking-[0.4em]">Advanced Shielding</span>
+                       </div>
+
+                       <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-between group hover:border-emerald-500/20 transition-all">
+                          <div class="flex items-center gap-6">
+                             <div class="w-14 h-14 bg-slate-950 border border-white/5 rounded-2xl flex items-center justify-center text-slate-600 group-hover:text-emerald-500 transition-all shadow-2xl">
+                                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                             </div>
+                             <div>
+                                <h4 class="text-white font-black text-sm uppercase tracking-tight group-hover:text-emerald-400 transition-colors">Multi-Factor Authentication (MFA)</h4>
+                                <p class="text-[9px] text-slate-600 font-black uppercase tracking-widest mt-1">Biometric STK verification required for all outbound protocols.</p>
+                             </div>
+                          </div>
+                          <label class="switch-luxury relative inline-flex items-center cursor-pointer">
+                             <input type="checkbox" checked class="sr-only peer">
+                             <div class="w-12 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                          </label>
+                       </div>
+                    </div>
+                 </div>
+              }
+
+              @if (activeTab === 'notifications') {
+                 <div class="relative z-10 animate-fade-in">
+                    <div class="p-8 border-b border-white/5 bg-white/[0.01]">
+                       <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest">Broadcasting Strategy Preferences</h3>
+                    </div>
+                    <div class="p-10 space-y-6">
+                       @for (pref of [
+                          { title: 'Filing Confirmations', desc: 'Secure email protocol after successful statutory declarations.', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+                          { title: 'Payment Receipts', desc: 'Digital ledgers for PRN generation and liquidity confirmations.', icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
+                          { title: 'Directive Updates', desc: 'Administrative bulletins regarding system upgrades and policy pivots.', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' }
+                       ]; track pref.title) {
+                          <label class="p-8 rounded-2xl bg-white/[0.01] border border-white/5 flex items-start gap-8 cursor-pointer hover:bg-white/[0.02] hover:border-blue-500/20 transition-all group">
+                             <div class="flex items-center h-5">
+                                <input type="checkbox" checked class="w-5 h-5 rounded border-white/10 bg-slate-900 text-blue-600 focus:ring-blue-500/20 focus:ring-offset-slate-900">
+                             </div>
+                             <div class="flex items-start gap-6 -mt-1">
+                                <div class="w-12 h-12 rounded-xl bg-slate-950 border border-white/5 flex items-center justify-center text-slate-700 group-hover:text-blue-400 group-hover:border-blue-500/20 transition-all shadow-xl">
+                                   <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path [attr.d]="pref.icon" /></svg>
+                                </div>
+                                <div>
+                                   <strong class="text-white font-black text-sm uppercase tracking-tight group-hover:text-blue-400 transition-colors">{{ pref.title }}</strong>
+                                   <p class="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1 opacity-70 leading-relaxed">{{ pref.desc }}</p>
+                                </div>
+                             </div>
+                          </label>
+                       }
+                       <div class="pt-8 border-t border-white/5 flex justify-end">
+                          <button class="modern-btn primary-btn py-4 px-10 shadow-xl shadow-blue-500/20 elite-glow !rounded-2xl" (click)="saveNotifications()" [disabled]="isSavingNotifications()">
+                             {{ isSavingNotifications() ? 'TRANSMITTING...' : 'SAVE STRATEGY' }}
+                          </button>
+                       </div>
+                    </div>
+                 </div>
+              }
+           </div>
         </div>
       </div>
     </div>
-    `,
+  `,
   styles: [`
-    .settings-grid-luxury { display: grid; grid-template-columns: 320px 1fr; gap: 40px; }
-    
-    .nav-card-luxury {
-      background: white; border-radius: 32px; padding: 15px;
-      border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);
-    }
-    .nav-item-elite {
-      width: 100%; display: flex; align-items: center; gap: 16px; padding: 16px 20px;
-      border: none; background: transparent; color: #64748b; font-weight: 800;
-      border-radius: 18px; cursor: pointer; transition: 0.3s; text-align: left;
-    }
-    .nav-item-elite:hover { background: #F8FAFC; color: var(--text-main); }
-    .nav-item-elite.active { background: var(--kra-gradient); color: white; box-shadow: 0 10px 20px rgba(227, 30, 36, 0.2); }
-    .ni-icon { display: flex; align-items: center; justify-content: center; opacity: 0.7; }
-    .nav-item-elite.active .ni-icon { opacity: 1; }
-
-    .integrity-card {
-      background: #F8FAFC; border-radius: 28px; padding: 24px; border: 1.5px solid #E2E8F0;
-    }
-    .i-header { font-size: 0.8rem; font-weight: 900; color: #1a202c; text-transform: uppercase; letter-spacing: 1.5px; }
-    .i-ver { font-size: 0.75rem; color: #94a3b8; font-weight: 700; margin-top: 6px; }
-    .status-flex-elite { display: flex; align-items: center; gap: 10px; margin-top: 16px; font-size: 0.8rem; font-weight: 800; color: #10B981; }
-    .pulse-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .pulse-dot.green { background: #10B981; box-shadow: 0 0 10px #10B981; animation: dotPulse 2s infinite; }
-    @keyframes dotPulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-
-    .luxury-form-stack { display: flex; flex-direction: column; gap: 32px; }
-    .form-item-elite { display: flex; flex-direction: column; gap: 12px; }
-    .form-item-elite label { font-size: 0.75rem; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; }
-    .form-row-elite { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    
-    .luxury-input-elite, .luxury-select-elite {
-      width: 100%; padding: 18px 24px; background: #F8FAFC; border: 2.5px solid #E2E8F0;
-      border-radius: 20px; font-weight: 800; color: #1a202c; font-size: 1.05rem; transition: 0.3s;
-    }
-    .luxury-input-elite:focus, .luxury-select-elite:focus { border-color: var(--kra-red); outline: none; background: white; box-shadow: 0 0 0 6px rgba(227,30,36,0.1); }
-
-    .surface-footer-flush { border-top: 1.5px solid #F1F5F9; padding-top: 32px; }
-
-    .elite-divider { position: relative; height: 1.5px; background: #E2E8F0; display: flex; align-items: center; justify-content: center; }
-    .elite-divider span { background: white; padding: 0 20px; font-size: 0.75rem; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; }
-
-    .toggle-card-luxury {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 30px; background: #F8FAFC; border-radius: 24px; border: 1.5px solid #E2E8F0;
-    }
-    .tc-text h4 { font-size: 1.1rem; font-weight: 900; color: #1a202c; margin: 0; }
-    .tc-text p { font-size: 0.9rem; color: #64748b; font-weight: 600; margin-top: 4px; }
-
-    .switch-luxury { position: relative; width: 60px; height: 34px; flex-shrink: 0; }
-    .switch-luxury input { opacity: 0; width: 0; height: 0; }
-    .slider-luxury { position: absolute; inset: 0; background: #CBD5E1; transition: .4s; border-radius: 34px; cursor: pointer; }
-    .slider-luxury:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background: white; transition: .4s; border-radius: 50%; }
-    input:checked + .slider-luxury { background: #10B981; }
-    input:checked + .slider-luxury:before { transform: translateX(26px); }
-
-    .luxury-check-grid { display: flex; flex-direction: column; gap: 24px; }
-    .check-item-elite { display: flex; gap: 24px; padding: 24px; border-radius: 20px; cursor: pointer; border: 1.5px solid transparent; transition: 0.3s; }
-    .check-item-elite:hover { background: #F8FAFC; border-color: #E2E8F0; }
-    .check-item-elite input { display: none; }
-    .custom-check-lux { width: 28px; height: 28px; border: 3px solid #E2E8F0; border-radius: 10px; flex-shrink: 0; position: relative; transition: 0.3s; margin-top: 2px; }
-    input:checked + .custom-check-lux { background: var(--kra-blue); border-color: var(--kra-blue); }
-    input:checked + .custom-check-lux:after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 16px; }
-    .ci-text-v strong { font-size: 1.1rem; color: #1a202c; display: block; }
-    .ci-text-v p { font-size: 0.95rem; color: #64748b; font-weight: 600; margin-top: 4px; line-height: 1.6; }
-
-    .p-40 { padding: 40px; }
-    .mt-40 { margin-top: 40px; }
-    .mt-24 { margin-top: 24px; }
-
-    @media (max-width: 1000px) {
-       .settings-grid-luxury { grid-template-columns: 1fr; }
-       .form-row-elite { grid-template-columns: 1fr; }
-    }
-  `]
+    :host { display: block; }
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent {
   private authService = inject(AuthService);
@@ -273,10 +205,16 @@ export class SettingsComponent {
   isSavingGeneral = signal(false);
   isSavingNotifications = signal(false);
 
+  tabs = [
+    { id: 'general', label: 'General Configuration', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z' },
+    { id: 'security', label: 'Security & Shields', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' },
+    { id: 'notifications', label: 'Directive Alerts', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' }
+  ];
+
   updatePassword() {
     if (!this.currentPassword || !this.newPassword || !this.confirmPassword) return;
     if (this.newPassword !== this.confirmPassword) {
-      alert('Error: Passwords do not match.');
+      alert('Error: Cryptographic mismatch in password confirmation.');
       return;
     }
 
@@ -288,14 +226,14 @@ export class SettingsComponent {
           this.currentPassword = '';
           this.newPassword = '';
           this.confirmPassword = '';
-          alert('Success: Password updated successfully.');
+          alert('Success: Security credentials updated.');
         } else {
-          alert('Error: ' + response.message);
+          alert('System Error: ' + response.message);
         }
       },
       error: () => {
         this.isUpdating.set(false);
-        alert('Error: Failed to update password.');
+        alert('Critical Error: Failed to commit cryptographic updates.');
       }
     });
   }
@@ -304,7 +242,7 @@ export class SettingsComponent {
     this.isSavingGeneral.set(true);
     setTimeout(() => {
       this.isSavingGeneral.set(false);
-      alert('Success: General settings saved.');
+      alert('Neutral: General configuration synchronized.');
     }, 1500);
   }
 
@@ -312,7 +250,7 @@ export class SettingsComponent {
     this.isSavingNotifications.set(true);
     setTimeout(() => {
       this.isSavingNotifications.set(false);
-      alert('Success: Notification preferences saved.');
+      alert('Neutral: Broadcasting strategy committed to registry.');
     }, 1500);
   }
 }

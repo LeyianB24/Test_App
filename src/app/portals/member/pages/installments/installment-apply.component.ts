@@ -9,53 +9,65 @@ import { NotificationService } from '../../../../core/services/notification.serv
   selector: 'app-installment-apply',
   imports: [ReactiveFormsModule, RouterModule, CommonModule, FormsModule],
   template: `
-    <div class="installment-apply-container p-6 animate-fade-in">
-      <header class="mb-8 flex justify-between items-center">
+    <div class="page-container animate-fade-in">
+      <header class="mb-10 lg:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
-          <h1 class="text-3xl font-bold text-white mb-2">Apply for Payment Plan</h1>
-          <p class="text-slate-400">Propose a monthly repayment schedule for your outstanding tax debt.</p>
+          <div class="flex items-center gap-3 mb-2">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-violet-500/10 border border-violet-500/20 text-violet-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
+              <span class="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+              PROPOSAL TERMINAL
+            </span>
+          </div>
+          <h1 class="premium-title">Repayment <span class="gradient-text">Scheduler</span></h1>
+          <p class="premium-subtitle">Propose a tactical monthly repayment protocol for outstanding tax liabilities</p>
         </div>
-        <button routerLink="/member/installments" class="text-slate-500 hover:text-white transition-colors">
-          Cancel &amp; Exit
+        <button routerLink="/member/installments" class="text-[10px] font-black text-slate-500 uppercase tracking-widest hover:text-white transition-colors">
+          Abort Proposal
         </button>
       </header>
 
       <div class="max-w-4xl mx-auto">
-        <div class="glass-card p-10">
+        <div class="glass-panel p-10 relative overflow-hidden group">
+          <!-- Ambient Glow -->
+          <div class="absolute -top-32 -left-32 w-64 h-64 bg-violet-600/5 rounded-full blur-3xl group-hover:bg-violet-600/10 transition-colors duration-1000"></div>
+
           <form [formGroup]="installmentForm">
-            <div class="space-y-8">
+            <div class="space-y-10 relative z-10">
               
               <!-- Basics -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                  <div class="form-group">
-                    <label class="block text-slate-300 mb-2 font-bold text-xs uppercase tracking-widest">Select Debt Obligation</label>
-                    <select formControlName="obligation_id" class="form-select">
+                    <label class="block text-slate-500 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">Select Liability Pool</label>
+                    <select formControlName="obligation_id" class="form-select bg-slate-900/50 border-white/5 text-white rounded-xl focus:border-violet-500/50 transition-all">
                        <option value="" disabled>Choose liability...</option>
                        <option value="1">Income Tax 2024 Audit (450,000 KES)</option>
                        <option value="2">VAT Sept 2025 (88,200 KES)</option>
                     </select>
                  </div>
                  <div class="form-group">
-                    <label class="block text-slate-300 mb-2 font-bold text-xs uppercase tracking-widest">Down Payment (Min 10%)</label>
-                    <input type="number" formControlName="down_payment" class="form-input" placeholder="0.00">
-                    <div class="text-[9px] text-violet-400 mt-2 italic">Minimum required: 45,000.00 KES</div>
+                    <label class="block text-slate-500 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">Initial Liquidation (Min 10%)</label>
+                    <div class="relative">
+                       <input type="number" formControlName="down_payment" class="form-input bg-slate-900/50 border-white/5 text-white rounded-xl focus:border-violet-500/50 transition-all pl-12" placeholder="0.00">
+                       <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 font-bold text-[10px]">KES</span>
+                    </div>
+                    <div class="text-[9px] text-violet-400 mt-2 font-black uppercase tracking-widest opacity-60">Strategic Minimum: 45,000.00 KES</div>
                  </div>
               </div>
 
               <!-- Proposed Schedule -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                  <div class="form-group">
-                    <label class="block text-slate-300 mb-2 font-bold text-xs uppercase tracking-widest">Number of Months</label>
-                    <select formControlName="duration_months" class="form-select">
-                       <option [value]="3">3 Months</option>
-                       <option [value]="6">6 Months</option>
-                       <option [value]="12">12 Months</option>
-                       <option [value]="24">24 Months</option>
+                    <label class="block text-slate-500 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">Repayment Horizon</label>
+                    <select formControlName="duration_months" class="form-select bg-slate-900/50 border-white/5 text-white rounded-xl focus:border-violet-500/50 transition-all">
+                       <option [value]="3">3 Months (Short Term)</option>
+                       <option [value]="6">6 Months (Quarterly)</option>
+                       <option [value]="12">12 Months (Standard)</option>
+                       <option [value]="24">24 Months (Extended)</option>
                     </select>
                  </div>
                  <div class="form-group">
-                    <label class="block text-slate-300 mb-2 font-bold text-xs uppercase tracking-widest">Preferred Payment Day</label>
-                    <select formControlName="payment_day" class="form-select">
+                    <label class="block text-slate-500 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">Recurrent Payment Date</label>
+                    <select formControlName="payment_day" class="form-select bg-slate-900/50 border-white/5 text-white rounded-xl focus:border-violet-500/50 transition-all">
                        <option [value]="5">5th of every month</option>
                        <option [value]="20">20th of every month</option>
                     </select>
@@ -63,45 +75,55 @@ import { NotificationService } from '../../../../core/services/notification.serv
               </div>
 
               <!-- Computed Summary -->
-              <div class="p-6 rounded-2xl bg-violet-600/5 border border-violet-500/10">
-                 <h4 class="text-white font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/5 pb-2">Proposed Schedule Summary</h4>
-                 <div class="space-y-4">
-                    <div class="flex justify-between text-slate-400 text-sm">
-                       <span>Total Principal Liability</span>
-                       <span class="text-white font-mono">450,000.00 KES</span>
+              <div class="p-8 rounded-2xl bg-white/[0.01] border border-white/5 relative overflow-hidden">
+                 <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent"></div>
+                 <h4 class="text-white font-black text-[10px] uppercase tracking-[0.3em] mb-8 opacity-60">Computed Proposal Matrix</h4>
+                 <div class="space-y-6">
+                    <div class="flex justify-between items-center text-slate-500 text-[10px] font-black uppercase tracking-widest">
+                       <span>Gross Liability Exposure</span>
+                       <span class="text-white tracking-widest font-mono">450,000.00 KES</span>
                     </div>
-                    <div class="flex justify-between text-slate-400 text-sm">
-                       <span>Down Payment to be Paid</span>
-                       <span class="text-violet-400 font-mono">- {{ downPaymentValue() | number:'1.2-2' }} KES</span>
+                    <div class="flex justify-between items-center text-slate-500 text-[10px] font-black uppercase tracking-widest">
+                       <span>Initial Liquidation Offset</span>
+                       <span class="text-violet-400 tracking-widest font-mono">{{ downPaymentValue() | number:'1.2-2' }} KES</span>
                     </div>
-                    <div class="flex justify-between text-slate-200 font-bold border-t border-white/5 pt-4">
-                       <span class="uppercase text-xs">Monthly Installment Amount</span>
-                       <span class="text-xl font-mono">{{ monthlyAmount() | number:'1.2-2' }} KES / month</span>
+                    <div class="flex justify-between items-center bg-violet-500/5 p-4 rounded-xl border border-violet-500/10">
+                       <span class="uppercase text-[10px] font-black text-violet-400 tracking-widest">Monthly Quota Allocation</span>
+                       <span class="text-xl font-black text-white tracking-tighter tabular-nums">{{ monthlyAmount() | number:'1.2-2' }} <span class="text-[10px] text-slate-600">KES / Mo</span></span>
                     </div>
-                    <div class="text-[10px] text-slate-500 mt-2 italic text-center">
-                       * Includes 1% statutory interest per month on declining balance.
+                    <div class="text-[9px] text-slate-600 mt-2 font-black uppercase tracking-[0.2em] text-center">
+                       * Includes 1% statutory interest per month on declining balance per IT Act 2023.
                     </div>
                  </div>
               </div>
 
+              <!-- Declaration Toggle -->
+              <div class="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.02] transition-colors cursor-pointer group/decl" (click)="installmentForm.get('declaration')?.setValue(!installmentForm.get('declaration')?.value)">
+                <div class="w-6 h-6 rounded-lg border-2 border-white/10 flex items-center justify-center shrink-0 transition-all group-hover/decl:border-violet-500/50" [class.bg-violet-600]="installmentForm.get('declaration')?.value" [class.border-violet-500]="installmentForm.get('declaration')?.value">
+                  @if (installmentForm.get('declaration')?.value) {
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4"><path d="M5 13l4 4L19 7"/></svg>
+                  }
+                </div>
+                <div class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-loose">
+                  I solemnly declare that I will strictly adhere to the repayment schedule and understand that any default will trigger full recovery enforcement protocols.
+                </div>
+              </div>
+
               <!-- Action Footer -->
-              <div class="pt-10 border-t border-white/5 flex gap-4 flex-wrap">
+              <div class="pt-10 border-t border-white/5 flex flex-col md:flex-row gap-4">
                  <button
                    type="submit"
-                   class="flex-1 py-4 bg-violet-600 hover:bg-violet-500 text-white font-bold rounded-2xl shadow-xl shadow-violet-600/20 transition-all hover:-translate-y-1"
+                   class="modern-btn primary-btn flex-1 py-4 shadow-xl shadow-violet-600/20 elite-glow !rounded-2xl"
                    [disabled]="!installmentForm.valid">
-                    Submit Installment Proposal
+                    Finalize Proposal Submission
                  </button>
                  <button
                    type="button"
-                   class="flex-1 py-4 bg-green-700/20 hover:bg-green-700/30 text-green-400 font-bold rounded-2xl border border-green-500/20 transition-all hover:-translate-y-1 flex items-center justify-center gap-2"
+                   class="flex-1 py-4 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-black text-[10px] uppercase tracking-widest rounded-2xl border border-emerald-500/20 transition-all hover:-translate-y-1 flex items-center justify-center gap-3"
                    [disabled]="!(+( installmentForm.get('down_payment')?.value ?? 0) > 0)"
                    (click)="openMpesaModal()">
-                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    Pay Down Payment via M-Pesa
-                 </button>
-                 <button routerLink="/member/installments" class="px-10 py-4 bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold rounded-2xl transition-all">
-                    Discard
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                    Initial Liquidation via M-Pesa
                  </button>
               </div>
             </div>

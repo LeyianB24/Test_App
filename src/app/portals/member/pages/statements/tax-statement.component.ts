@@ -5,81 +5,106 @@ import { CommonModule } from '@angular/common';
   selector: 'app-tax-statement',
   imports: [CommonModule],
   template: `
-    <div class="tax-statement-container p-6 animate-fade-in">
-      <header class="mb-10 flex flex-wrap justify-between items-end gap-6">
+    <div class="page-container animate-fade-in">
+      <header class="mb-10 lg:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
-          <h1 class="text-3xl font-bold text-white mb-2">Tax Ledger & Statements</h1>
-          <p class="text-slate-400">Comprehensive view of all your tax transactions: payments, returns, and assessments.</p>
+          <div class="flex items-center gap-3 mb-2">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
+              <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+              FISCAL LEDGER ACCESS
+            </span>
+          </div>
+          <h1 class="premium-title">Tax Ledger & <span class="gradient-text">Statements</span></h1>
+          <p class="premium-subtitle">Comprehensive archive of synchronized transactions, statutory declarations, and liquidity transfers</p>
         </div>
         
         <div class="flex gap-4">
-           <button class="px-6 py-2 bg-slate-800 border border-white/5 text-slate-300 font-bold rounded-xl hover:bg-slate-700 transition-all text-sm uppercase tracking-widest">
-              Export CSV
+           <button class="modern-btn border-white/10 text-slate-400 px-6 py-4 rounded-2xl hover:bg-white/[0.05] hover:text-white transition-all shadow-xl font-black text-[10px] uppercase tracking-widest">
+              Export Archive (CSV)
            </button>
-           <button class="px-6 py-2 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/20 text-sm uppercase tracking-widest">
-              Download PDF
+           <button class="modern-btn primary-btn py-4 px-8 shadow-xl shadow-blue-500/20 elite-glow !rounded-2xl">
+              Download Formal Statement (PDF)
            </button>
         </div>
       </header>
 
-      <!-- Filters & Balance -->
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-10">
-         <div class="lg:col-span-3 glass-card p-6 flex flex-wrap gap-6 items-center">
-            <div class="form-group flex-1 min-w-[200px]">
-               <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block">Tax Obligation</label>
-               <select class="form-select bg-slate-900/50 border-white/5 rounded-xl text-white text-sm w-full p-3 focus:outline-none focus:border-blue-500">
-                  <option>All Obligations</option>
-                  <option>Value Added Tax (VAT)</option>
-                  <option>Income Tax - Resident</option>
-                  <option>PAYE</option>
+      <!-- Advanced Filters & Balance Summary -->
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 mb-12">
+         <div class="glass-panel p-8 flex flex-wrap gap-8 items-center bg-white/[0.01] border-white/5 relative overflow-hidden group">
+            <div class="absolute inset-0 bg-blue-500/[0.01] opacity-50 group-hover:bg-blue-500/[0.02] transition-colors"></div>
+            
+            <div class="form-group flex-grow min-w-[200px] relative z-10">
+               <label class="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mb-3 block">Filter Obligation Profile</label>
+               <select class="form-select bg-slate-950 border-white/5 rounded-xl text-white text-xs p-4 w-full focus:outline-none focus:border-blue-500/50 transition-all font-black uppercase tracking-widest">
+                  <option>ALL STATUTORY OBLIGATIONS</option>
+                  <option>VALUE ADDED TAX (VAT)</option>
+                  <option>INCOME TAX - RESIDENT</option>
+                  <option>PAYE (EMPLOYER)</option>
                </select>
             </div>
-            <div class="form-group flex-1 min-w-[200px]">
-               <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block">Date Range</label>
-               <div class="flex gap-2">
-                  <input type="date" class="bg-slate-900/50 border-white/5 rounded-xl text-white text-xs p-3 flex-1">
-                  <input type="date" class="bg-slate-900/50 border-white/5 rounded-xl text-white text-xs p-3 flex-1">
+            <div class="form-group flex-shrink-0 relative z-10">
+               <label class="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mb-3 block">Temporal Range</label>
+               <div class="flex items-center gap-3">
+                  <input type="date" class="bg-slate-950 border-white/5 rounded-xl text-white text-[10px] p-4 font-black focus:border-blue-500/50 transition-all">
+                  <div class="w-2 h-px bg-slate-800"></div>
+                  <input type="date" class="bg-slate-950 border-white/5 rounded-xl text-white text-[10px] p-4 font-black focus:border-blue-500/50 transition-all">
                </div>
             </div>
-            <button class="px-8 py-3 bg-slate-100 text-slate-900 font-bold rounded-xl hover:bg-white transition-all text-xs uppercase self-end h-[50px]">
-               Filter
+            <button class="modern-btn px-10 py-4 bg-white text-slate-950 font-black rounded-xl hover:bg-slate-200 transition-all text-[10px] uppercase tracking-widest self-end h-[56px] relative z-10">
+               Apply Filter
             </button>
          </div>
 
-         <div class="glass-card p-6 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border-blue-500/30">
-            <div class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-2">Net Ledger Balance</div>
-            <div class="text-3xl font-bold text-white font-mono">(152,440.00)</div>
-            <div class="text-[9px] text-rose-400 font-bold uppercase mt-1 tracking-tighter">Debit / Liability</div>
+         <div class="glass-panel p-8 bg-gradient-to-br from-blue-600/10 to-transparent border-blue-500/20 relative overflow-hidden group">
+            <div class="absolute -right-12 -bottom-12 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all"></div>
+            <div class="text-[9px] font-black text-blue-400 uppercase tracking-[0.3em] mb-3 relative z-10">Unified Ledger Balance</div>
+            <div class="text-3xl font-black text-white tracking-tighter tabular-nums mb-2 relative z-10">
+               <span class="text-xs text-slate-600">KES</span>
+               (152,440.00)
+            </div>
+            <div class="inline-flex items-center gap-2 px-2 py-0.5 bg-red-500/10 border border-red-500/20 rounded-lg relative z-10">
+               <span class="w-1 h-1 rounded-full bg-red-500 animate-pulse"></span>
+               <span class="text-[8px] text-red-500 font-black uppercase tracking-widest">Active Liability</span>
+            </div>
          </div>
       </div>
 
-      <!-- Ledger Table -->
-      <div class="glass-card overflow-hidden">
+      <!-- Ledger Transaction Archive -->
+      <div class="glass-panel p-0 overflow-hidden bg-white/[0.01] border-white/5 relative">
         <table class="w-full text-left border-collapse">
           <thead>
-            <tr class="bg-slate-800/80 text-[10px] uppercase tracking-widest font-bold text-slate-400">
-              <th class="px-6 py-5">Date</th>
-              <th class="px-6 py-5">Transaction Type</th>
-              <th class="px-6 py-5">Reference</th>
-              <th class="px-6 py-5">Obligation</th>
-              <th class="px-6 py-5 text-right">Debit (KES)</th>
-              <th class="px-6 py-5 text-right">Credit (KES)</th>
-              <th class="px-6 py-5 text-right">Balance (KES)</th>
+            <tr class="bg-white/[0.02] text-[9px] uppercase tracking-[0.3em] font-black text-slate-600 border-b border-white/5">
+              <th class="px-10 py-6">Transaction Meta</th>
+              <th class="px-10 py-6">Protocol Type</th>
+              <th class="px-10 py-6">Protocol Reference</th>
+              <th class="px-10 py-6 text-right">Debit (OBL)</th>
+              <th class="px-10 py-6 text-right">Credit (LIQ)</th>
+              <th class="px-10 py-6 text-right">Active Balance</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-white/5">
+          <tbody class="divide-y divide-white/[0.02]">
             @for (row of ledger; track row.id) {
-              <tr class="hover:bg-white/5 transition-colors">
-                <td class="px-6 py-5 text-slate-400 font-mono text-xs">{{ row.date }}</td>
-                <td class="px-6 py-5">
-                   <div class="text-white font-bold text-sm">{{ row.type }}</div>
-                   <div class="text-[9px] text-slate-500 uppercase">{{ row.period }}</div>
+              <tr class="hover:bg-white/[0.01] transition-all group">
+                <td class="px-10 py-8">
+                   <div class="text-[10px] font-black text-slate-400 tracking-widest mb-1">{{ row.date | date:'dd MMM yyyy' }}</div>
+                   <div class="text-[9px] text-slate-600 font-black uppercase tracking-[0.2em] font-mono">{{ row.obligation }}</div>
                 </td>
-                <td class="px-6 py-5 text-slate-500 font-mono text-[10px]">{{ row.ref }}</td>
-                <td class="px-6 py-5 text-slate-300 text-xs">{{ row.obligation }}</td>
-                <td class="px-6 py-5 text-right text-rose-400 font-mono font-bold">{{ row.debit ? (row.debit | number:'1.2-2') : '-' }}</td>
-                <td class="px-6 py-5 text-right text-emerald-400 font-mono font-bold">{{ row.credit ? (row.credit | number:'1.2-2') : '-' }}</td>
-                <td class="px-6 py-5 text-right text-white font-mono font-bold">{{ row.balance | number:'1.2-2' }}</td>
+                <td class="px-10 py-8">
+                   <div class="text-sm font-black text-white tracking-tight group-hover:text-blue-400 transition-colors uppercase">{{ row.type }}</div>
+                   <div class="text-[9px] text-slate-600 font-black uppercase tracking-widest mt-1 opacity-60">{{ row.period }} FISCAL PERIOD</div>
+                </td>
+                <td class="px-10 py-8">
+                   <span class="text-[9px] font-black text-blue-500/50 uppercase tracking-widest font-mono border border-blue-500/10 px-2 py-0.5 rounded-lg">{{ row.ref }}</span>
+                </td>
+                <td class="px-10 py-8 text-right font-mono text-xs font-black" [class.text-rose-500]="row.debit">
+                   {{ row.debit ? (row.debit | number:'1.2-2') : '---' }}
+                </td>
+                <td class="px-10 py-8 text-right font-mono text-xs font-black text-emerald-500">
+                   {{ row.credit ? (row.credit | number:'1.2-2') : '---' }}
+                </td>
+                <td class="px-10 py-8 text-right font-mono text-sm font-black text-white group-hover:text-blue-400 transition-colors tracking-tighter">
+                   {{ row.balance | number:'1.2-2' }}
+                </td>
               </tr>
             }
           </tbody>
@@ -88,12 +113,7 @@ import { CommonModule } from '@angular/common';
     </div>
   `,
   styles: [`
-    .glass-card {
-      background: rgba(30, 41, 59, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-    }
+    :host { display: block; }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -103,9 +123,9 @@ export class TaxStatementComponent {
       id: 1,
       date: '2026-02-15',
       type: 'VAT Return Filing',
-      period: 'Jan 2026',
+      period: 'JAN 2026',
       ref: 'KRA202602158872',
-      obligation: 'Value Added Tax (VAT)',
+      obligation: 'VALUE ADDED TAX (VAT)',
       debit: 88400.00,
       credit: 0,
       balance: -152440.00
@@ -113,10 +133,10 @@ export class TaxStatementComponent {
     {
       id: 2,
       date: '2026-02-08',
-      type: 'PAYE Payment (M-Pesa)',
-      period: 'Jan 2026',
+      type: 'PAYE Payment (M-PESA)',
+      period: 'JAN 2026',
       ref: 'PRN992817266',
-      obligation: 'PAYE',
+      obligation: 'PAYE (EMPLOYER)',
       debit: 0,
       credit: 45000.00,
       balance: -64040.00
@@ -125,9 +145,9 @@ export class TaxStatementComponent {
       id: 3,
       date: '2026-01-20',
       type: 'Assessment Notice',
-      period: 'Year 2025',
+      period: 'YEAR 2025',
       ref: 'AS-8812-JAI',
-      obligation: 'Income Tax - Resident',
+      obligation: 'INCOME TAX - RESIDENT',
       debit: 109040.00,
       credit: 0,
       balance: -109040.00
@@ -135,10 +155,10 @@ export class TaxStatementComponent {
     {
       id: 4,
       date: '2025-12-12',
-      type: 'Payment (Bank Transfer)',
-      period: 'Dec 2025',
+      type: 'Payment (BANK TRANSFER)',
+      period: 'DEC 2025',
       ref: 'PRN11029933',
-      obligation: 'VAT',
+      obligation: 'VALUE ADDED TAX (VAT)',
       debit: 0,
       credit: 120000.00,
       balance: 0.00

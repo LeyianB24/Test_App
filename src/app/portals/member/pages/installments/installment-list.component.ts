@@ -9,95 +9,116 @@ import { NotificationService } from '../../../../core/services/notification.serv
   selector: 'app-installment-list',
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
   template: `
-    <div class="installments-list-container p-6 animate-fade-in">
-      <header class="mb-10 flex justify-between items-end">
+    <div class="page-container animate-fade-in">
+      <header class="mb-10 lg:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
-          <h1 class="text-3xl font-bold text-white mb-2">Payment Installment Plans</h1>
-          <p class="text-slate-400">Manage your tax debt through structured monthly payment arrangements.</p>
+          <div class="flex items-center gap-3 mb-2">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-violet-500/10 border border-violet-500/20 text-violet-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
+              <span class="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+              REPAYMENT COMMAND
+            </span>
+          </div>
+          <h1 class="premium-title">Tax Payment <span class="gradient-text">Installments</span></h1>
+          <p class="premium-subtitle">Authorized dashboard for managing structured liability liquidation protocols</p>
         </div>
-        <button routerLink="/member/installments/apply" class="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white font-bold rounded-xl shadow-lg shadow-violet-600/20 transition-all hover:-translate-y-1">
-          Apply for Installment Plan
+        <button routerLink="/member/installments/apply" class="modern-btn primary-btn py-4 px-8 shadow-xl shadow-violet-500/20 elite-glow">
+          Propose New Plan
         </button>
       </header>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         @for (plan of plans; track plan.id) {
-          <div class="glass-card overflow-hidden border border-white/5 hover:border-violet-500/30 transition-all flex flex-col">
+          <div class="glass-panel p-0 overflow-hidden border-white/5 hover:border-violet-500/30 transition-all flex flex-col group relative">
+             <!-- Interactive Glow -->
+             <div class="absolute -top-24 -right-24 w-48 h-48 bg-violet-600/5 rounded-full blur-3xl group-hover:bg-violet-600/10 transition-colors duration-700"></div>
+
              <!-- Header -->
-             <div class="p-6 bg-slate-800/50 border-b border-white/5 flex justify-between items-center">
+             <div class="p-8 bg-white/[0.01] border-b border-white/5 flex justify-between items-start relative z-10">
                 <div>
-                   <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">{{ plan.refNo }}</div>
-                   <h3 class="text-white font-bold">{{ plan.obligation }}</h3>
+                   <div class="text-[9px] font-black text-slate-600 uppercase tracking-[0.3em] mb-2">{{ plan.refNo }}</div>
+                   <h3 class="text-white font-black text-lg tracking-tight uppercase group-hover:text-violet-400 transition-colors">{{ plan.obligation }}</h3>
                 </div>
-                <span class="px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider" [class.bg-emerald-500/10]="plan.status === 'ACTIVE'" [class.text-emerald-400]="plan.status === 'ACTIVE'" [class.bg-blue-500/10]="plan.status === 'COMPLETED'" [class.text-blue-400]="plan.status === 'COMPLETED'">{{ plan.status }}</span>
+                <span class="status-pill-elite active" [class.success]="plan.status === 'COMPLETED'">
+                  <span class="dot"></span>
+                  {{ plan.status }}
+                </span>
              </div>
 
              <!-- Body -->
-             <div class="p-6 space-y-6 flex-grow">
+             <div class="p-8 space-y-8 flex-grow relative z-10">
                 <div class="flex justify-between items-end">
                    <div>
-                      <div class="text-slate-500 text-[10px] uppercase font-bold mb-1">Total Debt Amount</div>
-                      <div class="text-2xl font-bold text-white font-mono">{{ plan.totalAmount | number:'1.2-2' }} KES</div>
+                      <div class="text-slate-500 text-[10px] uppercase font-black tracking-widest mb-2">Total Liability</div>
+                      <div class="text-3xl font-black text-white tracking-tighter tabular-nums flex items-baseline gap-2">
+                         <span class="text-xs text-slate-600">KES</span>
+                         {{ plan.totalAmount | number:'1.2-2' }}
+                      </div>
                    </div>
                    <div class="text-right">
-                      <div class="text-slate-500 text-[10px] uppercase font-bold mb-1">Remaining Balance</div>
-                      <div class="text-xl font-bold text-violet-400 font-mono">{{ plan.remainingBalance | number:'1.2-2' }} KES</div>
+                      <div class="text-slate-500 text-[10px] uppercase font-black tracking-widest mb-2">Outstanding</div>
+                      <div class="text-xl font-black text-violet-400 tracking-tight tabular-nums">{{ plan.remainingBalance | number:'1.2-2' }}</div>
                    </div>
                 </div>
 
                 <!-- Progress Bar -->
-                <div>
-                   <div class="flex justify-between text-[10px] font-bold uppercase text-slate-500 mb-2">
-                      <span>Progress</span>
-                      <span>{{ plan.paidInstallments }}/{{ plan.totalInstallments }} Months Paid</span>
+                <div class="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
+                   <div class="flex justify-between text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 mb-3">
+                      <span>Liquidation Progress</span>
+                      <span class="text-violet-400">{{ plan.paidInstallments }}/{{ plan.totalInstallments }} Months Cleared</span>
                    </div>
-                   <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                      <div class="h-full bg-violet-500 rounded-full" [style.width.%]="(plan.paidInstallments / plan.totalInstallments) * 100"></div>
+                   <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                      <div class="h-full bg-gradient-to-r from-violet-600 to-indigo-500 rounded-full" [style.width.%]="(plan.paidInstallments / plan.totalInstallments) * 100"></div>
                    </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 pt-2">
-                   <div class="p-4 rounded-xl bg-slate-900/50 border border-white/5">
-                      <div class="text-[9px] text-slate-500 uppercase font-bold mb-1">Next Payment Due</div>
-                      <div class="text-white font-bold text-sm">{{ plan.nextDue }}</div>
+                <div class="grid grid-cols-2 gap-4">
+                   <div class="p-5 rounded-2xl bg-white/[0.01] border border-white/5">
+                      <div class="text-[9px] text-slate-600 uppercase font-black tracking-widest mb-2">Next Milestone</div>
+                      <div class="text-white font-black text-sm tracking-tight">{{ plan.nextDue | date:'dd MMM yyyy' }}</div>
                    </div>
-                   <div class="p-4 rounded-xl bg-slate-900/50 border border-white/5">
-                      <div class="text-[9px] text-slate-500 uppercase font-bold mb-1">Monthly Amount</div>
-                      <div class="text-white font-bold text-sm">{{ plan.monthlyAmount | number:'1.2-2' }} KES</div>
+                   <div class="p-5 rounded-2xl bg-white/[0.01] border border-white/5">
+                      <div class="text-[9px] text-slate-600 uppercase font-black tracking-widest mb-2">Monthly Quota</div>
+                      <div class="text-emerald-400 font-black text-sm tracking-tight">{{ plan.monthlyAmount | number:'1.2-2' }}</div>
                    </div>
                 </div>
              </div>
 
              <!-- Footer -->
-             <div class="p-4 bg-slate-800/30 flex gap-4">
-                <button class="flex-1 py-2 bg-violet-600/10 hover:bg-violet-600/20 text-violet-400 text-xs font-bold rounded-lg transition-all">Download Schedule</button>
-                <button class="flex-1 py-2 bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold rounded-lg transition-all">View Ledger</button>
+             <div class="p-6 bg-white/[0.02] flex gap-4 relative z-10">
+                <button class="flex-grow py-3 px-4 rounded-xl border border-white/5 bg-white/[0.02] text-slate-400 text-[10px] font-black uppercase tracking-widest hover:bg-white/[0.05] hover:text-white transition-all">Schedule</button>
+                <button class="flex-grow py-3 px-4 rounded-xl border border-white/5 bg-white/[0.02] text-slate-400 text-[10px] font-black uppercase tracking-widest hover:bg-white/[0.05] hover:text-white transition-all">Ledger</button>
                 @if (plan.status === 'ACTIVE') {
                   <button
-                    class="flex-1 py-2 bg-green-600/20 hover:bg-green-600/30 text-green-400 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5"
+                    class="flex-[2] py-3 px-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2"
                     (click)="openMpesaModal(plan)">
-                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    Pay via M-Pesa
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                    Liquidate via M-Pesa
                   </button>
                 }
              </div>
           </div>
         } @empty {
-          <div class="lg:col-span-2 glass-card p-20 flex flex-col items-center justify-center text-center">
-             <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-6 text-slate-600">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+          <div class="lg:col-span-2 glass-panel py-32 flex flex-col items-center justify-center text-center">
+             <div class="w-20 h-20 bg-slate-900 border border-white/5 rounded-full flex items-center justify-center mb-8 text-slate-700 shadow-2xl">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
              </div>
-             <p class="text-slate-400">You have no active installment plans.</p>
+             <h3 class="text-white font-black uppercase tracking-widest mb-2">Registry Silent</h3>
+             <p class="text-slate-500 text-sm max-w-xs uppercase tracking-widest font-bold opacity-60">No active repayment schedules or structured plans detected.</p>
           </div>
         }
       </div>
 
       <!-- Compliance Note -->
-      <div class="mt-12 p-6 rounded-2xl border border-violet-500/20 bg-violet-500/5 flex items-start">
-         <svg class="w-6 h-6 text-violet-400 mr-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-         <div class="text-xs text-slate-400 leading-relaxed">
-            <strong class="text-violet-400 block mb-1 uppercase tracking-widest">Compliance Tip:</strong>
-            Defaulting on a single installment payment may result in the immediate cancellation of the plan and full debt recovery enforcement, including agency notices on your bank accounts.
+      <div class="mt-14 glass-panel p-8 bg-violet-600/5 border-violet-500/20 flex items-start gap-6 relative overflow-hidden">
+         <div class="absolute -left-12 -bottom-12 w-32 h-32 bg-violet-500/10 rounded-full blur-3xl"></div>
+         <div class="w-12 h-12 rounded-2xl bg-violet-500/10 flex items-center justify-center shrink-0 border border-violet-500/20 relative z-10">
+            <svg class="w-6 h-6 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+         </div>
+         <div class="relative z-10">
+            <h4 class="text-violet-400 text-[10px] font-black uppercase tracking-[0.2em] mb-2">Compliance Directive</h4>
+            <p class="text-xs text-slate-400 leading-relaxed font-bold uppercase tracking-widest opacity-80">
+               Failure to adhere to the agreed liquidation schedule will terminate the protection protocol, triggering immediate enforcement actions including bank agency notices and asset lien procedures.
+            </p>
          </div>
       </div>
     </div>

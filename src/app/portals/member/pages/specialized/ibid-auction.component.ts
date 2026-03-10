@@ -1,4 +1,5 @@
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 interface AuctionItem {
@@ -16,178 +17,189 @@ interface AuctionItem {
 @Component({
   selector: 'app-ibid-auction',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule],
   template: `
-    <div class="page-container p-8 animate-fade-in">
-      <header class="mb-12 flex justify-between items-end">
+    <div class="page-container animate-fade-in">
+      <header class="mb-10 lg:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
-          <div class="flex items-center gap-4 mb-2">
-            <span class="px-4 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 font-black text-[10px] uppercase tracking-widest">Asset Liquidation</span>
+          <div class="flex items-center gap-3 mb-2">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+              ASSET LIQUIDATION TERMINAL
+            </span>
           </div>
-          <h1 class="text-6xl font-black text-white tracking-tighter mb-4">iBid <span class="text-amber-500">Auctions</span></h1>
-          <p class="text-slate-400 font-medium text-lg max-w-2xl">Bidding portal for government assets and public liquidations.</p>
+          <h1 class="premium-title">iBid <span class="gradient-text">Auctions</span></h1>
+          <p class="premium-subtitle">Authorized bidding portal for statutory asset liquidations and public auctions</p>
         </div>
-        <div class="flex gap-4">
-           <div class="p-6 bg-white/5 rounded-3xl border border-white/5 text-right">
-              <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Available Funds</span>
-              <span class="text-2xl font-black text-emerald-400 tabular-nums">KES 4,250,000</span>
+        
+        <div class="flex items-center gap-6">
+           <div class="glass-panel py-4 px-8 bg-white/[0.01] border-white/5 !rounded-2xl">
+              <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">Authenticated Liquidity</span>
+              <span class="text-xl font-black text-emerald-400 tabular-nums tracking-tighter">KES 4,250,000</span>
            </div>
         </div>
       </header>
 
-      <!-- Category Filter -->
-      <div class="flex gap-3 mb-10 pb-4 overflow-x-auto no-scrollbar">
+      <!-- Elite Category Strategy -->
+      <div class="flex gap-4 mb-12 pb-6 overflow-x-auto no-scrollbar border-b border-white/5 relative z-20">
         @for (cat of categories; track cat) {
           <button 
             (click)="selectedCategory.set(cat)"
-            class="px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border shrink-0"
+            class="px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all duration-300 border shrink-0 shadow-xl"
             [class.bg-amber-600]="selectedCategory() === cat"
             [class.text-white]="selectedCategory() === cat"
             [class.border-amber-500]="selectedCategory() === cat"
-            [class.bg-white/5]="selectedCategory() !== cat"
+            [class.bg-slate-950]="selectedCategory() !== cat"
             [class.text-slate-500]="selectedCategory() !== cat"
             [class.border-white/5]="selectedCategory() !== cat"
-            [class.hover:bg-white/10]="selectedCategory() !== cat"
+            [class.hover:bg-white/5]="selectedCategory() !== cat"
           >
             {{ cat }}
           </button>
         }
       </div>
 
-      <!-- Auction Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- High-Definition Auction Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         @for (item of filteredAuctions(); track item.id) {
-          <div class="group relative bg-white/5 rounded-[3.5rem] border border-white/5 overflow-hidden hover:border-amber-500/30 transition-all duration-500 flex flex-col">
-             <!-- Status Overlay -->
-             <div class="absolute top-6 left-6 z-10 flex gap-2">
+          <div class="group relative bg-white/[0.01] rounded-[3rem] border border-white/5 overflow-hidden hover:border-amber-500/30 transition-all duration-700 flex flex-col shadow-2xl animate-up">
+             <!-- Status Overlays -->
+             <div class="absolute top-6 left-6 z-10 flex gap-3">
                 <span 
-                  class="px-4 py-1.5 rounded-full font-black text-[9px] uppercase tracking-widest backdrop-blur-md"
+                  class="px-4 py-2 rounded-xl font-black text-[9px] uppercase tracking-[0.2em] backdrop-blur-xl border border-white/10"
                   [class.bg-emerald-500/10]="item.status === 'Live'"
                   [class.text-emerald-400]="item.status === 'Live'"
                   [class.bg-red-500/10]="item.status === 'Ending'"
                   [class.text-red-400]="item.status === 'Ending'"
                 >
-                   ● {{ item.status }}
+                   <span class="inline-block w-1.5 h-1.5 rounded-full mr-2" [class.bg-emerald-500]="item.status === 'Live'" [class.bg-red-500]="item.status === 'Ending'" [class.animate-pulse]="true"></span>
+                   {{ item.status }}
                 </span>
-                <span class="px-4 py-1.5 rounded-full bg-black/40 text-white font-black text-[9px] uppercase tracking-widest backdrop-blur-md">
+                <span class="px-4 py-2 rounded-xl bg-slate-950/60 text-slate-400 font-black text-[9px] uppercase tracking-[0.2em] backdrop-blur-xl border border-white/10">
                    {{ item.category }}
                 </span>
              </div>
 
-             <!-- Image placeholder (simulated) -->
-             <div class="aspect-video bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center p-1 relative overflow-hidden">
-                <div class="absolute inset-0 bg-amber-500/10 mix-blend-overlay group-hover:opacity-100 opacity-0 transition-opacity"></div>
-                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="text-white/10"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="1.5"/></svg>
+             <!-- Visual Media Placeholder -->
+             <div class="aspect-[16/10] bg-slate-950 flex items-center justify-center p-1 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent mix-blend-overlay group-hover:scale-110 transition-transform duration-1000"></div>
+                <div class="absolute inset-0 border border-white/[0.02] z-10"></div>
+                <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1" class="text-white/[0.03] group-hover:text-amber-500/10 transition-colors duration-700">
+                   <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
              </div>
 
-             <div class="p-10 flex-1 flex flex-col">
-                <h3 class="text-2xl font-black text-white tracking-tight mb-8 leading-tight group-hover:text-amber-400 transition-colors">{{ item.title }}</h3>
+             <div class="p-10 flex-1 flex flex-col bg-white/[0.01]">
+                <h3 class="text-xl font-black text-white tracking-tight mb-8 leading-snug group-hover:text-amber-400 transition-colors uppercase">{{ item.title }}</h3>
                 
                 <div class="grid grid-cols-2 gap-6 mb-10">
-                   <div>
-                      <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">Current Bid</span>
-                      <span class="text-xl font-black text-white tabular-nums">KES {{ item.currentBid.toLocaleString() }}</span>
+                   <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+                      <span class="text-[9px] font-black text-slate-600 uppercase tracking-widest block mb-2">Current Bid</span>
+                      <span class="text-lg font-black text-white tabular-nums tracking-tighter">KES {{ item.currentBid.toLocaleString() }}</span>
                    </div>
-                   <div class="text-right">
-                      <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">Volume</span>
-                      <span class="text-xl font-black text-white tabular-nums">{{ item.totalBids }} Bids</span>
+                   <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/5 text-right">
+                      <span class="text-[9px] font-black text-slate-600 uppercase tracking-widest block mb-2">Protocol Count</span>
+                      <span class="text-lg font-black text-white tabular-nums tracking-tighter">{{ item.totalBids }} BIDS</span>
                    </div>
                 </div>
 
-                <div class="mt-auto pt-6 border-t border-white/5 flex items-center justify-between gap-4">
+                <div class="mt-auto pt-8 border-t border-white/5 flex items-center justify-between gap-6">
                    <div class="flex-1">
-                      <span class="text-[9px] font-black text-amber-600/50 uppercase tracking-widest block mb-2">Time Remaining</span>
-                      <div class="text-sm font-bold text-slate-400 tabular-nums">08h : 14m : 55s</div>
+                      <span class="text-[9px] font-black text-slate-600 uppercase tracking-widest block mb-1">Time Remaining</span>
+                      <div class="text-[11px] font-black text-amber-500 tabular-nums tracking-[0.2em] font-mono">08H : 14M : 55S</div>
                    </div>
-                   <button (click)="placeBid(item)" class="bg-white/5 hover:bg-amber-600 text-slate-300 hover:text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border border-white/5">
-                      Enter Bid
+                   <button (click)="placeBid(item)" class="modern-btn border-white/10 text-slate-400 px-8 py-4 rounded-2xl hover:bg-amber-600 hover:text-white hover:border-amber-500 transition-all shadow-xl font-black text-[10px] uppercase tracking-widest">
+                      ENTER BID
                    </button>
                 </div>
              </div>
           </div>
         }
       </div>
+
+      <!-- Statutory Disclaimer -->
+      <footer class="mt-20 p-10 glass-panel border-white/5 bg-white/[0.01] text-center !rounded-[3rem]">
+         <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.3em] leading-relaxed max-w-4xl mx-auto">
+            ALL BIDS ARE BINDING UNDER THE PROVISIONS OF THE PUBLIC ASSET LIQUIDATION ACT. UNAUTHORIZED INTERFERENCE WITH DIGITAL AUCTION PROTOCOLS IS SUBJECT TO STATUTORY PENALTY.
+         </p>
+      </footer>
     </div>
   `,
   styles: [`
-    .page-container { max-width: 1400px; margin: 0 auto; }
+    :host { display: block; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    
-    .animate-fade-in { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
   `]
 })
 export class IBidAuctionComponent {
-  categories = ['All Assets', 'Real Estate', 'Logistics', 'Seized Goods', 'Tech & Media', 'Industrial'];
-  selectedCategory = signal('All Assets');
+  categories = ['ALL ASSETS', 'REAL ESTATE', 'LOGISTICS', 'SEIZED GOODS', 'TECH & MEDIA', 'INDUSTRIAL'];
+  selectedCategory = signal('ALL ASSETS');
 
   auctions = signal<AuctionItem[]>([
     {
       id: '1',
-      title: 'Luxury Office Suite - Upper Hill Nexus',
+      title: 'LUXURY OFFICE SUITE - UPPER HILL NEXUS',
       currentBid: 24500000,
       reservePrice: 20000000,
       totalBids: 18,
       endTime: new Date(),
       imageUrl: '',
-      category: 'Real Estate',
+      category: 'REAL ESTATE',
       status: 'Live'
     },
     {
       id: '2',
-      title: 'Scania Heavy Loader Fleet (3 Units)',
+      title: 'SCANIA HEAVY LOADER FLEET (3 UNITS)',
       currentBid: 12400000,
       reservePrice: 10000000,
       totalBids: 12,
       endTime: new Date(),
       imageUrl: '',
-      category: 'Logistics',
+      category: 'LOGISTICS',
       status: 'Live'
     },
     {
       id: '3',
-      title: 'High-End Multimedia Production Kit',
+      title: 'HIGH-END MULTIMEDIA PRODUCTION KIT',
       currentBid: 850000,
       reservePrice: 700000,
       totalBids: 45,
       endTime: new Date(),
       imageUrl: '',
-      category: 'Tech & Media',
+      category: 'TECH & MEDIA',
       status: 'Ending'
     },
     {
       id: '4',
-      title: 'Seized Rolex Cosmograph Daytona',
+      title: 'SEIZED ROLEX COSMOGRAPH DAYTONA',
       currentBid: 4200000,
       reservePrice: 3500000,
       totalBids: 67,
       endTime: new Date(),
       imageUrl: '',
-      category: 'Seized Goods',
+      category: 'SEIZED GOODS',
       status: 'Live'
     },
     {
       id: '5',
-      title: 'Industrial Generator Group (800kVA)',
+      title: 'INDUSTRIAL GENERATOR GROUP (800KVA)',
       currentBid: 3100000,
       reservePrice: 2800000,
       totalBids: 5,
       endTime: new Date(),
       imageUrl: '',
-      category: 'Industrial',
+      category: 'INDUSTRIAL',
       status: 'Live'
     }
   ]);
 
   filteredAuctions = computed(() => {
     const cat = this.selectedCategory();
-    if (cat === 'All Assets') return this.auctions();
+    if (cat === 'ALL ASSETS') return this.auctions();
     return this.auctions().filter(a => a.category === cat);
   });
 
   placeBid(item: AuctionItem) {
-    // Simulated real-time bidding update
     const increment = Math.floor(Math.random() * 50000) + 10000;
     this.auctions.update(prev => prev.map(a => 
       a.id === item.id 

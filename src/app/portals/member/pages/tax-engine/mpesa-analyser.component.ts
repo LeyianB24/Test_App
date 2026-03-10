@@ -9,85 +9,93 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="max-w-[1400px] mx-auto p-4 md:p-8 animate-fade-in">
-      <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
+    <div class="page-container animate-fade-in">
+      <header class="mb-10 lg:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
-          <h1 class="premium-title mb-2">M-PESA Revenue Analyser</h1>
-          <p class="text-slate-400 text-lg">Extract taxable income from your mobile money statements</p>
+          <div class="flex items-center gap-3 mb-2">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              REVENUE DISCOVERY ENGINE
+            </span>
+          </div>
+          <h1 class="premium-title">M-PESA <span class="gradient-text">Analyser</span></h1>
+          <p class="premium-subtitle">Automated extraction and classification of taxable liquidity from digital payment archives</p>
         </div>
         
-        <button class="bg-white/5 border border-white/10 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/10 transition-colors flex items-center gap-2 text-sm shadow-sm backdrop-blur-md">
-           <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-           Format Guide
+        <button class="modern-btn border-white/10 text-slate-400 px-6 py-4 rounded-2xl hover:bg-white/[0.05] hover:text-white transition-all shadow-xl font-black text-[10px] uppercase tracking-widest flex items-center gap-3">
+           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+           Protocol Handbook
         </button>
       </header>
 
       @if (!isLoaded()) {
-        <!-- Upload State -->
-        <div class="glass-panel p-12 md:p-20 text-center flex flex-col items-center justify-center border-dashed border-2 border-white/10 hover:border-emerald-500/30 transition-colors">
-           <div class="w-24 h-24 bg-emerald-500/10 text-emerald-400 rounded-3xl flex items-center justify-center mb-8 border border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.15)]">
-              <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+        <!-- Enhanced Upload State -->
+        <div class="glass-panel p-20 lg:p-32 text-center border-dashed border-2 border-white/10 hover:border-emerald-500/30 transition-all group !rounded-[3rem] relative overflow-hidden">
+           <div class="absolute -top-24 -left-24 w-64 h-64 bg-emerald-500/5 rounded-full blur-[100px] group-hover:bg-emerald-500/10 transition-all"></div>
+           
+           <div class="w-24 h-24 bg-slate-950 border border-white/5 text-emerald-400 rounded-3xl flex items-center justify-center mb-10 mx-auto shadow-2xl group-hover:scale-110 transition-transform duration-500 relative z-10">
+              <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
            </div>
            
-           <h2 class="text-2xl font-bold text-white mb-4 tracking-tight">Upload M-PESA PDF/CSV</h2>
-           <p class="text-slate-400 max-w-sm mb-10 text-sm">Select a statement from the Safaricom App or *334# to begin automatic tax categorization.</p>
+           <h2 class="text-3xl font-black text-white mb-4 tracking-tighter uppercase relative z-10">Initialize Statement Parsing</h2>
+           <p class="text-slate-500 max-w-md mx-auto mb-12 text-[11px] font-bold uppercase tracking-widest leading-relaxed relative z-10 opacity-70">Safaricom fiscal archives (PDF/CSV) are processed through an isolated clearing engine for statutory classification.</p>
            
-           <button (click)="simulateUpload()" class="btn-primary px-10 py-4 shadow-lg shadow-emerald-500/20">
-              <span class="flex items-center gap-3">
+           <button (click)="simulateUpload()" [disabled]="isParsing()" class="modern-btn primary-btn py-5 px-12 bg-emerald-600 border-emerald-500 text-white font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-emerald-600/20 elite-glow !rounded-2xl relative z-10">
+              <span class="flex items-center gap-4">
                 @if (isParsing()) {
-                  <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Parsing Statement...
+                  <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                  PARSING ARCHIVE...
                 } @else {
-                  Choose File to Analyse
+                  EXECUTE DISCOVERY PROTOCOL
                 }
               </span>
            </button>
         </div>
       } @else {
-        <!-- Analysis Results -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Premium Analysis Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-10">
            <!-- Transactions Table -->
-           <div class="lg:col-span-2">
-              <div class="glass-panel p-6 md:p-8 relative overflow-hidden h-full">
-                 <h3 class="premium-subtitle mb-6">Categorized Transactions</h3>
-                 <div class="overflow-x-auto -mx-6 md:mx-0 px-6 md:px-0">
+           <div class="animate-up">
+              <div class="glass-panel p-0 overflow-hidden bg-white/[0.01] border-white/5 relative">
+                 <div class="p-8 border-b border-white/5 bg-white/[0.01]">
+                    <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest">Classification Ledger</h3>
+                 </div>
+                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                        <thead>
-                          <tr class="text-xs font-semibold text-slate-400 uppercase tracking-widest border-b border-white/10">
-                             <th class="pb-4 font-medium">Ref / Details</th>
-                             <th class="pb-4 font-medium">Type</th>
-                             <th class="pb-4 text-right font-medium">Amount</th>
-                             <th class="pb-4 pl-6 font-medium">Tax Category</th>
+                          <tr class="text-[9px] font-black text-slate-600 uppercase tracking-[0.3em] border-b border-white/5 bg-white/[0.02]">
+                             <th class="px-8 py-5">Protocol / Entity</th>
+                             <th class="px-8 py-5">Classification</th>
+                             <th class="px-8 py-5 text-right">Liquidity (KES)</th>
+                             <th class="px-8 py-5 text-right">Statutory Action</th>
                           </tr>
                        </thead>
-                       <tbody class="divide-y divide-white/5">
+                       <tbody class="divide-y divide-white/[0.02]">
                           @for (tx of transactions(); track tx.receiptNo) {
-                             <tr class="hover:bg-white/[0.02] transition-colors group">
-                                <td class="py-4 pr-4">
+                             <tr class="hover:bg-white/[0.01] transition-all group">
+                                <td class="px-8 py-6">
                                    <div class="flex flex-col gap-1">
-                                      <span class="text-white font-medium text-sm">{{ tx.details }}</span>
-                                      <span class="text-slate-500 text-xs font-mono">{{ tx.receiptNo }}</span>
+                                      <span class="text-white font-black text-sm tracking-tight group-hover:text-blue-400 transition-colors uppercase">{{ tx.details }}</span>
+                                      <span class="text-slate-600 text-[9px] font-black tracking-[0.2em] font-mono">{{ tx.receiptNo }}</span>
                                    </div>
                                 </td>
-                                <td class="py-4 pr-4 align-top">
-                                   <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-white/5 text-slate-300 border border-white/10 uppercase tracking-wide">
-                                     {{ tx.type }}
+                                <td class="px-8 py-6">
+                                   <span class="status-pill-elite active">
+                                      <span class="dot"></span>
+                                      {{ tx.type | uppercase }}
                                    </span>
                                 </td>
-                                <td class="py-4 px-4 text-right align-top">
-                                   <span class="font-bold whitespace-nowrap" [class]="tx.amount > 0 ? 'text-emerald-400' : 'text-slate-300'">
-                                      {{ tx.amount > 0 ? '+' : '' }}{{ tx.amount | number }}
+                                <td class="px-8 py-6 text-right">
+                                   <span class="font-black tabular-nums tracking-tighter" [class]="tx.amount > 0 ? 'text-emerald-500 text-sm' : 'text-slate-500 text-xs'">
+                                      {{ tx.amount > 0 ? '+' : '' }}{{ tx.amount | number:'1.2-2' }}
                                    </span>
                                 </td>
-                                <td class="py-4 pl-6 align-top">
-                                   <select class="input-modern py-1.5 px-3 text-xs uppercase tracking-wider h-auto w-full max-w-[140px]">
+                                <td class="px-8 py-6 text-right">
+                                   <select class="bg-slate-950 border-white/5 rounded-xl text-white text-[9px] font-black uppercase tracking-widest p-2 focus:border-blue-500/50 transition-all outline-none">
                                       <option [value]="tx.category">{{ tx.category }}</option>
-                                      <option value="Personal">Personal</option>
-                                      <option value="VAT Sales">VAT Sales</option>
-                                      <option value="TOT Turnover">TOT Turnover</option>
+                                      <option value="Personal">PERSONAL ARCHIVE</option>
+                                      <option value="VAT Sales">VAT REVENUE</option>
+                                      <option value="TOT Turnover">TOT LIQUIDITY</option>
                                    </select>
                                 </td>
                              </tr>
@@ -98,50 +106,64 @@ import { Router } from '@angular/router';
               </div>
            </div>
 
-           <!-- Insights Sidebar -->
-           <div class="space-y-6">
-              <div class="glass-panel p-8 relative overflow-hidden group">
-                 <div class="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-500/30 transition-colors duration-700"></div>
+           <!-- Performance Insights Sidebar -->
+           <div class="space-y-8 animate-up delay-1">
+              <div class="glass-panel p-8 bg-white/[0.01] border-white/5 relative overflow-hidden group">
+                 <div class="absolute -top-16 -right-16 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all"></div>
                  
-                 <div class="relative z-10 flex items-center gap-3 mb-8">
-                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400">
-                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                 <div class="flex items-center gap-4 mb-10 relative z-10">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-950 border border-white/5 flex items-center justify-center text-blue-400 shadow-2xl group-hover:scale-110 transition-transform">
+                       <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                     </div>
-                    <h3 class="text-blue-400 font-semibold uppercase text-xs tracking-widest">Discovery Insights</h3>
+                    <div class="flex flex-col">
+                       <h3 class="text-xs font-black text-white uppercase tracking-tight">Discovery Matrix</h3>
+                       <span class="text-[9px] font-black text-slate-600 uppercase tracking-widest">Real-time Analytics</span>
+                    </div>
                  </div>
                  
                  <div class="space-y-6 relative z-10">
-                    <div class="p-5 rounded-2xl bg-white/[0.02] border border-white/5">
-                       <span class="text-xs font-medium text-slate-400 uppercase tracking-wider block mb-2">Taxable Income Found</span>
-                       <h4 class="text-3xl font-bold text-white tracking-tight">KES {{ insights().totalIncome | number }}</h4>
+                    <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-blue-500/20 transition-all">
+                       <span class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] block mb-2">Total Fiscal Liquidity</span>
+                       <h4 class="text-3xl font-black text-white tracking-tighter tabular-nums mb-1"><span class="text-xs text-slate-600 mr-2">KES</span>{{ insights().totalIncome | number:'1.2-2' }}</h4>
+                       <div class="flex items-center gap-2 mt-2">
+                          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                          <span class="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Identification Verified</span>
+                       </div>
                     </div>
                     
-                    <div class="p-5 rounded-2xl bg-red-500/5 border border-red-500/10">
-                       <span class="text-xs font-medium text-red-400/80 uppercase tracking-wider block mb-2">Business Expenses</span>
-                       <h4 class="text-3xl font-bold text-red-400 tracking-tight">KES {{ insights().businessExpenses | number }}</h4>
+                    <div class="p-6 rounded-2xl bg-amber-500/[0.02] border border-amber-500/10 hover:border-amber-500/30 transition-all">
+                       <span class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] block mb-2">Operational Outflows</span>
+                       <h4 class="text-3xl font-black text-amber-500 tracking-tighter tabular-nums mb-1"><span class="text-xs text-slate-600 mr-2">KES</span>{{ insights().businessExpenses | number:'1.2-2' }}</h4>
                     </div>
                     
-                    <div class="pt-6 border-t border-white/10 flex flex-col gap-3">
-                       <button (click)="syncToVat()" class="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold text-sm transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2">
-                          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                          Sync to VAT
+                    <div class="pt-8 space-y-4">
+                       <button (click)="syncToVat()" class="modern-btn primary-btn w-full py-4 bg-blue-600 border-blue-500 text-white font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-500/20 elite-glow !rounded-2xl">
+                          <span class="flex items-center justify-center gap-3">
+                             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                             SYNCHRONIZE TO VAT
+                          </span>
                        </button>
-                       <button (click)="syncToTot()" class="w-full py-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2">
-                          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
-                          Inject into TOT Return
+                       <button (click)="syncToTot()" class="modern-btn w-full py-4 bg-slate-900 border-white/5 text-slate-500 hover:text-white hover:border-blue-500/30 font-black text-[10px] uppercase tracking-[0.2em] !rounded-2xl transition-all">
+                          <span class="flex items-center justify-center gap-3">
+                             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
+                             INJECT INTO TOT RETURN
+                          </span>
                        </button>
                     </div>
                  </div>
               </div>
               
-              <div class="glass-panel p-6 bg-gradient-to-br from-amber-500/10 to-transparent border-amber-500/20">
-                 <div class="flex flex-col gap-3">
-                    <div class="flex items-center gap-2 text-amber-500">
-                       <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                       <h4 class="font-bold text-xs uppercase tracking-wider">Review Required</h4>
+              <div class="glass-panel p-8 bg-gradient-to-br from-amber-600/10 to-transparent border-amber-600/20 relative overflow-hidden group">
+                 <div class="absolute -right-12 -bottom-12 w-32 h-32 bg-amber-500/5 rounded-full blur-3xl group-hover:bg-amber-500/10 transition-all"></div>
+                 <div class="flex flex-col gap-4 relative z-10">
+                    <div class="flex items-center gap-3 text-amber-500">
+                       <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                       </div>
+                       <h4 class="font-black text-[10px] uppercase tracking-[0.2em]">Manual Review Queue</h4>
                     </div>
-                    <p class="text-sm text-slate-300 leading-relaxed">
-                      We've identified <strong class="text-white">KES 150,000</strong> received from a registered PIN. This has been flagged as taxable turnover. Please verify if this was an internal transfer or sales.
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">
+                      Statutory identification detected <strong class="text-white">KES 150,000</strong> from a registered entity. Action required: Verify if internal liquidity or commercial revenue.
                     </p>
                  </div>
               </div>
@@ -152,7 +174,8 @@ import { Router } from '@angular/router';
   `,
   styles: [`
     :host { display: block; }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MpesaAnalyserComponent {
   private mpesaService = inject(MpesaParserService);
@@ -174,8 +197,6 @@ export class MpesaAnalyserComponent {
   }
 
   syncToVat() {
-    // In a real app, we'd store the validated sales in a signal/store 
-    // that the VAT wizard can consume
     this.router.navigate(['/member/tax-engine/file/vat']);
   }
 

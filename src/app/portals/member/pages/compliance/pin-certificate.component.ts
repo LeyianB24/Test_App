@@ -11,41 +11,38 @@ import { environment } from '../../../../../environments/environment';
   template: `
     <div class="page-container animate-fade-in print-container">
       <!-- ── Dashboard Header (Hidden on Print) ─────────────── -->
-      <header class="mb-10 lg:mb-14 no-print">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <div class="flex items-center gap-3 mb-2">
-              <span class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                OFFICIAL REGISTRY
-              </span>
-            </div>
-            <h1 class="premium-title">PIN <span class="gradient-text">Certificate</span></h1>
-            <p class="premium-subtitle">Authorized acknowledgement of registered taxpayer status and obligations</p>
+      <header class="mb-10 lg:mb-14 no-print flex flex-col md:flex-row justify-between items-end gap-6">
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              STATUTORY REGISTRY ARCHIVE
+            </span>
           </div>
-          <div class="flex items-center gap-4">
-            <button class="modern-btn outline-btn py-3 px-6 shadow-xl shadow-black/10" (click)="print()">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4"/></svg>
-              Print Record
-            </button>
-            <button class="modern-btn primary-btn py-3 px-6 shadow-xl shadow-emerald-500/20 elite-glow" (click)="downloadPdf()">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-              Download PDF
-            </button>
-          </div>
+          <h1 class="premium-title">PIN <span class="gradient-text">Certificate</span></h1>
+          <p class="premium-subtitle">Authorized verification of registered taxpayer status and fiscal obligations</p>
+        </div>
+        
+        <div class="flex items-center gap-4">
+          <button class="modern-btn border-white/10 text-slate-400 px-6 py-3 rounded-xl hover:bg-white/[0.05] hover:text-white transition-all shadow-xl font-black text-[10px] uppercase tracking-widest flex items-center gap-3" (click)="print()">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4"/></svg>
+            PRINT RECORD
+          </button>
+          <button class="modern-btn primary-btn py-4 px-8 bg-emerald-600 border-emerald-500 text-white font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-emerald-600/20 elite-glow !rounded-2xl" (click)="downloadPdf()">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            DOWNLOAD PDF ARCHIVE
+          </button>
         </div>
       </header>
 
       <!-- ── Official PIN Certificate Document ──────────────── -->
-      <div id="pin-cert-doc" class="official-cert-paper rounded-2xl overflow-hidden">
+      <div id="pin-cert-doc" class="official-cert-paper rounded-[2rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)]">
 
-        <!-- Hourglass Branding Bar (Left) — SVG polygons for reliable rendering -->
+        <!-- Hourglass Branding Bar (Left) -->
         <div id="branding-bar">
-          <!-- Black top-half wedge -->
           <svg class="wedge-top" viewBox="0 0 1 1" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <polygon points="0,0 1,0 0,1" fill="#000000"/>
           </svg>
-          <!-- Red bottom-half wedge -->
           <svg class="wedge-bottom" viewBox="0 0 1 1" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <polygon points="0,1 1,1 0,0" fill="#cc0000"/>
           </svg>
@@ -161,35 +158,35 @@ import { environment } from '../../../../../environments/environment';
           <div class="cert-section">
              <h3 class="section-title">Tax Obligation(s) Registration Details</h3>
              @if (obligations().length > 0) {
-               <table class="cert-table list-table">
-                  <thead>
-                     <tr>
-                        <th width="8%">Sr. No.</th>
-                        <th width="38%">Tax Obligation(s)</th>
-                        <th width="18%">Effective From Date</th>
-                        <th width="18%">Effective Till Date</th>
-                        <th width="18%">Status</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     @for (ob of obligations(); track ob.obligation_id || ob.obligation_name; let i = $index) {
-                        <tr>
-                           <td class="center">{{ i + 1 }}</td>
-                           <td>{{ ob.obligation_name }}</td>
-                           <td class="center">{{ ob.effective_from | date:'dd/MM/yyyy' }}</td>
-                           <td class="center">{{ ob.effective_to ? (ob.effective_to | date:'dd/MM/yyyy') : 'N.A.' }}</td>
-                           <td class="center">{{ ob.status | titlecase }}</td>
-                        </tr>
-                     }
-                  </tbody>
-               </table>
+                <table class="cert-table list-table">
+                   <thead>
+                      <tr>
+                         <th width="8%">Sr. No.</th>
+                         <th width="38%">Tax Obligation(s)</th>
+                         <th width="18%">Effective From Date</th>
+                         <th width="18%">Effective Till Date</th>
+                         <th width="18%">Status</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      @for (ob of obligations(); track ob.obligation_id || ob.obligation_name; let i = $index) {
+                         <tr>
+                            <td class="center">{{ i + 1 }}</td>
+                            <td>{{ ob.obligation_name }}</td>
+                            <td class="center">{{ ob.effective_from | date:'dd/MM/yyyy' }}</td>
+                            <td class="center">{{ ob.effective_to ? (ob.effective_to | date:'dd/MM/yyyy') : 'N.A.' }}</td>
+                            <td class="center">{{ ob.status | titlecase }}</td>
+                         </tr>
+                      }
+                   </tbody>
+                </table>
              } @else {
-               <table class="cert-table list-table">
-                  <thead><tr><th>Sr. No.</th><th>Tax Obligation(s)</th><th>Effective From Date</th><th>Effective Till Date</th><th>Status</th></tr></thead>
-                  <tbody>
-                     <tr><td class="center">1</td><td>Income Tax - Resident Individual</td><td class="center">{{ registrationDate() | date:'dd/MM/yyyy' }}</td><td class="center">N.A.</td><td class="center">Active</td></tr>
-                  </tbody>
-               </table>
+                <table class="cert-table list-table">
+                   <thead><tr><th>Sr. No.</th><th>Tax Obligation(s)</th><th>Effective From Date</th><th>Effective Till Date</th><th>Status</th></tr></thead>
+                   <tbody>
+                      <tr><td class="center">1</td><td>Income Tax - Resident Individual</td><td class="center">{{ registrationDate() | date:'dd/MM/yyyy' }}</td><td class="center">N.A.</td><td class="center">Active</td></tr>
+                   </tbody>
+                </table>
              }
           </div>
 
@@ -223,6 +220,13 @@ import { environment } from '../../../../../environments/environment';
         </div><!-- /cert-content-inner -->
 
       </div><!-- /official-cert-paper -->
+
+      <!-- Theme Adherence Disclaimer -->
+      <footer class="mt-20 p-10 glass-panel border-white/5 bg-white/[0.01] text-center !rounded-[3rem] no-print">
+         <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.3em] leading-relaxed max-w-4xl mx-auto">
+            STATUTORY IDENTIFICATION ARCHIVE. AUTHORIZED ACCESS ONLY. THIS RECORD IS SYNCHRONIZED WITH THE CENTRAL TAXPAYER REGISTRY.
+         </p>
+      </footer>
     </div>
   `,
   styles: [`
@@ -232,8 +236,8 @@ import { environment } from '../../../../../environments/environment';
       min-height: 297mm;
       margin: 20px auto;
       padding: 0;
-      box-shadow: var(--shadow-2xl);
-      border: 1px solid var(--border-default);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+      border: 1px solid #e5e7eb;
       color: #000000;
       font-family: 'Arial', sans-serif;
       position: relative;
@@ -304,7 +308,7 @@ import { environment } from '../../../../../environments/environment';
       .no-print { display: none !important; }
       @page { margin: 0; size: A4; }
       body { background: white !important; padding: 0 !important; margin: 0 !important; }
-      .content-area { max-width: none !important; padding: 0 !important; margin: 0 !important; }
+      .page-container { max-width: none !important; padding: 0 !important; margin: 0 !important; }
       .official-cert-paper {
         margin: 0 !important; box-shadow: none !important; border: none !important;
         width: 210mm !important; height: 297mm !important; position: relative !important;
