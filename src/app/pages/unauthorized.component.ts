@@ -109,7 +109,7 @@ import { AuthService } from '../core/services/auth.service';
     .unauth-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-xl); padding: 56px; text-align: center; box-shadow: var(--shadow-xl); animation: card-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
     @keyframes card-in { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-    .icon-wrap { width: 96px; height: 96px; background: var(--accent-bg); border: 1px solid var(--accent-dim); color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; mx-auto mb-10 mx-auto; position: relative; }
+    .icon-wrap { width: 96px; height: 96px; background: var(--accent-bg); border: 1px solid var(--accent-dim); color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 40px; position: relative; }
     .icon-ring { position: absolute; inset: -8px; border-radius: 50%; border: 1px solid var(--accent); opacity: 0.2; animation: icon-pulse 2s infinite; }
     @keyframes icon-pulse { 0%, 100% { transform: scale(1); opacity: 0.2; } 50% { transform: scale(1.1); opacity: 0.1; } }
 
@@ -130,7 +130,7 @@ import { AuthService } from '../core/services/auth.service';
     .secondary-btn { width: 100%; height: 50px; background: transparent; border: 2px solid var(--border); border-radius: var(--r-lg); font-size: 12px; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s ease; }
     .secondary-btn:hover { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
 
-    .role-footer { margin-top: 40px; pt-32; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: center; gap: 12px; }
+    .role-footer { margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: center; gap: 12px; }
     .footer-label { font-size: 10px; font-weight: 800; color: var(--text-muted); opacity: 0.6; }
     .footer-value { font-size: 10px; font-weight: 900; color: var(--accent); background: var(--accent-bg); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--accent-dim); }
 

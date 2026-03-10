@@ -433,7 +433,7 @@ import { environment } from '../../environments/environment';
       border-radius: 30px;
     }
     .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 2s infinite; }
-    .form-ref { font-size: 10px; font-weight: 700; color: var(--text-muted); font-mono; }
+    .form-ref { font-size: 10px; font-weight: 700; color: var(--text-muted); font-family: monospace; }
     .form-title { font-size: 28px; font-weight: 900; color: var(--text-primary); margin: 0 0 8px; letter-spacing: -0.03em; }
     .form-subtitle { font-size: 14px; font-weight: 500; color: var(--text-secondary); margin: 0; line-height: 1.6; }
 
@@ -442,7 +442,7 @@ import { environment } from '../../environments/environment';
     .field-group { display: flex; flex-direction: column; gap: 10px; }
     .field-label { 
       font-size: 12px; font-weight: 700; color: var(--text-secondary); 
-      text-transform: uppercase; tracking: 0.05em; transition: color var(--tr);
+      text-transform: uppercase; letter-spacing: 0.05em; transition: color var(--tr);
       margin-left: 4px;
     }
     .field-group.field-focused .field-label { color: var(--accent); }
