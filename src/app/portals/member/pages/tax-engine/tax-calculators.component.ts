@@ -229,18 +229,17 @@ type CalcMode = 'paye' | 'vat' | 'tot' | 'mri';
         </div>
       }
 
-      <!-- Other Calculators (TOT/MRI) follow same Elite pattern -->
-      @if (mode() === 'tot' || mode() === 'mri') {
+      <!-- Turnover Tax (TOT) -->
+      @if (mode() === 'tot') {
          <div class="glass-panel p-20 lg:p-32 max-w-4xl mx-auto animate-up text-center !rounded-[4rem] relative overflow-hidden bg-white/[0.01] border-white/5 transition-all hover:border-blue-500/20">
             <div class="w-24 h-24 bg-slate-950 border border-white/5 rounded-3xl flex items-center justify-center mb-10 mx-auto shadow-2xl relative z-10">
-               <svg class="w-10 h-10" [class.text-indigo-400]="mode() === 'tot'" [class.text-violet-400]="mode() === 'mri'" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                  <path *ngIf="mode() === 'tot'" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  <path *ngIf="mode() === 'mri'" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+               <svg class="w-10 h-10 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                </svg>
             </div>
-            <h3 class="text-3xl font-black text-white mb-4 tracking-tighter uppercase relative z-10">{{ mode() === 'tot' ? 'Turnover Tax' : 'Rental Income' }} Archive Engine</h3>
+            <h3 class="text-3xl font-black text-white mb-4 tracking-tighter uppercase relative z-10">Turnover Tax Archive Engine</h3>
             <p class="text-slate-500 max-w-md mx-auto mb-16 text-[11px] font-bold uppercase tracking-widest leading-relaxed opacity-70 relative z-10">
-               {{ mode() === 'tot' ? 'Statutory 1.0% rate for Micro & Small Enterprise commercial liquidity.' : 'Authorized 7.5% gross liquidation for residential asset receipts.' }}
+               Statutory 1.0% rate for Micro & Small Enterprise commercial liquidity.
             </p>
 
             <div class="max-w-md mx-auto space-y-12 relative z-10">
@@ -248,22 +247,62 @@ type CalcMode = 'paye' | 'vat' | 'tot' | 'mri';
                   <label class="block text-slate-500 mb-4 font-black text-[10px] uppercase tracking-[0.2em] text-center">Gross Archive Liquidity (KES)</label>
                   <div class="relative">
                     <span class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 font-black text-xs">KES</span>
-                    <input type="number" [(ngModel)]="mode() === 'tot' ? totTurnover : mriRent" class="form-input bg-slate-950 border-white/5 text-white rounded-[1.5rem] pl-16 py-6 font-black text-2xl text-center focus:border-blue-500/50 transition-all shadow-2xl" placeholder="0.00">
+                    <input type="number" [(ngModel)]="totTurnover" class="form-input bg-slate-950 border-white/5 text-white rounded-[1.5rem] pl-16 py-6 font-black text-2xl text-center focus:border-blue-500/50 transition-all shadow-2xl" placeholder="0.00">
                   </div>
                </div>
 
                <div class="space-y-4 pt-10">
                   <div class="flex justify-between items-center p-6 rounded-2xl bg-white/[0.02] border border-white/5">
                      <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Gross Fiscal Total</span>
-                     <span class="text-white font-black text-lg tabular-nums tracking-tighter">{{ fmt(mode() === 'tot' ? totTurnover : mriRent) }}</span>
+                     <span class="text-white font-black text-lg tabular-nums tracking-tighter">{{ fmt(totTurnover) }}</span>
                   </div>
                   <div class="flex justify-between items-center p-6 rounded-2xl border border-blue-500/10">
                      <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Statutory Applied Rate</span>
-                     <span class="text-blue-500 font-black text-lg tabular-nums tracking-tighter">{{ mode() === 'tot' ? '1.0%' : '7.5%' }}</span>
+                     <span class="text-blue-500 font-black text-lg tabular-nums tracking-tighter">1.0%</span>
                   </div>
                   <div class="flex justify-between items-center p-8 rounded-[2.5rem] bg-amber-500/5 border border-amber-500/20 mt-8 shadow-2xl shadow-amber-500/10">
                      <span class="text-[10px] font-black text-amber-500 uppercase tracking-widest font-bold">PROJECTED OBLIGATION</span>
-                     <span class="text-amber-400 font-black text-3xl tabular-nums tracking-tighter">{{ fmt((mode() === 'tot' ? totTurnover : mriRent) * (mode() === 'tot' ? 0.01 : 0.075)) }}</span>
+                     <span class="text-amber-400 font-black text-3xl tabular-nums tracking-tighter">{{ fmt(totTurnover * 0.01) }}</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+      }
+
+      <!-- Monthly Rental Income (MRI) -->
+      @if (mode() === 'mri') {
+         <div class="glass-panel p-20 lg:p-32 max-w-4xl mx-auto animate-up text-center !rounded-[4rem] relative overflow-hidden bg-white/[0.01] border-white/5 transition-all hover:border-blue-500/20">
+            <div class="w-24 h-24 bg-slate-950 border border-white/5 rounded-3xl flex items-center justify-center mb-10 mx-auto shadow-2xl relative z-10">
+               <svg class="w-10 h-10 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+               </svg>
+            </div>
+            <h3 class="text-3xl font-black text-white mb-4 tracking-tighter uppercase relative z-10">Rental Income Archive Engine</h3>
+            <p class="text-slate-500 max-w-md mx-auto mb-16 text-[11px] font-bold uppercase tracking-widest leading-relaxed opacity-70 relative z-10">
+               Authorized 7.5% gross liquidation for residential asset receipts.
+            </p>
+
+            <div class="max-w-md mx-auto space-y-12 relative z-10">
+               <div class="form-group text-left">
+                  <label class="block text-slate-500 mb-4 font-black text-[10px] uppercase tracking-[0.2em] text-center">Gross Archive Liquidity (KES)</label>
+                  <div class="relative">
+                    <span class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 font-black text-xs">KES</span>
+                    <input type="number" [(ngModel)]="mriRent" class="form-input bg-slate-950 border-white/5 text-white rounded-[1.5rem] pl-16 py-6 font-black text-2xl text-center focus:border-blue-500/50 transition-all shadow-2xl" placeholder="0.00">
+                  </div>
+               </div>
+
+               <div class="space-y-4 pt-10">
+                  <div class="flex justify-between items-center p-6 rounded-2xl bg-white/[0.02] border border-white/5">
+                     <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Gross Fiscal Total</span>
+                     <span class="text-white font-black text-lg tabular-nums tracking-tighter">{{ fmt(mriRent) }}</span>
+                  </div>
+                  <div class="flex justify-between items-center p-6 rounded-2xl border border-blue-500/10">
+                     <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Statutory Applied Rate</span>
+                     <span class="text-blue-500 font-black text-lg tabular-nums tracking-tighter">7.5%</span>
+                  </div>
+                  <div class="flex justify-between items-center p-8 rounded-[2.5rem] bg-amber-500/5 border border-amber-500/20 mt-8 shadow-2xl shadow-amber-500/10">
+                     <span class="text-[10px] font-black text-amber-500 uppercase tracking-widest font-bold">PROJECTED OBLIGATION</span>
+                     <span class="text-amber-400 font-black text-3xl tabular-nums tracking-tighter">{{ fmt(mriRent * 0.075) }}</span>
                   </div>
                </div>
             </div>
@@ -273,8 +312,7 @@ type CalcMode = 'paye' | 'vat' | 'tot' | 'mri';
   `,
   styles: [`
     :host { display: block; }
-  `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  `]
 })
 export class TaxCalculatorsComponent {
   mode = signal<CalcMode>('paye');
