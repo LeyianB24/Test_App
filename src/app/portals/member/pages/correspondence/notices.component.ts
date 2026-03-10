@@ -1,68 +1,100 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-notices',
-  imports: [],
+  imports: [CommonModule],
   template: `
-    <div class="notices-container p-6 animate-fade-in">
-      <header class="mb-10">
-        <h1 class="text-3xl font-bold text-white mb-2">Correspondence & Notices</h1>
-        <p class="text-slate-400">View official communications, assessment notices, and demand letters from KRA.</p>
+    <div class="page-container animate-fade-in">
+      <header class="mb-10 lg:mb-14">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <div class="flex items-center gap-3 mb-2">
+              <span class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                COMMUNICATIONS CENTER
+              </span>
+            </div>
+            <h1 class="premium-title">Tactical <span class="gradient-text">Correspondence</span></h1>
+            <p class="premium-subtitle">Authorized gateway for official notices, legal documents, and system directives</p>
+          </div>
+        </div>
       </header>
 
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
         
-        <!-- Sidebar Filters -->
-        <div class="lg:col-span-1 space-y-6">
-           <div class="glass-card p-6">
-              <h3 class="text-white font-bold mb-4 text-sm uppercase tracking-widest">Filter by Category</h3>
-              <div class="space-y-2">
+        <!-- Sidebar Navigation -->
+        <div class="lg:col-span-1 flex flex-col gap-6">
+           <div class="glass-panel p-6 border-white/5 bg-white/[0.01]">
+              <h3 class="text-[10px] font-black text-slate-500 mb-6 uppercase tracking-[0.2em]">Registry Segments</h3>
+              <div class="flex flex-col gap-2">
                  @for (cat of categories; track cat.id) {
-                    <button class="w-full flex justify-between items-center p-3 rounded-xl transition-all group" [class.bg-blue-600]="activeCategory() === cat.id" [class.hover:bg-slate-800]="activeCategory() !== cat.id" (click)="activeCategory.set(cat.id)">
-                       <span class="text-sm" [class.text-white]="activeCategory() === cat.id" [class.text-slate-400]="activeCategory() !== cat.id">{{ cat.label }}</span>
-                       <span class="px-2 py-0.5 rounded-md text-[10px] font-bold" [class.bg-white/20]="activeCategory() === cat.id" [class.bg-slate-700]="activeCategory() !== cat.id" [class.text-white]="activeCategory() === cat.id" [class.text-slate-500]="activeCategory() !== cat.id">{{ cat.count }}</span>
+                    <button 
+                      class="w-full flex justify-between items-center p-4 rounded-2xl transition-all duration-300 group relative overflow-hidden" 
+                      [class.bg-blue-600]="activeCategory() === cat.id" 
+                      [class.bg-white/[0.02]]="activeCategory() !== cat.id"
+                      [class.hover:bg-white/[0.05]]="activeCategory() !== cat.id"
+                      (click)="activeCategory.set(cat.id)"
+                    >
+                       <span class="text-xs font-black uppercase tracking-widest relative z-10" [class.text-white]="activeCategory() === cat.id" [class.text-slate-400]="activeCategory() !== cat.id">{{ cat.label }}</span>
+                       <span class="px-2 py-1 rounded-lg text-[9px] font-black tracking-widest relative z-10 shadow-lg" [class.bg-white/20]="activeCategory() === cat.id" [class.bg-slate-900]="activeCategory() !== cat.id" [class.text-white]="activeCategory() === cat.id" [class.text-slate-600]="activeCategory() !== cat.id">{{ cat.count }}</span>
+                       
+                       @if (activeCategory() === cat.id) {
+                         <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-500 animate-pulse opacity-20"></div>
+                       }
                     </button>
                  }
               </div>
            </div>
 
-           <div class="p-6 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-xl shadow-blue-900/20">
-              <h4 class="font-bold mb-2">Need to Appeal?</h4>
-              <p class="text-xs text-white/80 leading-relaxed mb-4">You have 30 days from the date of an assessment notice to lodge a formal objection.</p>
-              <button class="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-bold transition-all">Lodge Objection</button>
+           <div class="glass-panel p-8 relative overflow-hidden group border-blue-500/20 bg-blue-500/5">
+              <div class="absolute -top-12 -right-12 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all duration-700"></div>
+              
+              <h4 class="text-sm font-black mb-3 text-white uppercase tracking-tighter relative z-10">Legal Appeals</h4>
+              <p class="text-[10px] text-slate-400 leading-relaxed mb-6 uppercase tracking-widest font-bold opacity-80 relative z-10">You have a statutory 30-day window from assessment issuance to lodge a formal objection protocol.</p>
+              
+              <button class="modern-btn primary-btn w-full py-3 text-[10px] shadow-lg shadow-blue-500/20 relative z-10 elite-glow">Lodge Objection</button>
            </div>
         </div>
 
-        <!-- Notices List -->
+        <!-- Notices Terminal -->
         <div class="lg:col-span-3">
            <div class="flex flex-col gap-4">
               @for (notice of filteredNotices(); track notice.id) {
-                <div class="glass-card p-6 hover:border-blue-500/30 transition-all cursor-pointer group">
-                   <div class="flex gap-6">
-                      <div class="notice-icon w-14 h-14 rounded-2xl bg-slate-800 flex items-center justify-center shrink-0 group-hover:bg-blue-600/10 transition-colors">
-                         <svg class="w-7 h-7" [class.text-slate-500]="notice.read" [class.text-blue-500]="!notice.read" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="notice.icon" />
+                <div class="glass-panel p-8 hover:border-blue-500/30 transition-all group relative overflow-hidden">
+                   <div class="absolute -bottom-16 -right-16 w-32 h-32 bg-white/[0.02] rounded-full blur-3xl group-hover:bg-blue-500/5 transition-all duration-700"></div>
+                   
+                   <div class="flex flex-col md:flex-row gap-8 relative z-10">
+                      <div class="w-16 h-16 rounded-[1.25rem] bg-slate-900 border border-white/5 flex items-center justify-center shrink-0 group-hover:border-blue-500/30 group-hover:bg-blue-600/5 transition-all duration-500 shadow-2xl">
+                         <svg class="w-8 h-8 transition-all duration-500 group-hover:scale-110" [class.text-slate-600]="notice.read" [class.text-blue-400]="!notice.read" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="notice.icon" />
                          </svg>
                          @if (!notice.read) {
-                            <div class="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-slate-900"></div>
+                            <div class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-blue-500 rounded-full border-2 border-slate-950 shadow-lg shadow-blue-500/50 animate-pulse"></div>
                          }
                       </div>
 
                       <div class="flex-grow">
-                         <div class="flex justify-between items-start mb-1">
-                            <h4 class="text-white font-bold text-lg group-hover:text-blue-400 transition-colors">{{ notice.title }}</h4>
-                            <span class="text-[10px] text-slate-500 font-mono">{{ notice.date }}</span>
+                         <div class="flex flex-col md:flex-row justify-between items-start gap-4 mb-4">
+                            <div>
+                               <h4 class="text-lg font-black text-white tracking-tighter group-hover:text-blue-400 transition-colors uppercase">{{ notice.title }}</h4>
+                               <div class="flex items-center gap-3 mt-2">
+                                  <span class="px-2 py-0.5 rounded-lg bg-white/5 border border-white/5 text-slate-500 text-[9px] font-black uppercase tracking-widest">{{ notice.ref }}</span>
+                                  <div class="w-1 h-1 rounded-full bg-slate-700"></div>
+                                  <span class="text-[9px] text-blue-500/50 font-black uppercase tracking-widest">{{ notice.category }}</span>
+                               </div>
+                            </div>
+                            <span class="text-[9px] text-slate-600 font-black uppercase tracking-[0.2em] bg-white/[0.02] px-3 py-1 rounded-full border border-white/5">{{ notice.date | date:'dd MMM yyyy' }}</span>
                          </div>
-                         <p class="text-slate-400 text-sm mb-4 line-clamp-2">{{ notice.excerpt }}</p>
                          
-                         <div class="flex justify-between items-center">
-                            <div class="flex gap-3">
-                               <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-500 text-[9px] font-bold uppercase">{{ notice.ref }}</span>
-                               <span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 text-[9px] font-bold uppercase">{{ notice.category }}</span>
-                            </div>
-                            <div class="flex gap-4">
-                               <button class="text-xs font-bold text-blue-400 hover:underline">Download PDF</button>
-                               <button class="text-xs font-bold text-slate-400 hover:text-white">View Details</button>
-                            </div>
+                         <p class="text-slate-400 text-sm leading-relaxed mb-8 max-w-2xl font-medium line-clamp-2 opacity-80 group-hover:opacity-100 transition-opacity">{{ notice.excerpt }}</p>
+                         
+                         <div class="flex justify-end items-center gap-6">
+                            <button class="text-[10px] font-black text-slate-500 hover:text-white uppercase tracking-widest transition-all">Audit Details</button>
+                            <button class="text-[10px] font-black text-blue-400 hover:text-blue-300 uppercase tracking-widest flex items-center gap-2 group/btn transition-all">
+                               Download PDF Archive
+                               <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="transition-transform group-hover/btn:translate-y-0.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            </button>
                          </div>
                       </div>
                    </div>
@@ -74,12 +106,7 @@ import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
     </div>
   `,
   styles: [`
-    .glass-card {
-      background: rgba(30, 41, 59, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-    }
+    :host { display: block; }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -126,8 +153,8 @@ export class NoticesComponent {
     }
   ];
 
-  filteredNotices() {
+  filteredNotices = computed(() => {
     if (this.activeCategory() === 'all') return this.notices;
     return this.notices.filter(n => n.category === this.activeCategory());
-  }
+  });
 }
