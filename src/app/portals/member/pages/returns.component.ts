@@ -9,205 +9,288 @@ import { environment } from '../../../../environments/environment';
   selector: 'app-returns',
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="animate-fade-in p-2 md:p-6 lg:p-8">
-      
-      <!-- HD Page Header -->
-      <header class="mb-10 lg:mb-14">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <div class="flex items-center gap-3 mb-2">
-              <span class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                COMPLIANCE MODULE
-              </span>
+    <div class="db-root animate-fade-in">
+      <div class="noise-overlay"></div>
+      <div class="accent-bleed"></div>
+
+      <div class="db-inner animate-stagger">
+        <!-- Elite Header -->
+        <header class="db-header-elite">
+          <div class="header-left">
+            <div class="live-badge">
+              <span class="live-dot"></span>
+              COMPLIANCE MODULE
             </div>
-            <h1 class="premium-title">Compliance <span class="text-amber-500">Registry</span></h1>
-            <p class="text-slate-400 text-lg md:text-xl font-medium mt-1">Authorized gateway for tax returns processing and fiscal history monitoring</p>
+            <h1 class="premium-title">Compliance <span class="text-red">Registry</span></h1>
+            <p class="premium-subtitle">Authorized gateway for tax returns processing and fiscal history monitoring</p>
           </div>
-          <div class="flex flex-wrap items-center gap-4">
-            <button class="btn-primary py-3 px-6 shadow-lg shadow-amber-500/25 bg-amber-600 hover:bg-amber-500" (click)="showFileDialog.set(true)">
+          
+          <div class="header-right">
+            <button class="btn-primary-elite" (click)="showFileDialog.set(true)">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-              Initiate New Filing
+              INITIATE FILING
             </button>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <!-- HD Metrics Matrix -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-10 lg:mb-14">
-        <div class="glass-panel p-8 relative overflow-hidden group hover:border-blue-500/30 transition-all duration-300 transform hover:-translate-y-1">
-          <div class="absolute inset-0 bg-gradient-to-br from-blue-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500 to-transparent"></div>
-          <div class="flex justify-between items-start mb-6">
-            <div class="w-14 h-14 rounded-2xl flex items-center justify-center relative z-10 bg-blue-500/10 text-blue-400">
-              <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <!-- HD Metrics Grid -->
+        <div class="main-grid">
+          <div class="elite-card metric-card group">
+            <div class="card-icon bg-red-pale text-red">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
             </div>
+            <div class="metric-content">
+              <span class="metric-label">Total Submissions</span>
+              <div class="metric-value">{{ allReturns().length }}</div>
+            </div>
+            <div class="card-glow"></div>
           </div>
-          <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2 z-10 relative">Total Submissions</h3>
-          <div class="text-4xl lg:text-5xl font-bold text-white tracking-tight z-10 relative">{{ allReturns().length }}</div>
-        </div>
 
-        <div class="glass-panel p-8 relative overflow-hidden group hover:border-emerald-500/30 transition-all duration-300 transform hover:-translate-y-1">
-          <div class="absolute inset-0 bg-gradient-to-br from-emerald-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500 to-transparent"></div>
-          <div class="flex justify-between items-start mb-6">
-            <div class="w-14 h-14 rounded-2xl flex items-center justify-center relative z-10 bg-emerald-500/10 text-emerald-400">
-              <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <div class="elite-card metric-card group">
+            <div class="card-icon bg-red-pale text-red">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
+            <div class="metric-content">
+              <span class="metric-label">Verified Filings</span>
+              <div class="metric-value">{{ submittedReturns().length }}</div>
+            </div>
+            <div class="card-glow"></div>
           </div>
-          <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2 z-10 relative">Verified Filings</h3>
-          <div class="text-4xl lg:text-5xl font-bold text-white tracking-tight z-10 relative">{{ submittedReturns().length }}</div>
-        </div>
 
-        <div class="glass-panel p-8 relative overflow-hidden group hover:border-red-500/30 transition-all duration-300 transform hover:-translate-y-1">
-          <div class="absolute inset-0 bg-gradient-to-br from-red-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500 to-transparent"></div>
-          <div class="flex justify-between items-start mb-6">
-            <div class="w-14 h-14 rounded-2xl flex items-center justify-center relative z-10 bg-red-500/10 text-red-400">
-              <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <div class="elite-card metric-card group">
+            <div class="card-icon bg-red-pale text-red">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
-          </div>
-          <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2 z-10 relative">Pending Reviews</h3>
-          <div class="text-4xl lg:text-5xl font-bold text-white tracking-tight z-10 relative">{{ pendingReturns().length }}</div>
-        </div>
-      </div>
-
-      <!-- HD Registry Surface -->
-      <div class="glass-panel p-0 overflow-hidden">
-        <div class="flex flex-col md:flex-row md:items-center justify-between p-6 lg:p-10 border-b border-white/5 bg-white/[0.02] gap-6">
-          <h3 class="premium-subtitle m-0 uppercase flex items-center gap-3">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-            Compliance Records
-          </h3>
-          <div class="relative w-full md:w-96 group">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 group-focus-within:text-amber-400 transition-colors">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <div class="metric-content">
+              <span class="metric-label">Pending Reviews</span>
+              <div class="metric-value">{{ pendingReturns().length }}</div>
             </div>
-            <input type="text" placeholder="Trace filings by reference or period..." [(ngModel)]="searchQuery" (input)="onSearch()"
-                   class="w-full bg-slate-900/50 border border-white/10 text-white text-sm rounded-xl pl-11 pr-4 py-3 outline-none focus:border-amber-500/50 focus:bg-slate-900 transition-all placeholder-slate-500">
+            <div class="card-glow"></div>
           </div>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left">
-            <thead>
-              <tr class="text-xs font-semibold text-slate-400 uppercase tracking-widest border-b border-white/10 bg-white/[0.02]">
-                <th class="px-6 py-4">Filing Head</th>
-                <th class="px-6 py-4">Fiscal Period</th>
-                <th class="px-6 py-4">Transmission Date</th>
-                <th class="px-6 py-4">Compliance Status</th>
-                <th class="px-6 py-4 text-center">Verification</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-white/5 disabled-text-selection">
-              @for (r of filteredReturns(); track r.id) {
-                <tr class="group hover:bg-white/[0.02] transition-colors">
-                  <td class="px-6 py-5">
-                    <span class="font-bold text-white">{{ r.type }}</span>
-                  </td>
-                  <td class="px-6 py-5">
-                    <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-white/5 text-amber-400 border border-white/10">
-                      {{ r.period }}
-                    </span>
-                  </td>
-                  <td class="px-6 py-5 text-slate-400 font-medium">{{ r.dateSubmitted || 'NOT TRANSMITTED' }}</td>
-                  <td class="px-6 py-5">
-                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest leading-none border"
-                          [ngClass]="{
-                            'bg-emerald-500/10 text-emerald-400 border-emerald-500/20': r.status === 'submitted',
-                            'bg-amber-500/10 text-amber-400 border-amber-500/20': r.status === 'pending',
-                            'bg-slate-500/10 text-slate-400 border-slate-500/20': r.status === 'draft'
-                          }">
-                      <span class="w-1.5 h-1.5 rounded-full"
-                            [ngClass]="{
-                              'bg-emerald-500': r.status === 'submitted',
-                              'bg-amber-500 animate-pulse': r.status === 'pending',
-                              'bg-slate-500': r.status === 'draft'
-                            }"></span>
-                      {{ r.status }}
-                    </span>
-                  </td>
-                  <td class="px-6 py-5 text-center">
-                    <button class="p-2 text-slate-500 hover:text-amber-400 transition-colors rounded-lg hover:bg-amber-400/10 flex items-center justify-center mx-auto"
-                            (click)="downloadAcknowledgement(r.id.toString())" title="Download Acknowledgement">
-                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    </button>
-                  </td>
-                </tr>
-              } @empty {
+        <!-- Registry Table Section -->
+        <div class="elite-card table-section">
+          <div class="table-header">
+            <div class="table-title">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              Compliance Records
+            </div>
+            <div class="search-box">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" placeholder="Trace filings..." [(ngModel)]="searchQuery" (input)="onSearch()">
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="elite-table">
+              <thead>
                 <tr>
-                  <td colspan="5">
-                    <div class="py-24 text-center flex flex-col items-center justify-center">
-                      <div class="w-20 h-20 mb-6 bg-white/5 rounded-3xl flex items-center justify-center text-slate-600">
-                        <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                      </div>
-                      <h3 class="text-xl font-bold text-white mb-2">Registry Clear</h3>
-                      <p class="text-slate-400 max-w-sm">No matching records traced. Ensure your parameters are correct or initiate a new filing.</p>
-                      <button class="btn-primary mt-8 py-3 px-6 shadow-lg shadow-amber-500/25 bg-amber-600 hover:bg-amber-500" (click)="showFileDialog.set(true)">Initiate First Filing</button>
-                    </div>
-                  </td>
+                  <th>Filing Head</th>
+                  <th>Fiscal Period</th>
+                  <th>Transmission Date</th>
+                  <th>Status</th>
+                  <th class="text-center">Action</th>
                 </tr>
-              }
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                @for (r of filteredReturns(); track r.id) {
+                  <tr class="table-row">
+                    <td><span class="font-bold text-pri">{{ r.type }}</span></td>
+                    <td><span class="period-chip">{{ r.period }}</span></td>
+                    <td><span class="text-sec">{{ r.dateSubmitted || 'NOT TRANSMITTED' }}</span></td>
+                    <td>
+                      <span class="status-chip" [attr.data-status]="r.status">
+                        <span class="status-dot"></span>
+                        {{ r.status }}
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <button class="icon-btn" (click)="downloadAcknowledgement(r.id.toString())" title="Download Acknowledgement">
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                      </button>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="5" class="empty-state">
+                      <div class="empty-icon">
+                        <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                      </div>
+                      <p>Registry Clear. No matching records traced.</p>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
+
+        <!-- Theme Adherence Disclaimer -->
+        <footer class="db-footer-elite">
+           <p>STATUTORY IDENTIFICATION ARCHIVE. AUTHORIZED ACCESS ONLY. THIS RECORD IS SYNCHRONIZED WITH THE CENTRAL TAXPAYER REGISTRY.</p>
+        </footer>
       </div>
 
-      <!-- HD Dialog: Secure Filing Sequence -->
+      <!-- Filing Dialog -->
       @if (showFileDialog()) {
-        <div class="dialog-overlay-elite animate-fade-in" (click)="cancelFileDialog()">
-          <div class="glass-panel !p-0 max-w-xl w-full mx-4 shadow-2xl relative overflow-hidden" (click)="$event.stopPropagation()">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-[80px] pointer-events-none"></div>
-            
-            <div class="p-8 border-b border-white/10 bg-white/[0.02] flex items-center justify-between relative z-10">
-              <div>
-                <h3 class="text-xl font-black text-white tracking-tight">Secure Filing Sequence</h3>
-                <p class="text-slate-400 text-sm mt-1">Configure return parameters for valid transmission</p>
+        <div class="elite-modal-overlay" (click)="cancelFileDialog()">
+          <div class="elite-modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <div class="modal-title">
+                <h3>Secure Filing Sequence</h3>
+                <p>Configure return parameters for valid transmission</p>
               </div>
-              <button class="w-10 h-10 rounded-xl bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 flex items-center justify-center transition-all" (click)="cancelFileDialog()">✕</button>
+              <button class="close-btn" (click)="cancelFileDialog()">✕</button>
             </div>
             
-            <div class="p-8 space-y-8 relative z-10">
-              <div class="space-y-3">
-                <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Revenue Head (Obligation)</label>
-                <div class="relative group">
-                  <select class="w-full bg-slate-900 border border-white/10 text-white text-sm font-medium rounded-xl px-4 py-3.5 outline-none focus:border-amber-500/50 focus:bg-slate-800 transition-all appearance-none cursor-pointer" [(ngModel)]="newReturn.type">
-                    <option value="" class="text-slate-500">Select an active obligation...</option>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Revenue Head (Obligation)</label>
+                <div class="select-wrapper">
+                  <select [(ngModel)]="newReturn.type">
+                    <option value="">Select an active obligation...</option>
                     <option value="Monthly VAT Return">Monthly VAT Return (Section A)</option>
                     <option value="Income Tax Return">Income Tax Return (Resident Individual)</option>
                     <option value="PAYE Return">PAYE Systematic Return</option>
                     <option value="Withholding Tax Return">Withholding Statutory Return</option>
                     <option value="Rental Income">Rental Income Tax (Residential)</option>
                   </select>
-                  <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                  </div>
                 </div>
               </div>
 
-              <div class="space-y-3">
-                <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Fiscal Period (Month/Year)</label>
-                <input type="text" [(ngModel)]="newReturn.period" placeholder="e.g. November 2025" class="w-full bg-slate-900 border border-white/10 text-white text-sm font-medium rounded-xl px-4 py-3.5 outline-none focus:border-amber-500/50 focus:bg-slate-800 transition-all placeholder-slate-500">
+              <div class="form-group">
+                <label>Fiscal Period (Month/Year)</label>
+                <input type="text" [(ngModel)]="newReturn.period" placeholder="e.g. November 2025">
               </div>
 
-              <div class="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex gap-4 text-amber-500 items-start">
-                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="shrink-0 mt-0.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <span class="text-sm font-medium leading-relaxed">Ensure all data is accurate before submission. This action initiates a legal filing sequence.</span>
+              <div class="info-alert">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>Ensure all data is accurate. This initiates a legal filing sequence.</span>
               </div>
             </div>
 
-            <div class="p-8 bg-white/[0.02] border-t border-white/10 flex flex-col-reverse sm:flex-row justify-end gap-4 relative z-10">
-              <button class="px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 transition-colors" (click)="cancelFileDialog()">Discard Session</button>
-              <button class="btn-primary py-3 px-6 shadow-lg shadow-amber-500/25 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed" (click)="fileReturn()" [disabled]="!newReturn.type || !newReturn.period">
+            <div class="modal-footer">
+              <button class="btn-ghost-elite" (click)="cancelFileDialog()">Discard</button>
+              <button class="btn-primary-elite" (click)="fileReturn()" [disabled]="!newReturn.type || !newReturn.period">
                 Authorize Submission
               </button>
             </div>
           </div>
         </div>
       }
-
     </div>
   `,
   styles: [`
-    .dialog-overlay-elite { position: fixed; inset: 0; background: var(--bg-overlay); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 2rem; }
-    .animate-scale-in { animation: scaleIn var(--duration-base) var(--ease-out); }
+    :host {
+      --red:          #D92B2B;
+      --red-bright:   #EF3B3B;
+      --red-glow:     rgba(217, 43, 43, 0.38);
+      --red-pale:     rgba(217, 43, 43, 0.10);
+      --red-border:   rgba(217, 43, 43, 0.22);
+
+      --bg-root:      #0C0C0C;
+      --bg-card:      #141414;
+      --bg-card-2:    #1C1C1C;
+      
+      --text-pri:     #F0F0F0;
+      --text-sec:     #888888;
+      --text-mut:     #4A4A4A;
+
+      --bdr:          rgba(255, 255, 255, 0.08);
+      --bdr-md:       rgba(255, 255, 255, 0.14);
+
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: block;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :host {
+        --bg-root:    #F2F2F4;
+        --bg-card:    #FFFFFF;
+        --bg-card-2:  #F8F8FA;
+        --text-pri:   #111111;
+        --text-sec:   #555560;
+        --text-mut:   #9999A8;
+        --bdr:        rgba(0, 0, 0, 0.08);
+        --bdr-md:     rgba(0, 0, 0, 0.12);
+      }
+    }
+
+    .db-root { min-height: 100vh; background: var(--bg-root); color: var(--text-pri); position: relative; overflow-x: hidden; }
+    .db-inner { max-width: 1400px; margin: 0 auto; padding: 40px 28px 80px; display: flex; flex-direction: column; gap: 40px; position: relative; z-index: 10; }
+
+    .db-header-elite { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+    .premium-title { font-size: clamp(32px, 5vw, 48px); font-weight: 950; letter-spacing: -1.5px; line-height: 1; margin: 12px 0 8px; }
+    .text-red { color: var(--red); }
+    .premium-subtitle { font-size: 14px; font-weight: 500; color: var(--text-sec); max-width: 500px; }
+
+    .live-badge { display: flex; align-items: center; gap: 7px; padding: 5px 12px; border-radius: 50px; background: var(--red-pale); border: 1px solid var(--red-border); font-size: 9px; font-weight: 900; letter-spacing: 1.5px; color: var(--red-bright); }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 10px var(--red); animation: blink 1.5s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .elite-card { background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 32px; padding: 32px; position: relative; overflow: hidden; }
+    
+    .metric-card { display: flex; align-items: center; gap: 24px; }
+    .card-icon { width: 64px; height: 64px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: var(--bg-card-2); border: 1px solid var(--bdr); }
+    .metric-label { font-size: 12px; font-weight: 700; color: var(--text-sec); uppercase; letter-spacing: 1px; }
+    .metric-value { font-size: 32px; font-weight: 900; color: var(--text-pri); }
+
+    .table-section { padding: 0; }
+    .table-header { padding: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; border-bottom: 1px solid var(--bdr); }
+    .table-title { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 12px; color: var(--text-pri); }
+    
+    .search-box { position: relative; width: 100%; max-width: 320px; }
+    .search-box svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-mut); }
+    .search-box input { width: 100%; background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 16px; padding: 12px 16px 12px 48px; color: var(--text-pri); font-size: 14px; outline: none; transition: all 0.2s; }
+    .search-box input:focus { border-color: var(--red); box-shadow: 0 0 0 4px var(--red-pale); }
+
+    .elite-table { width: 100%; border-collapse: collapse; }
+    .elite-table th { padding: 16px 32px; text-align: left; font-size: 11px; font-weight: 800; color: var(--text-mut); text-transform: uppercase; letter-spacing: 1px; background: var(--bg-card-2); }
+    .elite-table td { padding: 20px 32px; border-bottom: 1px solid var(--bdr); font-size: 14px; }
+    .table-row:hover { background: var(--bg-card-2); }
+
+    .period-chip { padding: 4px 10px; background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--text-sec); }
+    
+    .status-chip { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 50px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+    .status-chip[data-status="submitted"] { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+    .status-chip[data-status="pending"] { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    .icon-btn { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: var(--bg-card-2); border: 1px solid var(--bdr); color: var(--text-sec); cursor: pointer; transition: all 0.2s; }
+    .icon-btn:hover { background: var(--red); color: #fff; border-color: var(--red); }
+
+    .empty-state { padding: 80px 0; text-align: center; color: var(--text-mut); }
+    .empty-icon { margin-bottom: 16px; opacity: 0.2; }
+
+    .btn-primary-elite { background: var(--red); color: #fff; border: none; padding: 14px 28px; border-radius: 16px; font-size: 12px; font-weight: 800; letter-spacing: 1.5px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px var(--red-glow); }
+    .btn-primary-elite:hover { background: var(--red-bright); transform: translateY(-2px); }
+    .btn-primary-elite:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-ghost-elite { background: var(--bg-card-2); color: var(--text-sec); border: 1px solid var(--bdr); padding: 14px 28px; border-radius: 16px; font-size: 12px; font-weight: 800; cursor: pointer; transition: all 0.2s; }
+    .btn-ghost-elite:hover { background: var(--bdr); color: var(--text-pri); }
+
+    .elite-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .elite-modal-content { background: var(--bg-card); border: 1px solid var(--bdr-md); border-radius: 32px; width: 100%; max-width: 540px; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+    
+    .modal-header { padding: 32px; border-bottom: 1px solid var(--bdr); display: flex; justify-content: space-between; align-items: flex-start; }
+    .modal-title h3 { font-size: 24px; font-weight: 900; margin: 0; }
+    .modal-title p { font-size: 14px; color: var(--text-sec); margin: 4px 0 0; }
+    .close-btn { background: none; border: none; font-size: 20px; color: var(--text-mut); cursor: pointer; }
+
+    .modal-body { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group label { font-size: 12px; font-weight: 800; color: var(--text-mut); text-transform: uppercase; }
+    .form-group input, .select-wrapper select { width: 100%; background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 12px; padding: 14px; color: var(--text-pri); outline: none; font-size: 14px; }
+    .form-group input:focus { border-color: var(--red); }
+    
+    .info-alert { display: flex; gap: 12px; padding: 16px; background: var(--red-pale); border: 1px solid var(--red-border); border-radius: 16px; color: var(--red-bright); font-size: 13px; font-weight: 500; }
+
+    .modal-footer { padding: 24px 32px; border-top: 1px solid var(--bdr); display: flex; justify-content: flex-end; gap: 12px; }
+
+    .db-footer-elite { margin-top: 40px; padding: 40px; border: 1px solid var(--bdr); border-radius: 32px; text-align: center; background: var(--bg-card-2); }
+    .db-footer-elite p { font-size: 10px; font-weight: 800; color: var(--text-mut); letter-spacing: 4px; line-height: 1.8; max-width: 800px; margin: 0 auto; }
   `]
 })
 export class ReturnsComponent implements OnInit {
@@ -235,7 +318,6 @@ export class ReturnsComponent implements OnInit {
     
     this.returnsService.createReturn(this.newReturn.period, this.newReturn.type).subscribe({
       next: (created) => {
-        alert(`Strategic Acknowledgement: New filing created successfully.\nReference Head: ${this.newReturn.type}\nFiscal Period: ${this.newReturn.period}`);
         this.cancelFileDialog();
       },
       error: () => alert('Filing Integrity Check Failed: Critical handoff timeout.')
