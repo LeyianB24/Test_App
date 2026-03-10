@@ -377,58 +377,67 @@ interface Payment {
     /* ═══════════════════════════════
        Layout & Background
        ═══════════════════════════════ */
-    .db-root {
-      min-height: 100vh;
-      background: var(--bg-root);
-      color: var(--text-pri);
-      position: relative;
-      overflow: hidden;
+    .db-root { 
+      min-height: 100vh; 
+      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-pri); 
+      position: relative; 
+      overflow-x: hidden; 
+      padding-bottom: 5rem;
     }
-
-    .noise-overlay {
-      position: fixed;
+    
+    .db-root::before {
+      content: "";
+      position: absolute;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      opacity: 0.02;
-      z-index: 1;
+      background: radial-gradient(circle at top left, rgba(217, 43, 43, 0.1), transparent 40%),
+                  radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8), transparent 60%);
       pointer-events: none;
-    }
-
-    .accent-bleed {
-      position: fixed;
-      top: -15vw;
-      right: -10vw;
-      width: 45vw;
-      height: 45vw;
-      background: radial-gradient(circle, var(--red) 0%, transparent 70%);
-      opacity: 0.05;
-      filter: blur(80px);
       z-index: 1;
-      pointer-events: none;
     }
 
-    .db-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 48px 32px 100px;
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      gap: 48px;
+    .noise-overlay { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.02; z-index: 2; pointer-events: none; }
+
+    .db-inner { 
+      max-width: 1600px; 
+      margin: 0 auto; 
+      padding: 60px 40px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 50px; 
+      position: relative; 
+      z-index: 10; 
     }
 
-    /* ═══════════════════════════════
-       Premium Header Flow
-       ═══════════════════════════════ */
-    .db-header-elite {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+    /* Header Enhancement */
+    .db-header-elite { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: flex-end; 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 24px;
     }
-    .premium-title { font-size: 40px; font-weight: 950; letter-spacing: -2px; line-height: 1; margin: 12px 0 8px; }
-    .text-red { color: var(--red-bright); text-shadow: 0 0 25px var(--red-glow); }
-    .premium-subtitle { font-size: 14px; font-weight: 500; color: var(--text-sec); letter-spacing: -0.2px; }
+    .premium-title { 
+      font-size: 56px; 
+      font-weight: 950; 
+      letter-spacing: -2.5px; 
+      line-height: 0.9; 
+      margin: 16px 0 12px; 
+      text-transform: uppercase;
+    }
+    .text-red { 
+      color: var(--red-bright); 
+      -webkit-text-stroke: 1px var(--red-bright);
+      text-shadow: 0 0 20px var(--red-glow);
+    }
+    .premium-subtitle { 
+      font-size: 11px; 
+      font-weight: 900; 
+      color: var(--text-sec); 
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
 
     .live-badge { display: flex; align-items: center; gap: 8px; padding: 6px 14px; background: var(--red-pale); border: 1px solid var(--red-border); border-radius: 100px; font-size: 10px; font-weight: 950; letter-spacing: 1.5px; color: var(--red-bright); }
     .live-dot { width: 6px; height: 6px; background: var(--red-bright); border-radius: 50%; box-shadow: 0 0 12px var(--red); animation: pulse-red 2s infinite; }
@@ -437,7 +446,23 @@ interface Payment {
     /* ═══════════════════════════════
        Premium Card Architecture
        ═══════════════════════════════ */
-    .elite-card { background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 32px; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); }
+    .elite-card { 
+      background: rgba(20, 20, 20, 0.4); 
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      border-radius: 32px; 
+      position: relative; 
+      overflow: hidden; 
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); 
+    }
+    .elite-card:hover { 
+      background: rgba(20, 20, 20, 0.6);
+      border-color: rgba(217, 43, 43, 0.3); 
+      transform: translateY(-5px) scale(1.01); 
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 20px rgba(217, 43, 43, 0.1); 
+    }
     .card-glow { position: absolute; inset: 0; background: radial-gradient(circle at top left, var(--red-pale), transparent 70%); opacity: 0.3; pointer-events: none; }
 
     /* ═══════════════════════════════

@@ -7,7 +7,8 @@ import { RouterModule } from '@angular/router';
   imports: [ReactiveFormsModule, RouterModule],
   template: `
     <div class="page-container animate-fade-in">
-      <header class="mb-10 lg:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
+      <div class="noise-overlay"></div>
+      <header class="premium-header mb-10 lg:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
           <div class="flex items-center gap-3 mb-2">
             <span class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
@@ -103,7 +104,68 @@ import { RouterModule } from '@angular/router';
     </div>
   `,
   styles: [`
-    :host { display: block; }
+    .page-container { 
+      min-height: 100vh; 
+      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff; 
+      position: relative; 
+      overflow-x: hidden; 
+      padding: 60px 40px 100px;
+    }
+    
+    .page-container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(217, 43, 43, 0.1), transparent 40%),
+                  radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8), transparent 60%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .noise-overlay { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.02; z-index: 2; pointer-events: none; }
+
+    .premium-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: flex-end; 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 24px;
+      margin-bottom: 40px;
+    }
+
+    .glass-panel {
+      background: rgba(20, 20, 20, 0.4);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 32px;
+      position: relative;
+      z-index: 10;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-panel:hover {
+      background: rgba(20, 20, 20, 0.6);
+      border-color: rgba(16, 185, 129, 0.3);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 16px 20px;
+      color: white;
+      transition: all 0.3s;
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -120,38 +120,48 @@ import { CommonModule } from '@angular/common';
       --text-muted: #666670;
     }
 
-    .db-root {
-      min-height: 100vh;
-      background: var(--bg-root);
-      position: relative;
-      overflow-x: hidden;
-      color: #fff;
+    .db-root { 
+      min-height: 100vh; 
+      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff; 
+      position: relative; 
+      overflow-x: hidden; 
+      padding-bottom: 5rem;
     }
-
-    .noise-overlay {
-      position: fixed; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Cfilter id='noiseFilter'%3%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3%3C/filter%3%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3C/svg%3");
-      opacity: 0.03;
+    
+    .db-root::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(217, 43, 43, 0.1), transparent 40%),
+                  radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8), transparent 60%);
       pointer-events: none;
       z-index: 1;
     }
 
-    .accent-bleed {
-      position: fixed; top: -10%; right: -5%;
-      width: 60%; height: 50%;
-      background: radial-gradient(circle at center, var(--red-pale) 0%, transparent 70%);
-      filter: blur(80px);
-      z-index: 0;
+    .noise-overlay { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.02; z-index: 2; pointer-events: none; }
+
+    .db-inner { 
+      max-width: 1600px; 
+      margin: 0 auto; 
+      padding: 60px 40px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 50px; 
+      position: relative; 
+      z-index: 10; 
     }
 
-    .db-inner {
-      position: relative; z-index: 10;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 40px 24px;
+    /* Header Enhancement */
+    .premium-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: flex-end; 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 24px;
+      margin-bottom: 40px;
     }
-
-    .premium-header { margin-bottom: 48px; }
     .header-tag {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 6px 12px; background: var(--red-pale);
@@ -167,10 +177,18 @@ import { CommonModule } from '@angular/common';
 
     .registry-layout { display: grid; grid-template-columns: 320px 1fr; gap: 32px; align-items: start; }
 
-    /* Sidebar */
+    /* Sidebar Architecture */
     .registry-sidebar { display: flex; flex-direction: column; gap: 24px; }
-    .nav-card { padding: 24px; background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 24px; backdrop-filter: blur(24px); }
-    .nav-title { font-size: 10px; font-weight: 950; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 24px; }
+    .nav-card { 
+      padding: 24px; 
+      background: rgba(20, 20, 20, 0.4);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      border-radius: 32px; 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .nav-title { font-size: 10px; font-weight: 950; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 24px; text-transform: uppercase; }
 
     .nav-stack { display: flex; flex-direction: column; gap: 8px; }
     .nav-item {
@@ -197,10 +215,26 @@ import { CommonModule } from '@angular/common';
     }
     .btn-primary-elite:hover { transform: translateY(-2px); box-shadow: 0 12px 24px var(--red-glow); }
 
-    /* Terminal */
+    /* Terminal Row Architecture */
     .terminal-stack { display: flex; flex-direction: column; gap: 20px; }
-    .notice-row { padding: 32px; background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 28px; transition: all 0.4s; position: relative; overflow: hidden; backdrop-filter: blur(24px); }
-    .notice-row:hover { border-color: rgba(255,255,255,0.1); transform: translateX(8px); }
+    .notice-row { 
+      padding: 32px; 
+      background: rgba(20, 20, 20, 0.4); 
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      border-radius: 32px; 
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative; 
+      overflow: hidden; 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .notice-row:hover { 
+      background: rgba(20, 20, 20, 0.6);
+      border-color: rgba(217, 43, 43, 0.3); 
+      transform: translateX(12px) scale(1.01); 
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    }
     .row-glow { position: absolute; bottom: -50px; left: -50px; width: 150px; height: 150px; background: radial-gradient(circle, var(--red-pale) 0%, transparent 70%); opacity: 0; transition: opacity 0.4s; }
     .notice-row:hover .row-glow { opacity: 1; }
 

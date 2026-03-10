@@ -107,41 +107,47 @@ import { RouterModule } from '@angular/router';
       --text-muted: #666670;
     }
 
-    .db-root {
-      min-height: 100vh;
-      background: var(--bg-root);
-      position: relative;
-      overflow-x: hidden;
-      color: #fff;
+    .db-root { 
+      min-height: 100vh; 
+      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff; 
+      position: relative; 
+      overflow-x: hidden; 
+      padding-bottom: 5rem;
     }
-
-    .noise-overlay {
-      position: fixed; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Cfilter id='noiseFilter'%3%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3%3C/filter%3%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3C/svg%3");
-      opacity: 0.03;
+    
+    .db-root::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(217, 43, 43, 0.1), transparent 40%),
+                  radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8), transparent 60%);
       pointer-events: none;
       z-index: 1;
     }
 
-    .accent-bleed {
-      position: fixed; top: -10%; right: -5%;
-      width: 60%; height: 50%;
-      background: radial-gradient(circle at center, var(--red-pale) 0%, transparent 70%);
-      filter: blur(80px);
-      z-index: 0;
+    .noise-overlay { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.02; z-index: 2; pointer-events: none; }
+
+    .db-inner { 
+      max-width: 1600px; 
+      margin: 0 auto; 
+      padding: 60px 40px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 50px; 
+      position: relative; 
+      z-index: 10; 
     }
 
-    .db-inner {
-      position: relative; z-index: 10;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 40px 24px;
-    }
-
-    /* Header */
-    .premium-header {
-      display: flex; justify-content: space-between; align-items: flex-end;
-      margin-bottom: 48px;
+    /* Header Enhancement */
+    .premium-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: flex-end; 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 24px;
+      margin-bottom: 40px;
     }
 
     .header-tag {
@@ -173,20 +179,36 @@ import { RouterModule } from '@angular/router';
     .btn-glow { position: absolute; inset: 0; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent); transform: translateX(-100%); transition: transform 0.6s; }
     .btn-primary-elite:hover .btn-glow { transform: translateX(100%); }
 
-    /* Stats */
+    /* Stats Architecture */
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 40px; }
-    .stat-card { background: var(--bg-surface); border: 1px solid var(--bdr); border-radius: 24px; padding: 24px; backdrop-filter: blur(24px); }
-    .stat-label { font-size: 9px; font-weight: 950; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 8px; }
-    .stat-value { font-size: 32px; font-weight: 950; letter-spacing: -1px; margin-bottom: 8px; }
-    .stat-indicator { font-size: 9px; font-weight: 950; color: var(--red-bright); letter-spacing: 1px; }
+    .stat-card { 
+      background: rgba(20, 20, 20, 0.4); 
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      border-radius: 32px; 
+      padding: 32px; 
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .stat-card:hover {
+      background: rgba(20, 20, 20, 0.6);
+      border-color: rgba(217, 43, 43, 0.3);
+      transform: translateY(-8px);
+    }
+    .stat-label { font-size: 9px; font-weight: 950; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 12px; }
+    .stat-value { font-size: 40px; font-weight: 950; letter-spacing: -2px; margin-bottom: 8px; }
+    .stat-indicator { font-size: 9px; font-weight: 950; color: var(--red-bright); letter-spacing: 1.5px; opacity: 0.6; }
 
-    /* Registry */
+    /* Registry Surface Architecture */
     .registry-surface {
-      background: var(--bg-surface);
-      border: 1px solid var(--bdr);
+      background: rgba(20, 20, 20, 0.4);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 32px;
       overflow: hidden;
-      backdrop-filter: blur(24px);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.4);
     }
 
     .surface-header { padding: 24px 32px; border-bottom: 1px solid var(--bdr); background: rgba(0,0,0,0.2); }

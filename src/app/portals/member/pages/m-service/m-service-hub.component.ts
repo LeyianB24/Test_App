@@ -108,34 +108,33 @@ import { RouterModule } from '@angular/router';
       --text-muted: #666670;
     }
 
-    .db-root {
-      min-height: 100vh;
-      background: var(--bg-root);
-      position: relative;
-      overflow-x: hidden;
-      color: #fff;
+    .db-root { 
+      min-height: 100vh; 
+      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff; 
+      position: relative; 
+      overflow-x: hidden; 
+      padding-bottom: 5rem;
     }
-
-    .noise-overlay {
-      position: fixed; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Cfilter id='noiseFilter'%3%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3%3C/filter%3%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3C/svg%3");
-      opacity: 0.03;
+    
+    .db-root::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(217, 43, 43, 0.1), transparent 40%),
+                  radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8), transparent 60%);
       pointer-events: none;
       z-index: 1;
     }
 
-    .accent-bleed {
-      position: fixed; top: -10%; right: -5%;
-      width: 60%; height: 50%;
-      background: radial-gradient(circle at center, var(--red-pale) 0%, transparent 70%);
-      filter: blur(80px);
-      z-index: 0;
-    }
+    .noise-overlay { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.02; z-index: 2; pointer-events: none; }
 
-    .db-inner {
-      position: relative; z-index: 10;
-      margin: 0 auto;
-      padding: 64px 24px;
+    .db-inner { 
+      position: relative; 
+      z-index: 10; 
+      margin: 0 auto; 
+      padding: 64px 24px; 
     }
 
     /* Header */
@@ -165,14 +164,31 @@ import { RouterModule } from '@angular/router';
     .red-gradient { background: linear-gradient(to right, #fff, var(--red-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .premium-subtitle { color: var(--text-muted); font-size: 14px; font-weight: 500; margin: 12px 0 0; letter-spacing: 0.5px; }
 
-    /* Actions Grid */
+    /* Action Card Architecture */
     .actions-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 40px; }
     .action-card {
-       padding: 32px; display: flex; flex-direction: column; align-items: center; text-align: center;
-       background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 28px;
-       cursor: pointer; transition: all 0.4s; position: relative; overflow: hidden;
+      padding: 32px; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      text-align: center;
+      background: rgba(20, 20, 20, 0.4); 
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      border-radius: 32px;
+      cursor: pointer; 
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); 
+      position: relative; 
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     }
-    .action-card:hover { transform: translateY(-4px); border-color: var(--red-border); background: var(--red-pale); }
+    .action-card:hover { 
+      transform: translateY(-8px); 
+      background: rgba(217, 43, 43, 0.1);
+      border-color: rgba(217, 43, 43, 0.3); 
+      box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+    }
     .card-glow { position: absolute; bottom: -40px; right: -40px; width: 120px; height: 120px; background: radial-gradient(circle, var(--red-pale) 0%, transparent 70%); opacity: 0; transition: opacity 0.4s; }
     .action-card:hover .card-glow { opacity: 1; }
 
@@ -186,41 +202,46 @@ import { RouterModule } from '@angular/router';
     .action-label { font-size: 11px; font-weight: 950; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; transition: color 0.4s; position: relative; z-index: 1; }
     .action-card:hover .action-label { color: #fff; }
 
-    /* M-Pesa STK */
+    /* M-Pesa STK Architecture */
     .stk-section { margin-bottom: 40px; }
     .stk-card {
-       padding: 40px; background: linear-gradient(135deg, #065f46, #064e3b);
-       border-radius: 40px; position: relative; overflow: hidden;
-       box-shadow: 0 20px 40px rgba(6, 78, 59, 0.4);
+       padding: 40px; 
+       background: linear-gradient(135deg, #053b2c, #042f24);
+       border: 1px solid rgba(16, 185, 129, 0.2);
+       border-radius: 40px; 
+       position: relative; 
+       overflow: hidden;
+       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
     }
-    .stk-overlay { position: absolute; inset: 0; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent); transform: translateX(-100%); transition: transform 0.8s; }
+    .stk-overlay { position: absolute; inset: 0; background: linear-gradient(45deg, transparent, rgba(16, 185, 129, 0.1), transparent); transform: translateX(-100%); transition: transform 0.8s; }
     .stk-card:hover .stk-overlay { transform: translateX(100%); }
 
     .stk-content { position: relative; z-index: 10; }
     .stk-header { display: flex; align-items: center; gap: 20px; margin-bottom: 24px; }
-    .mpesa-logo { width: 56px; height: 56px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 950; color: #fff; }
-    .stk-title { font-size: 20px; font-weight: 950; margin: 0; letter-spacing: -0.5px; }
-    .stk-sub { font-size: 9px; font-weight: 950; color: rgba(255,255,255,0.6); margin: 4px 0 0; letter-spacing: 2px; }
+    .mpesa-logo { width: 56px; height: 56px; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 950; color: #fff; }
+    .stk-title { font-size: 22px; font-weight: 950; margin: 0; letter-spacing: -0.5px; }
+    .stk-sub { font-size: 9px; font-weight: 950; color: rgba(16, 185, 129, 0.8); margin: 4px 0 0; letter-spacing: 2px; }
 
-    .stk-desc { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); margin: 0 0 32px; line-height: 1.6; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stk-desc { font-size: 13px; font-weight: 600; color: rgba(255, 255, 255, 0.7); margin: 0 0 32px; line-height: 1.6; text-transform: uppercase; letter-spacing: 0.5px; }
 
     .stk-form { display: flex; flex-direction: column; gap: 16px; }
     .input-wrap { position: relative; }
     .stk-input {
-       width: 100%; height: 60px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-       border-radius: 20px; padding: 0 24px; color: #fff; font-size: 14px; font-weight: 900;
+       width: 100%; height: 60px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+       border-radius: 20px; padding: 0 24px; color: #fff; font-size: 15px; font-weight: 900;
        letter-spacing: 2px; outline: none; transition: all 0.3s;
     }
-    .stk-input::placeholder { color: rgba(255,255,255,0.3); }
-    .stk-input:focus { background: rgba(255,255,255,0.15); border-color: #fff; }
+    .stk-input::placeholder { color: rgba(255,255,255,0.2); }
+    .stk-input:focus { background: rgba(0, 0, 0, 0.5); border-color: #10b981; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); }
     .input-pulse { position: absolute; right: 24px; top: 50%; translate: 0 -50%; width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse 2s infinite; }
 
     .btn-stk {
-       height: 60px; background: #fff; color: #064e3b; border: none; border-radius: 20px;
+       height: 60px; background: #10b981; color: #fff; border: none; border-radius: 20px;
        font-size: 11px; font-weight: 950; letter-spacing: 1.5px; cursor: pointer;
-       transition: all 0.3s; box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+       box-shadow: 0 8px 16px rgba(16, 185, 129, 0.2);
     }
-    .btn-stk:hover { transform: translateY(-2px); background: #f0fdf4; box-shadow: 0 12px 24px rgba(0,0,0,0.3); }
+    .btn-stk:hover { transform: translateY(-3px); background: #059669; box-shadow: 0 16px 32px rgba(16, 185, 129, 0.3); }
 
     .stk-bg-icon { position: absolute; right: -40px; bottom: -40px; width: 240px; height: 240px; color: #fff; opacity: 0.03; transform: rotate(15deg); pointer-events: none; }
 

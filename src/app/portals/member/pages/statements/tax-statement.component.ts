@@ -139,42 +139,47 @@ import { FormsModule } from '@angular/forms';
       --text-muted: #666670;
     }
 
-    .db-root {
-      min-height: 100vh;
-      background: var(--bg-root);
-      position: relative;
-      overflow-x: hidden;
-      color: #fff;
+    .db-root { 
+      min-height: 100vh; 
+      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff; 
+      position: relative; 
+      overflow-x: hidden; 
+      padding-bottom: 5rem;
     }
-
-    .noise-overlay {
-      position: fixed; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Cfilter id='noiseFilter'%3%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3%3C/filter%3%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3C/svg%3");
-      opacity: 0.03;
+    
+    .db-root::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(217, 43, 43, 0.1), transparent 40%),
+                  radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8), transparent 60%);
       pointer-events: none;
       z-index: 1;
     }
 
-    .accent-bleed {
-      position: fixed; top: -10%; right: -5%;
-      width: 60%; height: 50%;
-      background: radial-gradient(circle at center, var(--red-pale) 0%, transparent 70%);
-      filter: blur(80px);
-      z-index: 0;
+    .noise-overlay { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.02; z-index: 2; pointer-events: none; }
+
+    .db-inner { 
+      max-width: 1600px; 
+      margin: 0 auto; 
+      padding: 60px 40px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 50px; 
+      position: relative; 
+      z-index: 10; 
     }
 
-    .db-inner {
-      position: relative; z-index: 10;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 40px 24px;
-    }
-
-    /* Header */
-    .premium-header {
-      display: flex; justify-content: space-between; align-items: flex-end;
-      margin-bottom: 48px;
-      gap: 32px;
+    /* Header Enhancement */
+    .premium-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: flex-end; 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 24px;
+      margin-bottom: 40px;
     }
 
     .header-tag {
@@ -217,24 +222,40 @@ import { FormsModule } from '@angular/forms';
     }
     .btn-ghost-elite:hover { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.1); }
 
-    /* Toolbar */
+    /* Toolbar Architecture */
     .registry-toolbar {
-      display: flex; gap: 24px; margin-bottom: 32px;
-      padding: 20px; background: var(--bg-surface);
-      border: 1px solid var(--bdr); border-radius: 24px;
+      display: flex; 
+      gap: 24px; 
+      margin-bottom: 32px;
+      padding: 24px; 
+      background: rgba(20, 20, 20, 0.4);
       backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      border-radius: 32px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     }
 
     .search-wrap { flex-grow: 1; position: relative; }
-    .search-icon { position: absolute; left: 20px; top: 50%; translate: 0 -50%; color: var(--text-muted); }
+    .search-icon { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
     .search-input {
-      width: 100%; height: 56px; background: #000;
-      border: 1px solid var(--bdr); border-radius: 16px;
-      padding: 0 20px 0 56px; color: #fff;
-      font-size: 14px; font-weight: 500; outline: none;
-      transition: all 0.3s;
+      width: 100%; 
+      height: 60px; 
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05); 
+      border-radius: 20px;
+      padding: 0 24px 0 64px; 
+      color: #fff;
+      font-size: 14px; 
+      font-weight: 500; 
+      outline: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .search-input:focus { border-color: var(--red-border); box-shadow: 0 0 0 4px var(--red-pale); }
+    .search-input:focus { 
+      border-color: rgba(217, 43, 43, 0.4); 
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 0 4px rgba(217, 43, 43, 0.1); 
+    }
 
     .filter-cluster { display: flex; gap: 12px; }
     .filter-select {
@@ -246,13 +267,15 @@ import { FormsModule } from '@angular/forms';
     }
     .filter-select:focus { border-color: var(--red-border); color: #fff; }
 
-    /* Table */
+    /* Table Surface Architecture */
     .ledger-surface {
-      background: var(--bg-surface);
-      border: 1px solid var(--bdr);
+      background: rgba(20, 20, 20, 0.4);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 32px;
       overflow: hidden;
-      backdrop-filter: blur(24px);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.4);
     }
 
     .elite-table {

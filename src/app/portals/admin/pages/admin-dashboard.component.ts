@@ -346,23 +346,27 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
     </div>
   `,
   styles: [`
-    .db-root {
-      min-height: 100vh;
-      background: #050505;
-      position: relative;
-      overflow-x: hidden;
-      color: #e2e8f0;
+    .db-root { 
+      min-height: 100vh; 
+      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #e2e8f0; 
+      position: relative; 
+      overflow-x: hidden; 
       padding: 3.5rem;
     }
-
-    .noise-overlay {
-      position: fixed;
+    
+    .db-root::before {
+      content: "";
+      position: absolute;
       inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      opacity: 0.015;
+      background: radial-gradient(circle at top left, rgba(217, 43, 43, 0.1), transparent 40%),
+                  radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8), transparent 60%);
       pointer-events: none;
       z-index: 1;
     }
+
+    .noise-overlay { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.015; z-index: 2; pointer-events: none; }
 
     .content-area {
       position: relative;

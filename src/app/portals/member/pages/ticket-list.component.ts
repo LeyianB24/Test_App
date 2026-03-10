@@ -203,74 +203,66 @@ import { CommonModule, UpperCasePipe } from '@angular/common';
     /* ═══════════════════════════════
        Layout & Background
        ═══════════════════════════════ */
-    .db-root {
-      min-height: 100vh;
-      background: var(--bg-root);
-      color: var(--text-pri);
-      position: relative;
-      overflow: hidden;
+    .db-root { 
+      min-height: 100vh; 
+      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-pri); 
+      position: relative; 
+      overflow-x: hidden; 
+      padding-bottom: 5rem;
     }
-
-    .noise-overlay {
-      position: fixed;
+    
+    .db-root::before {
+      content: "";
+      position: absolute;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      opacity: 0.02;
-      z-index: 1;
+      background: radial-gradient(circle at top left, rgba(217, 43, 43, 0.1), transparent 40%),
+                  radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8), transparent 60%);
       pointer-events: none;
-    }
-
-    .accent-bleed {
-      position: fixed;
-      top: -15vw;
-      right: -10vw;
-      width: 45vw;
-      height: 45vw;
-      background: radial-gradient(circle, var(--red) 0%, transparent 70%);
-      opacity: 0.05;
-      filter: blur(80px);
       z-index: 1;
-      pointer-events: none;
     }
 
-    .db-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 48px 32px 100px;
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      gap: 48px;
+    .noise-overlay { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.02; z-index: 2; pointer-events: none; }
+
+    .db-inner { 
+      max-width: 1600px; 
+      margin: 0 auto; 
+      padding: 60px 40px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 50px; 
+      position: relative; 
+      z-index: 10; 
     }
 
-    /* ═══════════════════════════════
-       Premium Header Flow
-       ═══════════════════════════════ */
-    .db-header-elite {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+    /* Header Enhancement */
+    .db-header-elite { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: flex-end; 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 24px;
     }
-
-    .premium-title {
-      font-size: 44px;
-      font-weight: 900;
-      letter-spacing: -2px;
-      line-height: 1;
-      margin: 16px 0 10px;
+    .premium-title { 
+      font-size: 56px; 
+      font-weight: 950; 
+      letter-spacing: -2.5px; 
+      line-height: 0.9; 
+      margin: 16px 0 12px; 
+      text-transform: uppercase;
     }
-
-    .text-red {
-      color: var(--red-bright);
-      text-shadow: 0 0 25px var(--red-glow);
+    .text-red { 
+      color: var(--red-bright); 
+      -webkit-text-stroke: 1px var(--red-bright);
+      text-shadow: 0 0 20px var(--red-glow);
     }
-
-    .premium-subtitle {
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text-sec);
-      letter-spacing: -0.2px;
+    .premium-subtitle { 
+      font-size: 11px; 
+      font-weight: 900; 
+      color: var(--text-sec); 
+      text-transform: uppercase;
+      letter-spacing: 3px;
     }
 
     .live-badge {
@@ -360,11 +352,25 @@ import { CommonModule, UpperCasePipe } from '@angular/common';
     /* ═══════════════════════════════
        Main Grid & Metrics
        ═══════════════════════════════ */
-    .main-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 32px;
+    .elite-card { 
+      background: rgba(20, 20, 20, 0.4); 
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      border-radius: 32px; 
+      padding: 32px; 
+      position: relative; 
+      overflow: hidden; 
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
+    .elite-card:hover { 
+      background: rgba(20, 20, 20, 0.6);
+      border-color: rgba(217, 43, 43, 0.3); 
+      transform: translateY(-5px) scale(1.01); 
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 20px rgba(217, 43, 43, 0.1); 
+    }
+
+    .card-glow { position: absolute; inset: 0; background: radial-gradient(circle at top right, var(--red), transparent 70%); opacity: 0.03; pointer-events: none; }
 
     .metric-card {
       padding: 32px;
@@ -506,20 +512,19 @@ import { CommonModule, UpperCasePipe } from '@angular/common';
       box-shadow: 0 0 20px var(--red-pale);
     }
 
-    .registry-list { display: flex; flex-direction: column; }
     .registry-item {
       display: grid;
       grid-template-columns: 160px 1fr 320px;
       align-items: center;
-      padding: 24px 40px;
-      border-bottom: 1.5px solid var(--bdr);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 28px 40px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .registry-item:hover {
-      background: rgba(255, 255, 255, 0.02);
-      border-color: var(--bdr-hr);
-      transform: scale(1.002);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(217, 43, 43, 0.2);
+      transform: translateX(10px);
     }
 
     .ri-left {
