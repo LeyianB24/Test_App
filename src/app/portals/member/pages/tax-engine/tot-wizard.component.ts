@@ -148,7 +148,7 @@ export class TotWizardComponent implements OnInit {
   selectedQuarter = 'Q1';
   monthlyData = signal<MonthlyTurnover[]>([]);
 
-  totalGross = computed(() => this.monthlyData().reduce((acc, m) => acc + m.amount, 0));
+  totalGross = computed(() => this.monthlyData().reduce((acc: number, m) => acc + m.amount, 0));
   totalTax = computed(() => Math.round(this.totalGross() * 0.01));
 
   ngOnInit() {

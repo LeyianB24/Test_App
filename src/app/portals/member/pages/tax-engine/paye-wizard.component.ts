@@ -188,10 +188,10 @@ export class PayeWizardComponent implements OnInit {
   employees = signal<EmployeeRecord[]>([]);
 
   // Aggregate Computations
-  totalGross = computed(() => this.employees().reduce((acc, emp) => acc + emp.basicSalary, 0));
-  totalPaye = computed(() => this.employees().reduce((acc, emp) => acc + emp.paye, 0));
-  totalSha = computed(() => this.employees().reduce((acc, emp) => acc + emp.sha, 0));
-  totalHouseLevy = computed(() => this.employees().reduce((acc, emp) => acc + emp.houseLevy, 0));
+  totalGross = computed(() => this.employees().reduce((acc: number, emp) => acc + emp.basicSalary, 0));
+  totalPaye = computed(() => this.employees().reduce((acc: number, emp) => acc + emp.paye, 0));
+  totalSha = computed(() => this.employees().reduce((acc: number, emp) => acc + emp.sha, 0));
+  totalHouseLevy = computed(() => this.employees().reduce((acc: number, emp) => acc + emp.houseLevy, 0));
 
   ngOnInit() {}
 

@@ -1,4 +1,4 @@
-import { Component, signal, computed, ChangeDetectionStrategy, inject } from '@angular/common';
+import { Component, signal, computed, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface ReconciliationItem {
@@ -180,16 +180,16 @@ export class ReconciliationComponent {
     const currentFilter = this.filter();
     const currentItems = this.items();
     if (currentFilter === 'all') return currentItems;
-    return currentItems.filter(i => i.status.toLowerCase() === currentFilter);
+    return currentItems.filter((i: any) => i.status.toLowerCase() === currentFilter);
   });
 
-  matchesCount = computed(() => this.items().filter(i => i.status === 'Match').length);
-  discrepanciesCount = computed(() => this.items().filter(i => i.status === 'Discrepancy').length);
+  matchesCount = computed(() => this.items().filter((i: any) => i.status === 'Match').length);
+  discrepanciesCount = computed(() => this.items().filter((i: any) => i.status === 'Discrepancy').length);
 
   matchesPercent = computed(() => (this.matchesCount() / this.items().length) * 100);
   discrepanciesPercent = computed(() => (this.discrepanciesCount() / this.items().length) * 100);
 
-  totalVariance = computed(() => this.items().reduce((acc, i) => acc + i.variance, 0));
+  totalVariance = computed(() => this.items().reduce((acc: number, i) => acc + i.variance, 0));
 
   fetchPrepopulation() {
     console.log('Fetching statutory data...');

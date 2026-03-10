@@ -513,13 +513,13 @@ export class PaymentsEnhancedComponent implements OnInit {
   totalPending = computed(() =>
     this.payments()
       .filter(p => p.status === 'pending')
-      .reduce((sum, p) => sum + p.amount, 0)
+      .reduce((sum: number, p) => sum + p.amount, 0)
   );
 
   totalCompleted = computed(() =>
     this.payments()
       .filter(p => p.status === 'completed')
-      .reduce((sum, p) => sum + p.amount, 0)
+      .reduce((sum: number, p) => sum + p.amount, 0)
   );
 
   totalPages = computed(() => {

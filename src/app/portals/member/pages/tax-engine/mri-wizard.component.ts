@@ -141,7 +141,7 @@ export class MriWizardComponent implements OnInit {
     { id: '2', name: 'Kilimani Residencies', lrNumber: '1/3342/B', grossRent: 120000 }
   ]);
 
-  totalGross = computed(() => this.properties().reduce((acc, p) => acc + p.grossRent, 0));
+  totalGross = computed(() => this.properties().reduce((acc: number, p) => acc + p.grossRent, 0));
   totalTax = computed(() => Math.round(this.totalGross() * 0.075));
 
   ngOnInit() {}

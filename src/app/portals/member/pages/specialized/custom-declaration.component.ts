@@ -265,7 +265,7 @@ export class CustomDeclarationComponent {
   agreed = signal(false);
 
   totalValue = computed(() => {
-    return this.items().reduce((acc, item) => acc + (item.valueUsd || 0), 0);
+    return this.items().reduce((acc: number, item) => acc + (item.valueUsd || 0), 0);
   });
 
   addItem() {
