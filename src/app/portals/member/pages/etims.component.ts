@@ -21,12 +21,12 @@ import { EtimsService } from '../../../services/etims.service';
               FISCAL GATEWAY
             </div>
             <h1 class="premium-title">e<span class="text-red">TIMS</span> Registry</h1>
-            <p class="premium-subtitle">Electronic Tax Invoice Management System · Statutory Fiscal Synch</p>
+            <p class="premium-subtitle">Electronic Tax Invoice Management System · Statutory Fiscal Synchronization</p>
           </div>
           
           <div class="header-right">
-            <div class="sync-status">
-              <span class="live-dot"></span>
+            <div class="sync-status no-print">
+              <div class="live-dot"></div>
               LIVE SYNC ACTIVE
             </div>
             <button class="btn-primary-elite" (click)="showInvoiceDialog.set(true)">
@@ -52,33 +52,33 @@ import { EtimsService } from '../../../services/etims.service';
           <div class="elite-card metric-card group">
             <div class="card-glow"></div>
             <div class="card-icon">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/></svg>
+               <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/></svg>
             </div>
             <div class="metric-content">
               <span class="metric-label">NET REVENUE</span>
-              <div class="metric-value">KES {{ totalRevenue() | number:'1.0-0' }}</div>
+              <div class="metric-value">{{ totalRevenue() | currency:'KES ':'symbol':'1.0-0' }}</div>
             </div>
           </div>
 
           <div class="elite-card metric-card group">
             <div class="card-glow"></div>
-            <div class="card-icon text-red">
+            <div class="card-icon">
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
             </div>
             <div class="metric-content">
               <span class="metric-label">VAT OBLIGATION</span>
-              <div class="metric-value text-red">KES {{ totalTax() | number:'1.0-0' }}</div>
+              <div class="metric-value text-red">{{ totalTax() | currency:'KES ':'symbol':'1.0-0' }}</div>
             </div>
           </div>
 
           <div class="elite-card metric-card group">
             <div class="card-glow"></div>
-            <div class="card-icon text-green">
+            <div class="card-icon">
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 0 0112 2.944a11.955 0 01-8.618 3.04A12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
             </div>
             <div class="metric-content">
               <span class="metric-label">GATEWAY STATUS</span>
-              <div class="metric-value text-green">ONLINE</div>
+              <div class="metric-value text-red">SECURE</div>
             </div>
           </div>
         </div>
@@ -89,18 +89,19 @@ import { EtimsService } from '../../../services/etims.service';
           <div class="table-toolbar-elite">
             <div class="filter-tabs-elite">
               <button class="filter-tab-elite" [class.active]="activeFilter === 'all'" (click)="activeFilter = 'all'">
-                All <span class="tab-count-elite">{{ allInvoices().length }}</span>
+                ALL <span class="tab-count-elite">{{ allInvoices().length }}</span>
               </button>
               <button class="filter-tab-elite" [class.active]="activeFilter === 'synced'" (click)="activeFilter = 'synced'">
-                Synced <span class="tab-count-elite synced">{{ syncedInvoices().length }}</span>
+                SYNCED <span class="tab-count-elite synced">{{ syncedInvoices().length }}</span>
               </button>
               <button class="filter-tab-elite" [class.active]="activeFilter === 'pending'" (click)="activeFilter = 'pending'">
-                Pending <span class="tab-count-elite alert">{{ pendingInvoices().length }}</span>
+                PENDING <span class="tab-count-elite alert">{{ pendingInvoices().length }}</span>
               </button>
             </div>
+            
             <div class="search-box-elite">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-              <input type="text" placeholder="Trace invoices..." [(ngModel)]="searchQuery" (input)="onSearch()">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" placeholder="Search registry..." [(ngModel)]="searchQuery" (input)="onSearch()">
             </div>
           </div>
 
@@ -109,12 +110,12 @@ import { EtimsService } from '../../../services/etims.service';
               <div class="registry-item animate-fade-in" [class]="invoice.status">
                 <div class="ri-left">
                   <div class="ri-type">{{ invoice.invoiceNumber }}</div>
-                  <div class="ri-period">{{ invoice.date }}</div>
+                  <div class="ri-period">{{ invoice.date | date:'mediumDate' }}</div>
                 </div>
                 <div class="ri-center">
                   <div class="customer-info-elite">
                     <div class="customer-avatar-elite">{{ invoice.customerName.charAt(0) }}</div>
-                    <div class="customer-details-elite">
+                    <div class="customer-details">
                       <div class="customer-name-elite">{{ invoice.customerName }}</div>
                       <div class="ri-period">Verified Entity</div>
                     </div>
@@ -131,13 +132,14 @@ import { EtimsService } from '../../../services/etims.service';
                   </div>
                 </div>
                 <div class="ri-right">
-                  <span class="status-badge" [class]="invoice.status === 'synced' ? 'success' : (invoice.status === 'pending' ? 'alert' : 'danger')">
+                  <span class="status-badge" [class.success]="invoice.status === 'synced'" [class.alert]="invoice.status === 'pending'" [class.danger]="invoice.status === 'error'">
                     {{ invoice.status | uppercase }}
                   </span>
+                  
                   <div class="action-stack-elite">
                     @if (invoice.status === 'pending') {
                       <button class="btn-primary-elite btn-table-action" (click)="syncInvoice(invoice.id)" [disabled]="syncing() === invoice.id">
-                        {{ syncing() === invoice.id ? 'SYNCING...' : 'SYNC NOW' }}
+                        {{ syncing() === invoice.id ? 'SYNCING...' : 'SYNC' }}
                       </button>
                     } @else if (invoice.status === 'error') {
                       <button class="btn-primary-elite btn-table-action danger" (click)="retrySync(invoice.id)">RETRY</button>
@@ -149,10 +151,8 @@ import { EtimsService } from '../../../services/etims.service';
               </div>
             } @empty {
               <div class="empty-state-elite">
-                <div class="empty-icon text-muted">
-                  <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                </div>
-                <p>Registry Clear. No fiscal transactions match your search.</p>
+                <div class="empty-icon text-red">∅</div>
+                <p>Registry Clear. No fiscal records detected.</p>
               </div>
             }
           </div>
@@ -162,12 +162,12 @@ import { EtimsService } from '../../../services/etims.service';
       <!-- Filing Modal -->
       @if (showInvoiceDialog()) {
         <div class="modal-overlay-elite animate-fade-in">
-          <div class="modal-box elite-card animate-scale-in">
+          <div class="elite-card modal-box animate-scale-in">
             <div class="card-glow"></div>
             <div class="panel-header-elite">
-              <div class="header-left-stack">
+              <div>
                 <h3 class="panel-title">Filing <span class="text-red">Sequence</span></h3>
-                <p class="panel-desc">Generate eTIMS Synchronized Transaction</p>
+                <p class="panel-desc">Statutory eTIMS Transaction Registration</p>
               </div>
               <button class="close-btn" (click)="cancelInvoiceDialog()">✕</button>
             </div>
@@ -176,43 +176,41 @@ import { EtimsService } from '../../../services/etims.service';
               <div class="mpesa-form-elite">
                 <div class="input-group-elite">
                   <label>CUSTOMER / ENTITY NAME</label>
-                  <input type="text" [(ngModel)]="newInvoice.customerName" placeholder="e.g. Safaricom PLC or A000000000Z">
+                  <input type="text" [(ngModel)]="newInvoice.customerName" placeholder="e.g. SAFARICOM PLC / A001234567Z">
                 </div>
 
                 <div class="ri-center-grid">
                   <div class="input-group-elite">
-                    <label>NET AMOUNT (KES)</label>
+                    <label>NET VALUE (KES)</label>
                     <input type="number" [(ngModel)]="newInvoice.amount" placeholder="0.00">
                   </div>
                   <div class="input-group-elite">
                     <label>VAT PROTOCOL</label>
-                    <div class="select-wrap-elite">
-                      <select [(ngModel)]="newInvoice.taxRate">
-                        <option [ngValue]="0.16">16% — Standard Rate</option>
-                        <option [ngValue]="0">0% — Zero Rated</option>
-                        <option [ngValue]="0.08">8% — Reduced Rate</option>
-                      </select>
-                    </div>
+                    <select [(ngModel)]="newInvoice.taxRate">
+                      <option [ngValue]="0.16">16% STANDARD RATE</option>
+                      <option [ngValue]="0">0% ZERO RATED</option>
+                      <option [ngValue]="0.08">8% REDUCED RATE</option>
+                    </select>
                   </div>
                 </div>
 
                 @if (newInvoice.amount > 0) {
                   <div class="tax-matrix-preview">
-                    <div class="tm-row"><span>NET AMOUNT</span><span>KES {{ newInvoice.amount | number:'1.0-0' }}</span></div>
+                    <div class="tm-row"><span>NET VALUE</span><span>KES {{ newInvoice.amount | number:'1.0-0' }}</span></div>
                     <div class="tm-row"><span>VAT ({{ newInvoice.taxRate * 100 }}%)</span><span class="text-red">KES {{ (newInvoice.amount * newInvoice.taxRate) | number:'1.0-0' }}</span></div>
-                    <div class="tm-row total"><span>TOTAL PAYABLE</span><span class="text-red">KES {{ (newInvoice.amount * (1 + newInvoice.taxRate)) | number:'1.0-0' }}</span></div>
+                    <div class="tm-row total"><span>AGGREGATE PAYABLE</span><span class="text-red">KES {{ (newInvoice.amount * (1 + newInvoice.taxRate)) | number:'1.0-0' }}</span></div>
                   </div>
                 }
 
                 <div class="info-alert-elite">
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                  <span>This invoice will be immediately registered on the <strong>KRA National Ledger</strong> and cannot be revoked once committed.</span>
+                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 15v2m0-6V7m0 11a9 9 0 110-18 9 9 0 010 18z"/></svg>
+                  <span>This transaction will be committed to the <strong>KRA National Fiscal Ledger</strong>. Once synchronized, fiscal records cannot be revoked.</span>
                 </div>
 
                 <div class="form-actions-elite">
-                  <button class="btn-ghost-elite" (click)="cancelInvoiceDialog()" style="flex: 1">DISCARD</button>
-                  <button class="btn-primary-elite" (click)="createInvoice()" [disabled]="!newInvoice.customerName || !newInvoice.amount" style="flex: 2">
-                    COMMIT & SYNC TO KRA
+                  <button class="btn-ghost-elite flex-1" (click)="cancelInvoiceDialog()">ABORT</button>
+                  <button class="btn-primary-elite flex-1" (click)="createInvoice()" [disabled]="!newInvoice.customerName || !newInvoice.amount">
+                    COMMIT & SYNC
                   </button>
                 </div>
               </div>
@@ -223,696 +221,154 @@ import { EtimsService } from '../../../services/etims.service';
     </div>
   `,
   styles: [`
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
-
-    /* ═══════════════════════════════
-       CSS VARIABLES — KRA PALETTE
-    ═══════════════════════════════ */
     :host {
-      --kra-green: #1A7A3C;
-      --kra-green-light: #22A052;
-      --kra-green-pale: rgba(26,122,60,0.08);
-      --kra-green-glow: rgba(26,122,60,0.2);
-      --kra-red: #C0392B;
-      --kra-red-light: #E74C3C;
-      --kra-red-pale: rgba(192,57,43,0.08);
-      --kra-blue: #1565C0;
-      --kra-blue-pale: rgba(21,101,192,0.1);
-      --kra-gold: #F59E0B;
-      --kra-gold-pale: rgba(245,158,11,0.1);
+      --red:          #D92B2B;
+      --red-bright:   #EF3B3B;
+      --red-glow:     rgba(217, 43, 43, 0.38);
+      --red-pale:     rgba(217, 43, 43, 0.10);
+      --red-border:   rgba(217, 43, 43, 0.22);
 
-      --bg-base: #0B0F0E;
-      --bg-surface: #111916;
-      --bg-card: #14201A;
-      --bg-card-hover: #192820;
-      --bg-elevated: #1C2B22;
-      --border-subtle: rgba(26,122,60,0.15);
-      --border-mid: rgba(26,122,60,0.25);
-      --text-primary: #E8F5EC;
-      --text-secondary: #8EA898;
-      --text-muted: #4A6258;
+      --bg-root:      #0C0C0C;
+      --bg-card:      #141414;
+      --bg-card-2:    #1C1C1C;
+      
+      --text-pri:     #F0F0F0;
+      --text-sec:     #888888;
+      --text-mut:     #4A4A4A;
+
+      --bdr:          rgba(255, 255, 255, 0.08);
+      --bdr-md:       rgba(255, 255, 255, 0.14);
 
       font-family: 'Plus Jakarta Sans', sans-serif;
       display: block;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    /* ═══════════════ ROOT ══════════════ */
-    .etims-root {
-      min-height: 100vh;
-      background: var(--bg-base);
-      position: relative;
-      overflow-x: hidden;
-      color: var(--text-primary);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+    @media (prefers-color-scheme: light) {
+      :host {
+        --bg-root:    #F2F2F4;
+        --bg-card:    #FFFFFF;
+        --bg-card-2:  #F8F8FA;
+        --text-pri:   #111111;
+        --text-sec:   #555560;
+        --text-mut:   #9999A8;
+        --bdr:        rgba(0, 0, 0, 0.08);
+        --bdr-md:     rgba(0, 0, 0, 0.12);
+      }
     }
 
-    /* ═══════════════ AMBIENT BG ══════════════ */
-    .ambient-bg {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-    .ambient-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.12;
-    }
-    .orb-1 {
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, var(--kra-green) 0%, transparent 70%);
-      top: -200px; left: -100px;
-      animation: orbFloat 18s ease-in-out infinite alternate;
-    }
-    .orb-2 {
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, var(--kra-red) 0%, transparent 70%);
-      bottom: -100px; right: -50px;
-      animation: orbFloat 22s ease-in-out infinite alternate-reverse;
-    }
-    .grid-overlay {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(26,122,60,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(26,122,60,0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
-    }
-    @keyframes orbFloat {
-      from { transform: translate(0,0) scale(1); }
-      to   { transform: translate(40px, 30px) scale(1.1); }
-    }
+    .db-root { min-height: 100vh; background: var(--bg-root); color: var(--text-pri); position: relative; overflow-x: hidden; }
+    .db-inner { max-width: 1400px; margin: 0 auto; padding: 40px 28px 80px; display: flex; flex-direction: column; gap: 40px; position: relative; z-index: 10; }
 
-    /* ═══════════════ CONTENT ══════════════ */
-    .etims-content {
-      position: relative;
-      z-index: 1;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 32px 24px 64px;
-    }
+    .db-header-elite { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+    .premium-title { font-size: clamp(32px, 5vw, 42px); font-weight: 950; letter-spacing: -1.5px; line-height: 1; margin: 12px 0 8px; }
+    .text-red { color: var(--red); }
+    .premium-subtitle { font-size: 14px; font-weight: 500; color: var(--text-sec); max-width: 500px; }
 
-    /* ═══════════════ HEADER ══════════════ */
-    .page-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 36px;
-      flex-wrap: wrap;
-    }
-    .header-brand { display: flex; align-items: center; gap: 16px; }
-    .kra-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--kra-green);
-      color: #fff;
-      padding: 10px 16px;
-      border-radius: 14px;
-      font-weight: 800;
-      font-size: 13px;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 24px var(--kra-green-glow), 0 0 0 1px rgba(255,255,255,0.1) inset;
-      flex-shrink: 0;
-    }
-    .page-title {
-      font-size: clamp(22px, 4vw, 32px);
-      font-weight: 900;
-      color: var(--text-primary);
-      letter-spacing: -1px;
-      line-height: 1.1;
-    }
-    .title-accent { color: var(--kra-green-light); }
-    .page-subtitle {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      letter-spacing: 0.3px;
-      margin-top: 4px;
-    }
-    .header-actions { display: flex; align-items: center; gap: 14px; }
-    .live-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 50px;
-      padding: 8px 16px;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--kra-green-light);
-      letter-spacing: 1px;
-    }
-    .live-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--kra-green-light);
-      box-shadow: 0 0 6px var(--kra-green-light);
-      animation: pulse 1.8s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
-    }
-    .btn-generate {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--kra-green);
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      padding: 12px 22px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 20px var(--kra-green-glow);
-      white-space: nowrap;
-    }
-    .btn-generate:hover {
-      background: var(--kra-green-light);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 28px var(--kra-green-glow);
-    }
+    .live-badge { display: flex; align-items: center; gap: 7px; padding: 5px 12px; border-radius: 50px; background: var(--red-pale); border: 1px solid var(--red-border); font-size: 9px; font-weight: 900; letter-spacing: 1.5px; color: var(--red-bright); }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 10px var(--red); animation: blink 1.5s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    /* ═══════════════ STATS GRID ══════════════ */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-      margin-bottom: 28px;
-    }
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      padding: 24px;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      border-radius: 20px 20px 0 0;
-    }
-    .stat-invoices::before { background: var(--kra-blue); }
-    .stat-revenue::before { background: var(--kra-green-light); }
-    .stat-vat::before { background: var(--kra-red); }
-    .stat-status::before { background: var(--kra-gold); }
-    .stat-card:hover { transform: translateY(-2px); border-color: var(--border-mid); }
+    .sync-status { display: flex; align-items: center; gap: 8px; color: #10B981; font-size: 10px; font-weight: 800; letter-spacing: 1px; }
+    .header-right { display: flex; align-items: center; gap: 20px; }
 
-    .stat-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-    .stat-label {
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      color: var(--text-muted);
-    }
-    .stat-icon-wrap {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .icon-blue { background: var(--kra-blue-pale); color: #5B9BD5; }
-    .icon-green { background: var(--kra-green-pale); color: var(--kra-green-light); }
-    .icon-red { background: var(--kra-red-pale); color: var(--kra-red-light); }
-    .icon-gold { background: var(--kra-gold-pale); color: var(--kra-gold); }
+    .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .elite-card { background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 32px; position: relative; overflow: hidden; }
+    .card-glow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top right, var(--red-pale), transparent 40%); pointer-events: none; opacity: 0.6; }
 
-    .stat-value {
-      font-size: 32px;
-      font-weight: 900;
-      color: var(--text-primary);
-      line-height: 1;
-      letter-spacing: -1.5px;
-      margin-bottom: 12px;
-    }
-    .stat-value.compact { font-size: 22px; letter-spacing: -0.8px; }
-    .stat-value.gateway-online { color: var(--kra-green-light); font-size: 24px; letter-spacing: 2px; }
+    .metric-card { padding: 32px; display: flex; align-items: center; gap: 24px; transition: transform 0.3s; }
+    .metric-card:hover { transform: translateY(-4px); }
+    .card-icon { width: 64px; height: 64px; border-radius: 20px; display: flex; align-items: center; justify-content: center; background: var(--bg-card-2); border: 1px solid var(--bdr); color: var(--text-sec); }
+    .metric-label { font-size: 10px; font-weight: 800; color: var(--text-sec); letter-spacing: 1.5px; display: block; margin-bottom: 4px; }
+    .metric-value { font-size: 28px; font-weight: 950; color: var(--text-pri); }
 
-    .stat-footer { margin-bottom: 14px; }
-    .stat-delta {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 6px;
-    }
-    .stat-delta.positive { background: var(--kra-green-pale); color: var(--kra-green-light); }
-    .stat-delta.neutral { background: rgba(255,255,255,0.05); color: var(--text-secondary); }
+    .table-panel { padding: 0; }
+    .table-toolbar-elite { padding: 24px 32px; border-bottom: 1px solid var(--bdr); display: flex; justify-content: space-between; align-items: center; gap: 24px; background: rgba(255,255,255,0.01); }
+    .filter-tabs-elite { display: flex; background: var(--bg-root); padding: 4px; border-radius: 12px; border: 1px solid var(--bdr); }
+    .filter-tab-elite { padding: 8px 16px; border-radius: 8px; border: none; background: transparent; color: var(--text-sec); font-size: 9px; font-weight: 950; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
+    .filter-tab-elite.active { background: var(--bg-card); color: var(--text-pri); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    
+    .tab-count-elite { font-size: 8px; padding: 2px 6px; border-radius: 4px; background: var(--bg-card-2); color: var(--text-mut); }
+    .tab-count-elite.synced { color: #10B981; background: rgba(16, 185, 129, 0.1); }
+    .tab-count-elite.alert { color: var(--red); background: var(--red-pale); }
 
-    .stat-bar {
-      height: 3px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .stat-bar-fill {
-      height: 100%;
-      border-radius: 3px;
-      transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
-      opacity: 0.7;
-    }
-    .gateway-bars {
-      display: flex;
-      align-items: flex-end;
-      gap: 4px;
-      height: 20px;
-    }
-    .gbar {
-      flex: 1;
-      background: var(--kra-green-light);
-      border-radius: 2px;
-      opacity: 0.6;
-      animation: barPulse 1.5s ease-in-out infinite;
-    }
-    .gbar:nth-child(1) { animation-delay: 0s; }
-    .gbar:nth-child(2) { animation-delay: 0.15s; }
-    .gbar:nth-child(3) { animation-delay: 0.3s; }
-    .gbar:nth-child(4) { animation-delay: 0.45s; }
-    .gbar:nth-child(5) { animation-delay: 0.6s; }
-    .gbar:nth-child(6) { animation-delay: 0.75s; }
-    .gbar:nth-child(7) { animation-delay: 0.9s; }
-    @keyframes barPulse {
-      0%,100% { opacity: 0.4; transform: scaleY(0.7); }
-      50% { opacity: 0.9; transform: scaleY(1); }
-    }
+    .search-box-elite { position: relative; flex: 1; max-width: 400px; }
+    .search-box-elite svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-mut); }
+    .search-box-elite input { width: 100%; background: var(--bg-root); border: 1px solid var(--bdr); border-radius: 12px; padding: 10px 16px 10px 42px; font-size: 13px; color: var(--text-pri); outline: none; transition: all 0.3s; }
+    .search-box-elite input:focus { border-color: var(--red-border); background: var(--bg-card-2); }
 
-    /* ═══════════════ TABLE PANEL ══════════════ */
-    .table-panel {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      overflow: hidden;
-    }
+    .registry-list { display: flex; flex-direction: column; }
+    .registry-item { display: grid; grid-template-columns: 1.5fr 2fr 1fr 1.5fr; align-items: center; padding: 24px 32px; border-bottom: 1px solid var(--bdr); transition: all 0.2s; }
+    .registry-item:hover { background: var(--bg-card-2); transform: translateX(8px); }
+    .registry-item.synced { border-left: 4px solid #10B981; }
+    .registry-item.pending { border-left: 4px solid #F59E0B; }
+    .registry-item.error { border-left: 4px solid var(--red); }
 
-    .table-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border-subtle);
-      background: var(--bg-elevated);
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .filter-tabs {
-      display: flex;
-      gap: 4px;
-      background: var(--bg-surface);
-      border-radius: 12px;
-      padding: 4px;
-    }
-    .filter-tab {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: transparent;
-      border: none;
-      border-radius: 9px;
-      padding: 7px 14px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .filter-tab.active {
-      background: var(--bg-card);
-      color: var(--text-primary);
-      box-shadow: 0 1px 8px rgba(0,0,0,0.3);
-    }
-    .tab-count {
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 5px;
-      background: rgba(255,255,255,0.07);
-    }
-    .tab-count.synced { background: var(--kra-green-pale); color: var(--kra-green-light); }
-    .tab-count.pending { background: var(--kra-gold-pale); color: var(--kra-gold); }
-    .tab-count.error { background: var(--kra-red-pale); color: var(--kra-red-light); }
+    .ri-left { display: flex; flex-direction: column; gap: 2px; }
+    .ri-type { font-size: 15px; font-weight: 900; color: var(--text-pri); }
+    .ri-period { font-size: 11px; color: var(--text-sec); font-weight: 600; }
 
-    .search-box {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 10px 16px;
-      min-width: 260px;
-      transition: border-color 0.2s;
-    }
-    .search-box:focus-within { border-color: var(--kra-green); }
-    .search-box svg { color: var(--text-muted); flex-shrink: 0; }
-    .search-box input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text-primary);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px;
-      width: 100%;
-    }
-    .search-box input::placeholder { color: var(--text-muted); }
+    .customer-info-elite { display: flex; align-items: center; gap: 12px; }
+    .customer-avatar-elite { width: 36px; height: 36px; border-radius: 10px; background: var(--bg-card-3); display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--red); border: 1px solid var(--bdr); }
+    .customer-name-elite { font-size: 13px; font-weight: 700; color: var(--text-pri); }
 
-    .table-scroll { overflow-x: auto; }
-    .invoice-table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 700px;
-    }
-    .invoice-table thead tr {
-      background: var(--bg-elevated);
-      border-bottom: 1px solid var(--border-subtle);
-    }
-    .invoice-table th {
-      padding: 14px 20px;
-      text-align: left;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 1.2px;
-      color: var(--text-muted);
-    }
-    .invoice-table .text-right { text-align: right; }
-    .invoice-row {
-      border-bottom: 1px solid rgba(26,122,60,0.07);
-      transition: background 0.15s;
-    }
-    .invoice-row:last-child { border-bottom: none; }
-    .invoice-row:hover { background: var(--bg-card-hover); }
-    .invoice-table td {
-      padding: 16px 20px;
-      font-size: 13px;
-    }
+    .ri-stats-stack { display: flex; flex-direction: column; gap: 6px; }
+    .ri-stat-row { display: flex; gap: 12px; justify-content: space-between; max-width: 140px; }
+    .ri-stat-label { font-size: 8px; font-weight: 800; color: var(--text-mut); letter-spacing: 1px; }
+    .ri-stat-val { font-size: 12px; font-weight: 700; }
 
-    .invoice-number {
-      font-family: 'Courier New', monospace;
-      font-weight: 700;
-      color: var(--kra-green-light);
-      font-size: 12px;
-      letter-spacing: 0.5px;
-    }
-    .date-cell { color: var(--text-secondary); font-size: 12px; font-weight: 500; }
-    .customer-cell { display: flex; align-items: center; gap: 10px; }
-    .customer-avatar {
-      width: 34px; height: 34px;
-      border-radius: 10px;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 12px;
-      color: var(--kra-green-light);
-      flex-shrink: 0;
-    }
-    .customer-name { font-weight: 600; font-size: 13px; }
-    .amount-cell { font-weight: 700; font-size: 13px; }
-    .tax-cell { color: var(--text-secondary); font-size: 12px; font-weight: 600; }
+    .ri-right { display: flex; align-items: center; justify-content: flex-end; gap: 20px; }
+    .status-badge { padding: 4px 12px; border-radius: 50px; font-size: 9px; font-weight: 900; letter-spacing: 1px; }
+    .status-badge.success { background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.2); }
+    .status-badge.alert { background: rgba(245, 158, 11, 0.1); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.2); }
+    .status-badge.danger { background: var(--red-pale); color: var(--red); border: 1px solid var(--red-border); }
 
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      border-radius: 8px;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 1px;
-    }
-    .status-synced { background: var(--kra-green-pale); color: var(--kra-green-light); }
-    .status-pending { background: var(--kra-gold-pale); color: var(--kra-gold); }
-    .status-error { background: var(--kra-red-pale); color: var(--kra-red-light); }
-    .status-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: currentColor;
-    }
-    .status-synced .status-dot { box-shadow: 0 0 5px var(--kra-green-light); }
-    .status-pending .status-dot { animation: pulse 1.4s infinite; }
+    .action-stack-elite { display: flex; gap: 8px; }
+    .icon-btn-elite { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: var(--bg-card-3); border: 1px solid var(--bdr); color: var(--text-sec); cursor: pointer; transition: all 0.2s; }
+    .icon-btn-elite:hover { background: var(--red); color: #fff; border-color: var(--red); }
 
-    .action-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border: none;
-      border-radius: 9px;
-      padding: 8px 14px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 0.3px;
-    }
-    .action-sync {
-      background: var(--kra-green-pale);
-      color: var(--kra-green-light);
-      border: 1px solid rgba(26,122,60,0.2);
-    }
-    .action-sync:hover:not(:disabled) { background: var(--kra-green); color: #fff; }
-    .action-sync:disabled { opacity: 0.5; cursor: not-allowed; }
-    .action-retry {
-      background: var(--kra-red-pale);
-      color: var(--kra-red-light);
-      border: 1px solid rgba(192,57,43,0.2);
-    }
-    .action-retry:hover { background: var(--kra-red); color: #fff; }
-    .action-download {
-      background: rgba(255,255,255,0.04);
-      color: var(--text-secondary);
-      border: 1px solid var(--border-subtle);
-    }
-    .action-download:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); }
-    .spin { animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-table-action { padding: 6px 14px; font-size: 9px; border-radius: 8px; height: auto; }
+    .btn-table-action.danger { background: #333; color: var(--red); }
+    .btn-table-action.danger:hover { background: var(--red); color: white; }
 
-    .empty-state {
-      padding: 64px 24px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-    .empty-icon { color: var(--text-muted); margin-bottom: 8px; opacity: 0.5; }
-    .empty-title { font-weight: 700; font-size: 16px; }
-    .empty-sub { font-size: 13px; color: var(--text-secondary); }
+    .empty-state-elite { padding: 80px 0; text-align: center; color: var(--text-mut); }
+    .empty-icon { font-size: 40px; margin-bottom: 20px; opacity: 0.3; }
 
-    /* ═══════════════ MODAL ══════════════ */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(12px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 20px;
-      animation: fadeIn 0.2s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .modal-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-mid);
-      border-radius: 24px;
-      width: 100%;
-      max-width: 520px;
-      overflow: hidden;
-      animation: slideUp 0.25s cubic-bezier(0.34,1.56,0.64,1);
-      box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(26,122,60,0.1) inset;
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(24px) scale(0.97); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    .modal-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 24px;
-      border-bottom: 1px solid var(--border-subtle);
-      background: var(--bg-elevated);
-    }
-    .modal-header-icon {
-      width: 44px; height: 44px;
-      background: var(--kra-green-pale);
-      border: 1px solid rgba(26,122,60,0.2);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--kra-green-light);
-      flex-shrink: 0;
-    }
-    .modal-title { font-size: 17px; font-weight: 800; }
-    .modal-sub { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
-    .modal-close {
-      margin-left: auto;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      width: 36px; height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.2s;
-      flex-shrink: 0;
-    }
-    .modal-close:hover { background: var(--kra-red-pale); color: var(--kra-red-light); border-color: transparent; }
+    /* Modal Architecture */
+    .modal-overlay-elite { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 2rem; }
+    .modal-box { width: 100%; max-width: 540px; }
+    .panel-header-elite { padding: 32px; border-bottom: 1px solid var(--bdr); display: flex; justify-content: space-between; align-items: center; }
+    .panel-title { font-size: 16px; font-weight: 950; color: var(--text-mut); letter-spacing: 2px; text-transform: uppercase; }
+    .panel-desc { font-size: 11px; color: var(--text-sec); margin-top: 4px; }
+    .close-btn { width: 34px; height: 34px; border-radius: 10px; background: var(--bg-card-3); border: 1px solid var(--bdr); color: var(--text-sec); cursor: pointer; }
 
-    .modal-body { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
-    .field-group { display: flex; flex-direction: column; gap: 8px; }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .field-label { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; color: var(--text-secondary); text-transform: uppercase; }
-    .field-input, .field-select {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-primary);
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      width: 100%;
-    }
-    .field-input:focus, .field-select:focus {
-      border-color: var(--kra-green);
-      box-shadow: 0 0 0 3px var(--kra-green-pale);
-    }
-    .field-input::placeholder { color: var(--text-muted); }
-    .field-select { cursor: pointer; appearance: none; }
-    .field-select option { background: var(--bg-card); }
+    .modal-body-elite { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+    .mpesa-form-elite { display: flex; flex-direction: column; gap: 24px; }
+    .input-group-elite { display: flex; flex-direction: column; gap: 8px; }
+    .input-group-elite label { font-size: 9px; font-weight: 800; color: var(--text-mut); letter-spacing: 1.5px; }
+    .input-group-elite input, .input-group-elite select { background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 12px; padding: 12px 16px; color: var(--text-pri); font-size: 14px; outline: none; transition: 0.2s; }
+    .input-group-elite input:focus { border-color: var(--red); }
 
-    .tax-preview {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .tax-preview-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-    .tax-preview-row span:last-child { font-weight: 700; color: var(--text-primary); }
-    .tax-preview-row.total {
-      padding-top: 10px;
-      border-top: 1px solid var(--border-subtle);
-      color: var(--text-primary);
-      font-weight: 700;
-      font-size: 14px;
-    }
-    .tax-preview-row.total span:last-child { color: var(--kra-green-light); font-size: 16px; font-weight: 800; }
+    .ri-center-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .tax-matrix-preview { background: var(--bg-card-2); padding: 20px; border-radius: 16px; border: 1px solid var(--bdr); }
+    .tm-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-sec); margin-bottom: 8px; }
+    .tm-row.total { border-top: 1px solid var(--bdr); padding-top: 12px; margin-top: 12px; font-weight: 900; color: var(--text-pri); }
 
-    .kra-notice {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      background: var(--kra-green-pale);
-      border: 1px solid rgba(26,122,60,0.2);
-      border-radius: 12px;
-      padding: 14px 16px;
-      color: var(--kra-green-light);
-      font-size: 12px;
-      line-height: 1.6;
-    }
-    .kra-notice svg { flex-shrink: 0; margin-top: 2px; }
-    .kra-notice strong { font-weight: 700; }
+    .info-alert-elite { display: flex; gap: 12px; background: var(--red-pale); border: 1px solid var(--red-border); border-radius: 12px; padding: 16px; font-size: 11px; color: var(--text-sec); line-height: 1.5; }
+    .info-alert-elite strong { color: var(--text-pri); }
+    .form-actions-elite { display: flex; gap: 16px; }
 
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      padding: 20px 24px;
-      border-top: 1px solid var(--border-subtle);
-      background: var(--bg-elevated);
-    }
-    .btn-cancel {
-      background: transparent;
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 11px 20px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-cancel:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
-    .btn-commit {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--kra-green);
-      border: none;
-      border-radius: 10px;
-      padding: 11px 22px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 16px var(--kra-green-glow);
-    }
-    .btn-commit:hover:not(:disabled) { background: var(--kra-green-light); transform: translateY(-1px); }
-    .btn-commit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    /* Buttons */
+    .btn-primary-elite { background: var(--red); color: #fff; border: none; padding: 14px 24px; border-radius: 14px; font-size: 11px; font-weight: 900; letter-spacing: 1.5px; cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 16px var(--red-glow); display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .btn-primary-elite:hover:not(:disabled) { background: var(--red-bright); transform: translateY(-2px); }
+    .btn-primary-elite:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .mt-4 { margin-top: 16px; }
+    .btn-ghost-elite { background: var(--bg-card-2); color: var(--text-sec); border: 1px solid var(--bdr); padding: 14px 24px; border-radius: 14px; font-size: 11px; font-weight: 800; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
+    .btn-ghost-elite:hover { background: var(--bg-card-3); color: var(--text-pri); }
 
-    /* ═══════════════ RESPONSIVE ══════════════ */
-    @media (max-width: 1024px) {
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 640px) {
-      .etims-content { padding: 16px 16px 48px; }
-      .page-header { flex-direction: column; align-items: flex-start; }
-      .header-actions { width: 100%; justify-content: space-between; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .stat-card { padding: 18px; }
-      .stat-value { font-size: 24px; }
-      .stat-value.compact { font-size: 17px; }
-      .table-toolbar { flex-direction: column; align-items: stretch; }
-      .filter-tabs { overflow-x: auto; }
-      .search-box { min-width: 0; }
-      .field-row { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 400px) {
-      .stats-grid { grid-template-columns: 1fr; }
-      .kra-badge span { display: none; }
-    }
+    .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+    .animate-scale-in { animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
   `]
 })
 export class EtimsComponent {
