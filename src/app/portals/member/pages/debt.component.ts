@@ -166,10 +166,37 @@ import { environment } from '../../../../environments/environment';
       display: block;
     }
 
-    .db-root { min-height: 100vh; background: var(--bg-root); color: var(--text-pri); position: relative; overflow-x: hidden; }
-    .noise-overlay { position: fixed; inset: 0; background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAA6f7sBAAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAD1JREFUeNoVjEkOACAIA53/f9qFA9S0mSBYhS6Yp7mXqR8B1Zp6InoSpOqJ6EnUInoStYieRC2iF9GLaE30JPojDPoA9WpU6YIAAAAASUVORK5CYII=') repeat; opacity: 0.03; pointer-events: none; z-index: 1; }
-    .accent-bleed { position: fixed; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, var(--red-pale) 0%, transparent 70%); filter: blur(60px); pointer-events: none; z-index: 2; }
-    .db-inner { max-width: 1400px; margin: 0 auto; padding: 40px 28px 80px; position: relative; z-index: 10; display: flex; flex-direction: column; gap: 40px; }
+    .db-root { 
+      min-height: 100vh; 
+      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-pri); 
+      position: relative; 
+      overflow-x: hidden; 
+    }
+    
+    .db-root::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(217, 43, 43, 0.1), transparent 40%),
+                  radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8), transparent 60%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .noise-overlay { position: fixed; inset: 0; background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAA6f7sBAAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAD1JREFUeNoVjEkOACAIA53/f9qFA9S0mSBYhS6Yp7mXqR8B1Zp6InoSpOqJ6EnUInoStYieRC2iF9GLaE30JPojDPoA9WpU6YIAAAAASUVORK5CYII=') repeat; opacity: 0.02; pointer-events: none; z-index: 2; }
+    
+    .db-inner { 
+      max-width: 1400px; 
+      margin: 0 auto; 
+      padding: 40px 28px 80px; 
+      position: relative; 
+      z-index: 10; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 40px; 
+    }
 
     /* Header */
     .db-header-elite { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
@@ -195,8 +222,25 @@ import { environment } from '../../../../environments/environment';
 
     /* Cards & Grid */
     .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
-    .elite-card { background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 32px; position: relative; overflow: hidden; }
-    .card-glow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top right, var(--red-pale), transparent 40%); pointer-events: none; opacity: 0.6; }
+    .elite-card { 
+      background: rgba(20, 20, 20, 0.4); 
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--bdr); 
+      border-radius: 32px; 
+      position: relative; 
+      overflow: hidden; 
+    }
+    .card-glow { 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: radial-gradient(circle at top right, var(--red-pale), transparent 40%); 
+      pointer-events: none; 
+      opacity: 0.4; 
+    }
 
     .metric-card { padding: 32px; display: flex; align-items: center; gap: 24px; transition: transform 0.3s; }
     .metric-card:hover { transform: translateY(-4px); }

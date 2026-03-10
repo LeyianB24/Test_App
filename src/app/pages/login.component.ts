@@ -236,33 +236,42 @@ import { environment } from '../../environments/environment';
     .login-root {
       display: flex;
       min-height: 100dvh;
-      background: var(--bg);
+      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background-size: cover;
       transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
 
-      /* Variables - Synchronized with Elite 2.0 and User Request */
-      --bg:             var(--bg-root, #f4f3f0);
-      --bg-card:        var(--bg-surface-1, #ffffff);
-      --bg-input:       var(--bg-surface-2, #f8f7f5);
-      --bg-input-focus: var(--bg-surface-3, #ffffff);
-      --border:         var(--border-default, #e2dfd9);
-      --text-primary:   var(--text-primary, #141210);
-      --text-secondary: var(--text-secondary, #6b6560);
-      --text-muted:     var(--text-muted, #a09a94);
-      --accent:         var(--color-accent, #c1392b);
-      --accent-bg:      var(--color-accent-bg, #fdf2f1);
-      --accent-dim:     var(--color-accent-dim, #e8b4af);
-      --left-bg:        var(--brand-black, #141210);
-      --left-text:      var(--brand-white, #f4f3f0);
-      --left-muted:     rgba(255, 255, 255, 0.4);
+      /* Variables - Synchronized with Elite 2.0 */
+      --bg-card:        rgba(20, 18, 16, 0.4);
+      --bg-input:       rgba(255, 255, 255, 0.03);
+      --bg-input-focus: rgba(255, 255, 255, 0.06);
+      --border:         rgba(255, 255, 255, 0.08);
+      --text-primary:   #f0ede8;
+      --text-secondary: #a09a94;
+      --text-muted:     #6b6560;
+      --accent:         #D92B2B;
+      --accent-bg:      rgba(217, 43, 43, 0.1);
+      --accent-dim:     rgba(217, 43, 43, 0.22);
+      --left-bg:        transparent;
+      --left-text:      #f4f3f0;
+      --left-muted:     rgba(255, 255, 255, 0.6);
       --left-border:    rgba(255, 255, 255, 0.05);
-      --shadow-lg:      var(--shadow-xl);
-      --submit-bg:      var(--color-accent);
-      --submit-hover:   var(--color-accent-hover);
-      --r-xl:           var(--radius-xl, 24px);
-      --r-lg:           var(--radius-lg, 12px);
+      --shadow-lg:      0 40px 80px rgba(0,0,0,0.6);
+      --submit-bg:      #D92B2B;
+      --r-xl:           32px;
+      --r-lg:           16px;
       --tr:             200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .login-root::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(217, 43, 43, 0.15), transparent 40%),
+                  radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8), transparent 60%);
+      pointer-events: none;
+      z-index: 1;
     }
 
     .login-root[data-theme="dark"] {
@@ -413,10 +422,15 @@ import { environment } from '../../environments/environment';
     .right-inner { width: 100%; max-width: 480px; }
 
     .form-card {
-      background: var(--bg-card); border: 1px solid var(--border);
+      background: var(--bg-card); 
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
       border-radius: var(--r-xl); padding: 48px; box-shadow: var(--shadow-lg);
       transform-origin: center;
       animation: card-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      position: relative;
+      z-index: 10;
     }
     @keyframes card-in {
       from { opacity: 0; transform: translateY(30px) scale(0.98); }
@@ -427,7 +441,7 @@ import { environment } from '../../environments/environment';
     .form-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
     .session-badge {
       display: flex; align-items: center; gap: 8px;
-      font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+      font-size: 10px; font-weight: 800; letter-spacing: 0.15em;
       color: var(--accent); background: var(--accent-bg);
       border: 1px solid var(--accent-dim); padding: 6px 14px;
       border-radius: 30px;
