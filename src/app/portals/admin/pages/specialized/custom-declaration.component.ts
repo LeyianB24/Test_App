@@ -1,251 +1,302 @@
-import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { CommonModule as NgCommon } from '@angular/common';
 
 @Component({
   selector: 'app-custom-declaration',
-  imports: [FormsModule],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgCommon, FormsModule, ReactiveFormsModule],
   template: `
-    <div class="page-container p-8 animate-up">
-      <header class="page-header-elite mb-10">
-        <div class="header-info">
-          <h1 class="premium-title">Customs <span class="gradient-text">Declaration</span></h1>
-          <p class="premium-subtitle">Declare goods and assets at the port of entry</p>
-        </div>
-        <div class="header-actions">
-          <div class="status-pill-elite active">
-            <span class="dot"></span>
-            Secure Form
+    <div class="db-root">
+      <div class="noise-overlay"></div>
+      
+      <div class="content-area animate-stagger">
+        
+        <!-- Customs Header Manifold -->
+        <header class="mb-14 overflow-hidden relative group">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-10 relative z-10">
+            <div class="space-y-2">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-1.5 h-6 bg-accent rounded-full shadow-[0_0_12px_var(--color-accent)]"></div>
+                <span class="text-[10px] font-black text-accent uppercase tracking-[0.4em]">Cross-Border Asset Control</span>
+              </div>
+              <h1 class="text-5xl font-black text-primary tracking-tighter uppercase leading-none">
+                Customs <span class="text-stroke-sm">Manifold</span>
+              </h1>
+              <p class="text-[10px] font-black text-muted uppercase tracking-[0.3em] flex items-center gap-3">
+                AUTHORIZED DECLARATION PROTOCOL // NODE: CST-KRA-08
+              </p>
+            </div>
+
+            <div class="flex items-center gap-6">
+               <div class="status-pill-precision online py-2 px-5 bg-white/5 border-white/10">
+                 <span class="status-pill-dot animate-pulse shadow-[0_0_8px_var(--color-success)]"></span>
+                 BORDER CONTROL SYNC ACTIVE
+               </div>
+            </div>
           </div>
-        </div>
-      </header>
-    
-      <div class="max-w-4xl mx-auto">
-        <!-- Elite Stepper -->
-        <div class="elite-stepper mb-12">
-          @for (s of steps; track s; let i = $index) {
-            <div class="elite-step" [class.active]="currentStep() === i" [class.done]="currentStep() > i">
-              <div class="step-blob">
-                @if (currentStep() > i) {
-                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                } @else {
-                  {{ i + 1 }}
-                }
-              </div>
-              <span class="step-text">{{ s }}</span>
-            </div>
-            @if (i < steps.length - 1) {
-              <div class="step-connector" [class.done]="currentStep() > i"></div>
-            }
-          }
-        </div>
-    
-        <div class="content-card-premium p-10 relative overflow-hidden">
-          <div class="absolute -top-20 -left-20 w-60 h-60 bg-red-50 rounded-full blur-3xl opacity-40"></div>
-    
-          @if (currentStep() === 0) {
-            <div class="step-content animate-fade-in relative z-10">
-              <div class="flex items-center gap-3 mb-8">
-                <div class="w-1 h-6 bg-red-600 rounded-full"></div>
-                <h3 class="text-xl font-black text-slate-800">Traveler Details</h3>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="field-group">
-                  <label class="premium-label">Full Name</label>
-                  <input type="text" [(ngModel)]="formData.name" class="search-input-elite w-full py-4 px-6" placeholder="e.g. John Doe"/>
+        </header>
+
+        <!-- Elite Stepper Manifold -->
+        <div class="glass-panel overflow-hidden border-white/5 bg-white/[0.01]">
+           <div class="flex border-b border-white/5 bg-white/[0.02]">
+              @for (step of steps; track step.id) {
+                <div class="flex-1 p-10 flex flex-col items-center gap-4 relative transition-all" [class.opacity-30]="currentStep() < step.id">
+                   <div class="w-12 h-12 rounded-2xl flex items-center justify-center border font-black text-sm transition-all shadow-2xl" 
+                      [class]="currentStep() === step.id ? 'bg-accent border-accent text-white shadow-[0_0_20px_var(--color-accent)]' : (currentStep() > step.id ? 'bg-[var(--color-success)] border-[var(--color-success)] text-white' : 'bg-white/5 border-white/10 text-muted')">
+                      @if (currentStep() > step.id) {
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                      } @else {
+                        {{ step.id }}
+                      }
+                   </div>
+                   <span class="text-[10px] font-black uppercase tracking-[0.3em]" [class.text-primary]="currentStep() === step.id" [class.text-muted]="currentStep() !== step.id">
+                      {{ step.label }}
+                   </span>
+                   @if ($index < steps.length - 1) {
+                     <div class="absolute right-[-2.5%] top-[2.5rem] w-[5%] h-[1px] bg-white/10 hidden xl:block"></div>
+                   }
                 </div>
-                <div class="field-group">
-                  <label class="premium-label">Passport Number</label>
-                  <input type="text" [(ngModel)]="formData.passport" class="search-input-elite w-full py-4 px-6" placeholder="e.g. AK1234567"/>
-                </div>
-                <div class="field-group">
-                  <label class="premium-label">Flight/Vessel Number</label>
-                  <input type="text" [(ngModel)]="formData.flight" class="search-input-elite w-full py-4 px-6" placeholder="e.g. KQ101"/>
-                </div>
-                <div class="field-group">
-                  <label class="premium-label">Country of Origin</label>
-                  <input type="text" [(ngModel)]="formData.origin" class="search-input-elite w-full py-4 px-6" placeholder="e.g. United Kingdom"/>
-                </div>
-              </div>
-            </div>
-          }
-    
-          @if (currentStep() === 1) {
-            <div class="step-content animate-fade-in relative z-10">
-              <div class="flex items-center gap-3 mb-8">
-                <div class="w-1 h-6 bg-red-600 rounded-full"></div>
-                <h3 class="text-xl font-black text-slate-800">Declare Goods</h3>
-              </div>
-    
-              <div class="space-y-4 mb-10">
-                @for (item of formData.items; track item.id; let i = $index) {
-                  <div class="item-row-elite flex gap-4 items-center">
-                    <input type="text" [(ngModel)]="item.description" class="search-input-elite flex-[3] py-4 px-6" placeholder="Item Description"/>
-                    <div class="relative flex-1">
-                      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
-                      <input type="number" [(ngModel)]="item.value" class="search-input-elite w-full py-4 pl-8 pr-4" placeholder="Value"/>
+              }
+           </div>
+
+           <div class="p-14 min-h-[500px]">
+              <form [formGroup]="declarationForm" (ngSubmit)="submit()">
+                 
+                 <!-- Step 1: Identity Vector -->
+                 @if (currentStep() === 1) {
+                    <div class="animate-stagger space-y-12">
+                       <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                          <div class="space-y-4">
+                             <label class="text-[10px] font-black uppercase tracking-[0.3em] text-muted ml-2">National ID PIN</label>
+                             <input type="text" formControlName="travelerPin" class="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-sm font-black text-primary focus:border-accent outline-none uppercase tracking-widest placeholder:text-muted/20" placeholder="A001234567X">
+                          </div>
+                          <div class="space-y-4">
+                             <label class="text-[10px] font-black uppercase tracking-[0.3em] text-muted ml-2">Identity Passport Vector</label>
+                             <input type="text" formControlName="passportNo" class="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-sm font-black text-primary focus:border-accent outline-none uppercase tracking-widest placeholder:text-muted/20" placeholder="AK123456">
+                          </div>
+                       </div>
+                       <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                          <div class="space-y-4">
+                             <label class="text-[10px] font-black uppercase tracking-[0.3em] text-muted ml-2">Temporal Arrival</label>
+                             <input type="date" formControlName="arrivalDate" class="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-sm font-black text-primary focus:border-accent outline-none">
+                          </div>
+                          <div class="space-y-4">
+                             <label class="text-[10px] font-black uppercase tracking-[0.3em] text-muted ml-2">Transit Manifest ID</label>
+                             <input type="text" formControlName="flightNumber" class="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-sm font-black text-primary focus:border-accent outline-none uppercase tracking-widest" placeholder="KQ 101">
+                          </div>
+                          <div class="space-y-4">
+                             <label class="text-[10px] font-black uppercase tracking-[0.3em] text-muted ml-2">Origin Hub</label>
+                             <input type="text" formControlName="origin" class="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-sm font-black text-primary focus:border-accent outline-none uppercase tracking-tight" placeholder="LONDON (LHR)">
+                          </div>
+                       </div>
                     </div>
-                    <button (click)="removeItem(i)" class="icon-btn-elite text-red-500">
-                      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                 }
+
+                 <!-- Step 2: Asset Declaration -->
+                 @if (currentStep() === 2) {
+                    <div class="animate-stagger space-y-12">
+                       <div class="p-8 rounded-3xl bg-accent/5 border border-accent/20 flex items-center justify-between mb-10">
+                          <div class="flex items-center gap-6">
+                             <div class="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center text-accent">
+                                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                             </div>
+                             <p class="text-[10px] font-black text-primary uppercase tracking-widest">Mandatory: Declare all assets exceeding KES 500,000 threshold</p>
+                          </div>
+                       </div>
+                       
+                       <div class="space-y-4">
+                          <label class="text-[10px] font-black uppercase tracking-[0.3em] text-muted ml-2">Asset Spectrum Description</label>
+                          <textarea formControlName="goodsDescription" rows="4" class="w-full bg-white/[0.03] border border-white/10 rounded-[2rem] py-8 px-10 text-sm font-black text-primary focus:border-accent outline-none uppercase tracking-tight placeholder:text-muted/20" placeholder="Specify all taxable quantities and asset fragments..."></textarea>
+                       </div>
+
+                       <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                          <div class="space-y-4">
+                             <label class="text-[10px] font-black uppercase tracking-[0.3em] text-muted ml-2">Aggregate Value Vector (USD)</label>
+                             <input type="number" formControlName="value" class="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-sm font-black text-primary focus:border-accent outline-none tabular-nums font-mono" placeholder="0.00">
+                          </div>
+                          <div class="space-y-4">
+                             <label class="text-[10px] font-black uppercase tracking-[0.3em] text-muted ml-2">Currency Protocol</label>
+                             <select formControlName="currency" class="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-sm font-black text-primary focus:border-accent outline-none uppercase appearance-none cursor-pointer">
+                                <option value="USD">UNITED STATES DOLLAR (USD)</option>
+                                <option value="EUR">EURO ZONE (EUR)</option>
+                                <option value="GBP">BRITISH POUND (GBP)</option>
+                                <option value="KES">KENYAN SHILLING (KES)</option>
+                             </select>
+                          </div>
+                       </div>
+                    </div>
+                 }
+
+                 <!-- Step 3: Commitment Protocol -->
+                 @if (currentStep() === 3) {
+                    <div class="animate-stagger flex flex-col items-center justify-center text-center gap-12 py-10">
+                       <div class="w-32 h-32 rounded-[3.5rem] bg-[var(--color-success)]/10 text-[var(--color-success)] flex items-center justify-center border border-[var(--color-success)]/20 shadow-[0_0_50px_rgba(16,185,129,0.1)]">
+                          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                       </div>
+                       <div class="space-y-4 max-w-xl">
+                          <h3 class="text-3xl font-black text-primary uppercase tracking-tighter">Legal Commitment Array</h3>
+                          <p class="text-[11px] font-bold text-muted uppercase tracking-[0.2em] leading-relaxed">By committing this fragment, I certify that all asset telemetry provided is accurate and exhaustive according to the National Customs Protocol Act.</p>
+                       </div>
+                       
+                       <div class="p-8 rounded-3xl bg-white/5 border border-white/5 w-full max-w-2xl text-left grid grid-cols-2 gap-8">
+                          <div>
+                            <span class="text-[9px] font-black text-muted uppercase tracking-widest block mb-2">PIN VECTOR</span>
+                            <span class="text-xs font-black text-primary uppercase tracking-tighter">{{ declarationForm.value.travelerPin || 'UNSPECIFIED' }}</span>
+                          </div>
+                          <div>
+                            <span class="text-[9px] font-black text-muted uppercase tracking-widest block mb-2">AGGREGATE VALUE</span>
+                            <span class="text-xs font-black text-accent uppercase tracking-tighter">{{ declarationForm.value.value }} {{ declarationForm.value.currency }}</span>
+                          </div>
+                       </div>
+                    </div>
+                 }
+
+                 <div class="flex justify-between items-center pt-14 border-t border-white/5">
+                    <button type="button" (click)="prevStep()" [disabled]="currentStep() === 1" 
+                       class="btn-precision online !bg-white/5 !border-white/10 !text-primary disabled:opacity-20">
+                       VOID PREVIOUS
                     </button>
-                  </div>
-                }
-                <button (click)="addItem()" class="modern-btn-elite-sm w-full py-4 flex items-center justify-center gap-2 mt-4 hover:bg-slate-50 transition-colors">
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M12 4v16m8-8H4"/></svg>
-                  Add Item
-                </button>
-              </div>
-    
-              <div class="p-8 bg-slate-900 rounded-[2rem] text-white shadow-2xl relative overflow-hidden group">
-                <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-red-600 rounded-full blur-3xl opacity-20 transition-transform group-hover:scale-150"></div>
-                <div class="flex justify-between items-center relative z-10">
-                  <div>
-                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Total Value</span>
-                    <p class="text-xs text-slate-500 mt-1">Total value of declared items</p>
-                  </div>
-                  <span class="text-4xl font-black gradient-text">USD {{ calculateTotal().toLocaleString() }}</span>
-                </div>
-              </div>
-            </div>
-          }
-    
-          @if (currentStep() === 2) {
-            <div class="step-content text-center py-10 animate-fade-in relative z-10">
-              @if (!isSubmitted()) {
-                <div class="confirmation">
-                  <div class="w-20 h-20 bg-red-50 text-red-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-inner">
-                    <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                  </div>
-                  <h3 class="text-3xl font-black text-slate-800 mb-4">Declaration Summary</h3>
-                  <p class="text-slate-500 mb-10 max-w-md mx-auto leading-relaxed">
-                    Please confirm that all information is complete and correct. False declarations may result in penalties.
-                  </p>
-                  <label class="flex items-center gap-4 justify-center mb-12 cursor-pointer group p-6 rounded-3xl hover:bg-slate-50 transition-colors border-2 border-transparent hover:border-slate-100">
-                    <input type="checkbox" [(ngModel)]="formData.agreed" class="w-6 h-6 rounded-lg border-2 border-slate-300 text-red-600 focus:ring-red-500">
-                    <span class="text-sm font-black text-slate-700 uppercase tracking-wide">I confirm that this declaration is correct</span>
-                  </label>
-                </div>
-              } @else {
-                <div class="success-state">
-                  <div class="w-24 h-24 bg-emerald-500 text-white rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 shadow-xl shadow-emerald-200 animate-bounce">
-                    <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="4" d="M5 13l4 4L19 7"/></svg>
-                  </div>
-                  <h3 class="text-3xl font-black text-slate-800 mb-2">Declaration Submitted</h3>
-                  <p class="text-slate-500 mb-10 font-mono text-sm">TRANSACTION_REF: KRA-CUST-88-{{ refNumber }}</p>
-                  <div class="flex gap-4 justify-center">
-                    <button class="modern-btn primary-btn shadow-lg" (click)="reset()">New Entry</button>
-                    <button class="modern-btn outline-btn">Download PDF</button>
-                  </div>
-                </div>
-              }
-            </div>
-          }
+                    
+                    @if (currentStep() < 3) {
+                      <button type="button" (click)="nextStep()" class="btn-precision online !bg-primary !text-white !border-none shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+                         CONTINUE TRAJECTORY
+                      </button>
+                    } @else {
+                      <button type="submit" [disabled]="submitting() || declarationForm.invalid" 
+                         class="btn-precision online !bg-accent !text-white !border-none shadow-[0_0_30px_var(--color-accent)] animate-pulse">
+                         {{ submitting() ? 'COMMITING...' : 'FINALIZE DECLARATION' }}
+                      </button>
+                    }
+                 </div>
+              </form>
+           </div>
         </div>
-    
-        @if (!isSubmitted()) {
-          <div class="nav-btns flex justify-between mt-12 px-2">
-            <button class="modern-btn outline-btn" [disabled]="currentStep() === 0" (click)="prev()">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mr-2"><path stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
-              Back
-            </button>
-            <button class="modern-btn primary-btn px-10" [disabled]="!canNext()" (click)="next()">
-              {{ currentStep() === 2 ? 'Submit Declaration' : 'Next' }}
-              @if (currentStep() < 2) {
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="ml-2"><path stroke-width="3" d="M9 5l7 7-7 7"/></svg>
-              }
-            </button>
-          </div>
+
+        @if (success()) {
+           <div class="fixed inset-0 z-[2000] flex items-center justify-center p-8 backdrop-blur-3xl bg-black/90 animate-fade-in">
+              <div class="text-center space-y-12">
+                 <div class="w-40 h-40 bg-[var(--color-success)] text-white rounded-[4rem] flex items-center justify-center mx-auto shadow-[0_0_100px_rgba(16,185,129,0.3)] animate-scale">
+                    <svg width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="4" d="M5 13l4 4L19 7"/></svg>
+                 </div>
+                 <div class="space-y-4">
+                    <h2 class="text-5xl font-black text-primary uppercase tracking-tighter">Protocol Committed</h2>
+                    <p class="text-[11px] font-black text-muted uppercase tracking-[0.4em]">Asset declaration signature has been successfully logged in the National Matrix.</p>
+                 </div>
+                 <button (click)="success.set(false); reset()" class="btn-precision online !px-20">Acknowledge Command</button>
+              </div>
+           </div>
         }
       </div>
     </div>
-    `,
+  `,
   styles: [`
-    .page-container { max-width: 1200px; margin: 0 auto; }
-    .animate-up { animation: up 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-    @keyframes up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Elite Stepper */
-    .elite-stepper { display: flex; align-items: center; gap: 12px; }
-    .elite-step { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; position: relative; }
-    .step-blob { 
-      width: 44px; height: 44px; border-radius: 16px; display: flex; align-items: center; justify-content: center; 
-      font-weight: 900; border: 2px solid #e2e8f0; color: #94a3b8; background: white; z-index: 2; transition: 0.3s;
+    .db-root {
+      min-height: 100vh;
+      background: #050505;
+      position: relative;
+      overflow-x: hidden;
+      color: #e2e8f0;
+      padding: 3.5rem;
     }
-    .elite-step.active .step-blob { border-color: #e31e24; color: #e31e24; transform: scale(1.1); box-shadow: 0 8px 20px rgba(227,30,36,0.15); }
-    .elite-step.done .step-blob { background: #10b981; border-color: #10b981; color: white; }
-    .step-text { font-size: 0.6rem; font-weight: 950; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.5px; }
-    .elite-step.active .step-text { color: #1e293b; }
-    
-    .step-connector { flex: 1; height: 3px; background: #f1f5f9; margin-top: -32px; border-radius: 10px; }
-    .step-connector.done { background: #10b981; }
 
-    .premium-label { display: block; font-size: 0.65rem; font-weight: 950; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; padding-left: 4px; }
-    
-    .item-row-elite { animation: slideIn 0.3s ease-out; }
-    @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.015;
+      pointer-events: none;
+      z-index: 1;
+    }
 
-    .animate-fade-in { animation: fadeIn 0.4s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .content-area {
+      position: relative;
+      z-index: 2;
+      max-width: 1700px;
+      margin: 0 auto;
+    }
 
-    .content-card-premium { border-radius: 40px; }
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 2.5rem;
+    }
+
+    .status-pill-precision {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .online { color: #10b981; }
+    .status-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    .text-stroke-sm {
+      -webkit-text-stroke: 1px currentColor;
+      color: transparent;
+    }
+
+    .animate-stagger > * {
+      animation: stg 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes stg { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .animate-scale { animation: sc 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    @keyframes sc { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    .animate-fade-in { animation: fi 0.4s ease-out; }
+    @keyframes fi { from { opacity: 0; } to { opacity: 1; } }
   `]
 })
 export class CustomDeclarationComponent {
-  steps = ['Traveler', 'Goods', 'Confirm'];
-  currentStep = signal(0);
-  isSubmitted = signal(false);
-  refNumber = Math.floor(100000 + Math.random() * 900000);
+  private fb = inject(FormBuilder);
 
-  formData = {
-    name: '',
-    passport: '',
-    flight: '',
-    origin: '',
-    items: [{ id: 1, description: '', value: 0 }],
-    agreed: false
-  };
+  currentStep = signal(1);
+  submitting = signal(false);
+  success = signal(false);
 
-  calculateTotal() {
-    return this.formData.items.reduce((acc, item) => acc + (item.value || 0), 0);
-  }
+  steps = [
+    { id: 1, label: 'Identity Vector' },
+    { id: 2, label: 'Asset Spectrum' },
+    { id: 3, label: 'Legal Commitment' }
+  ];
 
-  addItem() {
-    this.formData.items.push({ id: Date.now(), description: '', value: 0 });
-  }
+  declarationForm = this.fb.group({
+    travelerPin: ['', [Validators.required]],
+    passportNo: ['', [Validators.required]],
+    arrivalDate: ['', [Validators.required]],
+    flightNumber: ['', [Validators.required]],
+    origin: ['', [Validators.required]],
+    goodsDescription: ['', [Validators.required]],
+    value: [0, [Validators.required, Validators.min(0)]],
+    currency: ['USD', [Validators.required]]
+  });
 
-  removeItem(index: number) {
-    this.formData.items.splice(index, 1);
-  }
+  nextStep() { if (this.currentStep() < 3) this.currentStep.update(s => s + 1); }
+  prevStep() { if (this.currentStep() > 1) this.currentStep.update(s => s - 1); }
 
-  canNext() {
-    if (this.currentStep() === 0) return this.formData.name && this.formData.passport;
-    if (this.currentStep() === 2) return this.formData.agreed;
-    return true;
-  }
-
-  next() {
-    if (this.currentStep() === 2) {
-      this.isSubmitted.set(true);
-    } else {
-      this.currentStep.set(this.currentStep() + 1);
-    }
-  }
-
-  prev() {
-    this.currentStep.set(this.currentStep() - 1);
+  submit() {
+    if (this.declarationForm.invalid) return;
+    this.submitting.set(true);
+    setTimeout(() => {
+      this.submitting.set(false);
+      this.success.set(true);
+    }, 2000);
   }
 
   reset() {
-    this.currentStep.set(0);
-    this.isSubmitted.set(false);
-    this.formData = {
-      name: '',
-      passport: '',
-      flight: '',
-      origin: '',
-      items: [{ id: 1, description: '', value: 0 }],
-      agreed: false
-    };
-    this.refNumber = Math.floor(100000 + Math.random() * 900000);
+    this.declarationForm.reset({ currency: 'USD', value: 0 });
+    this.currentStep.set(1);
   }
 }

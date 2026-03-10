@@ -1,358 +1,331 @@
-import { Component, inject, computed, signal, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../../../core/services/auth.service';
-import { DashboardDataService } from '../../../../services/dashboard-data.service';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { AuthService, UserProfile } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-profile',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgOptimizedImage],
   template: `
-    <div class="page-container animate-up">
-    
-      <!-- Elite Page Header -->
-      <header class="page-header-elite">
-        <div class="header-info">
-          <h1 class="premium-title">User <span class="gradient-text">Profile</span></h1>
-          <p class="premium-subtitle">Manage your account details and preferences</p>
-        </div>
-        <div class="header-actions">
-          <button class="modern-btn outline-btn sm" (click)="downloadCertificate()">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 16h16M4 12h16M4 18h16" stroke-width="2.5"/></svg>
-            Download PIN Certificate
-          </button>
-          <button class="modern-btn primary-btn" (click)="showEditModal.set(true)">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="3"/></svg>
-            Edit Profile
-          </button>
-        </div>
-      </header>
-    
-      <div class="profile-grid-luxury">
-    
-        <!-- Left Column: Identity Core -->
-        <div class="profile-core-hub">
-          <div class="id-card-luxury animate-up delay-1">
-            <div class="id-inner-glass">
-              <div class="id-header-v">
-                <div class="id-avatar-box">
-                  {{ getInitials(user()?.name) }}
-                  <div class="id-badge-verified">
-                    <svg width="12" height="12" fill="white" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" /></svg>
-                  </div>
-                </div>
-                <div class="id-title-v">
-                  <h2 class="id-name-elite">{{ user()?.name }}</h2>
-                  <span class="id-type-tag">{{ user()?.type }} Resident</span>
-                </div>
+    <div class="db-root">
+      <div class="noise-overlay"></div>
+      
+      <div class="content-area animate-stagger">
+        
+        <!-- Identity Header Manifold -->
+        <header class="mb-14 overflow-hidden relative group">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-10 relative z-10">
+            <div class="space-y-2">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-1.5 h-6 bg-accent rounded-full shadow-[0_0_12px_var(--color-accent)]"></div>
+                <span class="text-[10px] font-black text-accent uppercase tracking-[0.4em]">Administrative Credential Control</span>
               </div>
-    
-              <div class="compliance-pulse-v mt-32">
-                <div class="p-labels">
-                  <span class="p-tag">PROFILE COMPLETENESS</span>
-                  <span class="p-val">{{ complianceProgress() }}%</span>
-                </div>
-                <div class="p-track-lux">
-                  <div class="p-fill-lux" [style.width.%]="complianceProgress()"></div>
-                </div>
-                <p class="p-hint-v">{{ complianceProgress() === 100 ? 'Profile is complete' : 'Update your address to reach 100%' }}</p>
-              </div>
-    
-              <div class="id-footer-v mt-40">
-                <div class="id-stat-unit">
-                  <span class="isu-label">KRA PIN</span>
-                  <span class="isu-val mono">{{ user()?.taxpayer_id }}</span>
-                </div>
-                <div class="isu-divider"></div>
-                <div class="id-stat-unit">
-                  <span class="isu-label">REGISTERED ON</span>
-                  <span class="isu-val">{{ user()?.registrationDate | date:'MMM yyyy' }}</span>
-                </div>
-              </div>
+              <h1 class="text-5xl font-black text-primary tracking-tighter uppercase leading-none">
+                Identity <span class="text-stroke-sm">Matrix</span>
+              </h1>
+              <p class="text-[10px] font-black text-muted uppercase tracking-[0.3em] flex items-center gap-3">
+                SECURE AUTHENTICATION NODE // TERMINAL: ID-KRA-NODE-01
+              </p>
+            </div>
+
+            <div class="flex items-center gap-6">
+               <button (click)="openEditOverlay()" class="btn-precision online !bg-white/5 !border-white/10 !text-primary hover:!bg-accent/10 hover:!border-accent/40 !px-10 transition-all">
+                  RECALIBRATE IDENTITY
+               </button>
             </div>
           </div>
-    
-          <!-- Connectivity & Domicile -->
-          <div class="content-card-premium mt-32 animate-up delay-2">
-            <div class="card-p-header">
-              <div class="ch-icon-ring green">
-                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-width="2.2"/></svg>
-              </div>
-              <div class="p-title-group">
-                <h3 class="card-p-title">Contact Information</h3>
-                <p class="card-p-subtitle">Your verified contact details</p>
-              </div>
-            </div>
-            <div class="luxury-info-stack p-32">
-              <div class="li-item">
-                <span class="li-label">Email Address</span>
-                <div class="li-val-row">
-                  <span class="li-val">{{ user()?.email }}</span>
-                  <span class="verify-status">VERIFIED</span>
-                </div>
-              </div>
-              <div class="li-item">
-                <span class="li-label">Phone Number</span>
-                <span class="li-val">{{ taxpayer()?.phone || '07XXXXXXXX' }}</span>
-              </div>
-              <div class="li-item full">
-                <span class="li-label">Physical Address</span>
-                <span class="li-val">{{ taxpayer()?.address || 'Nairobi, Kenya' }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-    
-        <!-- Right Column: Legal Mandates -->
-        <div class="profile-mandate-hub">
-          <div class="content-card-premium animate-up delay-2">
-            <div class="card-p-header">
-              <div class="ch-icon-ring blue">
-                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2.2"/></svg>
-              </div>
-              <div class="p-title-group">
-                <h3 class="card-p-title">Tax Obligations</h3>
-                <p class="card-p-subtitle">Active tax obligations linked to your account</p>
-              </div>
-            </div>
-            <div class="luxury-mandate-list p-32">
-              @for (ob of obligations(); track ob.id) {
-                <div class="mandate-item-elite">
-                  <div class="m-icon-box">
-                    {{ ob.obligation_name.substring(0, 2).toUpperCase() }}
-                  </div>
-                  <div class="m-content">
-                    <h4 class="m-title">{{ ob.obligation_name }}</h4>
-                    <div class="m-meta-stack">
-                      <span>Effective Date: {{ ob.effective_from }}</span>
-                      <span class="m-sep">|</span>
-                      <span>Cycle: Monthly</span>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+           
+           <!-- Identity Card Luxury -->
+           <div class="lg:col-span-12 xl:col-span-8">
+              <div class="glass-panel p-1 border-white/10 shadow-2xl relative group overflow-hidden bg-gradient-to-br from-white/[0.05] to-transparent">
+                 <div class="p-12 md:p-16 flex flex-col md:flex-row gap-14 relative z-10">
+                    
+                    <!-- Profile Avatar Projection -->
+                    <div class="relative shrink-0">
+                       <div class="w-48 h-48 rounded-[3.5rem] bg-surface-2 border border-white/10 overflow-hidden relative group/avatar">
+                          <div class="absolute inset-0 bg-accent/20 opacity-0 group-hover/avatar:opacity-100 transition-opacity"></div>
+                          @if (profile()?.profile_image) {
+                            <img [src]="profile()?.profile_image" alt="Admin Avatar" class="w-full h-full object-cover">
+                          } @else {
+                            <div class="w-full h-full flex items-center justify-center text-4xl font-black text-primary bg-white/5">
+                               {{ profile()?.name?.substring(0, 2)?.toUpperCase() }}
+                            </div>
+                          }
+                          <div class="absolute bottom-4 right-4 w-6 h-6 rounded-full bg-[var(--color-success)] border-4 border-[#050505] shadow-[0_0_15px_var(--color-success)]"></div>
+                       </div>
+                       <div class="mt-8 text-center md:text-left space-y-2">
+                          <span class="text-[10px] font-black text-accent uppercase tracking-[0.4em]">Rank Identifier</span>
+                          <p class="text-sm font-black text-primary uppercase tracking-widest">{{ profile()?.role || 'SYSTEM ADMIN' }}</p>
+                       </div>
                     </div>
-                  </div>
-                  <div class="m-status-wrap">
-                    <div class="status-pill-elite synced">
-                      <span class="dot"></span> ACTIVE
+
+                    <!-- Credential Fragments -->
+                    <div class="flex-1 space-y-12">
+                       <div class="space-y-2">
+                          <h2 class="text-4xl font-black text-primary uppercase tracking-tighter">{{ profile()?.name }}</h2>
+                          <div class="flex flex-wrap items-center gap-4">
+                             <div class="status-pill-precision online !px-3 !py-1 text-[8px]">PRIMARY ACCOUNT</div>
+                             <span class="text-[11px] font-black text-muted tracking-widest uppercase">{{ profile()?.email }}</span>
+                          </div>
+                       </div>
+
+                       <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                          <div class="space-y-2">
+                             <span class="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Administrative PIN</span>
+                             <div class="flex items-center gap-4">
+                                <span class="text-lg font-black text-primary tracking-widest font-mono uppercase">{{ profile()?.taxpayer_id || 'A000000000X' }}</span>
+                                <button (click)="copyPin()" class="text-accent hover:text-primary transition-colors">
+                                   <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                </button>
+                             </div>
+                          </div>
+                          <div class="space-y-2">
+                             <span class="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Node Cluster</span>
+                             <p class="text-lg font-black text-primary tracking-tighter uppercase">{{ profile()?.station || 'NAIROBI NORTH COMMAND' }}</p>
+                          </div>
+                          <div class="space-y-2">
+                             <span class="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Communication Vector</span>
+                             <p class="text-lg font-black text-primary tracking-tighter tabular-nums">{{ profile()?.phone || '+254 XXX XXX XXX' }}</p>
+                          </div>
+                          <div class="space-y-2">
+                             <span class="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Physical Registry</span>
+                             <p class="text-lg font-black text-primary tracking-tighter uppercase truncate max-w-[200px]">{{ profile()?.address || 'TIMES TOWER, NRB' }}</p>
+                          </div>
+                       </div>
                     </div>
-                  </div>
-                </div>
-                } @empty {
-                <div class="empty-placeholder" style="padding: 40px 0;">
-                  <p>No active obligations found.</p>
-                </div>
-              }
-            </div>
-          </div>
-    
-          <div class="content-card-premium mt-32 animate-up delay-3">
-            <div class="card-p-header">
-              <div class="p-title-group">
-                <h3 class="card-p-title">Verification Status</h3>
-                <p class="card-p-subtitle">Account verification timeline</p>
+                 </div>
+
+                 <!-- Background Chips Decoration -->
+                 <div class="absolute top-10 right-10 w-4 h-20 bg-accent/10 skew-x-[45deg] blur-sm"></div>
+                 <div class="absolute top-10 right-20 w-8 h-20 bg-primary/5 skew-x-[45deg] blur-sm"></div>
               </div>
-            </div>
-            <div class="integrity-timeline p-32">
-              <div class="it-unit">
-                <div class="it-dot active"></div>
-                <div class="it-text">
-                  <span class="it-title">National ID Verification</span>
-                  <span class="it-desc">Verified successfully against the national ID database</span>
-                </div>
+           </div>
+
+           <!-- Sidebar Telemetry -->
+           <div class="lg:col-span-12 xl:col-span-4 space-y-10">
+              
+              <!-- Verification Flux -->
+              <div class="glass-panel p-10 space-y-10 bg-white/[0.01] border-white/5">
+                 <h4 class="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Security Integrity</h4>
+                 <div class="flex items-center gap-8">
+                    <div class="w-16 h-16 rounded-full border-4 border-white/5 flex items-center justify-center relative">
+                       <svg viewBox="0 0 36 36" class="absolute inset-0 w-full h-full transform -rotate-90">
+                          <circle cx="18" cy="18" r="16" fill="none" class="stroke-accent" stroke-width="4" stroke-dasharray="100, 100" stroke-dashoffset="15"></circle>
+                       </svg>
+                       <span class="text-[10px] font-black text-primary">85%</span>
+                    </div>
+                    <div class="space-y-1">
+                       <span class="text-xs font-black text-primary uppercase tracking-tighter">Bio-Shield Sync</span>
+                       <p class="text-[9px] font-black text-muted uppercase tracking-widest opacity-60">High Integrity Factor</p>
+                    </div>
+                 </div>
+                 <div class="space-y-4 pt-4">
+                    <div class="flex justify-between items-center bg-white/5 p-4 rounded-xl border border-white/5">
+                       <span class="text-[9px] font-black text-muted uppercase tracking-widest">2FA STATUS</span>
+                       <span class="text-[9px] font-black text-[var(--color-success)] uppercase tracking-widest">ENABLED</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-white/5 p-4 rounded-xl border border-white/5">
+                       <span class="text-[9px] font-black text-muted uppercase tracking-widest">ENCRYPTION LVL</span>
+                       <span class="text-[9px] font-black text-accent uppercase tracking-widest">TIER-X</span>
+                    </div>
+                 </div>
               </div>
-              <div class="it-unit">
-                <div class="it-dot active"></div>
-                <div class="it-text">
-                  <span class="it-title">PIN Verification</span>
-                  <span class="it-desc">Verified as the authorized owner of this PIN</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    
-      </div>
-    
-      <!-- Elite Edit Overlay -->
-      @if (showEditModal()) {
-        <div class="dialog-overlay-elite animate-fade" (click)="showEditModal.set(false)">
-          <div class="elite-dialog-card animate-scale" (click)="$event.stopPropagation()">
-            <div class="dialog-header-luxury">
-              <div class="header-icon-ring">
-                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="white"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="3"/></svg>
-              </div>
-              <div class="header-text-v">
-                <h3>Update Profile</h3>
-                <p>Update your contact and address information</p>
-              </div>
-              <button class="close-luxury-circular" (click)="showEditModal.set(false)">✕</button>
-            </div>
-            <div class="dialog-content-luxury">
-              <div class="luxury-form-stack">
-                <div class="form-item-elite">
-                  <label>Phone Number</label>
-                  <input type="text" [(ngModel)]="editData.phone" placeholder="+254 XXX XXX XXX" class="luxury-input-elite">
-                </div>
-                <div class="form-item-elite">
-                  <label>Physical Address</label>
-                  <textarea rows="3" [(ngModel)]="editData.address" placeholder="Enter full address" class="luxury-input-elite"></textarea>
-                </div>
-              </div>
-              <div class="policy-notice-luxury">
-                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2.5"/></svg>
-                <span>A verification code will be sent to your email.</span>
-              </div>
-            </div>
-            <div class="dialog-footer-luxury">
-              <button class="modern-btn outline-btn sm" (click)="showEditModal.set(false)">Cancel</button>
-              <button class="modern-btn primary-btn" (click)="saveProfile()" [disabled]="isSaving()">
-                {{ isSaving() ? 'SAVING...' : 'SAVE CHANGES' }}
+
+              <!-- Certificate Extraction -->
+              <button (click)="downloadCertificate()" class="w-full glass-panel p-8 text-left hover:border-accent/40 transition-all group/cert relative overflow-hidden">
+                 <div class="absolute inset-0 bg-accent/5 opacity-0 group-hover/cert:opacity-100 transition-opacity"></div>
+                 <div class="flex items-center gap-8 relative z-10">
+                    <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-accent group-hover:scale-110 transition-transform">
+                       <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <div class="space-y-1">
+                       <span class="text-[11px] font-black text-primary uppercase tracking-widest block">Extract PIN Certificate</span>
+                       <span class="text-[9px] font-black text-muted uppercase tracking-widest block opacity-60">Authorized PDF Vector</span>
+                    </div>
+                 </div>
               </button>
-            </div>
-          </div>
+           </div>
+
+        </div>
+      </div>
+
+      <!-- Identity Recalibration Overlay -->
+      @if (showEditOverlay()) {
+        <div class="fixed inset-0 z-[1000] flex items-center justify-center p-8 backdrop-blur-3xl bg-black/80 animate-fade-in">
+           <div class="w-full max-w-2xl glass-panel relative overflow-hidden animate-scale border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)]">
+              <div class="p-12 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
+                 <div class="space-y-2">
+                    <div class="flex items-center gap-3">
+                       <div class="w-1 h-4 bg-accent rounded-full"></div>
+                       <span class="text-[10px] font-black text-accent uppercase tracking-[0.4em]">Secure Repositing</span>
+                    </div>
+                    <h2 class="text-4xl font-black text-primary uppercase tracking-tighter">Recalibrate Identity</h2>
+                 </div>
+                 <button (click)="closeEditOverlay()" class="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 hover:bg-accent/10 transition-all flex items-center justify-center">
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
+                 </button>
+              </div>
+
+              <form [formGroup]="editForm" (ngSubmit)="saveProfile()" class="p-12 space-y-12">
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-4">
+                       <label class="text-[10px] font-black uppercase tracking-[0.3em] text-muted ml-2">Communication Vector</label>
+                       <input type="text" formControlName="phone" class="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-sm font-black text-primary focus:border-accent outline-none tabular-nums font-mono">
+                    </div>
+                    <div class="space-y-4">
+                       <label class="text-[10px] font-black uppercase tracking-[0.3em] text-muted ml-2">Digital Signature</label>
+                       <input type="email" formControlName="email" class="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-sm font-black text-primary focus:border-accent outline-none">
+                    </div>
+                 </div>
+                 <div class="space-y-4">
+                    <label class="text-[10px] font-black uppercase tracking-[0.3em] text-muted ml-2">Registry Physical Vector</label>
+                    <input type="text" formControlName="address" class="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-sm font-black text-primary focus:border-accent outline-none uppercase tracking-tight">
+                 </div>
+
+                 <div class="flex justify-end gap-6 pt-10 border-t border-white/5">
+                    <button type="button" (click)="closeEditOverlay()" class="btn-precision online !bg-white/5 !border-white/10 !text-primary">ABORT COMMAND</button>
+                    <button type="submit" [disabled]="submitting() || editForm.invalid" class="btn-precision online !bg-accent !text-white !border-none shadow-[0_0_20px_var(--color-accent)]">
+                       {{ submitting() ? 'COMMITING...' : 'COMMIT PROFILE' }}
+                    </button>
+                 </div>
+              </form>
+           </div>
         </div>
       }
-    
     </div>
-    `,
+  `,
   styles: [`
-    .profile-grid-luxury { display: grid; grid-template-columns: 1fr 450px; gap: 40px; }
-    
-    .id-card-luxury {
-      background: var(--kra-gradient); border-radius: 40px; padding: 1px;
-      box-shadow: 0 30px 60px rgba(227, 30, 36, 0.15);
+    .db-root {
+      min-height: 100vh;
+      background: #050505;
+      position: relative;
+      overflow-x: hidden;
+      color: #e2e8f0;
+      padding: 3.5rem;
     }
-    .id-inner-glass {
-      background: rgba(10, 34, 61, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-radius: 39px; padding: 40px; color: white;
+
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.015;
+      pointer-events: none;
+      z-index: 1;
     }
-    .id-header-v { display: flex; align-items: center; gap: 32px; }
-    .id-avatar-box {
-      width: 100px; height: 100px; background: white; border-radius: 32px;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 900; font-size: 2.2rem; color: var(--kra-red); position: relative;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+
+    .content-area {
+      position: relative;
+      z-index: 2;
+      max-width: 1700px;
+      margin: 0 auto;
     }
-    .id-badge-verified {
-      position: absolute; bottom: -8px; right: -8px; width: 32px; height: 32px;
-      background: #10B981; border: 4px solid #1a223d; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(16,185,129,0.3);
+
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 2.5rem;
     }
-    .id-name-elite { font-size: 2.2rem; font-weight: 900; margin: 0; letter-spacing: -1.5px; }
-    .id-type-tag { font-size: 0.85rem; font-weight: 800; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; }
 
-    .compliance-pulse-v .p-labels { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
-    .p-tag { font-size: 0.75rem; font-weight: 900; color: rgba(255,255,255,0.5); letter-spacing: 1px; }
-    .p-val { font-size: 1.1rem; font-weight: 900; }
-    .p-track-lux { height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; overflow: hidden; }
-    .p-fill-lux { height: 100%; background: white; box-shadow: 0 0 15px rgba(255,255,255,0.5); border-radius: 5px; }
-    .p-hint-v { font-size: 0.8rem; color: rgba(255,255,255,0.5); font-weight: 600; margin-top: 10px; }
-
-    .id-footer-v { display: flex; gap: 50px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); }
-    .isu-label { font-size: 0.7rem; font-weight: 900; color: rgba(255,255,255,0.4); display: block; margin-bottom: 4px; letter-spacing: 1px; }
-    .isu-val { font-size: 1.15rem; font-weight: 800; }
-    .isu-val.mono { font-family: 'Courier New', monospace; letter-spacing: 1px; color: #60A5FA; }
-    .isu-divider { width: 1px; background: rgba(255,255,255,0.1); }
-
-    .luxury-info-stack { display: flex; flex-direction: column; gap: 32px; }
-    .li-item { display: flex; flex-direction: column; gap: 8px; }
-    .li-label { font-size: 0.75rem; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; }
-    .li-val { font-size: 1.1rem; font-weight: 800; color: #1a202c; }
-    .li-val-row { display: flex; align-items: center; gap: 16px; }
-    .verify-status { font-size: 0.65rem; font-weight: 900; color: #10B981; background: #ECFDF5; padding: 4px 10px; border-radius: 8px; }
-
-    .luxury-mandate-list { display: flex; flex-direction: column; gap: 16px; }
-    .mandate-item-elite {
-      display: flex; align-items: center; gap: 20px; padding: 24px; background: #F8FAFC;
-      border-radius: 24px; border: 1.5px solid #E2E8F0; transition: 0.3s;
+    .status-pill-precision {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.03);
     }
-    .mandate-item-elite:hover { transform: translateX(10px); background: white; border-color: var(--kra-red); }
-    .m-icon-box { width: 44px; height: 44px; background: white; border: 2px solid #E2E8F0; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--kra-blue); }
-    .m-title { font-size: 1rem; font-weight: 900; color: #1a202c; margin: 0; }
-    .m-meta-stack { font-size: 0.8rem; color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 10px; margin-top: 4px; }
-    .m-sep { color: #CBD5E1; }
 
-    .integrity-timeline { display: flex; flex-direction: column; gap: 32px; }
-    .it-unit { display: flex; gap: 20px; align-items: flex-start; }
-    .it-dot { width: 14px; height: 14px; border-radius: 50%; background: #E2E8F0; margin-top: 6px; flex-shrink: 0; }
-    .it-dot.active { background: #10B981; box-shadow: 0 0 10px rgba(16,185,129,0.4); border: 3px solid white; outline: 1px solid #10B981; }
-    .it-title { font-weight: 800; font-size: 1rem; color: #1a202c; display: block; }
-    .it-desc { font-size: 0.85rem; color: #64748b; font-weight: 600; margin-top: 2px; display: block; }
+    .online { color: #10b981; border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.05); }
 
-    /* Dialog/Overlay Extras */
-    .dialog-overlay-elite { position: fixed; inset: 0; background: rgba(10, 10, 11, 0.5); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-    .elite-dialog-card { background: white; width: 100%; max-width: 600px; border-radius: 40px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); border-top: 6px solid var(--kra-red); }
-    .dialog-header-luxury { padding: 40px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; gap: 24px; position: relative; }
-    .header-icon-ring { width: 56px; height: 56px; background: var(--kra-red); border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(227, 30, 36, 0.2); }
-    .header-text-v h3 { font-size: 1.4rem; font-weight: 900; color: #1a202c; margin: 0; letter-spacing: -0.5px; }
-    .header-text-v p { font-size: 0.9rem; color: #64748b; font-weight: 600; margin-top: 4px; }
-    .close-luxury-circular { position: absolute; top: 30px; right: 30px; width: 44px; height: 44px; border-radius: 50%; border: none; background: #F1F5F9; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-    .close-luxury-circular:hover { background: #fee2e2; color: #ef4444; }
-
-    .dialog-content-luxury { padding: 40px; }
-    .luxury-form-stack { display: flex; flex-direction: column; gap: 32px; }
-    .form-item-elite { display: flex; flex-direction: column; gap: 12px; }
-    .form-item-elite label { font-size: 0.75rem; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; }
-    
-    .luxury-input-elite { width: 100%; padding: 18px 24px; background: #F8FAFC; border: 2.5px solid #E2E8F0; border-radius: 20px; font-weight: 800; color: #1a202c; font-size: 1.05rem; transition: 0.3s; font-family: inherit; }
-    .luxury-input-elite:focus { border-color: var(--kra-red); outline: none; background: white; box-shadow: 0 0 0 6px rgba(227,30,36,0.1); }
-    
-    .policy-notice-luxury { margin-top: 40px; padding: 20px; background: #E0F2FE; border-radius: 18px; border: 1.5px solid #BAE6FD; display: flex; align-items: center; gap: 16px; color: #0369A1; font-weight: 700; font-size: 0.9rem; }
-    .dialog-footer-luxury { padding: 32px 40px; background: #F8FAFC; border-top: 1px solid #E2E8F0; display: flex; justify-content: flex-end; gap: 20px; }
-
-    .p-32 { padding: 32px; }
-
-    @media (max-width: 1200px) {
-       .profile-grid-luxury { grid-template-columns: 1fr; }
+    .text-stroke-sm {
+      -webkit-text-stroke: 1px currentColor;
+      color: transparent;
     }
-    @media (max-width: 768px) {
-       .id-header-v { flex-direction: column; text-align: center; gap: 20px; }
-       .id-footer-v { flex-direction: column; gap: 20px; text-align: center; }
-       .isu-divider { display: none; }
-       .id-name-elite { font-size: 1.8rem; }
-       .p-val { font-size: 1rem; }
-       .luxury-info-stack { padding: 20px; gap: 24px; }
-       .li-val { font-size: 1rem; }
-       .luxury-mandate-list { padding: 20px; }
-       .mandate-item-elite { padding: 16px; gap: 12px; }
-       .m-icon-box { width: 36px; height: 36px; font-size: 0.8rem; }
-       .m-title { font-size: 0.9rem; }
+
+    .animate-stagger > * {
+      animation: stg 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
+    @keyframes stg { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .animate-scale { animation: sc 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    @keyframes sc { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    .animate-fade-in { animation: fi 0.4s ease-out; }
+    @keyframes fi { from { opacity: 0; } to { opacity: 1; } }
   `]
 })
-export class ProfileComponent {
-  private authService = inject(AuthService);
-  private dashboardData = inject(DashboardDataService);
+export class ProfileComponent implements OnInit {
+  private authSvc = inject(AuthService);
+  private fb = inject(FormBuilder);
 
-  user = this.authService.currentUser;
-  taxpayer = this.dashboardData.taxpayerProfile;
-  obligations = this.dashboardData.obligations;
+  profile = signal<UserProfile | null>(null);
+  showEditOverlay = signal(false);
+  submitting = signal(false);
 
-  showEditModal = signal(false);
-  isSaving = signal(false);
-  complianceProgress = signal(100);
+  editForm = this.fb.group({
+    name: [''],
+    email: ['', [Validators.required, Validators.email]],
+    phone: [''],
+    address: ['']
+  });
 
-  editData = {
-    phone: this.taxpayer()?.phone || '0700123456',
-    address: this.taxpayer()?.address || 'Nairobi, Kenya'
-  };
+  ngOnInit() {
+    this.loadProfile();
+  }
+
+  loadProfile() {
+    this.authSvc.getProfile().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.profile.set(res.data);
+          this.editForm.patchValue({
+             name: res.data.name,
+             email: res.data.email,
+             phone: res.data.phone,
+             address: res.data.address
+          });
+        }
+      }
+    });
+  }
+
+  openEditOverlay() { this.showEditOverlay.set(true); }
+  closeEditOverlay() { this.showEditOverlay.set(false); }
 
   saveProfile() {
-    this.isSaving.set(true);
-    setTimeout(() => {
-      this.isSaving.set(false);
-      this.showEditModal.set(false);
-      alert('Profile updated successfully.');
-    }, 1500);
+    if (this.editForm.invalid) return;
+    this.submitting.set(true);
+    this.authSvc.updateProfile(this.editForm.value as any).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.loadProfile();
+          this.closeEditOverlay();
+        }
+        this.submitting.set(false);
+      },
+      error: () => this.submitting.set(false)
+    });
+  }
+
+  copyPin() {
+    const pin = this.profile()?.taxpayer_id || 'A000000000X';
+    navigator.clipboard.writeText(pin);
+    console.log('PIN copied to clipboard protocol');
   }
 
   downloadCertificate() {
-    alert('Downloading PIN Certificate (PDF)...');
-  }
-
-  getInitials(name: string | undefined): string {
-    if (!name) return 'TP';
-    const parts = name.split(' ');
-    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-    return name.substring(0, 2).toUpperCase();
+     console.log('Initiating PIN certificate extraction protocol...');
   }
 }
