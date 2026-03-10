@@ -1,163 +1,289 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, UpperCasePipe],
   template: `
-    <div class="page-container animate-fade-in">
-      <header class="mb-10 lg:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
-        <div>
-          <div class="flex items-center gap-3 mb-2">
-            <span class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
-              <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-              TAXPAYER IDENTITY
-            </span>
+    <div class="db-root animate-fade-in">
+      <div class="noise-overlay"></div>
+      <div class="accent-bleed"></div>
+
+      <div class="db-inner">
+        <!-- Elite Header -->
+        <header class="db-header-elite">
+          <div class="header-left">
+            <div class="live-badge">
+              <span class="live-dot"></span>
+              TAXPAYER IDENTITY SECURE
+            </div>
+            <h1 class="premium-title">Taxpayer <span class="text-red">Profile</span></h1>
+            <p class="premium-subtitle">Authorized registry of statutory identity, demographic data, and biometric status</p>
           </div>
-          <h1 class="premium-title">Taxpayer <span class="gradient-text">Profile</span></h1>
-          <p class="premium-subtitle">Authorized registry of statutory identity, demographic data, and biometric status</p>
-        </div>
-        <div class="flex gap-4">
-           <button class="modern-btn border-white/10 text-slate-400 flex items-center gap-2 px-6 py-4 rounded-2xl hover:bg-white/[0.05] hover:text-white transition-all">
+          <div class="action-stack">
+            <button class="btn-ghost-elite">
               <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-              Download PIN Certificate
-           </button>
-           <button class="modern-btn primary-btn py-4 px-8 shadow-xl shadow-blue-500/20 elite-glow">
-              Update Particulars
-           </button>
-        </div>
-      </header>
+              PIN CERTIFICATE
+            </button>
+            <button class="btn-primary-elite">
+              UPDATE PARTICULARS
+            </button>
+          </div>
+        </header>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Sidebar Profile info -->
-        <div class="lg:col-span-1 space-y-8">
-           <div class="glass-panel p-10 text-center relative overflow-hidden group border-blue-500/20 bg-blue-500/5">
-              <div class="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all duration-700"></div>
+        <div class="dashboard-grid-elite">
+          <!-- Sidebar: Identity Matrix -->
+          <div class="side-stack-elite">
+            <div class="elite-card identity-focus">
+              <div class="card-glow"></div>
               
-              <div class="w-32 h-32 rounded-[2.5rem] bg-slate-900 border border-white/5 mx-auto mb-8 flex items-center justify-center relative z-10 shadow-2xl overflow-hidden group-hover:border-blue-500/30 transition-all">
-                 <div class="absolute inset-0 bg-blue-500/5 blur-xl"></div>
-                 <svg class="w-16 h-16 text-slate-700 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+              <div class="avatar-capsule">
+                <div class="avatar-ring"></div>
+                <div class="avatar-content">
+                  <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                </div>
               </div>
-              
-              <h2 class="text-2xl font-black text-white tracking-tighter mb-2 relative z-10">{{ profile().name }}</h2>
-              <div class="flex flex-col items-center gap-3 relative z-10">
-                 <span class="px-3 py-1 bg-slate-900 border border-white/10 rounded-lg text-[10px] font-black text-blue-400 uppercase tracking-widest shadow-lg">{{ profile().pin }}</span>
-                 <span class="status-pill-elite active relative">
-                   <span class="dot"></span>
-                   STATUTORY COMPLIANT
-                 </span>
-              </div>
-           </div>
 
-           <div class="glass-panel p-8 space-y-6">
-              <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4">Identity Matrix</h3>
-              
-              <div class="space-y-6">
-                 @for (field of [
-                    { label: 'Citizenship', value: profile().citizenship },
-                    { label: 'Gender', value: profile().gender },
-                    { label: 'Date of Birth', value: profile().dob },
-                    { label: 'ID/Passport No.', value: profile().idNo }
-                 ]; track field.label) {
-                    <div class="flex justify-between items-center group/field">
-                       <span class="text-[10px] font-black text-slate-600 uppercase tracking-widest">{{ field.label }}</span>
-                       <span class="text-xs font-black text-white group-hover/field:text-blue-400 transition-colors uppercase">{{ field.value }}</span>
-                    </div>
-                 }
+              <div class="identity-lead text-center mt-8">
+                <h2 class="text-xl font-black tracking-tighter text-white mb-2">{{ profile().name | uppercase }}</h2>
+                <div class="flex flex-col items-center gap-3">
+                  <span class="pin-badge">{{ profile().pin }}</span>
+                  <div class="status-badge success">
+                    <span class="live-dot"></span>
+                    STATUTORY COMPLIANT
+                  </div>
+                </div>
               </div>
-           </div>
+            </div>
 
-           <div class="glass-panel p-8 bg-emerald-500/5 border-emerald-500/10">
-              <div class="flex items-center gap-4 mb-4">
-                 <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                 </div>
-                 <h4 class="text-xs font-black text-white uppercase tracking-widest">Enhanced Security</h4>
-              </div>
-              <p class="text-[10px] text-slate-500 font-bold uppercase leading-relaxed tracking-widest opacity-80 mb-6">Biometric authentication is active for this identity archive.</p>
-              <button class="w-full py-3 rounded-xl bg-slate-900 border border-white/5 text-[9px] font-black text-slate-500 uppercase tracking-widest hover:text-white transition-all">Manage Keys</button>
-           </div>
-        </div>
+            <div class="elite-card">
+               <div class="card-glow"></div>
+               <div class="panel-header-mini">
+                  <h3 class="meta-label">IDENTITY MATRIX</h3>
+               </div>
+               <div class="matrix-list">
+                  @for (field of [
+                     { label: 'Citizenship', value: profile().citizenship },
+                     { label: 'Gender', value: profile().gender },
+                     { label: 'Date of Birth', value: profile().dob },
+                     { label: 'ID/Passport No.', value: profile().idNo }
+                  ]; track field.label) {
+                     <div class="matrix-item">
+                        <span class="meta-label text-mut">{{ field.label }}</span>
+                        <span class="matrix-val">{{ field.value | uppercase }}</span>
+                     </div>
+                  }
+               </div>
+            </div>
 
-        <!-- Main Profile Sections -->
-        <div class="lg:col-span-2 space-y-8">
-           <!-- Contact Particulars -->
-           <div class="glass-panel p-0 overflow-hidden relative">
-              <div class="p-8 border-b border-white/5 bg-white/[0.01] flex items-center justify-between">
-                 <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest">Contact & Communication Protocols</h3>
-                 <button class="text-[9px] font-black text-blue-500/50 uppercase tracking-[0.2em] hover:text-blue-400 transition-colors">Edit Archive</button>
-              </div>
-              <div class="p-10 grid grid-cols-1 md:grid-cols-2 gap-10">
-                 @for (contact of [
-                    { label: 'Primary Terminal', value: profile().phone, icon: 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z' },
-                    { label: 'Identity Email', value: profile().email, icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
-                    { label: 'Physical Registry', value: profile().address, icon: 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z' },
-                    { label: 'Postal Protocol', value: profile().postal, icon: 'M3 19v-8.913a1 1 0 01.31-.707l7-7a1 1 0 011.38 0l7 7a1 1 0 01.31.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z' }
-                 ]; track contact.label) {
-                    <div class="group flex items-start gap-4">
-                       <div class="w-10 h-10 rounded-xl bg-slate-900 border border-white/5 flex items-center justify-center text-slate-600 group-hover:text-blue-400 group-hover:border-blue-500/20 transition-all shadow-xl">
-                          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path [attr.d]="contact.icon" /></svg>
+            <div class="elite-card security-panel">
+               <div class="card-glow"></div>
+               <div class="flex items-center gap-4 mb-6">
+                  <div class="w-10 h-10 rounded-xl bg-red-pale border border-red-border flex items-center justify-center text-red">
+                     <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                  </div>
+                  <h4 class="meta-label">ENHANCED BIOMETRICS</h4>
+               </div>
+               <p class="ri-period mb-6 opacity-70 leading-relaxed">Active biometric handshake established for this identity archive.</p>
+               <button class="btn-ghost-elite w-full py-3">MANAGE KEYS</button>
+            </div>
+          </div>
+
+          <!-- Main Content: Protocols & Obligations -->
+          <div class="main-stack">
+            <!-- Contact Protocols -->
+            <div class="elite-card p-0">
+               <div class="card-glow"></div>
+               <div class="panel-header-elite">
+                  <h3 class="panel-title">COMMUNICATION PROTOCOLS</h3>
+                  <button class="meta-label text-red hover:underline">EDIT ARCHIVE</button>
+               </div>
+               <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-10">
+                  @for (contact of [
+                     { label: 'Primary Terminal', value: profile().phone, icon: 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z' },
+                     { label: 'Identity Email', value: profile().email, icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+                     { label: 'Physical Registry', value: profile().address, icon: 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z' },
+                     { label: 'Postal Protocol', value: profile().postal, icon: 'M3 19v-8.913a1 1 0 01.31-.707l7-7a1 1 0 011.38 0l7 7a1 1 0 01.31.707V19a2 2 0 01-2 2H5a2 2 0 01-2-2z' }
+                  ]; track contact.label) {
+                    <div class="protocol-cell group">
+                       <div class="protocol-icon">
+                          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path [attr.d]="contact.icon" /></svg>
                        </div>
-                       <div>
-                          <span class="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-1 block">{{ contact.label }}</span>
-                          <span class="text-sm font-black text-white group-hover:text-blue-400 transition-colors uppercase tracking-tight">{{ contact.value }}</span>
+                       <div class="protocol-info">
+                          <span class="meta-label text-mut">{{ contact.label }}</span>
+                          <span class="protocol-val">{{ contact.value | uppercase }}</span>
                        </div>
                     </div>
-                 }
-              </div>
-           </div>
+                  }
+               </div>
+            </div>
 
-           <!-- Tax Obligations -->
-           <div class="glass-panel p-0 overflow-hidden relative">
-              <div class="p-8 border-b border-white/5 bg-white/[0.01]">
-                 <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest">Statutory Tax Obligations</h3>
-              </div>
-              <div class="p-8">
-                 <div class="grid grid-cols-1 gap-4">
-                    @for (obl of profile().obligations; track obl.name) {
-                       <div class="p-6 rounded-2xl bg-white/[0.01] border border-white/5 hover:border-blue-500/20 transition-all group flex items-center justify-between">
-                          <div class="flex items-center gap-6">
-                             <div class="w-12 h-12 rounded-xl bg-slate-900 border border-white/10 flex items-center justify-center text-slate-600 group-hover:text-blue-400 group-hover:border-blue-500/20 transition-all shadow-xl font-black text-xs uppercase tracking-tighter">
-                                {{ obl.code }}
-                             </div>
-                             <div>
-                                <h4 class="text-white font-black text-sm tracking-tight group-hover:text-blue-400 transition-colors uppercase">{{ obl.name }}</h4>
-                                <p class="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1">Effective: {{ obl.effective }}</p>
+            <!-- Tax Obligations -->
+            <div class="elite-card p-0">
+               <div class="card-glow"></div>
+               <div class="panel-header-elite">
+                  <h3 class="panel-title">STATUTORY OBLIGATIONS</h3>
+               </div>
+               <div class="p-8">
+                  <div class="obligation-stack">
+                     @for (obl of profile().obligations; track obl.name) {
+                       <div class="obligation-item group">
+                          <div class="obl-left">
+                             <div class="obl-code">{{ obl.code }}</div>
+                             <div class="obl-main">
+                                <h4 class="obl-name">{{ obl.name | uppercase }}</h4>
+                                <p class="ri-period text-mut">EFFECTIVE: {{ obl.effective }}</p>
                              </div>
                           </div>
-                          <span class="status-pill-elite active">
-                             <span class="dot"></span>
+                          <div class="status-badge success">
+                             <span class="live-dot"></span>
                              ACTIVE
-                          </span>
+                          </div>
                        </div>
-                    }
-                 </div>
-              </div>
-           </div>
+                     }
+                  </div>
+               </div>
+            </div>
 
-           <!-- Associated Links -->
-           <div class="glass-panel p-10 bg-blue-600/5 border-blue-500/10 flex flex-col md:flex-row items-center justify-between gap-8 group">
-              <div class="flex items-center gap-6">
-                 <div class="w-16 h-16 rounded-[1.5rem] bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shadow-2xl group-hover:scale-110 transition-transform">
-                    <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
-                 </div>
-                 <div>
-                    <h4 class="text-white font-black text-lg tracking-tighter uppercase group-hover:text-blue-400 transition-colors">Linked Corporate Entities</h4>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Authorized digital proxy for linked commercial archives</p>
-                 </div>
-              </div>
-              <button class="modern-btn border-white/10 text-slate-400 px-8 py-4 rounded-2xl group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-xl font-black text-[10px] uppercase tracking-widest">
-                 View Entities
-              </button>
-           </div>
+            <!-- Linked Entities -->
+            <div class="elite-card entity-link-card group">
+               <div class="card-glow"></div>
+               <div class="flex flex-col md:flex-row items-center gap-8">
+                  <div class="entity-icon-ring">
+                     <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                  </div>
+                  <div class="flex-1 text-center md:text-left">
+                     <h4 class="text-xl font-black text-white tracking-tighter uppercase group-hover:text-red transition-colors">Linked Corporate Entities</h4>
+                     <p class="ri-period mt-1 opacity-60">Authorized digital proxy for linked commercial archives</p>
+                  </div>
+                  <button class="btn-primary-elite">VIEW ENTITIES</button>
+               </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   `,
   styles: [`
-    :host { display: block; }
-  `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
+
+    :host {
+      --red: #C0392B;
+      --red-light: #E74C3C;
+      --red-pale: rgba(192,57,43,0.08);
+      --red-glow: rgba(192,57,43,0.25);
+      --red-border: rgba(192,57,43,0.15);
+      
+      --green: #1A7A3C;
+      --green-light: #22A052;
+      --green-pale: rgba(26,122,60,0.08);
+
+      --bg-root: #0B0F0E;
+      --bg-card: #14201A;
+      --bg-card-2: #192820;
+      --bg-card-3: #1C2B22;
+      
+      --text-pri: #E8F5EC;
+      --text-sec: #8EA898;
+      --text-mut: #4A6258;
+
+      --bdr: rgba(26,122,60,0.15);
+      --bdr-md: rgba(26,122,60,0.25);
+
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: block;
+    }
+
+    .db-root { min-height: 100vh; background: var(--bg-root); color: var(--text-pri); position: relative; overflow: hidden; }
+    .noise-overlay { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.03; z-index: 1; pointer-events: none; }
+    .accent-bleed { position: fixed; top: -10vw; right: -10vw; width: 40vw; height: 40vw; background: var(--red); filter: blur(15vw); opacity: 0.05; border-radius: 50%; z-index: 1; pointer-events: none; }
+
+    .db-inner { max-width: 1440px; margin: 0 auto; padding: 40px 28px 80px; display: flex; flex-direction: column; gap: 40px; position: relative; z-index: 10; }
+
+    /* Header */
+    .db-header-elite { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+    .premium-title { font-size: 40px; font-weight: 950; letter-spacing: -1.5px; line-height: 1; margin: 12px 0 8px; }
+    .text-red { color: var(--red-light); }
+    .premium-subtitle { font-size: 14px; font-weight: 500; color: var(--text-sec); }
+
+    .live-badge { display: flex; align-items: center; gap: 7px; padding: 5px 12px; border-radius: 50px; background: var(--red-pale); border: 1px solid var(--red-border); font-size: 9px; font-weight: 900; letter-spacing: 1.5px; color: var(--red-light); }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red-light); box-shadow: 0 0 10px var(--red-glow); animation: blink 1.5s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .action-stack { display: flex; gap: 12px; }
+    .btn-ghost-elite { background: var(--bg-card-2); border: 1px solid var(--bdr); color: var(--text-sec); padding: 12px 24px; border-radius: 14px; font-size: 11px; font-weight: 950; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
+    .btn-ghost-elite:hover { background: var(--bg-card-3); color: var(--text-pri); border-color: var(--bdr-md); }
+
+    .btn-primary-elite { background: var(--red); border: none; color: white; padding: 12px 24px; border-radius: 14px; font-size: 11px; font-weight: 950; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; box-shadow: 0 8px 24px var(--red-glow); }
+    .btn-primary-elite:hover { transform: translateY(-2px); background: var(--red-light); box-shadow: 0 12px 32px var(--red-glow); }
+
+    /* Grid Architecture */
+    .dashboard-grid-elite { display: grid; grid-template-columns: 340px 1fr; gap: 32px; }
+    .main-stack { display: flex; flex-direction: column; gap: 32px; }
+    .side-stack-elite { display: flex; flex-direction: column; gap: 32px; }
+
+    /* Elite Card */
+    .elite-card { background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 28px; padding: 32px; position: relative; overflow: hidden; }
+    .card-glow { position: absolute; inset: 0; background: radial-gradient(circle at top right, var(--red), transparent 70%); opacity: 0.03; pointer-events: none; }
+
+    /* Identity Sidebar */
+    .avatar-capsule { width: 120px; height: 120px; margin: 0 auto; position: relative; }
+    .avatar-ring { position: absolute; inset: -10px; border: 2px dashed var(--bdr); border-radius: 40px; animation: rotate 20s linear infinite; }
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .avatar-content { width: 100%; height: 100%; background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 36px; display: flex; align-items: center; justify-content: center; color: var(--text-mut); position: relative; z-index: 2; }
+    
+    .pin-badge { font-size: 10px; font-weight: 950; background: var(--bg-card-2); padding: 5px 12px; border-radius: 8px; border: 1px solid var(--bdr); color: var(--text-pri); letter-spacing: 1.5px; }
+    .status-badge { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 50px; font-size: 9px; font-weight: 950; letter-spacing: 1px; }
+    .status-badge.success { background: var(--green-pale); color: var(--green-light); border: 1px solid rgba(26, 122, 60, 0.2); }
+
+    .panel-header-mini { margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--bdr); }
+    .meta-label { font-size: 9px; font-weight: 950; color: var(--text-mut); letter-spacing: 2px; text-transform: uppercase; }
+
+    .matrix-list { display: flex; flex-direction: column; gap: 20px; }
+    .matrix-item { display: flex; justify-content: space-between; align-items: center; }
+    .matrix-val { font-size: 11px; font-weight: 900; color: var(--text-pri); }
+
+    .ri-period { font-size: 10px; font-weight: 800; color: var(--text-mut); letter-spacing: 1.5px; }
+
+    /* Main Content Sections */
+    .panel-header-elite { padding: 24px 32px; border-bottom: 1px solid var(--bdr); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.01); }
+    .panel-title { font-size: 12px; font-weight: 950; color: var(--text-mut); letter-spacing: 2.5px; }
+
+    .protocol-cell { display: flex; items-center; gap: 20px; transition: all 0.3s; }
+    .protocol-icon { width: 44px; height: 44px; background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--text-mut); transition: all 0.3s; }
+    .group:hover .protocol-icon { color: var(--red-light); border-color: var(--red-border); transform: scale(1.05); }
+    .protocol-info { display: flex; flex-direction: column; gap: 4px; }
+    .protocol-val { font-size: 13px; font-weight: 900; color: var(--text-pri); letter-spacing: -0.2px; }
+
+    .obligation-stack { display: flex; flex-direction: column; gap: 16px; }
+    .obligation-item { padding: 20px 24px; background: var(--bg-card-2); border: 2px solid transparent; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s; }
+    .obligation-item:hover { border-color: var(--red-border); background: var(--bg-card-3); transform: translateX(5px); }
+    
+    .obl-left { display: flex; items-center; gap: 24px; }
+    .obl-code { width: 48px; height: 48px; background: var(--bg-root); border: 1px solid var(--bdr); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 950; color: var(--text-sec); }
+    .obl-name { font-size: 14px; font-weight: 950; color: var(--text-pri); letter-spacing: -0.5px; }
+
+    .entity-link-card { background: var(--red-pale); border-color: var(--red-border); }
+    .entity-icon-ring { width: 64px; height: 64px; border-radius: 20px; background: var(--bg-card-2); border: 1px solid var(--bdr); display: flex; align-items: center; justify-content: center; color: var(--red-light); transition: all 0.5s; }
+    .group:hover .entity-icon-ring { transform: rotate(10deg) scale(1.1); box-shadow: 0 10px 30px var(--red-glow); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+
+    @media (max-width: 1024px) {
+      .dashboard-grid-elite { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .db-inner { padding: 24px 16px; }
+      .premium-title { font-size: 32px; }
+      .db-header-elite { flex-direction: column; align-items: flex-start; }
+      .action-stack { width: 100%; }
+      .action-stack button { flex: 1; }
+      .obl-left { gap: 16px; }
+      .obl-code { display: none; }
+    }
+  `]
 })
 export class ProfileComponent {
   profile = signal({
