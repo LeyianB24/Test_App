@@ -176,471 +176,134 @@ interface PaymentFormData {
       }
     </div>
     `,
-  styles: [`
-    .mpesa-payment-container {
-      position: relative;
+    :host {
+      --red:          #D92B2B;
+      --red-bright:   #EF3B3B;
+      --red-glow:     rgba(217, 43, 43, 0.38);
+      --red-pale:     rgba(217, 43, 43, 0.10);
+      --red-border:   rgba(217, 43, 43, 0.22);
+
+      --bg-root:      #0C0C0C;
+      --bg-card:      #141414;
+      --bg-card-2:    #1C1C1C;
+      
+      --text-pri:     #F0F0F0;
+      --text-sec:     #888888;
+      --text-mut:     #4A4A4A;
+
+      --bdr:          rgba(255, 255, 255, 0.08);
+      --bdr-md:       rgba(255, 255, 255, 0.14);
+
+      --duration-base: 0.4s;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: block;
     }
 
-    /* Modal Styles */
-    .payment-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    /* Layout & Base */
+    .db-root { background: var(--bg-root); color: var(--text-pri); position: relative; overflow-x: hidden; }
+    .noise-overlay { position: fixed; inset: 0; background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAA6f7sBAAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAD1JREFUeNoVjEkOACAIA53/f9qFA9S0mSBYhS6Yp7mXqR8B1Zp6InoSpOqJ6EnUInoStYieRC2iF9GLaE30JPojDPoA9WpU6YIAAAAASUVORK5CYII=') repeat; opacity: 0.03; pointer-events: none; z-index: 1; }
+    .accent-bleed { position: fixed; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, var(--red-pale) 0%, transparent 70%); filter: blur(60px); pointer-events: none; z-index: 2; }
+    .db-inner { max-width: 1400px; margin: 0 auto; padding: 40px 28px; position: relative; z-index: 10; }
 
-    .modal-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      cursor: pointer;
-    }
+    /* Modals */
+    .modal-overlay-elite { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 24px; animation: fadeIn 0.3s var(--ease-out); }
+    .modal-box { width: 100%; max-width: 500px; border-radius: 32px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border-color: var(--bdr-md); position: relative; z-index: 1010; }
+    .modal-body-elite { padding: 32px; display: flex; flex-direction: column; gap: 32px; }
+    .elite-card { background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 24px; position: relative; overflow: hidden; transition: border-color 0.3s; }
+    .card-glow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top right, var(--red-pale), transparent 40%); pointer-events: none; opacity: 0.6; }
 
-    .modal-content {
-      position: relative;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      max-width: 500px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
+    .panel-header-elite { padding: 24px 32px; border-bottom: 1px solid var(--bdr); display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+    .panel-title { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+    .text-red { color: var(--red); }
+    .panel-desc { font-size: 12px; color: var(--text-sec); font-weight: 500; }
+    .close-btn { width: 32px; height: 32px; border-radius: 10px; border: none; background: var(--bg-card-2); color: var(--text-sec); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .close-btn:hover { color: var(--text-pri); background: var(--bdr); }
 
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 24px;
-      border-bottom: 1px solid #e5e7eb;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border-radius: 12px 12px 0 0;
-    }
+    /* M-Pesa Result & Processing */
+    .mpesa-processing { text-align: center; padding: 40px 0; }
+    .loader-ring { width: 48px; height: 48px; border: 3px solid var(--red-pale); border-top-color: var(--red); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 24px; }
+    .mpesa-processing p { font-weight: 800; font-size: 13px; letter-spacing: 1px; margin-bottom: 8px; }
+    .mpesa-processing span { font-size: 12px; color: var(--text-sec); }
 
-    .modal-header h2 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 600;
-    }
+    .mpesa-result { text-align: center; }
+    .res-icon { width: 64px; height: 64px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 24px; }
+    .success .res-icon { background: #00C853; box-shadow: 0 0 20px rgba(0, 200, 83, 0.3); }
+    .error .res-icon { background: var(--red); box-shadow: 0 0 20px var(--red-glow); }
+    .mpesa-result h3 { font-size: 24px; font-weight: 950; margin-bottom: 12px; }
+    .mpesa-result p { color: var(--text-sec); margin-bottom: 16px; font-size: 14px; }
+    .txn-ref { font-family: monospace; font-size: 11px; background: var(--bg-root); padding: 8px 16px; border-radius: 8px; display: inline-block; color: var(--text-sec); border: 1px solid var(--bdr); }
 
-    .close-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 28px;
-      cursor: pointer;
-      padding: 0;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      transition: background 0.2s;
-    }
-
-    .close-btn:hover {
-      background: rgba(0, 0, 0, 0.1);
-    }
-
-    .modal-body {
-      padding: 32px;
-    }
+    .fiscal-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--bdr); }
+    .fs-label { font-size: 9px; font-weight: 800; color: var(--text-mut); letter-spacing: 1px; display: block; margin-bottom: 4px; }
+    .fs-val { font-size: 15px; font-weight: 900; }
 
     /* Form Styles */
-    .payment-form {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
+    .mpesa-form-elite { display: flex; flex-direction: column; gap: 24px; }
+    .input-group-elite label { font-size: 10px; font-weight: 800; color: var(--text-mut); letter-spacing: 1.5px; margin-bottom: 10px; display: block; }
+    .input-group-elite input { width: 100%; background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 14px; padding: 14px 20px; font-size: 16px; font-family: 'JetBrains Mono', monospace; color: var(--text-pri); outline: none; transition: all 0.2s; }
+    .input-group-elite input:focus { border-color: var(--red-border); background: var(--bg-card); box-shadow: 0 0 0 4px var(--red-pale); }
+    .input-group-elite input.error { border-color: var(--red); background: var(--red-pale); }
+    .error-intel { font-size: 10px; font-weight: 700; color: var(--red); margin-top: 6px; display: block; }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .currency-wrap { position: relative; }
+    .currency-wrap .prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-weight: 900; font-size: 14px; color: var(--text-mut); }
+    .currency-wrap input { padding-left: 54px; }
 
-    .form-group label {
-      font-weight: 600;
-      color: #1f2937;
-      font-size: 14px;
-    }
+    .tax-matrix-elite { background: var(--bg-card-2); padding: 20px; border-radius: 14px; border: 1px solid var(--bdr); }
+    .tm-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-sec); margin-bottom: 8px; }
+    .tm-row.total { border-top: 1px solid var(--bdr); padding-top: 12px; margin-top: 12px; font-weight: 900; color: var(--text-pri); font-size: 14px; }
 
-    .form-input {
-      padding: 12px;
-      border: 2px solid #e5e7eb;
-      border-radius: 8px;
-      font-size: 14px;
-      transition: border-color 0.2s;
-      font-family: inherit;
-    }
+    .form-actions-elite { display: flex; gap: 16px; }
 
-    .form-input:focus {
-      outline: none;
-      border-color: #667eea;
-      background: #f8f9ff;
-    }
+    /* Active Tracker Panel */
+    .table-panel { margin-top: 40px; }
+    .live-badge { display: flex; align-items: center; gap: 7px; padding: 5px 12px; border-radius: 50px; background: var(--red-pale); border: 1px solid var(--red-border); font-size: 9px; font-weight: 900; letter-spacing: 1.5px; color: var(--red-bright); }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 10px var(--red); animation: blink 1.5s ease-in-out infinite; }
+    .action-stack { display: flex; align-items: center; gap: 16px; }
 
-    .form-input.error {
-      border-color: #ef4444;
-      background: #fef2f2;
-    }
+    .tracking-grid { display: flex; flex-direction: column; gap: 12px; }
+    .tracking-item { display: grid; grid-template-columns: 1.5fr 1fr 1fr; align-items: center; padding: 16px 24px; background: var(--bg-card-2); border: 1px solid var(--bdr); border-radius: 16px; border-left: 4px solid var(--text-mut); transition: all 0.2s; }
+    .tracking-item:hover { transform: translateX(4px); border-color: var(--bdr-md); }
+    .tracking-item.completed { border-left-color: #00C853; }
+    .tracking-item.pending { border-left-color: #FFAB00; }
+    .tracking-item.failed { border-left-color: var(--red); }
 
-    .textarea {
-      resize: vertical;
-      font-family: inherit;
-    }
+    .ti-left { display: flex; flex-direction: column; gap: 4px; }
+    .ti-ref { font-size: 9px; font-weight: 800; color: var(--text-mut); letter-spacing: 0.5px; }
+    .ti-phone { font-size: 14px; font-weight: 700; }
+    .ti-center { display: flex; flex-direction: column; gap: 4px; }
+    .ti-amount { font-size: 14px; font-weight: 900; color: var(--text-pri); }
+    .ti-time { font-size: 11px; color: var(--text-sec); }
+    .ti-right { display: flex; justify-content: flex-end; }
+    .status-badge { padding: 4px 12px; border-radius: 50px; font-size: 9px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+    .status-badge.alert { background: rgba(255, 171, 0, 0.1); color: #FFAB00; border: 1px solid rgba(255, 171, 0, 0.2); }
+    .status-badge.success { background: rgba(0, 200, 83, 0.1); color: #00C853; border: 1px solid rgba(0, 200, 83, 0.2); }
 
-    .hint-text {
-      font-size: 12px;
-      color: #6b7280;
-    }
+    /* Buttons */
+    .btn-primary-elite { background: var(--red); color: #fff; border: none; padding: 16px 28px; border-radius: 14px; font-size: 11px; font-weight: 900; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 16px -4px var(--red-glow); display: flex; align-items: center; justify-content: center; text-transform: uppercase; }
+    .btn-primary-elite:hover:not(:disabled) { background: var(--red-bright); transform: translateY(-2px); box-shadow: 0 12px 24px -6px var(--red-glow); }
+    .btn-primary-elite:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    .error-text {
-      font-size: 12px;
-      color: #ef4444;
-      font-weight: 500;
-    }
+    .btn-ghost-elite { background: var(--bg-card-2); color: var(--text-sec); border: 1px solid var(--bdr); padding: 16px 24px; border-radius: 14px; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; text-transform: uppercase; }
+    .btn-ghost-elite:hover { background: var(--bg-card); color: var(--text-pri); border-color: var(--bdr-md); }
 
-    .amount-input-group {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .currency-prefix {
-      position: absolute;
-      left: 12px;
-      color: #6b7280;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .amount-input {
-      padding-left: 50px;
-    }
-
-    /* Fee Breakdown */
-    .fee-breakdown {
-      background: #f3f4f6;
-      padding: 16px;
-      border-radius: 8px;
-      border-left: 4px solid #667eea;
-    }
-
-    .fee-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      font-size: 14px;
-      color: #1f2937;
-    }
-
-    .fee-row.total {
-      border-top: 1px solid #d1d5db;
-      padding-top: 12px;
-      margin-top: 8px;
-      font-weight: 600;
-    }
-
-    /* Form Actions */
-    .form-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .form-actions button {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .modern-btn.primary-btn {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-
-    .modern-btn.primary-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-    }
-
-    .modern-btn.primary-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .modern-btn.outline-btn {
-      background: white;
-      border: 2px solid #e5e7eb;
-      color: #1f2937;
-    }
-
-    .modern-btn.outline-btn:hover {
-      border-color: #667eea;
-      color: #667eea;
-    }
-
-    .full-width {
-      width: 100%;
-    }
-
-    /* State Views */
-    .processing-state,
-    .success-state,
-    .error-state {
-      text-align: center;
-      padding: 32px;
-    }
-
-    .spinner {
-      width: 48px;
-      height: 48px;
-      border: 4px solid #e5e7eb;
-      border-top-color: #667eea;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 16px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .success-icon,
-    .error-icon {
-      font-size: 48px;
-      margin-bottom: 16px;
-    }
-
-    .success-icon {
-      color: #10b981;
-    }
-
-    .error-icon {
-      color: #ef4444;
-    }
-
-    .success-state h3,
-    .error-state h3 {
-      margin: 0 0 12px;
-      color: #1f2937;
-    }
-
-    .success-state p,
-    .error-state p {
-      color: #6b7280;
-      margin: 0 0 16px;
-      font-size: 14px;
-    }
-
-    .info-text {
-      background: #ecfdf5;
-      padding: 12px;
-      border-radius: 8px;
-      color: #047857;
-      font-size: 13px;
-      margin: 16px 0;
-    }
-
-    /* Transaction Details */
-    .transaction-details {
-      background: #f9fafb;
-      padding: 16px;
-      border-radius: 8px;
-      margin: 20px 0;
-      text-align: left;
-    }
-
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      font-size: 14px;
-      color: #1f2937;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .detail-row:last-child {
-      border-bottom: none;
-    }
-
-    .detail-row strong {
-      color: #374151;
-      word-break: break-all;
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .status-badge.pending {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .status-badge.completed {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .status-badge.failed {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .status-badge.cancelled {
-      background: #f3f4f6;
-      color: #374151;
-    }
-
-    /* Active Payments Panel */
-    .active-payments-panel {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .panel-header h3 {
-      margin: 0;
-      font-size: 16px;
-      color: #1f2937;
-    }
-
-    .count {
-      background: #667eea;
-      color: white;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .clean-btn {
-      background: none;
-      border: none;
-      color: #667eea;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 13px;
-      transition: color 0.2s;
-    }
-
-    .clean-btn:hover {
-      color: #764ba2;
-    }
-
-    .payments-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .payment-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px;
-      background: #f9fafb;
-      border-radius: 6px;
-      border-left: 4px solid #667eea;
-    }
-
-    .payment-info {
-      display: flex;
-      gap: 24px;
-      flex: 1;
-    }
-
-    .phone-info,
-    .amount-info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .phone-info .label,
-    .amount-info .label {
-      font-size: 12px;
-      color: #6b7280;
-      font-weight: 500;
-    }
-
-    .phone-info strong,
-    .amount-info strong {
-      font-size: 14px;
-      color: #1f2937;
-    }
-
-    .payment-status {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .timestamp {
-      font-size: 12px;
-      color: #9ca3af;
-    }
+    /* Animations & Keyframes */
+    .animate-fade-in { animation: fadeIn var(--duration-base) var(--ease-out); }
+    .animate-scale-in { animation: scaleIn var(--duration-base) var(--ease-out); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     @media (max-width: 640px) {
-      .modal-content {
-        width: 95%;
-      }
-
-      .modal-body {
-        padding: 20px;
-      }
-
-      .form-actions {
-        flex-direction: column;
-      }
-
-      .payment-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-      }
-
-      .payment-status {
-        width: 100%;
-      }
-
-      .payment-info {
-        width: 100%;
-        gap: 16px;
-      }
+      .modal-box { border-radius: 24px; }
+      .modal-body-elite { padding: 24px; gap: 24px; }
+      .tracking-item { grid-template-columns: 1fr 1fr; gap: 16px; }
+      .ti-right { grid-column: span 2; justify-content: flex-start; }
+      .form-actions-elite { flex-direction: column; }
     }
-  `]
 })
 export class MpesaPaymentComponent {
   private mpesaService = inject(MpesaService);
