@@ -30,120 +30,111 @@ interface Payment {
   template: `
     <div class="animate-fade-in p-2 md:p-6 lg:p-8">
     
-      <!-- HD Page Header -->
-      <header class="mb-10 lg:mb-14">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <div class="flex items-center gap-3 mb-2">
-              <span class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                PAYMENTS MODULE
-              </span>
+        <!-- Modern Header -->
+        <header class="db-header-elite">
+          <div class="header-left">
+            <div class="live-badge">
+              <span class="live-dot"></span>
+              TRANSACTION TERMINAL
             </div>
-            <h1 class="premium-title">Wealth <span class="text-emerald-500">Transaction Terminal</span></h1>
-            <p class="text-slate-400 text-lg md:text-xl font-medium mt-1">Digital Financial Telemetry & Secure Fiscal Processing</p>
+            <h1 class="premium-title">Fiscal <span class="text-red">Telemetry</span></h1>
+            <p class="premium-subtitle">Digital Financial Ledger & Secure Processing Engine</p>
           </div>
-          <div class="flex flex-wrap items-center gap-4">
-            <button class="px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 transition-colors flex items-center gap-2 shadow-sm text-sm disabled:opacity-50" (click)="refreshPayments()" [disabled]="loading()">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-              {{ loading() ? 'SYNCHRONIZING...' : 'REFRESH INTEL' }}
+          <div class="action-stack">
+            <button class="btn-ghost-elite" (click)="refreshPayments()" [disabled]="loading()">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              {{ loading() ? 'SYNC...' : 'REFRESH' }}
             </button>
-            <button
-              class="px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 shadow-lg transition-all bg-green-700/30 hover:bg-green-700/50 text-green-400 border border-green-500/30"
-              (click)="openMpesaQuickPay()">
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-              M-PESA QUICK PAY
+            <button class="btn-ghost-elite" (click)="openMpesaQuickPay()">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              M-PESA PAY
             </button>
-            <button class="btn-primary py-3 px-6 shadow-lg shadow-emerald-500/25 bg-emerald-600 hover:bg-emerald-500" (click)="togglePaymentForm()">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-              {{ showPaymentForm() ? 'SHIELD PORTAL' : 'EXECUTE PAYMENT' }}
+            <button class="btn-primary-elite" (click)="togglePaymentForm()">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 4v16m8-8H4"/></svg>
+              {{ showPaymentForm() ? 'CLOSE FORM' : 'NEW PAYMENT' }}
             </button>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <!-- HD Payment Form (Collapsible) -->
-      @if (showPaymentForm()) {
-        <div class="mb-10 lg:mb-14 animate-fade-in">
-          <div class="glass-panel p-8 relative overflow-hidden ring-1 ring-emerald-500/30">
-            <div class="absolute -top-32 -left-32 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none"></div>
-            <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none"></div>
-            
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 pb-6 border-b border-white/10 relative z-10 gap-4">
-              <h3 class="premium-subtitle m-0 uppercase flex items-center gap-3">
-                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                Execution Protocol
-              </h3>
-              <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                ENCRYPTION ACTIVE
+        <!-- Collapsible Payment Form -->
+        @if (showPaymentForm()) {
+          <div class="elite-card animate-fade-in">
+            <div class="card-glow"></div>
+            <div class="panel-header-elite">
+              <div>
+                <h3 class="panel-title">Execution Protocol</h3>
+                <p class="panel-desc">Secure financial transaction initialization</p>
+              </div>
+              <div class="status-badge alert">ENCRYPTION ACTIVE</div>
+            </div>
+            <app-payment-form #paymentForm></app-payment-form>
+          </div>
+        }
+
+        <!-- KPI Metrics Grid -->
+        <div class="kpi-grid-elite">
+          <div class="elite-card kpi-box cursor-pointer" (click)="filterByStatus('pending')">
+            <div class="card-glow"></div>
+            <div class="kpi-head">
+              <span class="kpi-label">OUTSTANDING LIABILITY</span>
+              <div class="kpi-icon-wrap">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
               </div>
             </div>
-            <div class="relative z-10">
-              <app-payment-form #paymentForm></app-payment-form>
+            <div class="kpi-main">
+              <span class="kpi-currency">KES</span>
+              <span class="kpi-number">{{ totalPending() | number:'1.2-2' }}</span>
             </div>
+            <span class="trend-indicator">{{ pendingCount() }} QUEUED TRANSACTIONS</span>
+            <div class="mini-trace"><div class="trace-fill" [style.width.%]="45"></div></div>
           </div>
-        </div>
-      }
 
-      <!-- HD Metrics Matrix -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-10 lg:mb-14">
-        <div class="glass-panel p-6 relative overflow-hidden group hover:border-amber-500/30 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer" (click)="filterByStatus('pending')">
-          <div class="absolute inset-0 bg-gradient-to-br from-amber-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500 to-transparent"></div>
-          <div class="flex justify-between items-start mb-6">
-            <div class="w-12 h-12 rounded-2xl flex items-center justify-center relative z-10 bg-amber-500/10 text-amber-400">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <div class="elite-card kpi-box cursor-pointer" (click)="filterByStatus('completed')">
+            <div class="card-glow"></div>
+            <div class="kpi-head">
+              <span class="kpi-label">VOLUME PROCESSED</span>
+              <div class="kpi-icon-wrap red">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
             </div>
+            <div class="kpi-main">
+              <span class="kpi-currency">KES</span>
+              <span class="kpi-number">{{ totalCompleted() | number:'1.2-2' }}</span>
+            </div>
+            <span class="trend-indicator">{{ completedCount() }} VERIFIED PAYMENTS</span>
+            <div class="mini-trace red"><div class="trace-fill" [style.width.%]="85"></div></div>
           </div>
-          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1 z-10 relative">Oustanding Liability</h3>
-          <div class="text-2xl lg:text-3xl font-bold text-white tracking-tight z-10 relative mb-4">KES {{ totalPending() | number:'1.2-2' }}</div>
-          <div class="pt-4 border-t border-white/10">
-            <span class="text-[10px] font-bold uppercase text-slate-500 tracking-widest">{{ pendingCount() }} QUEUED TRANSACTIONS</span>
-          </div>
-        </div>
 
-        <div class="glass-panel p-6 relative overflow-hidden group hover:border-emerald-500/30 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer" (click)="filterByStatus('completed')">
-          <div class="absolute inset-0 bg-gradient-to-br from-emerald-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500 to-transparent"></div>
-          <div class="flex justify-between items-start mb-6">
-            <div class="w-12 h-12 rounded-2xl flex items-center justify-center relative z-10 bg-emerald-500/10 text-emerald-400">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <div class="elite-card kpi-box">
+            <div class="card-glow"></div>
+            <div class="kpi-head">
+              <span class="kpi-label">TOTAL TELEMETRY</span>
+              <div class="kpi-icon-wrap">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              </div>
             </div>
+            <div class="kpi-main">
+              <span class="kpi-number">{{ payments().length }}</span>
+            </div>
+            <span class="trend-indicator">HISTORICAL DATABASE</span>
+            <div class="mini-trace"><div class="trace-fill" [style.width.%]="60"></div></div>
           </div>
-          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1 z-10 relative">Volume Processed</h3>
-          <div class="text-2xl lg:text-3xl font-bold text-white tracking-tight z-10 relative mb-4">KES {{ totalCompleted() | number:'1.2-2' }}</div>
-          <div class="pt-4 border-t border-white/10">
-            <span class="text-[10px] font-bold uppercase text-emerald-500 tracking-widest">{{ completedCount() }} VERIFIED PAYMENTS</span>
-          </div>
-        </div>
 
-        <div class="glass-panel p-6 relative overflow-hidden group hover:border-blue-500/30 transition-all duration-300 transform hover:-translate-y-1">
-          <div class="absolute inset-0 bg-gradient-to-br from-blue-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500 to-transparent"></div>
-          <div class="flex justify-between items-start mb-6">
-            <div class="w-12 h-12 rounded-2xl flex items-center justify-center relative z-10 bg-blue-500/10 text-blue-400">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <div class="elite-card kpi-box alert cursor-pointer" (click)="filterByStatus('failed')">
+            <div class="card-glow"></div>
+            <div class="kpi-head">
+              <span class="kpi-label">ANOMALY COUNT</span>
+              <div class="kpi-icon-wrap red">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              </div>
             </div>
-          </div>
-          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1 z-10 relative">Total Telemetry</h3>
-          <div class="text-2xl lg:text-3xl font-bold text-white tracking-tight z-10 relative mb-4">{{ payments().length }}</div>
-          <div class="pt-4 border-t border-white/10">
-            <span class="text-[10px] font-bold uppercase text-slate-500 tracking-widest">HISTORICAL DATABASE</span>
+            <div class="kpi-main">
+              <span class="kpi-number">{{ failedCount() }}</span>
+            </div>
+            <span class="trend-indicator red">REQUIRES ATTENTION</span>
+            <div class="mini-trace red"><div class="trace-fill" [style.width.%]="100"></div></div>
           </div>
         </div>
-
-        <div class="glass-panel p-6 relative overflow-hidden group hover:border-red-500/30 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer" (click)="filterByStatus('failed')">
-          <div class="absolute inset-0 bg-gradient-to-br from-red-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500 to-transparent"></div>
-          <div class="flex justify-between items-start mb-6">
-            <div class="w-12 h-12 rounded-2xl flex items-center justify-center relative z-10 bg-red-500/10 text-red-400">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            </div>
-          </div>
-          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1 z-10 relative">Anomaly Count</h3>
-          <div class="text-2xl lg:text-3xl font-bold text-red-500 tracking-tight z-10 relative mb-4">{{ failedCount() }}</div>
-          <div class="pt-4 border-t border-white/10">
-            <span class="text-[10px] font-bold uppercase text-red-500 tracking-widest">REQUIRES ATTENTION</span>
-          </div>
-        </div>
-      </div>
 
       <!-- HD Table Context -->
       <div class="glass-panel p-0 overflow-hidden">
