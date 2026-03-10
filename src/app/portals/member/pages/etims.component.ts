@@ -221,8 +221,6 @@ import { EtimsService } from '../../../services/etims.service';
         </div>
       }
     </div>
-
-    </div>
   `,
   styles: [`
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
@@ -968,4 +966,9 @@ export class EtimsComponent {
 
   retrySync(id: string) { this.syncInvoice(id); }
   onSearch() {}
+
+  downloadInvoice(invoice: any) {
+    const url = `c:/xampp/htdocs/itax/kra-itax/src/environments/environment.apiUrl/download.php?type=invoice&id=${invoice.id}&format=pdf`;
+    window.open(url, '_blank');
+  }
 }
