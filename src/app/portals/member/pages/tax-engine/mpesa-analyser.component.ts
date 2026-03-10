@@ -174,8 +174,7 @@ import { Router } from '@angular/router';
   `,
   styles: [`
     :host { display: block; }
-  `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  `]
 })
 export class MpesaAnalyserComponent {
   private mpesaService = inject(MpesaParserService);

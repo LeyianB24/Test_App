@@ -128,8 +128,7 @@ import { RouterModule } from '@angular/router';
       </footer>
     </div>
   `,
-  styles: [``],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styles: [``]
 })
 export class TccApplicationComponent {
   certificates = [
