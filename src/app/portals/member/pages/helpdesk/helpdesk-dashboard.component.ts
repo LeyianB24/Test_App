@@ -13,118 +13,151 @@ interface DailyItem { day: string; count: number; }
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule],
   template: `
-    <div class="hd-dash p-6">
-      <header class="mb-8 flex items-center justify-between">
+    <div class="page-container animate-fade-in">
+      <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 class="text-3xl font-black text-slate-800 tracking-tight">Helpdesk Dashboard</h1>
-          <p class="text-slate-500 mt-1">Overview of your support tickets and performance</p>
+          <div class="flex items-center gap-3 mb-2">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 text-red-500 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+              SUPPORT TERMINAL
+            </span>
+          </div>
+          <h1 class="premium-title">Helpdesk <span class="gradient-text">Operations</span></h1>
+          <p class="premium-subtitle">Strategic overview of support initiatives and resolution performance</p>
         </div>
-        <a routerLink="/helpdesk/create" class="btn-create flex items-center gap-2">
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-          New Ticket
+        <a routerLink="/helpdesk/create" class="modern-btn primary-btn elite-glow">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          Initialize Ticket
         </a>
       </header>
 
-      <!-- KPI Cards -->
-      <div class="kpi-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <div class="kpi-card">
-          <div class="kpi-icon bg-blue-50 text-blue-600">
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      <!-- Elite Metrics Matrix -->
+      <div class="stats-grid-premium mb-10">
+        <div class="premium-stat-card d-flex align-items-center p-6 animate-up delay-1">
+          <div class="stat-icon-wrapper blue me-4">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
           </div>
-          <div class="kpi-body">
-            <span class="kpi-label">Total Open</span>
-            <span class="kpi-value">{{ openCount() }}</span>
-          </div>
-        </div>
-
-        <div class="kpi-card">
-          <div class="kpi-icon bg-amber-50 text-amber-600">
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          </div>
-          <div class="kpi-body">
-            <span class="kpi-label">Avg Resolution</span>
-            <span class="kpi-value">{{ avgResolution() }}h</span>
+          <div class="stat-info">
+            <span class="stat-label">Total Active</span>
+            <div class="stat-value-group">
+              <h3 class="stat-number">{{ openCount() }}</h3>
+            </div>
           </div>
         </div>
 
-        <div class="kpi-card">
-          <div class="kpi-icon bg-green-50 text-green-600">
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div class="premium-stat-card d-flex align-items-center p-6 animate-up delay-2">
+          <div class="stat-icon-wrapper gold me-4">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
-          <div class="kpi-body">
-            <span class="kpi-label">SLA Compliance</span>
-            <span class="kpi-value">{{ slaRate() }}%</span>
+          <div class="stat-info">
+            <span class="stat-label">Avg Resolution</span>
+            <div class="stat-value-group">
+              <h3 class="stat-number">{{ avgResolution() }}<span class="unit-text">HRS</span></h3>
+            </div>
           </div>
         </div>
 
-        <div class="kpi-card">
-          <div class="kpi-icon bg-purple-50 text-purple-600">
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        <div class="premium-stat-card d-flex align-items-center p-6 animate-up delay-3">
+          <div class="stat-icon-wrapper green me-4">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
-          <div class="kpi-body">
-            <span class="kpi-label">Total Resolved</span>
-            <span class="kpi-value">{{ totalResolved() }}</span>
+          <div class="stat-info">
+            <span class="stat-label">SLA Compliance</span>
+            <div class="stat-value-group">
+              <h3 class="stat-number">{{ slaRate() }}%</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="premium-stat-card d-flex align-items-center p-6 animate-up delay-4">
+          <div class="stat-icon-wrapper purple me-4">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Total Resolved</span>
+            <div class="stat-value-group">
+              <h3 class="stat-number">{{ totalResolved() }}</h3>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Charts Row -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
-        <!-- Status Breakdown -->
-        <div class="chart-card">
-          <h3 class="chart-title">Status Breakdown</h3>
-          <div class="bar-chart">
+      <!-- Analysis Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+        <!-- Status Decomposition -->
+        <div class="content-card-premium p-8 animate-up delay-2">
+          <div class="card-p-header mb-8">
+            <h3 class="card-p-title">Status Decomposition</h3>
+            <p class="card-p-subtitle">Distribution of active and closed protocols</p>
+          </div>
+          <div class="space-y-6">
             @for (item of statusData(); track item.status) {
-              <div class="bar-row">
-                <span class="bar-label">{{ item.status }}</span>
-                <div class="bar-track">
-                  <div class="bar-fill" [style.width.%]="getPercentage(item.count, totalTickets())" [class]="'fill-' + getStatusColor(item.status)"></div>
+              <div class="flex flex-col gap-2">
+                <div class="flex justify-between items-center text-xs font-bold uppercase tracking-widest">
+                  <span class="text-slate-400">{{ item.status }}</span>
+                  <span class="text-white">{{ item.count }}</span>
                 </div>
-                <span class="bar-count">{{ item.count }}</span>
+                <div class="h-3 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                  <div class="h-full rounded-full transition-all duration-1000" 
+                       [style.width.%]="getPercentage(item.count, totalTickets())" 
+                       [class]="'fill-' + getStatusColor(item.status)"></div>
+                </div>
               </div>
             }
           </div>
         </div>
 
-        <!-- Priority Breakdown -->
-        <div class="chart-card">
-          <h3 class="chart-title">Priority Distribution</h3>
-          <div class="bar-chart">
+        <!-- Priority Matrix -->
+        <div class="content-card-premium p-8 animate-up delay-3">
+          <div class="card-p-header mb-8">
+            <h3 class="card-p-title">Priority Distribution</h3>
+            <p class="card-p-subtitle">SLA urgency mapping for current workload</p>
+          </div>
+          <div class="space-y-6">
             @for (item of priorityData(); track item.priority) {
-              <div class="bar-row">
-                <span class="bar-label">{{ item.priority }}</span>
-                <div class="bar-track">
-                  <div class="bar-fill" [style.width.%]="getPercentage(item.count, totalTickets())" [class]="'fill-' + getPriorityColor(item.priority)"></div>
+              <div class="flex flex-col gap-2">
+                <div class="flex justify-between items-center text-xs font-bold uppercase tracking-widest">
+                  <span class="text-slate-400">{{ item.priority }}</span>
+                  <span class="text-white">{{ item.count }}</span>
                 </div>
-                <span class="bar-count">{{ item.count }}</span>
+                <div class="h-3 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                  <div class="h-full rounded-full transition-all duration-1000" 
+                       [style.width.%]="getPercentage(item.count, totalTickets())" 
+                       [class]="'fill-' + getPriorityColor(item.priority)"></div>
+                </div>
               </div>
             }
           </div>
         </div>
       </div>
 
-      <!-- Category Breakdown -->
-      <div class="chart-card mb-10">
-        <h3 class="chart-title">Tickets by Category</h3>
-        <div class="category-grid grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+      <!-- Category Insights -->
+      <div class="content-card-premium p-8 mb-10 animate-up delay-4">
+        <h3 class="card-p-title mb-6">Subject Matter Insights</h3>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
           @for (item of categoryData(); track item.category) {
-            <div class="cat-pill">
-              <span class="cat-name">{{ item.category }}</span>
-              <span class="cat-count">{{ item.count }}</span>
+            <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors">
+              <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">{{ item.category }}</span>
+              <span class="text-2xl font-black text-white">{{ item.count }}</span>
             </div>
           }
         </div>
       </div>
 
-      <!-- 7-Day Volume Sparkline -->
-      <div class="chart-card">
-        <h3 class="chart-title">7-Day Ticket Volume</h3>
-        <div class="daily-chart mt-4 flex items-end gap-3 h-32">
+      <!-- Volumetric Analysis -->
+      <div class="content-card-premium p-8 animate-up delay-5">
+        <h3 class="card-p-title mb-8">Periodic Volumetric Analysis</h3>
+        <div class="flex items-end gap-3 h-48 px-4">
           @for (d of dailyData(); track d.day) {
-            <div class="daily-bar-wrapper flex-1 flex flex-col items-center gap-1">
-              <span class="daily-count text-xs font-bold text-slate-500">{{ d.count }}</span>
-              <div class="daily-bar rounded-t-lg" [style.height.%]="getDayHeight(d.count)"></div>
-              <span class="daily-label text-xs text-slate-400">{{ formatDay(d.day) }}</span>
+            <div class="flex-1 flex flex-col items-center gap-4 group">
+              <div class="relative w-full flex flex-col items-center justify-end h-32">
+                 <div class="absolute -top-8 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded-md border border-white/10">
+                    {{ d.count }}
+                 </div>
+                 <div class="w-full bg-gradient-to-t from-red-600 to-red-400 rounded-t-xl group-hover:from-red-500 group-hover:to-red-300 transition-all duration-500" 
+                      [style.height.%]="getDayHeight(d.count)"></div>
+              </div>
+              <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ formatDay(d.day) }}</span>
             </div>
           }
         </div>
@@ -132,59 +165,19 @@ interface DailyItem { day: string; count: number; }
     </div>
   `,
   styles: [`
-    .hd-dash { max-width: 1400px; margin: 0 auto; animation: fadeIn 0.4s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-    .btn-create {
-      padding: 12px 24px; border-radius: 16px; font-weight: 800; font-size: 0.9rem;
-      background: linear-gradient(135deg, #e31e24, #c0121a); color: white; border: none;
-      cursor: pointer; transition: all 0.3s; text-decoration: none;
-    }
-    .btn-create:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(227,30,36,0.3); }
-
-    .kpi-card {
-      display: flex; align-items: center; gap: 16px; padding: 24px;
-      background: white; border-radius: 24px; border: 1px solid #f1f5f9;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: all 0.3s;
-    }
-    .kpi-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); transform: translateY(-2px); }
-    .kpi-icon { width: 56px; height: 56px; border-radius: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .kpi-body { display: flex; flex-direction: column; }
-    .kpi-label { font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-    .kpi-value { font-size: 2rem; font-weight: 900; color: #1e293b; line-height: 1.1; margin-top: 4px; }
-
-    .chart-card {
-      background: white; border-radius: 24px; padding: 28px;
-      border: 1px solid #f1f5f9; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    }
-    .chart-title { font-size: 1.1rem; font-weight: 800; color: #334155; margin-bottom: 20px; }
-
-    .bar-chart { display: flex; flex-direction: column; gap: 12px; }
-    .bar-row { display: flex; align-items: center; gap: 12px; }
-    .bar-label { width: 140px; font-size: 0.85rem; font-weight: 700; color: #64748b; text-align: right; flex-shrink: 0; }
-    .bar-track { flex: 1; height: 28px; background: #f8fafc; border-radius: 14px; overflow: hidden; }
-    .bar-fill { height: 100%; border-radius: 14px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); min-width: 4px; }
-    .bar-count { width: 40px; font-size: 0.85rem; font-weight: 800; color: #1e293b; text-align: center; }
-
-    .fill-blue { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-    .fill-amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-    .fill-green { background: linear-gradient(90deg, #22c55e, #4ade80); }
-    .fill-red { background: linear-gradient(90deg, #ef4444, #f87171); }
-    .fill-purple { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
-    .fill-slate { background: linear-gradient(90deg, #64748b, #94a3b8); }
-
-    .cat-pill {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 18px; background: #f8fafc; border-radius: 16px;
-      border: 1px solid #f1f5f9; transition: all 0.3s;
-    }
-    .cat-pill:hover { border-color: #e2e8f0; background: white; }
-    .cat-name { font-size: 0.85rem; font-weight: 700; color: #475569; }
-    .cat-count { font-size: 1.1rem; font-weight: 900; color: #1e293b; }
-
-    .daily-bar-wrapper { position: relative; }
-    .daily-bar { width: 100%; background: linear-gradient(180deg, #e31e24, #f87171); border-radius: 8px 8px 0 0; min-height: 4px; transition: height 0.8s cubic-bezier(0.4,0,0.2,1); }
-    .daily-chart { align-items: flex-end; }
+    .page-container { max-width: 1400px; margin: 0 auto; }
+    .unit-text { font-size: 0.65rem; font-weight: 900; vertical-align: middle; margin-left: 6px; color: var(--text-tertiary); }
+    
+    .fill-blue   { background: linear-gradient(90deg, #3b82f6, #60a5fa); box-shadow: 0 0 15px rgba(59,130,246,0.3); }
+    .fill-amber  { background: linear-gradient(90deg, #f59e0b, #fbbf24); box-shadow: 0 0 15px rgba(245,158,11,0.3); }
+    .fill-green  { background: linear-gradient(90deg, #22c55e, #4ade80); box-shadow: 0 0 15px rgba(34,197,94,0.3); }
+    .fill-red    { background: linear-gradient(90deg, #ef4444, #f87171); box-shadow: 0 0 15px rgba(239,68,68,0.3); }
+    .fill-purple { background: linear-gradient(90deg, #8b5cf6, #a78bfa); box-shadow: 0 0 15px rgba(139,92,246,0.3); }
+    .fill-slate  { background: linear-gradient(90deg, #64748b, #94a3b8); box-shadow: 0 0 15px rgba(100,116,139,0.3); }
+    
+    .card-p-header { display: flex; flex-direction: column; gap: 4px; }
+    .card-p-title { font-size: 1.1rem; font-weight: 900; color: #fff; margin: 0; letter-spacing: -0.5px; }
+    .card-p-subtitle { font-size: 0.85rem; color: #64748b; font-weight: 500; }
   `]
 })
 export class HelpdeskDashboardComponent implements OnInit {
