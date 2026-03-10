@@ -18,185 +18,163 @@ interface PaymentFormData {
   selector: 'app-mpesa-payment',
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   template: `
-    <div class="mpesa-payment-container">
-      <!-- Payment Dialog -->
+    <div class="db-root animate-fade-in">
+      <!-- Digital Noise & Background Accents -->
+      <div class="noise-overlay"></div>
+      <div class="accent-bleed"></div>
+
+      <!-- Payment Interface Modal -->
       @if (showPaymentModal()) {
-        <div class="payment-modal">
-          <div class="modal-overlay" (click)="closePaymentModal()"></div>
-          <div class="modal-content">
-            <div class="modal-header">
-              <h2>M-PESA Payment</h2>
+        <div class="modal-overlay-elite animate-fade-in">
+          <div class="absolute inset-0 bg-black/85 backdrop-blur-xl" (click)="closePaymentModal()"></div>
+          <div class="elite-card modal-box mpesa-box animate-scale-in">
+            <div class="card-glow"></div>
+            <div class="panel-header-elite">
+              <div>
+                <h3 class="panel-title">M-PESA <span class="text-red">Protocol</span></h3>
+                <p class="panel-desc">Statutory Payment Initialization via STK Push</p>
+              </div>
               <button class="close-btn" (click)="closePaymentModal()">✕</button>
             </div>
-            <div class="modal-body">
-              <!-- Loading State -->
+
+            <div class="modal-body-elite">
+              <!-- SYNC STATE -->
               @if (isProcessing()) {
-                <div class="processing-state">
-                  <div class="spinner"></div>
-                  <p>Sending payment prompt to your M-PESA phone...</p>
+                <div class="mpesa-processing">
+                  <div class="loader-ring"></div>
+                  <p>SYNCING WITH SAFARICOM MOBILE ENGINE...</p>
+                  <span>Enter your M-PESA PIN when the prompt appears on your device.</span>
                 </div>
               }
-              <!-- Success State -->
+
+              <!-- SUCCESS TELEMETRY -->
               @if (!isProcessing() && paymentSuccess()) {
-                <div class="success-state">
-                  <div class="success-icon">✓</div>
-                  <h3>Payment Initiated Successfully</h3>
-                  <p>A payment prompt has been sent to <strong>{{ lastPaymentPhone() }}</strong></p>
-                  <p class="info-text">Please enter your M-PESA PIN when you receive the prompt.</p>
-                  <div class="transaction-details">
-                    <div class="detail-row">
-                      <span>Transaction ID:</span>
-                      <strong>{{ lastTransactionId() }}</strong>
+                <div class="mpesa-result success">
+                  <div class="res-icon">✓</div>
+                  <h3>Transmission Success</h3>
+                  <p>Telemetry prompt dispatched to <strong class="text-white">{{ lastPaymentPhone() }}</strong></p>
+                  <div class="txn-ref">REF ID: {{ lastTransactionId() }}</div>
+                  
+                  <div class="fiscal-summary">
+                    <div class="fs-item">
+                       <span class="fs-label">FISCAL VALUE</span>
+                       <span class="fs-val">KES {{ lastPaymentAmount() | number:'1.2-2' }}</span>
                     </div>
-                    <div class="detail-row">
-                      <span>Amount:</span>
-                      <strong>KES {{ lastPaymentAmount() | number:'1.0-2' }}</strong>
-                    </div>
-                    <div class="detail-row">
-                      <span>Status:</span>
-                      <span class="status-badge pending">Awaiting PIN Entry</span>
+                    <div class="fs-item text-right">
+                       <span class="fs-label">PROTOCOL STATUS</span>
+                       <span class="fs-val text-red">AWAITING PIN</span>
                     </div>
                   </div>
-                  <button class="modern-btn primary-btn full-width" (click)="closePaymentModal()">
-                    Close
-                  </button>
+
+                  <button class="btn-primary-elite w-full mt-8" (click)="closePaymentModal()">ACKNOWLEDGE & CLOSE</button>
                 </div>
               }
-              <!-- Error State -->
+
+              <!-- ANOMALY DETECTED -->
               @if (!isProcessing() && paymentError()) {
-                <div class="error-state">
-                  <div class="error-icon">✕</div>
-                  <h3>Payment Failed</h3>
+                <div class="mpesa-result error">
+                  <div class="res-icon">✕</div>
+                  <h3>Protocol Aborted</h3>
                   <p>{{ paymentErrorMessage() }}</p>
-                  <button class="modern-btn primary-btn full-width" (click)="resetPaymentForm()">
-                    Try Again
-                  </button>
+                  <button class="btn-primary-elite w-full mt-8" (click)="resetPaymentForm()">RETRY TRANSMISSION</button>
                 </div>
               }
-              <!-- Form State -->
+
+              <!-- EXECUTION FORM -->
               @if (!isProcessing() && !paymentSuccess() && !paymentError()) {
-                <form
-                  [formGroup]="paymentForm"
-                  (ngSubmit)="submitPayment()"
-                  class="payment-form">
-                  <!-- Phone Number Input -->
-                  <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input
-                      id="phone"
-                      type="tel"
-                      formControlName="phone"
-                      placeholder="e.g., +254700000000 or 0700000000"
-                      class="form-input"
-                      [class.error]="hasPhoneError()">
-                      <small class="hint-text">Must be registered with M-PESA</small>
-                      @if (hasPhoneError()) {
-                        <div class="error-text">
-                          {{ getPhoneError() }}
-                        </div>
-                      }
-                    </div>
-                    <!-- Amount Input -->
-                    <div class="form-group">
-                      <label for="amount">Amount (KES)</label>
-                      <div class="amount-input-group">
-                        <span class="currency-prefix">KES</span>
-                        <input
-                          id="amount"
-                          type="number"
-                          formControlName="amount"
-                          placeholder="100 - 150,000"
-                          class="form-input amount-input"
-                          [class.error]="hasAmountError()">
-                        </div>
-                        <small class="hint-text">Minimum: KES 100, Maximum: KES 150,000</small>
-                        @if (hasAmountError()) {
-                          <div class="error-text">
-                            {{ getAmountError() }}
-                          </div>
-                        }
-                      </div>
-                      <!-- Amount Fee Info -->
-                      @if (paymentForm.get('amount')?.value) {
-                        <div class="fee-breakdown">
-                          <div class="fee-row">
-                            <span>Amount:</span>
-                            <span>KES {{ paymentForm.get('amount')?.value | number:'1.0-2' }}</span>
-                          </div>
-                          <div class="fee-row">
-                            <span>M-PESA Fee:</span>
-                            <span>KES {{ calculateFee().fee | number:'1.0-2' }}</span>
-                          </div>
-                          <div class="fee-row total">
-                            <span>Total to Pay:</span>
-                            <strong>KES {{ calculateFee().total | number:'1.0-2' }}</strong>
-                          </div>
-                        </div>
-                      }
-                      <!-- Description -->
-                      <div class="form-group">
-                        <label for="description">Payment Description</label>
-                        <textarea
-                          id="description"
-                          formControlName="description"
-                          placeholder="e.g., Payment for tax return 2024"
-                          class="form-input textarea"
-                        rows="2"></textarea>
-                      </div>
-                      <!-- Form Actions -->
-                      <div class="form-actions">
-                        <button
-                          type="button"
-                          class="modern-btn outline-btn"
-                          (click)="closePaymentModal()">
-                          Cancel
-                        </button>
-                        <button
-                          type="submit"
-                          class="modern-btn primary-btn"
-                          [disabled]="!paymentForm.valid || isProcessing()">
-                          Initiate M-PESA Payment
-                        </button>
-                      </div>
-                    </form>
-                  }
-                </div>
-              </div>
-            </div>
-          }
-    
-          <!-- Active Payments Tracker -->
-          @if ((activePayments$ | async)?.size; as paymentCount) {
-            <div class="active-payments-panel">
-              <div class="panel-header">
-                <h3>Active Payments (<span class="count">{{ paymentCount }}</span>)</h3>
-                <button class="clean-btn" (click)="clearCompletedPayments()">Clear Completed</button>
-              </div>
-              <div class="payments-list">
-                @for (tracking of getActivePaymentsList(); track tracking) {
-                  <div class="payment-item">
-                    <div class="payment-info">
-                      <div class="phone-info">
-                        <span class="label">Phone:</span>
-                        <strong>{{ maskPhoneNumber(tracking.phone) }}</strong>
-                      </div>
-                      <div class="amount-info">
-                        <span class="label">Amount:</span>
-                        <strong>KES {{ tracking.amount | number:'1.0-2' }}</strong>
-                      </div>
-                    </div>
-                    <div class="payment-status">
-                      <span class="status-badge" [class]="getStatusClass(tracking.status)">
-                        {{ getStatusDisplay(tracking.status) }}
-                      </span>
-                      <span class="timestamp">{{ tracking.timestamp | date:'short' }}</span>
-                    </div>
+                <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()" class="mpesa-form-elite">
+                  <div class="input-group-elite">
+                    <label>ENCRYPTED PHONE NUMBER</label>
+                    <input type="tel" formControlName="phone" placeholder="e.g. 0712 345 678" [class.error]="hasPhoneError()">
+                    @if (hasPhoneError()) { <span class="error-intel">{{ getPhoneError() }}</span> }
                   </div>
-                }
+
+                  <div class="input-group-elite text-right">
+                    <label>EXACT FISCAL VALUE (KES)</label>
+                    <div class="currency-wrap">
+                      <span class="prefix">KES</span>
+                      <input type="number" formControlName="amount" placeholder="1,000" class="text-right" [class.error]="hasAmountError()">
+                    </div>
+                    @if (hasAmountError()) { <span class="error-intel">{{ getAmountError() }}</span> }
+                  </div>
+
+                  @if (paymentForm.get('amount')?.value) {
+                    <div class="tax-matrix-elite">
+                      <div class="tm-row">
+                        <span>PRN Principal</span>
+                        <span>{{ paymentForm.get('amount')?.value | number:'1.2-2' }}</span>
+                      </div>
+                      <div class="tm-row">
+                        <span>Gateway Fee</span>
+                        <span>{{ calculateFee().fee | number:'1.2-2' }}</span>
+                      </div>
+                      <div class="tm-row total">
+                        <span>Total Liability</span>
+                        <span>KES {{ calculateFee().total | number:'1.2-2' }}</span>
+                      </div>
+                    </div>
+                  }
+
+                  <div class="input-group-elite">
+                    <label>PAYMENT TELEMETRY CONTEXT</label>
+                    <input type="text" formControlName="description" placeholder="e.g. Income Tax Period 2024-Q1">
+                  </div>
+
+                  <div class="form-actions-elite pt-4">
+                    <button type="button" class="btn-ghost-elite flex-1" (click)="closePaymentModal()">PRESCIND</button>
+                    <button type="submit" class="btn-primary-elite flex-1" [disabled]="!paymentForm.valid || isProcessing()">INITIATE STK PUSH</button>
+                  </div>
+                </form>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Performance Telemetry Tracker -->
+      @if ((activePayments$ | async)?.size; as paymentCount) {
+        <div class="db-inner !py-0">
+          <div class="elite-card table-panel">
+            <div class="card-glow"></div>
+            <div class="panel-header-elite">
+              <div>
+                <h3 class="panel-title">Active <span class="text-red">Telemetry</span> Tracker</h3>
+                <p class="panel-desc">Real-time status of dispatched M-PESA prompts</p>
+              </div>
+              <div class="action-stack">
+                <div class="live-badge">
+                  <span class="live-dot"></span>
+                  {{ paymentCount }} SIGNAL{{ paymentCount > 1 ? 'S' : '' }} ACTIVE
+                </div>
+                <button class="btn-ghost-elite" (click)="clearCompletedPayments()">CLEAR COMPLETED</button>
               </div>
             </div>
-          }
+
+            <div class="p-6">
+               <div class="tracking-grid">
+                  @for (tracking of getActivePaymentsList(); track tracking) {
+                    <div class="tracking-item" [class]="getStatusClass(tracking.status)">
+                      <div class="ti-left">
+                         <span class="ti-ref">#TRANSACTION-{{ tracking.timestamp | date:'HHmmss' }}</span>
+                         <span class="ti-phone">{{ maskPhoneNumber(tracking.phone) }}</span>
+                      </div>
+                      <div class="ti-center">
+                         <span class="ti-amount">KES {{ tracking.amount | number:'1.2-2' }}</span>
+                         <span class="ti-time">{{ tracking.timestamp | date:'shortTime' }}</span>
+                      </div>
+                      <div class="ti-right">
+                         <div class="status-badge" [class.success]="tracking.status === 'completed'" [class.alert]="tracking.status === 'pending'">
+                            {{ getStatusDisplay(tracking.status) | uppercase }}
+                         </div>
+                      </div>
+                    </div>
+                  }
+               </div>
+            </div>
+          </div>
         </div>
+      }
+    </div>
     `,
   styles: [`
     .mpesa-payment-container {
