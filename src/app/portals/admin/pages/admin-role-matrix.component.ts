@@ -1,321 +1,342 @@
-import { Component, inject, OnInit, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AdminService } from '../../../services/admin.service';
-
-interface RolePermission {
-  role_id: number;
-  page_slug: string;
-  can_view: number;
-  can_edit: number;
-  can_delete: number;
-  can_export: number;
-}
+import { AdminService, Role, ModulePermission } from '../../../services/admin.service';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-admin-role-matrix',
-  imports: [FormsModule],
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, FormsModule],
   template: `
-    <div class="content-area animate-fade-in">
+    <div class="db-root">
+      <div class="noise-overlay"></div>
       
-      <!-- Elite Header -->
-      <header class="mb-10">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div class="header-titles-complex">
-            <h1 class="text-3xl font-black text-primary tracking-tight">
-              Role <span class="text-accent">Orchestration</span>
-            </h1>
-            <p class="text-[var(--text-secondary)] mt-2 font-semibold tracking-wide uppercase text-[10px]">National Authorization Control & Protocol Management</p>
-          </div>
-          @if (!loading()) {
-            <div class="flex items-center gap-4">
-              <div class="status-pill-precision online py-3 px-6">
-                 <span class="text-[10px] font-black text-tertiary uppercase tracking-widest block mb-1">Active Roles</span>
-                 <span class="text-xl font-black text-accent tracking-tighter uppercase">{{ totalRolesCount() }} UNITS</span>
+      <div class="content-area animate-stagger">
+        
+        <!-- Protocol Header Manifold -->
+        <header class="mb-14 overflow-hidden relative group">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-10 relative z-10">
+            <div class="space-y-2">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-1.5 h-6 bg-accent rounded-full shadow-[0_0_12px_var(--color-accent)]"></div>
+                <span class="text-[10px] font-black text-accent uppercase tracking-[0.4em]">Advanced Authorization Layer</span>
               </div>
-              <div class="status-pill-precision synced py-3 px-6">
-                 <span class="text-[10px] font-black text-tertiary uppercase tracking-widest block mb-1">Protected Nodes</span>
-                 <span class="text-xl font-black text-primary tracking-tighter uppercase">{{ totalPagesCount() }} SEGMENTS</span>
+              <h1 class="text-5xl font-black text-primary tracking-tighter uppercase leading-none">
+                Protocol <span class="text-stroke-sm">Shield Matrix</span>
+              </h1>
+              <p class="text-[10px] font-black text-muted uppercase tracking-[0.3em] flex items-center gap-3">
+                CRITICAL ACCESS DELEGATION // SYSTEM AUTHORITY OVERRIDE NODE: SEC-KRA-09
+              </p>
+            </div>
+
+            <div class="flex items-center gap-6">
+              <div class="status-pill-precision online py-2 px-5 bg-white/5 border-white/10">
+                <span class="status-pill-dot animate-pulse shadow-[0_0_8px_var(--color-success)]"></span>
+                ENCRYPTION LAYER ACTIVE
+              </div>
+              <button (click)="savePermissions()" [disabled]="saving() || !selectedRole()" 
+                class="btn-precision online !bg-accent !text-white !border-none !px-10 shadow-[0_0_20px_var(--color-accent)] disabled:opacity-40">
+                {{ saving() ? 'SYNCHRONIZING...' : 'COMMIT PROTOCOL' }}
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- Role Array Selection -->
+          <div class="lg:col-span-3 space-y-6">
+            <div class="glass-panel p-8 bg-white/[0.02]">
+              <h3 class="text-[10px] font-black text-muted uppercase tracking-[0.4em] mb-8 flex items-center gap-3">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg>
+                Authority Primitives
+              </h3>
+              <div class="space-y-3">
+                @for (role of roles(); track role.id) {
+                  <button (click)="selectRole(role)" 
+                    class="w-full p-5 rounded-2xl text-left transition-all relative overflow-hidden group/role"
+                    [class.bg-accent]="selectedRole()?.id === role.id"
+                    [class.text-white]="selectedRole()?.id === role.id"
+                    [class.bg-white/5]="selectedRole()?.id !== role.id"
+                    [class.border]="selectedRole()?.id !== role.id"
+                    [class.border-white/5]="selectedRole()?.id !== role.id"
+                    [class.hover:border-accent/40]="selectedRole()?.id !== role.id">
+                    @if (selectedRole()?.id === role.id) {
+                      <div class="absolute inset-0 bg-gradient-to-r from-accent to-accent/80"></div>
+                      <div class="absolute right-[-20%] top-[-20%] w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                    }
+                    <div class="relative z-10 flex flex-col gap-1">
+                      <span class="text-xs font-black uppercase tracking-tight">{{ role.name }}</span>
+                      <span class="text-[9px] font-black uppercase tracking-widest opacity-60">ID: SEC-{{ role.id }}</span>
+                    </div>
+                  </button>
+                }
               </div>
             </div>
-          }
-        </div>
-      </header>
-    
-      @if (loading()) {
-        <div class="py-20 flex flex-col items-center gap-4">
-          <div class="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin"></div>
-          <p class="text-[10px] font-black text-tertiary uppercase tracking-widest">Synchronizing Security Matrix...</p>
-        </div>
-      }
-    
-      @if (!loading() && error()) {
-        <div class="stat-card-precision border-accent/20 animate-shake mb-10">
-          <div class="flex items-center gap-4 text-accent">
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            <span class="font-black uppercase text-xs tracking-widest">{{ error() }}</span>
           </div>
-        </div>
-      }
-    
-      @if (!loading() && !error()) {
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-    
-          <!-- Role Identities -->
-          <div class="lg:col-span-4 space-y-6">
-            <h3 class="text-[10px] font-black text-tertiary uppercase tracking-[0.3em] pl-2 mb-6">User Role Clusters</h3>
-            <div class="flex flex-col gap-4">
-              @for (role of roles(); track role.id) {
-                <button (click)="selectedRoleId.set(role.id)"
-                  class="w-full flex items-center gap-6 p-6 rounded-2xl border-2 transition-all text-left relative group overflow-hidden"
-                  [class]="selectedRoleId() === role.id ? 'bg-[var(--bg-surface-1)] border-accent shadow-xl shadow-accent/5' : 'bg-[var(--bg-card)] border-[var(--border-subtle)] hover:border-accent/40'">
-                  
-                  <div class="w-12 h-12 rounded-xl flex items-center justify-center transition-all"
-                    [class]="selectedRoleId() === role.id ? 'bg-accent text-white' : 'bg-[var(--bg-surface-2)] text-tertiary group-hover:text-accent'">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                  </div>
-                  
-                  <div class="flex-1">
-                    <span class="block text-sm font-black text-primary uppercase tracking-tight">{{ role.name }}</span>
-                    <span class="block text-[9px] font-black text-tertiary uppercase tracking-widest mt-1 opacity-60">{{ role.description || 'Level 1 Clearance' }}</span>
-                  </div>
 
-                  @if (selectedRoleId() === role.id) {
-                    <div class="absolute right-0 top-0 bottom-0 w-1 bg-accent"></div>
-                  }
-                </button>
+          <!-- Protocol Grid Manifold -->
+          <div class="lg:col-span-9">
+            <div class="glass-panel overflow-hidden border-white/5">
+              @if (loading()) {
+               <div class="py-40 flex flex-col items-center justify-center gap-8">
+                  <div class="relative w-16 h-16">
+                    <div class="absolute inset-0 border-4 border-accent/20 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-t-accent rounded-full animate-spin"></div>
+                  </div>
+                  <p class="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Reconstructing Protocol Grid...</p>
+                </div>
+              } @else if (!selectedRole()) {
+                <div class="py-48 flex flex-col items-center justify-center text-center gap-8 group/init">
+                  <div class="w-24 h-24 bg-white/5 rounded-[2rem] flex items-center justify-center text-muted border border-white/10 group-hover/init:border-accent/30 transition-all outline outline-offset-8 outline-white/5">
+                    <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                  </div>
+                  <div class="space-y-2">
+                    <h3 class="text-2xl font-black text-primary uppercase tracking-tighter">Authority Lockdown</h3>
+                    <p class="text-[10px] font-black text-muted uppercase tracking-[0.3em]">Select an authority primitive to decrypt its protocol matrix</p>
+                  </div>
+                </div>
+              } @else {
+                <div class="overflow-x-auto custom-scrollbar">
+                  <table class="w-full text-left border-collapse">
+                    <thead>
+                      <tr class="bg-white/[0.02] border-b border-white/5">
+                        <th class="px-10 py-8 text-[10px] font-black uppercase tracking-[0.4em] text-muted">Module Node</th>
+                        <th class="px-8 py-8 text-[10px] font-black uppercase tracking-[0.4em] text-muted text-center">Visibility</th>
+                        <th class="px-8 py-8 text-[10px] font-black uppercase tracking-[0.4em] text-muted text-center">Modification</th>
+                        <th class="px-8 py-8 text-[10px] font-black uppercase tracking-[0.4em] text-muted text-center">Purge</th>
+                        <th class="px-10 py-8 text-[10px] font-black uppercase tracking-[0.4em] text-muted text-center">Extraction</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                      @for (perm of permissions(); track perm.module_id) {
+                        <tr class="hover:bg-white/[0.03] transition-colors group">
+                          <td class="px-10 py-8">
+                            <div class="flex items-center gap-5">
+                              <div class="w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_var(--color-accent)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                              <div class="space-y-1">
+                                <span class="text-sm font-black text-primary uppercase tracking-tighter block">{{ perm.module_name }}</span>
+                                <span class="text-[9px] font-black text-muted uppercase tracking-widest block opacity-60">ID: MN-{{ perm.module_id }}</span>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="px-8 py-8 text-center">
+                            <label class="matrix-toggle mx-auto">
+                              <input type="checkbox" [(ngModel)]="perm.can_view">
+                              <span class="toggle-manifold">
+                                <span class="toggle-core"></span>
+                              </span>
+                            </label>
+                          </td>
+                          <td class="px-8 py-8 text-center">
+                            <label class="matrix-toggle mx-auto">
+                              <input type="checkbox" [(ngModel)]="perm.can_edit">
+                              <span class="toggle-manifold mod">
+                                <span class="toggle-core"></span>
+                              </span>
+                            </label>
+                          </td>
+                          <td class="px-8 py-8 text-center">
+                            <label class="matrix-toggle mx-auto">
+                              <input type="checkbox" [(ngModel)]="perm.can_delete">
+                              <span class="toggle-manifold purge">
+                                <span class="toggle-core"></span>
+                              </span>
+                            </label>
+                          </td>
+                          <td class="px-10 py-8 text-center">
+                            <label class="matrix-toggle mx-auto">
+                              <input type="checkbox" [(ngModel)]="perm.can_export">
+                              <span class="toggle-manifold extract">
+                                <span class="toggle-core"></span>
+                              </span>
+                            </label>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
               }
             </div>
           </div>
-    
-          <!-- Protocol Grid -->
-          <div class="lg:col-span-8">
-            @if (selectedRole()) {
-              <div class="stat-card-precision !p-0 overflow-hidden relative border-accent/10">
-                <div class="p-10 border-b border-[var(--border-subtle)] bg-[var(--bg-surface-1)]">
-                   <div class="flex items-center justify-between mb-2">
-                     <h2 class="text-xl font-black text-primary uppercase tracking-tight">Protocols: <span class="text-accent">{{ selectedRole().name }}</span></h2>
-                     <div class="flex items-center gap-2">
-                       <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
-                       <span class="text-[10px] font-black text-tertiary uppercase tracking-widest">Live Sync</span>
-                     </div>
-                   </div>
-                   <p class="text-[10px] font-black text-tertiary uppercase tracking-widest">Configure cluster permission inheritance</p>
-                </div>
-    
-                <div class="p-10 space-y-12 max-h-[800px] overflow-y-auto custom-scrollbar">
-                  @for (module of modules(); track module.name) {
-                    <div class="space-y-6">
-                      <h4 class="text-[10px] font-black text-accent uppercase tracking-[0.3em] bg-accent/5 inline-block px-4 py-1 rounded-full border border-accent/10">{{ module.name }} Module</h4>
-    
-                      <div class="space-y-3">
-                        @for (page of module.pages; track page.slug) {
-                          <div class="bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-2xl overflow-hidden transition-all hover:bg-[var(--bg-surface-1)]">
-                            <div class="flex items-center justify-between p-6">
-                              <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-[var(--bg-surface-2)] flex items-center justify-center text-tertiary transition-all group-hover:text-accent">
-                                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                </div>
-                                <div>
-                                  <span class="block text-xs font-black text-primary uppercase tracking-tight">{{ page.title }}</span>
-                                  <span class="block text-[9px] font-black text-tertiary uppercase tracking-widest mt-1">/{{ page.slug }}</span>
-                                </div>
-                              </div>
-    
-                              <div class="flex items-center gap-6">
-                                @if (getPermission(selectedRoleId(), page.slug, 'can_view')) {
-                                  <button (click)="toggleExpand(page.slug)"
-                                    class="text-[10px] font-black uppercase tracking-widest transition-all p-2 rounded-lg flex items-center gap-2"
-                                    [class]="expandedPage() === page.slug ? 'bg-primary text-white' : 'bg-[var(--bg-surface-2)] text-tertiary hover:text-primary'">
-                                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-                                    Advanced
-                                  </button>
-                                }
-    
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                  <input type="checkbox" class="sr-only peer"
-                                    [checked]="getPermission(selectedRoleId(), page.slug, 'can_view')"
-                                    (change)="togglePermission(selectedRoleId(), page.slug, 'can_view', $any($event.target).checked)"
-                                    [disabled]="saving()">
-                                  <div class="w-12 h-6 bg-[var(--bg-surface-2)] border border-[var(--border-subtle)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:bg-accent peer-checked:bg-accent/10 after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-tertiary after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
-                                </label>
-                              </div>
-                            </div>
-    
-                            <!-- Advanced Matrix -->
-                            @if (expandedPage() === page.slug && getPermission(selectedRoleId(), page.slug, 'can_view')) {
-                              <div class="bg-[var(--bg-surface-2)] p-6 border-t border-[var(--border-subtle)] animate-fade-in">
-                                <div class="grid grid-cols-3 gap-4">
-                                  <label class="flex-1 cursor-pointer group">
-                                    <input type="checkbox" class="sr-only peer" [checked]="getPermission(selectedRoleId(), page.slug, 'can_edit')" (change)="togglePermission(selectedRoleId(), page.slug, 'can_edit', $any($event.target).checked)">
-                                    <div class="bg-[var(--bg-card)] border-2 border-[var(--border-subtle)] rounded-xl p-4 text-center transition-all peer-checked:border-accent peer-checked:bg-accent/5 group-hover:border-accent group-hover:bg-accent/5">
-                                      <span class="block text-[10px] font-black text-primary uppercase tracking-widest mb-1 group-hover:text-accent peer-checked:text-accent">Write</span>
-                                      <span class="block text-[8px] font-black text-tertiary uppercase">Edit Data</span>
-                                    </div>
-                                  </label>
-                                  <label class="flex-1 cursor-pointer group">
-                                    <input type="checkbox" class="sr-only peer" [checked]="getPermission(selectedRoleId(), page.slug, 'can_delete')" (change)="togglePermission(selectedRoleId(), page.slug, 'can_delete', $any($event.target).checked)">
-                                    <div class="bg-[var(--bg-card)] border-2 border-[var(--border-subtle)] rounded-xl p-4 text-center transition-all peer-checked:border-accent peer-checked:bg-accent/5 group-hover:border-accent group-hover:bg-accent/5">
-                                      <span class="block text-[10px] font-black text-primary uppercase tracking-widest mb-1 group-hover:text-accent peer-checked:text-accent">Purge</span>
-                                      <span class="block text-[8px] font-black text-tertiary uppercase">Delete Data</span>
-                                    </div>
-                                  </label>
-                                  <label class="flex-1 cursor-pointer group">
-                                    <input type="checkbox" class="sr-only peer" [checked]="getPermission(selectedRoleId(), page.slug, 'can_export')" (change)="togglePermission(selectedRoleId(), page.slug, 'can_export', $any($event.target).checked)">
-                                    <div class="bg-[var(--bg-card)] border-2 border-[var(--border-subtle)] rounded-xl p-4 text-center transition-all peer-checked:border-accent peer-checked:bg-accent/5 group-hover:border-accent group-hover:bg-accent/5">
-                                      <span class="block text-[10px] font-black text-primary uppercase tracking-widest mb-1 group-hover:text-accent peer-checked:text-accent">Export</span>
-                                      <span class="block text-[8px] font-black text-tertiary uppercase">Data Sync</span>
-                                    </div>
-                                  </label>
-                                </div>
-                              </div>
-                            }
-                          </div>
-                        }
-                      </div>
-                    </div>
-                  }
-                </div>
-              </div>
-            }
-          </div>
         </div>
-      }
-    
-      <!-- Integrity Stream -->
-      <footer class="mt-20 bg-[var(--text-primary)] rounded-3xl p-10 relative overflow-hidden shadow-2xl">
-        <div class="absolute -top-10 -right-10 w-40 h-40 bg-accent/10 rounded-full blur-3xl"></div>
-        <div class="relative z-10">
-          <div class="flex items-center gap-3 mb-8">
-            <div class="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
-            <h5 class="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Integrity Protocol Ledger</h5>
-          </div>
-          <div class="space-y-4">
-            @for (change of recentChanges().slice(0, 3); track $index) {
-              <div class="text-[11px] font-black text-white/80 border-l-2 border-accent pl-6 py-1 font-mono tracking-tighter uppercase">
-                {{ change }}
-              </div>
-            } @empty {
-              <div class="text-[11px] font-black text-white/20 uppercase tracking-widest pl-6">No recent modifications detected in synchronization</div>
-            }
-          </div>
-        </div>
-      </footer>
+      </div>
     </div>
   `,
-  styles: [``]
+  styles: [`
+    .db-root {
+      min-height: 100vh;
+      background: #050505;
+      position: relative;
+      overflow-x: hidden;
+      color: #e2e8f0;
+      padding: 3.5rem;
+    }
+
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.015;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .content-area {
+      position: relative;
+      z-index: 2;
+      max-width: 1700px;
+      margin: 0 auto;
+    }
+
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 2.5rem;
+    }
+
+    .status-pill-precision {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .online { color: #10b981; }
+    .status-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    .text-stroke-sm {
+      -webkit-text-stroke: 1px currentColor;
+      color: transparent;
+    }
+
+    .matrix-toggle {
+      display: block;
+      width: 48px;
+      height: 24px;
+      cursor: pointer;
+      position: relative;
+    }
+    .matrix-toggle input { display: none; }
+    
+    .toggle-manifold {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .toggle-core {
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      background: #4a5568;
+      border-radius: 8px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .matrix-toggle input:checked + .toggle-manifold {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    .matrix-toggle input:checked + .toggle-manifold .toggle-core {
+      transform: translateX(24px);
+      background: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    /* Override for mod/purge/extract if needed for distinct colors */
+    .matrix-toggle input:checked + .toggle-manifold.mod { background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3); }
+    .matrix-toggle input:checked + .toggle-manifold.mod .toggle-core { background: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+    
+    .matrix-toggle input:checked + .toggle-manifold.purge { background: rgba(217, 43, 43, 0.1); border-color: rgba(217, 43, 43, 0.3); }
+    .matrix-toggle input:checked + .toggle-manifold.purge .toggle-core { background: var(--color-accent); box-shadow: 0 0 10px var(--color-accent); }
+
+    .matrix-toggle input:checked + .toggle-manifold.extract { background: rgba(140, 82, 255, 0.1); border-color: rgba(140, 82, 255, 0.3); }
+    .matrix-toggle input:checked + .toggle-manifold.extract .toggle-core { background: #8c52ff; box-shadow: 0 0 10px rgba(140, 82, 255, 0.5); }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
+
+    .animate-stagger > * {
+      animation: stg 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes stg {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-stagger > *:nth-child(1) { animation-delay: 0.1s; }
+    .animate-stagger > *:nth-child(2) { animation-delay: 0.2s; }
+  `]
 })
 export class AdminRoleMatrixComponent implements OnInit {
   private adminService = inject(AdminService);
 
   loading = signal(true);
   saving = signal(false);
-  error = signal('');
-  
-  roles = signal<any[]>([]);
-  pagesSource = signal<any[]>([]);
-  permissions = signal<RolePermission[]>([]);
-  recentChanges = signal<string[]>([]);
-  selectedRoleId = signal<number | null>(null);
-  expandedPage = signal<string | null>(null);
+  roles = signal<Role[]>([]);
+  selectedRole = signal<Role | null>(null);
+  permissions = signal<ModulePermission[]>([]);
 
-  selectedRole = computed(() => {
-    const id = this.selectedRoleId();
-    return this.roles().find(r => r.id === id);
-  });
-
-  modules = computed(() => {
-    const groups: { name: string, pages: any[] }[] = [];
-    this.pagesSource().forEach(p => {
-      let group = groups.find(g => g.name === p.module);
-      if (!group) {
-        group = { name: p.module, pages: [] };
-        groups.push(group);
-      }
-      group.pages.push(p);
-    });
-    return groups;
-  });
-
-  totalRolesCount = computed(() => this.roles().length);
-  totalPagesCount = computed(() => this.pagesSource().length);
-
-  ngOnInit(): void {
-    this.fetchMatrix();
+  ngOnInit() {
+    this.loadRoles();
   }
 
-  fetchMatrix() {
+  loadRoles() {
     this.loading.set(true);
-    this.error.set('');
-    this.adminService.getMatrix().subscribe({
+    this.adminService.getRoles().subscribe({
       next: (res) => {
-        if (res && res.data) {
-          this.roles.set(res.data.roles || []);
-          this.pagesSource.set(res.data.pages || []);
-          this.permissions.set(Object.values(res.data.permissions || {}) as RolePermission[]);
-          
-          if (!this.selectedRoleId() && this.roles().length > 0) {
-            this.selectedRoleId.set(this.roles()[0].id);
-          }
+        if (res.success && res.data) {
+          this.roles.set(res.data);
         }
         this.loading.set(false);
       },
-      error: (err) => {
-        this.error.set('Failed to synchronize permissions registry.');
-        this.loading.set(false);
-      }
+      error: () => this.loading.set(false)
     });
   }
 
-  toggleExpand(slug: string) {
-    this.expandedPage.update(current => current === slug ? null : slug);
+  selectRole(role: Role) {
+    this.selectedRole.set(role);
+    this.loading.set(true);
+    this.adminService.getModulePermissions(role.id).subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.permissions.set(res.data);
+        }
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false)
+    });
   }
 
-  getPermission(roleId: number | null, pageSlug: string, permKey: keyof RolePermission): boolean {
-    if (roleId === null) return false;
-    const perm = this.permissions().find(p => p.role_id === roleId && p.page_slug === pageSlug);
-    return perm ? (perm[permKey] === 1) : false;
-  }
+  savePermissions() {
+    const role = this.selectedRole();
+    if (!role) return;
 
-  togglePermission(roleId: number | null, pageSlug: string, permKey: 'can_view' | 'can_edit' | 'can_delete' | 'can_export', value: boolean) {
-    if (roleId === null) return;
     this.saving.set(true);
-
-    const currentPerms = this.permissions().find(p => p.role_id === roleId && p.page_slug === pageSlug) || 
-      { role_id: roleId, page_slug: pageSlug, can_view: 0, can_edit: 0, can_delete: 0, can_export: 0 };
-    
-    const payload = {
-      ...currentPerms,
-      [permKey]: value ? 1 : 0
-    };
-
-    this.adminService.upsertPermission(payload).subscribe({
-      next: () => {
-        const action = value ? 'GRANTED' : 'REVOKED';
-        const roleName = this.roles().find(r => r.id === roleId)?.name || `Role ${roleId}`;
-        const pageTitle = this.pagesSource().find(p => p.slug === pageSlug)?.title || pageSlug;
-        const permLabel = permKey.replace('can_', '').toUpperCase();
-        
-        this.recentChanges.update(prev => [`${action}: ${permLabel} for ${pageTitle} (${roleName})`, ...prev]);
-        
-        this.permissions.update(current => {
-          const index = current.findIndex(p => p.role_id === roleId && p.page_slug === pageSlug);
-          if (index > -1) {
-            const updated = [...current];
-            updated[index] = { ...updated[index], ...payload };
-            return updated;
-          }
-          return [...current, payload as RolePermission];
-        });
-        
+    this.adminService.upsertPermissions(role.id, this.permissions()).subscribe({
+      next: (res) => {
+        if (res.success) {
+          // Protocol update success feedback could be added here
+        }
         this.saving.set(false);
       },
-      error: () => {
-        this.error.set('Integrity sync failed. Please verify network connection.');
-        this.saving.set(false);
-      }
+      error: () => this.saving.set(false)
     });
   }
 }
