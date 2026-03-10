@@ -9,193 +9,193 @@ import { NotificationService } from '../../../../core/services/notification.serv
   selector: 'app-installment-list',
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
   template: `
-    <div class="page-container animate-fade-in">
-      <header class="mb-10 lg:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
-        <div>
-          <div class="flex items-center gap-3 mb-2">
-            <span class="inline-flex items-center gap-2 px-3 py-1 bg-violet-500/10 border border-violet-500/20 text-violet-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
-              <span class="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
-              REPAYMENT COMMAND
-            </span>
+    <div class="db-root">
+      <div class="noise-overlay"></div>
+      <div class="accent-bleed"></div>
+      
+      <div class="db-inner">
+        <header class="premium-header">
+          <div class="header-main">
+            <div class="header-tag">
+              <span class="tag-glow"></span>
+              <span class="tag-text">Fiscal Telemetry</span>
+            </div>
+            <h1 class="premium-title">Repayment <span class="red-gradient">Schedules</span></h1>
+            <p class="premium-subtitle">Authorized monitoring of structured tax liability liquidation protocols</p>
           </div>
-          <h1 class="premium-title">Tax Payment <span class="gradient-text">Installments</span></h1>
-          <p class="premium-subtitle">Authorized dashboard for managing structured liability liquidation protocols</p>
-        </div>
-        <button routerLink="/member/installments/apply" class="modern-btn primary-btn py-4 px-8 shadow-xl shadow-violet-500/20 elite-glow">
-          Propose New Plan
-        </button>
-      </header>
+          <button routerLink="/member/installments/apply" class="btn-primary-elite">
+            <div class="btn-glow"></div>
+            <span class="relative z-10">PROPOSE NEW PLAN</span>
+          </button>
+        </header>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        @for (plan of plans; track plan.id) {
-          <div class="glass-panel p-0 overflow-hidden border-white/5 hover:border-violet-500/30 transition-all flex flex-col group relative">
-             <!-- Interactive Glow -->
-             <div class="absolute -top-24 -right-24 w-48 h-48 bg-violet-600/5 rounded-full blur-3xl group-hover:bg-violet-600/10 transition-colors duration-700"></div>
-
-             <!-- Header -->
-             <div class="p-8 bg-white/[0.01] border-b border-white/5 flex justify-between items-start relative z-10">
-                <div>
-                   <div class="text-[9px] font-black text-slate-600 uppercase tracking-[0.3em] mb-2">{{ plan.refNo }}</div>
-                   <h3 class="text-white font-black text-lg tracking-tight uppercase group-hover:text-violet-400 transition-colors">{{ plan.obligation }}</h3>
+        <div class="grid-layout">
+          @for (plan of plans; track plan.id) {
+            <div class="elite-card plan-card group">
+              <!-- Header Section -->
+              <div class="card-head">
+                <div class="head-info">
+                  <span class="ref-id">{{ plan.refNo }}</span>
+                  <h3 class="obligation-title">{{ plan.obligation }}</h3>
                 </div>
-                <span class="status-pill-elite active" [class.success]="plan.status === 'COMPLETED'">
-                  <span class="dot"></span>
-                  {{ plan.status }}
-                </span>
-             </div>
+                <div class="status-indicator" [class.completed]="plan.status === 'COMPLETED'">
+                  <span class="status-dot"></span>
+                  <span class="status-text">{{ plan.status }}</span>
+                </div>
+              </div>
 
-             <!-- Body -->
-             <div class="p-8 space-y-8 flex-grow relative z-10">
-                <div class="flex justify-between items-end">
-                   <div>
-                      <div class="text-slate-500 text-[10px] uppercase font-black tracking-widest mb-2">Total Liability</div>
-                      <div class="text-3xl font-black text-white tracking-tighter tabular-nums flex items-baseline gap-2">
-                         <span class="text-xs text-slate-600">KES</span>
-                         {{ plan.totalAmount | number:'1.2-2' }}
-                      </div>
-                   </div>
-                   <div class="text-right">
-                      <div class="text-slate-500 text-[10px] uppercase font-black tracking-widest mb-2">Outstanding</div>
-                      <div class="text-xl font-black text-violet-400 tracking-tight tabular-nums">{{ plan.remainingBalance | number:'1.2-2' }}</div>
-                   </div>
+              <!-- Metrics Section -->
+              <div class="card-body">
+                <div class="metric-row">
+                  <div class="metric-box">
+                    <span class="metric-label">TOTAL LIABILITY</span>
+                    <div class="metric-value">
+                      <span class="currency">KES</span>
+                      {{ plan.totalAmount | number:'1.2-2' }}
+                    </div>
+                  </div>
+                  <div class="metric-box text-right">
+                    <span class="metric-label">OUTSTANDING</span>
+                    <div class="metric-value highlight">
+                      <span class="currency">KES</span>
+                      {{ plan.remainingBalance | number:'1.2-2' }}
+                    </div>
+                  </div>
                 </div>
 
-                <!-- Progress Bar -->
-                <div class="bg-white/[0.02] p-4 rounded-2xl border border-white/5">
-                   <div class="flex justify-between text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 mb-3">
-                      <span>Liquidation Progress</span>
-                      <span class="text-violet-400">{{ plan.paidInstallments }}/{{ plan.totalInstallments }} Months Cleared</span>
-                   </div>
-                   <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
-                      <div class="h-full bg-gradient-to-r from-violet-600 to-indigo-500 rounded-full" [style.width.%]="(plan.paidInstallments / plan.totalInstallments) * 100"></div>
-                   </div>
+                <!-- Progress Visualization -->
+                <div class="progress-container">
+                  <div class="progress-meta">
+                    <span class="progress-label">LIQUIDATION PROGRESS</span>
+                    <span class="progress-stats">{{ plan.paidInstallments }} / {{ plan.totalInstallments }} MONTHS</span>
+                  </div>
+                  <div class="progress-track">
+                    <div class="progress-fill" [style.width.%]="(plan.paidInstallments / plan.totalInstallments) * 100"></div>
+                  </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                   <div class="p-5 rounded-2xl bg-white/[0.01] border border-white/5">
-                      <div class="text-[9px] text-slate-600 uppercase font-black tracking-widest mb-2">Next Milestone</div>
-                      <div class="text-white font-black text-sm tracking-tight">{{ plan.nextDue | date:'dd MMM yyyy' }}</div>
-                   </div>
-                   <div class="p-5 rounded-2xl bg-white/[0.01] border border-white/5">
-                      <div class="text-[9px] text-slate-600 uppercase font-black tracking-widest mb-2">Monthly Quota</div>
-                      <div class="text-emerald-400 font-black text-sm tracking-tight">{{ plan.monthlyAmount | number:'1.2-2' }}</div>
-                   </div>
+                <!-- Schedule Details -->
+                <div class="schedule-grid">
+                  <div class="schedule-item">
+                    <span class="item-label">NEXT MILESTONE</span>
+                    <span class="item-value">{{ plan.nextDue | date:'dd MMM yyyy' }}</span>
+                  </div>
+                  <div class="schedule-item">
+                    <span class="item-label">MONTHLY QUOTA</span>
+                    <span class="item-value accent">{{ plan.monthlyAmount | number:'1.2-2' }}</span>
+                  </div>
                 </div>
-             </div>
+              </div>
 
-             <!-- Footer -->
-             <div class="p-6 bg-white/[0.02] flex gap-4 relative z-10">
-                <button class="flex-grow py-3 px-4 rounded-xl border border-white/5 bg-white/[0.02] text-slate-400 text-[10px] font-black uppercase tracking-widest hover:bg-white/[0.05] hover:text-white transition-all">Schedule</button>
-                <button class="flex-grow py-3 px-4 rounded-xl border border-white/5 bg-white/[0.02] text-slate-400 text-[10px] font-black uppercase tracking-widest hover:bg-white/[0.05] hover:text-white transition-all">Ledger</button>
+              <!-- Action Footer -->
+              <div class="card-foot">
+                <button class="btn-ghost-elite">Schedule</button>
+                <button class="btn-ghost-elite">Ledger</button>
                 @if (plan.status === 'ACTIVE') {
-                  <button
-                    class="flex-[2] py-3 px-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-emerald-500/20 transition-all flex items-center justify-center gap-2"
-                    (click)="openMpesaModal(plan)">
+                  <button class="btn-action-highlight" (click)="openMpesaModal(plan)">
                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    Liquidate via M-Pesa
+                    Pay via M-Pesa
                   </button>
                 }
+              </div>
+            </div>
+          } @empty {
+             <div class="empty-telemetry">
+                <div class="empty-icon-wrap">
+                   <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                </div>
+                <h3 class="empty-title">REGISTRY SILENT</h3>
+                <p class="empty-text">No active repayment schedules or structured plans detected.</p>
              </div>
-          </div>
-        } @empty {
-          <div class="lg:col-span-2 glass-panel py-32 flex flex-col items-center justify-center text-center">
-             <div class="w-20 h-20 bg-slate-900 border border-white/5 rounded-full flex items-center justify-center mb-8 text-slate-700 shadow-2xl">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-             </div>
-             <h3 class="text-white font-black uppercase tracking-widest mb-2">Registry Silent</h3>
-             <p class="text-slate-500 text-sm max-w-xs uppercase tracking-widest font-bold opacity-60">No active repayment schedules or structured plans detected.</p>
-          </div>
-        }
-      </div>
+          }
+        </div>
 
-      <!-- Compliance Note -->
-      <div class="mt-14 glass-panel p-8 bg-violet-600/5 border-violet-500/20 flex items-start gap-6 relative overflow-hidden">
-         <div class="absolute -left-12 -bottom-12 w-32 h-32 bg-violet-500/10 rounded-full blur-3xl"></div>
-         <div class="w-12 h-12 rounded-2xl bg-violet-500/10 flex items-center justify-center shrink-0 border border-violet-500/20 relative z-10">
-            <svg class="w-6 h-6 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-         </div>
-         <div class="relative z-10">
-            <h4 class="text-violet-400 text-[10px] font-black uppercase tracking-[0.2em] mb-2">Compliance Directive</h4>
-            <p class="text-xs text-slate-400 leading-relaxed font-bold uppercase tracking-widest opacity-80">
-               Failure to adhere to the agreed liquidation schedule will terminate the protection protocol, triggering immediate enforcement actions including bank agency notices and asset lien procedures.
-            </p>
-         </div>
+        <!-- Compliance Directive -->
+        <footer class="directive-box">
+           <div class="directive-icon">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+           </div>
+           <div class="directive-content">
+              <h4 class="directive-title">COMPLIANCE DIRECTIVE</h4>
+              <p class="directive-text text-balance">
+                Failure to adhere to the agreed liquidation schedule will terminate the protection protocol, triggering immediate enforcement actions including bank agency notices and asset lien procedures.
+              </p>
+           </div>
+        </footer>
       </div>
     </div>
 
     <!-- M-Pesa Payment Modal -->
     @if (showMpesaModal()) {
-      <div class="mpesa-overlay" role="dialog" aria-modal="true" aria-labelledby="mpesa-modal-title">
-        <div class="mpesa-modal-backdrop" (click)="closeMpesaModal()"></div>
-        <div class="mpesa-modal-content">
+      <div class="modal-overlay-elite" role="dialog" aria-modal="true">
+        <div class="modal-backdrop" (click)="closeMpesaModal()"></div>
+        <div class="modal-glass">
           <!-- Header -->
-          <div class="mpesa-modal-header">
-            <div>
-              <div class="text-[10px] font-bold text-green-400 uppercase tracking-widest mb-1">M-PESA STK PUSH</div>
-              <h2 id="mpesa-modal-title" class="text-lg font-black text-white">Pay Installment</h2>
+          <div class="modal-header">
+            <div class="header-info">
+              <span class="header-tag">MPESA STK PROTOCOL</span>
+              <h2 class="modal-title">Pay Installment</h2>
               @if (selectedPlan()) {
-                <p class="text-slate-400 text-xs mt-0.5">{{ selectedPlan()!.obligation }}</p>
+                <p class="modal-subtitle">{{ selectedPlan()!.obligation }}</p>
               }
             </div>
-            <button class="mpesa-close-btn" (click)="closeMpesaModal()" aria-label="Close M-Pesa modal">✕</button>
+            <button class="modal-close" (click)="closeMpesaModal()">✕</button>
           </div>
 
           <!-- Body -->
-          <div class="mpesa-modal-body">
+          <div class="modal-body">
             @if (mpesaProcessing()) {
-              <div class="mpesa-state-center">
-                <div class="mpesa-spinner" role="status" aria-label="Processing payment"></div>
-                <p class="text-white font-bold mt-4">Sending prompt to your phone…</p>
-                <p class="text-slate-400 text-sm mt-1">Enter your M-PESA PIN when prompted.</p>
+              <div class="processing-state">
+                <div class="loader-ring"></div>
+                <h3 class="state-title">Authenticating...</h3>
+                <p class="state-text text-balance">Sending secure STK trigger to your device. Complete PIN entry now.</p>
               </div>
             } @else if (mpesaSuccess()) {
-              <div class="mpesa-state-center">
-                <div class="mpesa-icon-success" aria-hidden="true">✓</div>
-                <h3 class="text-white font-bold text-lg mt-4">Prompt Sent!</h3>
-                <p class="text-slate-400 text-sm mt-1">Check <strong class="text-white">{{ mpesaForm.get('phone')?.value }}</strong> for the M-PESA PIN prompt.</p>
-                <p class="text-green-400 text-xs mt-3 bg-green-500/10 px-4 py-2 rounded-lg">Transaction ID: {{ mpesaTransactionId() }}</p>
-                <button class="mpesa-btn-primary mt-6" (click)="closeMpesaModal()">Done</button>
+              <div class="success-state">
+                <div class="success-icon">✓</div>
+                <h3 class="state-title">Protocol Sent</h3>
+                <p class="state-text">Check {{ mpesaForm.get('phone')?.value }} for the payment prompt.</p>
+                <div class="tx-badge">TXID: {{ mpesaTransactionId() }}</div>
+                <button class="btn-primary-elite mt-8 w-full" (click)="closeMpesaModal()">DISMISS</button>
               </div>
             } @else if (mpesaError()) {
-              <div class="mpesa-state-center">
-                <div class="mpesa-icon-error" aria-hidden="true">✕</div>
-                <h3 class="text-white font-bold text-lg mt-4">Payment Failed</h3>
-                <p class="text-slate-400 text-sm mt-1">{{ mpesaErrorMessage() }}</p>
-                <button class="mpesa-btn-primary mt-6" (click)="resetMpesaState()">Try Again</button>
+              <div class="error-state">
+                <div class="error-icon">✕</div>
+                <h3 class="state-title">Auth Failed</h3>
+                <p class="state-text">{{ mpesaErrorMessage() }}</p>
+                <button class="btn-primary-elite mt-8 w-full" (click)="resetMpesaState()">RETRY PROTOCOL</button>
               </div>
             } @else {
-              <form [formGroup]="mpesaForm" (ngSubmit)="submitMpesaPayment()" class="mpesa-form">
-                <!-- Amount display -->
-                <div class="mpesa-amount-card">
-                  <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Amount Due</div>
-                  <div class="text-3xl font-black text-white font-mono">KES {{ mpesaForm.get('amount')?.value | number:'1.2-2' }}</div>
-                  <div class="text-[10px] text-slate-500 mt-1">Monthly installment payment</div>
+              <form [formGroup]="mpesaForm" (ngSubmit)="submitMpesaPayment()" class="elite-form">
+                <div class="amount-card">
+                  <span class="label">SETTLEMENT AMOUNT</span>
+                  <div class="value">
+                    <span class="unit">KES</span>
+                    {{ mpesaForm.get('amount')?.value | number:'1.2-2' }}
+                  </div>
                 </div>
 
-                <!-- Phone input -->
-                <div class="mpesa-field">
-                  <label for="installment-mpesa-phone" class="mpesa-label">M-PESA Phone Number <span class="text-red-400">*</span></label>
-                  <input
-                    id="installment-mpesa-phone"
-                    type="tel"
-                    formControlName="phone"
-                    placeholder="e.g. 0712 345 678 or +254712345678"
-                    class="mpesa-input"
-                    [class.mpesa-input-error]="mpesaForm.get('phone')?.invalid && mpesaForm.get('phone')?.touched"
-                    autocomplete="tel">
+                <div class="form-group">
+                  <label class="form-label">VALIDATED PHONE NUMBER</label>
+                  <div class="input-group">
+                    <input
+                      type="tel"
+                      formControlName="phone"
+                      placeholder="e.g. 0712 345 678"
+                      class="form-input-elite"
+                      [class.error]="mpesaForm.get('phone')?.invalid && mpesaForm.get('phone')?.touched"
+                    >
+                  </div>
                   @if (mpesaForm.get('phone')?.invalid && mpesaForm.get('phone')?.touched) {
-                    <span class="text-red-400 text-[10px] font-bold uppercase mt-1 block">Valid Safaricom/Airtel number required</span>
+                    <span class="error-hint">VALID PROTOCOL-ENABLED NUMBER REQUIRED</span>
                   }
-                  <span class="text-slate-500 text-[10px] mt-1 block">Must be registered with M-PESA</span>
                 </div>
 
-                <div class="mpesa-form-footer">
-                  <button type="button" class="mpesa-btn-secondary" (click)="closeMpesaModal()">Cancel</button>
-                  <button
-                    type="submit"
-                    class="mpesa-btn-primary"
-                    [disabled]="mpesaForm.invalid">
-                    Initiate M-PESA Payment
+                <div class="modal-footer">
+                  <button type="button" class="btn-ghost-elite" (click)="closeMpesaModal()">ABORT</button>
+                  <button type="submit" class="btn-primary-elite flex-grow" [disabled]="mpesaForm.invalid">
+                    <div class="btn-glow"></div>
+                    <span class="relative z-10">INITIATE PAYMENT</span>
                   </button>
                 </div>
               </form>
@@ -206,94 +206,198 @@ import { NotificationService } from '../../../../core/services/notification.serv
     }
   `,
   styles: [`
-    .glass-card {
-      background: rgba(30, 41, 59, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
+    :host { 
+      --red: #D92B2B;
+      --red-bright: #EF3B3B;
+      --red-glow: rgba(217, 43, 43, 0.4);
+      --red-pale: rgba(217, 43, 43, 0.1);
+      --red-border: rgba(217, 43, 43, 0.2);
+      --bg-root: #080809;
+      --bg-card: rgba(18, 18, 20, 0.6);
+      --bdr: rgba(255, 255, 255, 0.05);
+      --text-muted: #666670;
     }
-    /* M-Pesa Modal */
-    .mpesa-overlay {
-      position: fixed; inset: 0; z-index: 900;
-      display: flex; align-items: center; justify-content: center; padding: 1rem;
+
+    .db-root {
+      min-height: 100vh;
+      background: var(--bg-root);
+      position: relative;
+      overflow-x: hidden;
+      color: #fff;
     }
-    .mpesa-modal-backdrop {
-      position: absolute; inset: 0;
-      background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+
+    .noise-overlay {
+      position: fixed; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Cfilter id='noiseFilter'%3%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3%3C/filter%3%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3C/svg%3");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 1;
     }
-    .mpesa-modal-content {
-      position: relative; z-index: 1;
-      background: #1e293b; border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-      width: 100%; max-width: 440px; overflow: hidden;
+
+    .accent-bleed {
+      position: fixed; top: -10%; right: -5%;
+      width: 60%; height: 50%;
+      background: radial-gradient(circle at center, var(--red-pale) 0%, transparent 70%);
+      filter: blur(80px);
+      z-index: 0;
     }
-    .mpesa-modal-header {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.02);
+
+    .db-inner {
+      position: relative; z-index: 10;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 24px;
     }
-    .mpesa-close-btn {
-      width: 32px; height: 32px; border-radius: 8px;
-      background: rgba(255,255,255,0.05); border: none;
-      color: #94a3b8; cursor: pointer; font-size: 14px;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.15s;
+
+    /* Header */
+    .premium-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 64px;
+      gap: 32px;
     }
-    .mpesa-close-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-    .mpesa-modal-body { padding: 1.5rem; }
-    .mpesa-state-center { text-align: center; padding: 1.5rem 0; }
-    .mpesa-spinner {
-      width: 52px; height: 52px; border-radius: 50%;
-      border: 4px solid rgba(255,255,255,0.1);
-      border-top-color: #22c55e;
-      animation: spin 0.8s linear infinite; margin: 0 auto;
+
+    .header-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px;
+      background: var(--red-pale);
+      border: 1px solid var(--red-border);
+      border-radius: 100px;
+      margin-bottom: 16px;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .mpesa-icon-success {
-      width: 64px; height: 64px; border-radius: 50%;
-      background: #16a34a20; color: #22c55e;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px; font-weight: 900; margin: 0 auto;
-      border: 2px solid #22c55e40;
+    .tag-glow { width: 6px; height: 6px; background: var(--red); border-radius: 50%; box-shadow: 0 0 10px var(--red); }
+    .tag-text { font-size: 10px; font-weight: 900; color: var(--red-bright); letter-spacing: 2px; text-transform: uppercase; }
+
+    .premium-title { font-size: 48px; font-weight: 950; letter-spacing: -2px; line-height: 1; margin: 0; }
+    .red-gradient { background: linear-gradient(to right, #fff, var(--red-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .premium-subtitle { color: var(--text-muted); font-size: 14px; font-weight: 500; margin: 12px 0 0; letter-spacing: 0.5px; }
+
+    /* Buttons */
+    .btn-primary-elite {
+      position: relative; padding: 18px 36px;
+      background: var(--red); color: white;
+      border: none; border-radius: 20px;
+      font-size: 11px; font-weight: 900; letter-spacing: 1.5px;
+      cursor: pointer; overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 24px var(--red-glow);
     }
-    .mpesa-icon-error {
-      width: 64px; height: 64px; border-radius: 50%;
-      background: #dc262620; color: #ef4444;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px; font-weight: 900; margin: 0 auto;
-      border: 2px solid #ef444440;
+    .btn-primary-elite:hover { transform: translateY(-3px); box-shadow: 0 12px 32px var(--red-glow); filter: brightness(1.1); }
+    .btn-glow { position: absolute; inset: 0; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent); transform: translateX(-100%); transition: transform 0.6s; }
+    .btn-primary-elite:hover .btn-glow { transform: translateX(100%); }
+
+    /* Grid Layout */
+    .grid-layout {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+      gap: 32px;
     }
-    .mpesa-amount-card {
-      background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.2);
-      border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;
+
+    /* Plan Card */
+    .elite-card {
+      background: var(--bg-card);
+      border: 1px solid var(--bdr);
+      border-radius: 32px;
+      padding: 0;
+      backdrop-filter: blur(24px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; flex-direction: column;
+      overflow: hidden;
     }
-    .mpesa-form { display: flex; flex-direction: column; gap: 0; }
-    .mpesa-field { display: flex; flex-direction: column; margin-bottom: 1.25rem; }
-    .mpesa-label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
-    .mpesa-input {
-      background: rgba(15,23,42,0.7); border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px; padding: 0.75rem 1rem;
-      color: white; font-size: 14px; font-family: monospace; letter-spacing: 0.05em;
-      transition: border-color 0.15s;
+    .elite-card:hover { border-color: var(--red-border); transform: translateY(-8px); box-shadow: 0 24px 64px rgba(0,0,0,0.4); }
+
+    .card-head { padding: 32px; border-bottom: 1px solid var(--bdr); display: flex; justify-content: space-between; align-items: flex-start; }
+    .ref-id { font-size: 9px; font-weight: 900; color: var(--text-muted); letter-spacing: 3px; display: block; margin-bottom: 8px; }
+    .obligation-title { font-size: 18px; font-weight: 900; margin: 0; letter-spacing: -0.5px; color: #fff; transition: color 0.4s; }
+    .plan-card:hover .obligation-title { color: var(--red-bright); }
+
+    .status-indicator { display: flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 100px; }
+    .status-indicator.completed { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; }
+    .completed .status-dot { background: #10b981; }
+    .status-text { font-size: 9px; font-weight: 900; color: #f59e0b; letter-spacing: 1px; }
+    .completed .status-text { color: #10b981; }
+
+    .card-body { padding: 32px; flex-grow: 1; }
+    .metric-row { display: flex; justify-content: space-between; margin-bottom: 32px; }
+    .metric-label { font-size: 9px; font-weight: 900; color: var(--text-muted); letter-spacing: 1.5px; display: block; margin-bottom: 8px; }
+    .metric-value { font-size: 32px; font-weight: 950; letter-spacing: -1px; display: flex; align-items: baseline; gap: 4px; }
+    .metric-value.highlight { color: var(--red-bright); font-size: 24px; }
+    .currency { font-size: 10px; color: var(--text-muted); font-weight: 900; }
+
+    /* Progress */
+    .progress-container { margin-bottom: 32px; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px solid var(--bdr); }
+    .progress-meta { display: flex; justify-content: space-between; margin-bottom: 12px; }
+    .progress-label { font-size: 9px; font-weight: 950; color: var(--text-muted); letter-spacing: 2px; }
+    .progress-stats { font-size: 9px; font-weight: 950; color: var(--red-bright); letter-spacing: 1px; }
+    .progress-track { height: 6px; background: #000; border-radius: 100px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(to right, var(--red), var(--red-bright)); border-radius: 100px; box-shadow: 0 0 10px var(--red-glow); }
+
+    .schedule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .schedule-item { padding: 20px; background: rgba(0,0,0,0.2); border-radius: 20px; border: 1px solid var(--bdr); }
+    .item-label { font-size: 9px; font-weight: 900; color: var(--text-muted); letter-spacing: 1px; display: block; margin-bottom: 4px; }
+    .item-value { font-size: 14px; font-weight: 900; color: #fff; }
+    .item-value.accent { color: #10b981; }
+
+    .card-foot { padding: 24px 32px; background: rgba(0,0,0,0.2); display: flex; gap: 12px; }
+    .btn-ghost-elite { flex: 1; padding: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--bdr); border-radius: 16px; color: var(--text-muted); font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
+    .btn-ghost-elite:hover { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.1); }
+    .btn-action-highlight { flex: 2; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--red-pale); border: 1px solid var(--red-border); border-radius: 16px; color: var(--red-bright); font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; }
+    .btn-action-highlight:hover { background: var(--red); color: #fff; box-shadow: 0 8px 20px var(--red-glow); }
+
+    /* Directive */
+    .directive-box { margin-top: 64px; padding: 32px; background: var(--red-pale); border: 1px solid var(--red-border); border-radius: 32px; display: flex; gap: 24px; align-items: flex-start; position: relative; overflow: hidden; }
+    .directive-icon { width: 48px; height: 48px; background: var(--red-pale); border: 1px solid var(--red-border); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--red-bright); flex-shrink: 0; }
+    .directive-title { font-size: 11px; font-weight: 950; color: var(--red-bright); letter-spacing: 3px; margin: 0 0 8px; }
+    .directive-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; font-weight: 500; margin: 0; }
+
+    /* M-Pesa Modal Refined */
+    .modal-overlay-elite { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); }
+    .modal-glass { position: relative; z-index: 10; width: 100%; max-width: 480px; background: #121214; border: 1px solid var(--bdr); border-radius: 40px; overflow: hidden; box-shadow: 0 64px 128px rgba(0,0,0,0.8); }
+    
+    .modal-header { padding: 40px; border-bottom: 1px solid var(--bdr); display: flex; justify-content: space-between; align-items: flex-start; }
+    .modal-header .header-tag { margin-bottom: 12px; }
+    .modal-title { font-size: 28px; font-weight: 950; margin: 0; letter-spacing: -1px; }
+    .modal-subtitle { color: var(--text-muted); font-size: 13px; margin: 4px 0 0; font-weight: 600; }
+    .modal-close { background: rgba(255,255,255,0.05); border: none; width: 40px; height: 40px; border-radius: 15px; color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.3s; }
+    .modal-close:hover { background: var(--red); color: #fff; transform: rotate(90deg); }
+
+    .modal-body { padding: 40px; }
+    .processing-state { text-align: center; padding: 20px 0; }
+    .loader-ring { width: 56px; height: 56px; border: 4px solid var(--red-pale); border-top-color: var(--red-bright); border-radius: 50%; animation: spin-elite 1s cubic-bezier(0.4, 0, 0.2, 1) infinite; margin: 0 auto 24px; }
+    @keyframes spin-elite { to { transform: rotate(360deg); } }
+    .state-title { font-size: 18px; font-weight: 900; margin: 0 0 8px; }
+    .state-text { color: var(--text-muted); font-size: 13px; font-weight: 500; }
+
+    .success-state, .error-state { text-align: center; }
+    .success-icon, .error-icon { width: 64px; height: 64px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; margin: 0 auto 24px; }
+    .success-icon { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+    .error-icon { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+
+    .elite-form { display: flex; flex-direction: column; gap: 32px; }
+    .amount-card { padding: 24px; background: rgba(255,255,255,0.02); border-radius: 24px; border: 1px solid var(--bdr); }
+    .amount-card .label { font-size: 9px; font-weight: 900; color: var(--text-muted); letter-spacing: 2px; display: block; margin-bottom: 8px; }
+    .amount-card .value { font-size: 32px; font-weight: 950; letter-spacing: -1px; }
+    .amount-card .unit { font-size: 12px; color: var(--text-muted); margin-right: 4px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-label { font-size: 10px; font-weight: 950; color: var(--text-muted); letter-spacing: 1.5px; margin-left: 4px; }
+    .form-input-elite { background: rgba(0,0,0,0.3); border: 1px solid var(--bdr); border-radius: 16px; padding: 18px 24px; color: #fff; font-size: 16px; font-weight: 600; outline: none; transition: all 0.3s; }
+    .form-input-elite:focus { border-color: var(--red-border); background: #000; box-shadow: 0 0 0 4px var(--red-pale); }
+    .form-input-elite.error { border-color: rgba(239, 68, 68, 0.5); }
+    .error-hint { font-size: 9px; font-weight: 900; color: #ef4444; letter-spacing: 1px; margin-top: 4px; }
+
+    .modal-footer { display: flex; gap: 16px; margin-top: 8px; }
+
+    .empty-telemetry { grid-column: 1 / -1; padding: 80px 0; text-align: center; }
+    .empty-icon-wrap { width: 80px; height: 80px; background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 30px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--text-muted); }
+    .empty-title { font-size: 11px; font-weight: 950; color: #fff; letter-spacing: 4px; margin: 0 0 8px; }
+    .empty-text { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+    @media (max-width: 1024px) {
+      .grid-layout { grid-template-columns: 1fr; }
+      .premium-header { flex-direction: column; align-items: flex-start; }
+      .btn-primary-elite { width: 100%; }
     }
-    .mpesa-input:focus { outline: none; border-color: #8b5cf6; }
-    .mpesa-input-error { border-color: #ef4444; }
-    .mpesa-form-footer { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
-    .mpesa-btn-primary {
-      flex: 1; padding: 0.75rem 1.5rem; border-radius: 10px;
-      background: #16a34a; color: white; font-weight: 700; font-size: 13px;
-      border: none; cursor: pointer; transition: background 0.15s;
-    }
-    .mpesa-btn-primary:hover:not(:disabled) { background: #15803d; }
-    .mpesa-btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-    .mpesa-btn-secondary {
-      padding: 0.75rem 1.25rem; border-radius: 10px;
-      background: rgba(255,255,255,0.05); color: #94a3b8;
-      font-weight: 600; font-size: 13px;
-      border: 1px solid rgba(255,255,255,0.08); cursor: pointer; transition: all 0.15s;
-    }
-    .mpesa-btn-secondary:hover { background: rgba(255,255,255,0.08); color: white; }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

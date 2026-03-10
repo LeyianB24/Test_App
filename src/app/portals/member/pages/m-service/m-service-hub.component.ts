@@ -1,99 +1,257 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-m-service-hub',
-  imports: [RouterModule],
+  standalone: true,
+  imports: [RouterModule, CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="page-container animate-fade-in max-w-lg mx-auto !pt-10">
-      <header class="mb-12 text-center relative">
-        <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-40 h-40 bg-red-600/5 rounded-full blur-3xl"></div>
-        <div class="inline-flex items-center justify-center p-5 bg-gradient-to-br from-red-600 to-red-700 rounded-[2.5rem] mb-6 shadow-2xl shadow-red-600/20 relative z-10 border border-white/10 group hover:scale-105 transition-all duration-500">
-           <svg class="w-10 h-10 text-white transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 012 2z" /></svg>
-        </div>
-        <div class="flex flex-col items-center gap-2 mb-3">
-          <span class="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 text-slate-400 rounded-full text-[9px] font-black uppercase tracking-[0.3em]">
-            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-            MOBILE GATEWAY
-          </span>
-          <h1 class="premium-title !text-3xl">M-Service <span class="gradient-text">Hub</span></h1>
-        </div>
-        <p class="text-slate-500 text-[10px] font-black uppercase tracking-widest opacity-60">Professional Tax Administration at your fingertips</p>
-      </header>
-
-      <!-- Quick Actions Grid -->
-      <div class="grid grid-cols-2 gap-4">
-         @for (action of quickActions; track action.label) {
-            <div class="glass-panel p-8 flex flex-col items-center text-center hover:border-white/20 transition-all cursor-pointer group active:scale-95 relative overflow-hidden" [routerLink]="action.link">
-               <div class="absolute -bottom-10 -right-10 w-24 h-24 bg-white/[0.01] rounded-full blur-2xl group-hover:bg-white/[0.05] transition-colors"></div>
-               <div class="w-14 h-14 rounded-2xl bg-slate-900/50 border border-white/5 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-2xl relative z-10 group-hover:border-white/20">
-                  <svg class="w-7 h-7" [class]="action.colorClass" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" [attr.d]="action.icon" /></svg>
-               </div>
-               <span class="text-white font-black text-[10px] uppercase tracking-widest relative z-10 opacity-70 group-hover:opacity-100 transition-opacity">{{ action.label }}</span>
+    <div class="db-root">
+      <div class="noise-overlay"></div>
+      <div class="accent-bleed"></div>
+      
+      <div class="db-inner max-w-lg">
+        <header class="hub-header">
+          <div class="hub-icon-wrap">
+             <div class="icon-glow"></div>
+             <svg class="hub-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 012 2z" /></svg>
+          </div>
+          
+          <div class="header-content">
+            <div class="header-tag">
+              <span class="tag-glow"></span>
+              <span class="tag-text">Mobile Gateway Protocol</span>
             </div>
-         }
+            <h1 class="premium-title">M-Service <span class="red-gradient">Hub</span></h1>
+            <p class="premium-subtitle">Professional Tax Administration at your fingertips</p>
+          </div>
+        </header>
+
+        <!-- Quick Actions Grid -->
+        <div class="actions-grid">
+           @for (action of quickActions; track action.label) {
+              <div class="elite-card action-card group" [routerLink]="action.link">
+                 <div class="card-glow"></div>
+                 <div class="action-icon-box">
+                    <svg class="action-icon" [class]="action.colorClass" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" [attr.d]="action.icon" /></svg>
+                 </div>
+                 <span class="action-label">{{ action.label }}</span>
+              </div>
+           }
+        </div>
+
+        <!-- M-Pesa Quick Pay -->
+        <section class="stk-section">
+           <div class="stk-card group">
+              <div class="stk-overlay"></div>
+              <div class="stk-content">
+                 <div class="stk-header">
+                    <div class="mpesa-logo">M</div>
+                    <div class="stk-title-wrap">
+                       <h3 class="stk-title">M-PESA QUICK PAY</h3>
+                       <p class="stk-sub">INSTANT LIABILITY LIQUIDATION</p>
+                    </div>
+                 </div>
+                 
+                 <p class="stk-desc">Input your PRN reference to initiate a secure biometric STK authentication protocol.</p>
+                 
+                 <div class="stk-form">
+                    <div class="input-wrap">
+                       <input type="text" placeholder="ENTER PRN NO." class="stk-input">
+                       <div class="input-pulse"></div>
+                    </div>
+                    <button class="btn-stk">REQUEST GATEWAY AUTHENTICATION</button>
+                 </div>
+              </div>
+              <div class="stk-bg-icon">
+                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.82v-1.91c-.38-.07-.74-.17-1.11-.29l-.24 2.12-2.76-.32.48-4.22c-.67-.37-1.28-.84-1.81-1.39l-2.09 1.48-1.54-2.32 2.14-1.52c-.14-.54-.23-1.09-.27-1.65H2v-2.82h1.41c.04-.56.13-1.11.27-1.65l-2.14-1.52 1.54-2.32 2.09 1.48c.53-.55 1.14-1.02 1.81-1.39L8.48 2.21l2.76.32-.24 2.12c.37-.12.73-.22 1.11-.29V2h2.82v1.91c.38.07.74.17 1.11.29l.24-2.12 2.76.32-.48 4.22c.67.37 1.28.84 1.81 1.39l2.09-1.48 1.54 2.32-2.14 1.52c.14.54.23 1.09.27 1.65H22v2.82h-1.41c-.04.56-.13 1.11-.27 1.65l2.14 1.52-1.54 2.32-2.09-1.48c-.53.55-1.14 1.02-1.81 1.39l.48 4.22-2.76.32-.24-2.12c-.37.12-.73.22-1.11.29z" /></svg>
+              </div>
+           </div>
+        </section>
+
+        <!-- App Deployment Hub -->
+        <section class="deploy-hub">
+           <div class="elite-card deploy-card group">
+              <div class="deploy-content">
+                 <div class="deploy-text">
+                    <h4 class="deploy-title">DEPLOYMENT HUB</h4>
+                    <p class="deploy-sub">UNIFIED BINARY ARCHIVE</p>
+                 </div>
+                 <div class="qr-wrap">
+                    <div class="qr-glow"></div>
+                    <div class="qr-box">
+                       <svg class="qr-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3-6h1.5v1.5H18V13zm3 0h1.5v1.5H21V13z" /></svg>
+                    </div>
+                 </div>
+              </div>
+              <div class="deploy-actions">
+                 <button class="btn-deploy">ANDROID BINARY</button>
+                 <button class="btn-deploy">IOS ARCHIVE</button>
+              </div>
+           </div>
+        </section>
       </div>
-
-      <!-- M-Pesa STK Push Simulator -->
-      <section class="mt-10">
-         <div class="p-8 rounded-[2.5rem] bg-gradient-to-br from-emerald-600 to-emerald-800 text-white shadow-2xl shadow-emerald-900/40 relative overflow-hidden group">
-            <!-- Animated Background Glow -->
-            <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-            
-            <div class="relative z-10">
-               <div class="flex items-center gap-4 mb-6">
-                  <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center font-black text-xl border border-white/20 shadow-xl">M</div>
-                  <div>
-                     <h3 class="font-black text-lg tracking-tight uppercase">M-Pesa Quick Pay</h3>
-                     <p class="text-[9px] text-white/60 font-black uppercase tracking-widest mt-0.5">Instant liability liquidation</p>
-                  </div>
-               </div>
-               
-               <p class="text-xs text-white/80 mb-8 leading-relaxed font-bold uppercase tracking-widest opacity-80">Input your PRN reference to initiate a secure biometric STK authentication protocol.</p>
-               
-               <div class="flex flex-col gap-3">
-                  <div class="relative">
-                     <input type="text" placeholder="ENTER PRN NO." class="w-full bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-xs font-black tracking-widest focus:outline-none focus:bg-white/20 placeholder:text-white/30 transition-all uppercase">
-                     <div class="absolute right-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                  </div>
-                  <button class="bg-white text-emerald-800 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl hover:bg-emerald-50 transition-all active:scale-95 elite-glow">Request Gateway Authentication</button>
-               </div>
-            </div>
-            
-            <!-- Decorative logo -->
-            <div class="absolute -right-16 -bottom-16 opacity-5 rotate-12">
-               <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.82v-1.91c-.38-.07-.74-.17-1.11-.29l-.24 2.12-2.76-.32.48-4.22c-.67-.37-1.28-.84-1.81-1.39l-2.09 1.48-1.54-2.32 2.14-1.52c-.14-.54-.23-1.09-.27-1.65H2v-2.82h1.41c.04-.56.13-1.11.27-1.65l-2.14-1.52 1.54-2.32 2.09 1.48c.53-.55 1.14-1.02 1.81-1.39L8.48 2.21l2.76.32-.24 2.12c.37-.12.73-.22 1.11-.29V2h2.82v1.91c.38.07.74.17 1.11.29l.24-2.12 2.76.32-.48 4.22c.67.37 1.28.84 1.81 1.39l2.09-1.48 1.54 2.32-2.14 1.52c.14.54.23 1.09.27 1.65H22v2.82h-1.41c-.04.56-.13 1.11-.27 1.65l2.14 1.52-1.54 2.32-2.09-1.48c-.53.55-1.14 1.02-1.81 1.39l.48 4.22-2.76.32-.24-2.12c-.37.12-.73.22-1.11.29z" /></svg>
-            </div>
-         </div>
-      </section>
-
-      <!-- App Download Section -->
-      <section class="mt-10 p-8 glass-panel bg-white/[0.01] border-white/5 relative overflow-hidden group">
-         <div class="absolute -top-24 -right-24 w-48 h-48 bg-white/[0.02] rounded-full blur-3xl group-hover:bg-white/[0.04] transition-colors"></div>
-         <div class="flex items-center justify-between relative z-10">
-            <div>
-               <h4 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-3">Deployment Hub</h4>
-               <p class="text-[9px] text-slate-500 font-black uppercase tracking-[0.3em] opacity-60">Unified Binary Archive</p>
-            </div>
-            <div class="w-20 h-20 bg-white p-2.5 rounded-2xl shadow-2xl relative">
-               <div class="absolute inset-0 bg-blue-500/10 blur-xl"></div>
-               <!-- QR to App Store -->
-               <div class="w-full h-full bg-slate-100 rounded-lg flex items-center justify-center relative">
-                  <svg class="w-12 h-12 text-slate-800/20" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3-6h1.5v1.5H18V13zm3 0h1.5v1.5H21V13z" /></svg>
-               </div>
-            </div>
-         </div>
-         <div class="mt-8 flex gap-3 relative z-10">
-            <button class="flex-1 bg-slate-900/50 border border-white/5 py-4 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-white hover:border-white/10 transition-all active:scale-95">Android Binary</button>
-            <button class="flex-1 bg-slate-900/50 border border-white/5 py-4 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-white hover:border-white/10 transition-all active:scale-95">iOS Archive</button>
-         </div>
-      </section>
     </div>
   `,
   styles: [`
-    :host { display: block; }
+    :host { 
+      --red: #D92B2B;
+      --red-bright: #EF3B3B;
+      --red-glow: rgba(217, 43, 43, 0.4);
+      --red-pale: rgba(217, 43, 43, 0.1);
+      --red-border: rgba(217, 43, 43, 0.2);
+      --bg-root: #080809;
+      --bg-card: rgba(18, 18, 20, 0.6);
+      --bdr: rgba(255, 255, 255, 0.05);
+      --text-muted: #666670;
+    }
+
+    .db-root {
+      min-height: 100vh;
+      background: var(--bg-root);
+      position: relative;
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    .noise-overlay {
+      position: fixed; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Cfilter id='noiseFilter'%3%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3%3C/filter%3%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3C/svg%3");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .accent-bleed {
+      position: fixed; top: -10%; right: -5%;
+      width: 60%; height: 50%;
+      background: radial-gradient(circle at center, var(--red-pale) 0%, transparent 70%);
+      filter: blur(80px);
+      z-index: 0;
+    }
+
+    .db-inner {
+      position: relative; z-index: 10;
+      margin: 0 auto;
+      padding: 64px 24px;
+    }
+
+    /* Header */
+    .hub-header { text-align: center; margin-bottom: 56px; }
+    .hub-icon-wrap {
+       position: relative; width: 80px; height: 80px; margin: 0 auto 24px;
+       display: flex; align-items: center; justify-content: center;
+       background: linear-gradient(135deg, var(--red), var(--red-bright));
+       border-radius: 24px; border: 1px solid rgba(255,255,255,0.1);
+       box-shadow: 0 16px 32px var(--red-glow);
+       transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .hub-icon-wrap:hover { transform: scale(1.05) rotate(5deg); }
+    .icon-glow { position: absolute; inset: -10px; background: var(--red); filter: blur(20px); opacity: 0.3; border-radius: inherit; }
+    .hub-icon { width: 36px; height: 36px; color: #fff; position: relative; z-index: 1; }
+
+    .header-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; background: rgba(255,255,255,0.05);
+      border: 1px solid var(--bdr); border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    .tag-glow { width: 6px; height: 6px; background: var(--red); border-radius: 50%; box-shadow: 0 0 10px var(--red); }
+    .tag-text { font-size: 10px; font-weight: 950; color: #fff; letter-spacing: 2.5px; text-transform: uppercase; }
+
+    .premium-title { font-size: 36px; font-weight: 950; letter-spacing: -1.5px; line-height: 1; margin: 0; }
+    .red-gradient { background: linear-gradient(to right, #fff, var(--red-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .premium-subtitle { color: var(--text-muted); font-size: 14px; font-weight: 500; margin: 12px 0 0; letter-spacing: 0.5px; }
+
+    /* Actions Grid */
+    .actions-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 40px; }
+    .action-card {
+       padding: 32px; display: flex; flex-direction: column; align-items: center; text-align: center;
+       background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 28px;
+       cursor: pointer; transition: all 0.4s; position: relative; overflow: hidden;
+    }
+    .action-card:hover { transform: translateY(-4px); border-color: var(--red-border); background: var(--red-pale); }
+    .card-glow { position: absolute; bottom: -40px; right: -40px; width: 120px; height: 120px; background: radial-gradient(circle, var(--red-pale) 0%, transparent 70%); opacity: 0; transition: opacity 0.4s; }
+    .action-card:hover .card-glow { opacity: 1; }
+
+    .action-icon-box {
+       width: 56px; height: 56px; border-radius: 16px; background: #000;
+       border: 1px solid var(--bdr); display: flex; align-items: center; justify-content: center;
+       margin-bottom: 20px; transition: all 0.4s; position: relative; z-index: 1;
+    }
+    .action-card:hover .action-icon-box { transform: scale(1.1); border-color: rgba(255,255,255,0.2); }
+    .action-icon { width: 28px; height: 28px; }
+    .action-label { font-size: 11px; font-weight: 950; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; transition: color 0.4s; position: relative; z-index: 1; }
+    .action-card:hover .action-label { color: #fff; }
+
+    /* M-Pesa STK */
+    .stk-section { margin-bottom: 40px; }
+    .stk-card {
+       padding: 40px; background: linear-gradient(135deg, #065f46, #064e3b);
+       border-radius: 40px; position: relative; overflow: hidden;
+       box-shadow: 0 20px 40px rgba(6, 78, 59, 0.4);
+    }
+    .stk-overlay { position: absolute; inset: 0; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent); transform: translateX(-100%); transition: transform 0.8s; }
+    .stk-card:hover .stk-overlay { transform: translateX(100%); }
+
+    .stk-content { position: relative; z-index: 10; }
+    .stk-header { display: flex; align-items: center; gap: 20px; margin-bottom: 24px; }
+    .mpesa-logo { width: 56px; height: 56px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 950; color: #fff; }
+    .stk-title { font-size: 20px; font-weight: 950; margin: 0; letter-spacing: -0.5px; }
+    .stk-sub { font-size: 9px; font-weight: 950; color: rgba(255,255,255,0.6); margin: 4px 0 0; letter-spacing: 2px; }
+
+    .stk-desc { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); margin: 0 0 32px; line-height: 1.6; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .stk-form { display: flex; flex-direction: column; gap: 16px; }
+    .input-wrap { position: relative; }
+    .stk-input {
+       width: 100%; height: 60px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+       border-radius: 20px; padding: 0 24px; color: #fff; font-size: 14px; font-weight: 900;
+       letter-spacing: 2px; outline: none; transition: all 0.3s;
+    }
+    .stk-input::placeholder { color: rgba(255,255,255,0.3); }
+    .stk-input:focus { background: rgba(255,255,255,0.15); border-color: #fff; }
+    .input-pulse { position: absolute; right: 24px; top: 50%; translate: 0 -50%; width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse 2s infinite; }
+
+    .btn-stk {
+       height: 60px; background: #fff; color: #064e3b; border: none; border-radius: 20px;
+       font-size: 11px; font-weight: 950; letter-spacing: 1.5px; cursor: pointer;
+       transition: all 0.3s; box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+    .btn-stk:hover { transform: translateY(-2px); background: #f0fdf4; box-shadow: 0 12px 24px rgba(0,0,0,0.3); }
+
+    .stk-bg-icon { position: absolute; right: -40px; bottom: -40px; width: 240px; height: 240px; color: #fff; opacity: 0.03; transform: rotate(15deg); pointer-events: none; }
+
+    /* Deploy Hub */
+    .deploy-hub { margin-bottom: 24px; }
+    .deploy-card { padding: 32px; background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 32px; backdrop-filter: blur(24px); }
+    
+    .deploy-content { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .deploy-title { font-size: 12px; font-weight: 950; margin: 0; letter-spacing: 2px; color: #fff; }
+    .deploy-sub { font-size: 9px; font-weight: 950; color: var(--text-muted); margin: 6px 0 0; letter-spacing: 3px; }
+
+    .qr-wrap { position: relative; }
+    .qr-glow { position: absolute; inset: -10px; background: var(--red); opacity: 0.1; filter: blur(15px); border-radius: 12px; }
+    .qr-box { width: 64px; height: 64px; background: #fff; border-radius: 16px; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; }
+    .qr-icon { width: 44px; height: 44px; color: #111; opacity: 0.2; }
+
+    .deploy-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .btn-deploy {
+       height: 52px; background: rgba(255,255,255,0.03); border: 1px solid var(--bdr);
+       border-radius: 14px; color: var(--text-muted); font-size: 9px; font-weight: 950;
+       letter-spacing: 1.5px; cursor: pointer; transition: all 0.3s;
+    }
+    .btn-deploy:hover { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.2); }
+
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+    @media (max-width: 480px) {
+       .actions-grid { grid-template-columns: 1fr; }
+       .deploy-actions { grid-template-columns: 1fr; }
+    }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MServiceHubComponent {
   quickActions = [
@@ -101,25 +259,25 @@ export class MServiceHubComponent {
       label: 'File Nil Return',
       icon: 'M5 13l4 4L19 7',
       link: '/member/tax-engine/file/nil-return',
-      colorClass: 'text-emerald-500'
+      colorClass: 'text-red-500'
     },
     {
       label: 'Check Balance',
       icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
       link: '/member/debt',
-      colorClass: 'text-blue-500'
+      colorClass: 'text-red-500'
     },
     {
       label: 'Verify TCC',
       icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
       link: '/member/compliance/tcc',
-      colorClass: 'text-violet-500'
+      colorClass: 'text-red-500'
     },
     {
       label: 'Notifications',
       icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9',
       link: '/member/notifications',
-      colorClass: 'text-amber-500'
+      colorClass: 'text-red-500'
     }
   ];
 }

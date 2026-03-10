@@ -4,110 +4,243 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-objection-list',
+  standalone: true,
   imports: [CommonModule, RouterModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="page-container animate-fade-in">
-      <header class="mb-10 lg:mb-14 flex flex-col md:flex-row justify-between items-end gap-6">
-        <div>
-          <div class="flex items-center gap-3 mb-2">
-            <span class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-full text-[10px] font-black uppercase tracking-widest leading-none">
-              <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-              LEGAL CHANCERY
-            </span>
+    <div class="db-root">
+      <div class="noise-overlay"></div>
+      <div class="accent-bleed"></div>
+      
+      <div class="db-inner">
+        <header class="premium-header">
+          <div class="header-main">
+            <div class="header-tag">
+              <span class="tag-glow"></span>
+              <span class="tag-text">Legal Chancery Protocol</span>
+            </div>
+            <h1 class="premium-title">My <span class="red-gradient">Objections</span></h1>
+            <p class="premium-subtitle">Authorized tracker for formal disputes and administrative appeals protocols</p>
           </div>
-          <h1 class="premium-title">My <span class="gradient-text">Objections</span></h1>
-          <p class="premium-subtitle">Authorized tracker for formal disputes and administrative appeals protocols</p>
-        </div>
-        <button routerLink="/member/objections/create" class="modern-btn primary-btn py-4 px-8 shadow-xl shadow-blue-500/20 elite-glow">
-          File New Dispute
-        </button>
-      </header>
+          <button routerLink="/member/objections/create" class="btn-primary-elite">
+            <div class="btn-glow"></div>
+            <span class="relative z-10">FILE NEW DISPUTE</span>
+          </button>
+        </header>
 
-      <!-- Stats Grids -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        @for (stat of stats; track stat.label; let i = $index) {
-          <div class="glass-panel p-6 border-white/5 hover:border-blue-500/20 transition-all group overflow-hidden relative">
-             <div class="absolute -bottom-8 -right-8 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/10 transition-colors"></div>
-             <div class="flex items-center gap-4 relative z-10">
-                <div class="w-12 h-12 rounded-xl bg-slate-900 border border-white/5 flex items-center justify-center text-blue-400 shadow-2xl">
-                   <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                </div>
-                <div>
-                   <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1 block">{{ stat.label }}</span>
-                   <h3 class="text-2xl font-black text-white tracking-tighter">{{ stat.value }}</h3>
-                </div>
-             </div>
-          </div>
-        }
-      </div>
-
-      <div class="glass-panel p-0 overflow-hidden relative">
-        <div class="p-8 border-b border-white/5 bg-white/[0.01] flex items-center justify-between">
-           <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest">Active Dispute Registry</h3>
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+           @for (stat of stats; track stat.label) {
+              <div class="elite-card stat-card">
+                 <span class="stat-label">{{ stat.label }}</span>
+                 <div class="stat-value">{{ stat.value }}</div>
+                 <div class="stat-indicator">PROTOCOL ACTIVE</div>
+              </div>
+           }
         </div>
 
-        <div class="grid grid-cols-1 divide-y divide-white/5">
-          @for (item of objections; track item.id) {
-            <div class="p-8 hover:bg-white/[0.02] transition-colors group relative overflow-hidden">
-               <!-- Interactive Glow -->
-               <div class="absolute -right-24 -bottom-24 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/10 transition-colors"></div>
-               
-               <div class="flex flex-wrap lg:flex-nowrap gap-8 items-center relative z-10">
-                  <div class="flex-grow">
-                     <div class="flex items-center gap-4 mb-3">
-                        <span class="text-[9px] font-black text-blue-500/50 uppercase tracking-[0.3em] font-mono border border-blue-500/10 px-2 py-0.5 rounded-lg">{{ item.refNo }}</span>
-                        <div class="w-1 h-1 rounded-full bg-slate-700"></div>
-                        <span class="text-[9px] text-slate-600 font-black uppercase tracking-[0.2em]">{{ item.obligation }}</span>
-                     </div>
-                     <h3 class="text-lg font-black text-white group-hover:text-blue-400 transition-colors mb-2 tracking-tight uppercase">{{ item.reason }}</h3>
-                     <div class="flex items-center gap-6 text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-                        <span>Ref Assessment: <strong class="text-slate-400">{{ item.assessmentNo }}</strong></span>
-                        <div class="w-1 h-1 rounded-full bg-slate-800"></div>
-                        <span>Protocol Date: <strong class="text-slate-400">{{ item.filedDate | date:'dd MMM yyyy' }}</strong></span>
-                     </div>
-                  </div>
+        <!-- Registry Surface -->
+        <div class="registry-surface">
+           <div class="surface-header">
+              <h3 class="surface-title">ACTIVE DISPUTE REGISTRY</h3>
+           </div>
 
-                  <div class="flex flex-col items-end gap-6 min-w-[220px]">
-                     <span class="status-pill-elite active" 
-                        [class.warning]="item.status === 'PENDING DOCUMENTS'"
-                        [class.success]="item.status === 'RESOLVED'">
-                        <span class="dot"></span>
-                        {{ item.status }}
-                     </span>
-                     <div class="flex gap-6">
-                        <button class="text-[10px] font-black text-slate-500 hover:text-white uppercase tracking-widest transition-all">Audit Archive</button>
-                        <button class="text-[10px] font-black text-blue-400 hover:text-blue-300 uppercase tracking-widest flex items-center gap-2 group/btn">
-                           Track Progress
-                           <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="transition-transform group-hover/btn:translate-x-0.5"><path d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
-                        </button>
-                     </div>
-                  </div>
-               </div>
-            </div>
-          } @empty {
-            <div class="p-24 flex flex-col items-center justify-center text-center">
-               <div class="w-20 h-20 rounded-full flex items-center justify-center mb-8 text-slate-700 border border-white/5 bg-slate-950 shadow-2xl">
-                  <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
-               </div>
-               <h3 class="text-white font-black uppercase tracking-widest mb-2">No Dispute Records</h3>
-               <p class="text-slate-500 text-xs font-bold uppercase tracking-widest max-w-xs opacity-60">You have no active or historical objection protocols in the registry.</p>
-            </div>
-          }
+           <div class="objection-stack">
+              @for (item of objections; track item.id) {
+                 <div class="objection-row group">
+                    <div class="row-main">
+                       <div class="meta-line">
+                          <span class="ref-tag">{{ item.refNo }}</span>
+                          <span class="divider"></span>
+                          <span class="obligation-text">{{ item.obligation }}</span>
+                       </div>
+                       <h3 class="objection-reason">{{ item.reason }}</h3>
+                       <div class="info-cluster">
+                          <div class="info-item">
+                             <span class="info-label">ASSESSMENT NO</span>
+                             <span class="info-value">{{ item.assessmentNo }}</span>
+                          </div>
+                          <div class="info-item">
+                             <span class="info-label">PROTOCOL DATE</span>
+                             <span class="info-value">{{ item.filedDate | date:'dd MMM yyyy' }}</span>
+                          </div>
+                       </div>
+                    </div>
+
+                    <div class="row-actions-wrap">
+                       <span class="status-pill-elite" [class.active]="item.status === 'UNDER REVIEW'">
+                          <span class="dot"></span>
+                          {{ item.status }}
+                       </span>
+                       <div class="action-buttons">
+                          <button class="btn-icon-elite" title="Audit Archive">
+                             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                          </button>
+                          <button class="btn-ghost-elite">TRACK PROGRESS</button>
+                       </div>
+                    </div>
+                 </div>
+              } @empty {
+                 <div class="empty-registry">
+                    <div class="empty-icon-wrap">
+                       <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
+                    </div>
+                    <h3 class="empty-title">NO DISPUTE RECORDS</h3>
+                    <p class="empty-text">You have no active or historical objection protocols in the registry.</p>
+                 </div>
+              }
+           </div>
         </div>
       </div>
     </div>
   `,
   styles: [`
-    :host { display: block; }
+    :host { 
+      --red: #D92B2B;
+      --red-bright: #EF3B3B;
+      --red-glow: rgba(217, 43, 43, 0.4);
+      --red-pale: rgba(217, 43, 43, 0.1);
+      --red-border: rgba(217, 43, 43, 0.2);
+      --bg-root: #080809;
+      --bg-surface: rgba(18, 18, 20, 0.6);
+      --bdr: rgba(255, 255, 255, 0.05);
+      --text-muted: #666670;
+    }
+
+    .db-root {
+      min-height: 100vh;
+      background: var(--bg-root);
+      position: relative;
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    .noise-overlay {
+      position: fixed; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Cfilter id='noiseFilter'%3%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3%3C/filter%3%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3C/svg%3");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .accent-bleed {
+      position: fixed; top: -10%; right: -5%;
+      width: 60%; height: 50%;
+      background: radial-gradient(circle at center, var(--red-pale) 0%, transparent 70%);
+      filter: blur(80px);
+      z-index: 0;
+    }
+
+    .db-inner {
+      position: relative; z-index: 10;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* Header */
+    .premium-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 48px;
+    }
+
+    .header-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px;
+      background: var(--red-pale);
+      border: 1px solid var(--red-border);
+      border-radius: 100px;
+      margin-bottom: 16px;
+    }
+    .tag-glow { width: 6px; height: 6px; background: var(--red); border-radius: 50%; box-shadow: 0 0 10px var(--red); }
+    .tag-text { font-size: 10px; font-weight: 900; color: var(--red-bright); letter-spacing: 2px; text-transform: uppercase; }
+
+    .premium-title { font-size: 48px; font-weight: 950; letter-spacing: -2px; line-height: 1; margin: 0; }
+    .red-gradient { background: linear-gradient(to right, #fff, var(--red-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .premium-subtitle { color: var(--text-muted); font-size: 14px; font-weight: 500; margin: 12px 0 0; letter-spacing: 0.5px; }
+
+    /* Buttons */
+    .btn-primary-elite {
+      position: relative; padding: 18px 36px;
+      background: var(--red); color: white;
+      border: none; border-radius: 20px;
+      font-size: 11px; font-weight: 900; letter-spacing: 1.5px;
+      cursor: pointer; overflow: hidden;
+      transition: all 0.4s;
+      box-shadow: 0 8px 24px var(--red-glow);
+    }
+    .btn-primary-elite:hover { transform: translateY(-3px); box-shadow: 0 12px 32px var(--red-glow); }
+    .btn-glow { position: absolute; inset: 0; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent); transform: translateX(-100%); transition: transform 0.6s; }
+    .btn-primary-elite:hover .btn-glow { transform: translateX(100%); }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 40px; }
+    .stat-card { background: var(--bg-surface); border: 1px solid var(--bdr); border-radius: 24px; padding: 24px; backdrop-filter: blur(24px); }
+    .stat-label { font-size: 9px; font-weight: 950; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 8px; }
+    .stat-value { font-size: 32px; font-weight: 950; letter-spacing: -1px; margin-bottom: 8px; }
+    .stat-indicator { font-size: 9px; font-weight: 950; color: var(--red-bright); letter-spacing: 1px; }
+
+    /* Registry */
+    .registry-surface {
+      background: var(--bg-surface);
+      border: 1px solid var(--bdr);
+      border-radius: 32px;
+      overflow: hidden;
+      backdrop-filter: blur(24px);
+    }
+
+    .surface-header { padding: 24px 32px; border-bottom: 1px solid var(--bdr); background: rgba(0,0,0,0.2); }
+    .surface-title { font-size: 10px; font-weight: 950; color: var(--text-muted); letter-spacing: 3px; margin: 0; }
+
+    .objection-stack { display: flex; flex-direction: column; }
+    .objection-row { display: flex; justify-content: space-between; align-items: center; padding: 32px; border-bottom: 1px solid var(--bdr); transition: all 0.3s; }
+    .objection-row:last-child { border-bottom: none; }
+    .objection-row:hover { background: rgba(255,255,255,0.02); }
+
+    .meta-line { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .ref-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 900; color: var(--red-bright); background: var(--red-pale); padding: 4px 10px; border-radius: 6px; }
+    .divider { width: 4px; height: 4px; border-radius: 50%; background: var(--bdr); }
+    .obligation-text { font-size: 10px; font-weight: 900; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+
+    .objection-reason { font-size: 18px; font-weight: 950; margin: 0 0 16px; letter-spacing: -0.5px; }
+
+    .info-cluster { display: flex; gap: 32px; }
+    .info-item { display: flex; flex-direction: column; gap: 4px; }
+    .info-label { font-size: 9px; font-weight: 950; color: var(--text-muted); letter-spacing: 1px; }
+    .info-value { font-size: 12px; font-weight: 900; color: #eee; }
+
+    .row-actions-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 20px; }
+
+    .status-pill-elite { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--bdr); border-radius: 100px; font-size: 9px; font-weight: 950; color: var(--text-muted); letter-spacing: 1px; }
+    .status-pill-elite.active { background: var(--red-pale); border-color: var(--red-border); color: var(--red-bright); }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    .action-buttons { display: flex; gap: 12px; }
+    .btn-icon-elite { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border: 1px solid var(--bdr); border-radius: 12px; color: var(--text-muted); cursor: pointer; transition: all 0.3s; }
+    .btn-icon-elite:hover { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.1); }
+    .btn-ghost-elite { padding: 0 20px; height: 44px; background: rgba(255,255,255,0.03); border: 1px solid var(--bdr); border-radius: 12px; color: var(--text-muted); font-size: 10px; font-weight: 950; letter-spacing: 1.5px; cursor: pointer; transition: all 0.3s; }
+    .btn-ghost-elite:hover { background: var(--red-pale); color: var(--red-bright); border-color: var(--red-border); }
+
+    .empty-registry { padding: 80px 0; text-align: center; }
+    .empty-icon-wrap { width: 80px; height: 80px; background: rgba(0,0,0,0.3); border: 1px solid var(--bdr); border-radius: 30px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--text-muted); }
+    .empty-title { font-size: 11px; font-weight: 950; color: #fff; letter-spacing: 4px; margin: 0 0 8px; }
+    .empty-text { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+    @media (max-width: 1024px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .objection-row { flex-direction: column; align-items: flex-start; gap: 32px; }
+      .row-actions-wrap { align-items: flex-start; width: 100%; }
+      .action-buttons { width: 100%; }
+      .btn-ghost-elite { flex-grow: 1; }
+    }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ObjectionListComponent {
   objections = [
     {
       id: 1,
       refNo: 'OBJ-2026-001',
-      obligation: 'Value Added Tax (VAT)',
+      obligation: 'VALUE ADDED TAX (VAT)',
       reason: 'Disputed Input Tax Deduction rejection',
       assessmentNo: 'AS-9921-XAO',
       filedDate: '2026-02-20',
@@ -116,7 +249,7 @@ export class ObjectionListComponent {
     {
       id: 2,
       refNo: 'OBJ-2025-042',
-      obligation: 'Income Tax - Resident',
+      obligation: 'INCOME TAX - RESIDENT',
       reason: 'Incorrect calculation of professional fee relief',
       assessmentNo: 'AS-8812-JAI',
       filedDate: '2025-12-15',
