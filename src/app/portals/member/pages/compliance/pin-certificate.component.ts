@@ -1,13 +1,14 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed, Input, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { AuthService } from '../../../../core/services/auth.service';
 import { DashboardDataService } from '../../../../services/dashboard-data.service';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-pin-certificate',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [CommonModule, NgOptimizedImage],
   template: `
     <div class="db-root print-container">
       <div class="noise-overlay no-print"></div>
@@ -54,7 +55,7 @@ import { environment } from '../../../../../environments/environment';
             <!-- Document Header -->
             <div class="cert-header">
                <div class="cert-header-left">
-                  <img src="assets/logo.png" class="kra-logo-large" alt="KRA Logo">
+                  <img ngSrc="assets/logo.png" width="180" height="75" class="kra-logo-large" alt="KRA Logo" priority>
                   <span class="kra-url">www.kra.go.ke</span>
                </div>
 
@@ -212,8 +213,8 @@ import { environment } from '../../../../../environments/environment';
             <div class="cert-footer-branded">
                <div class="tagline">Tulipe Ushuru, Tujitegemee!</div>
                <div class="branding-logos">
-                  <img src="assets/itax.jpeg" alt="iTax" class="footer-brand-img">
-                  <img src="assets/vision_2030.png" alt="Vision 2030" class="footer-brand-img">
+                  <img ngSrc="assets/itax.jpeg" width="100" height="36" alt="iTax" class="footer-brand-img">
+                  <img ngSrc="assets/vision_2030.png" width="100" height="36" alt="Vision 2030" class="footer-brand-img">
                </div>
                <div class="disclaimer-note">
                   Disclaimer: This is a system generated certificate and does not require signature.
@@ -255,6 +256,8 @@ import { environment } from '../../../../../environments/environment';
     @media (prefers-color-scheme: light) {
       :host {
         --bg-root:    #F2F2F4;
+        --bg-card:    #FFFFFF;
+        --bg-card-2:  #F8F8FA;
         --text-pri:   #111111;
         --text-sec:   #555560;
         --text-mut:   #9999A8;
@@ -262,50 +265,25 @@ import { environment } from '../../../../../environments/environment';
       }
     }
 
-    .db-root {
-      min-height: 100vh;
-      background: var(--bg-root);
-      color: var(--text-pri);
-      position: relative;
-    }
+    .db-root { min-height: 100vh; background: var(--bg-root); color: var(--text-pri); position: relative; overflow-x: hidden; }
+    .noise-overlay { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.03; z-index: 1; pointer-events: none; }
+    .accent-bleed { position: fixed; top: -10vw; left: -10vw; width: 40vw; height: 40vw; background: var(--red); filter: blur(15vw); opacity: 0.08; border-radius: 50%; z-index: 1; pointer-events: none; }
 
-    .db-inner {
-      max-width: 1200px; margin: 0 auto;
-      padding: 40px 28px 80px;
-      display: flex; flex-direction: column; gap: 40px;
-    }
+    .db-inner { max-width: 1440px; margin: 0 auto; padding: 40px 28px 80px; display: flex; flex-direction: column; gap: 48px; position: relative; z-index: 10; }
 
-    .db-header-elite {
-      display: flex; justify-content: space-between; align-items: flex-end;
-      gap: 24px; flex-wrap: wrap; margin-bottom: 12px;
-    }
-
-    .premium-title {
-      font-size: clamp(32px, 5vw, 42px);
-      font-weight: 950; letter-spacing: -1.5px;
-      line-height: 1; margin: 12px 0 8px;
-    }
+    .db-header-elite { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+    .premium-title { font-size: clamp(32px, 5vw, 48px); font-weight: 950; letter-spacing: -1.5px; line-height: 1; margin: 12px 0 8px; }
     .text-red { color: var(--red); }
-
     .premium-subtitle { font-size: 14px; font-weight: 500; color: var(--text-sec); }
 
-    .live-badge {
-      display: flex; align-items: center; gap: 7px;
-      padding: 5px 12px; border-radius: 50px;
-      background: var(--red-pale); border: 1px solid var(--red-border);
-      font-size: 9px; font-weight: 900; letter-spacing: 1.5px; color: var(--red-bright);
-    }
-    .live-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--red); box-shadow: 0 0 5px var(--red);
-      animation: blink 1.5s ease-in-out infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+    .live-badge { display: flex; align-items: center; gap: 7px; padding: 5px 12px; border-radius: 50px; background: var(--red-pale); border: 1px solid var(--red-border); font-size: 9px; font-weight: 900; letter-spacing: 1.5px; color: var(--red-bright); }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 10px var(--red); animation: blink 1.5s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     .flex-btns { display: flex; gap: 12px; }
 
     .btn-primary-elite {
-      background: var(--red); color: #fff; border: none;
+      background: var(--red); color: white; border: none;
       padding: 14px 24px; border-radius: 12px; font-size: 11px; font-weight: 800;
       letter-spacing: 1.5px; cursor: pointer; transition: all 0.2s;
       box-shadow: 0 4px 14px var(--red-glow);
@@ -334,16 +312,9 @@ import { environment } from '../../../../../environments/environment';
       overflow: hidden;
     }
 
-    .cert-content-inner {
-      padding: 35px 35px 35px 60px;
-      position: relative;
-      z-index: 5;
-    }
+    .cert-content-inner { padding: 35px 35px 35px 60px; position: relative; z-index: 5; }
 
-    #branding-bar {
-        position: absolute; top: 0; left: 0; width: 38px; height: 100%;
-        z-index: 10; overflow: hidden; display: flex; flex-direction: column;
-    }
+    #branding-bar { position: absolute; top: 0; left: 0; width: 38px; height: 100%; z-index: 10; overflow: hidden; display: flex; flex-direction: column; }
     .wedge-top, .wedge-bottom { display: block; width: 38px; flex: 1; }
 
     .cert-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; border-bottom: 2pt solid #000; padding-bottom: 10px; }
@@ -378,10 +349,7 @@ import { environment } from '../../../../../environments/environment';
     .footer-brand-img { height: 36px; object-fit: contain; }
     .disclaimer-note { font-size: 7.5pt; color: #666; font-style: italic; width: 100%; text-align: left; }
 
-    .db-footer-elite {
-      margin-top: 20px; padding: 40px; border: 1px solid var(--bdr);
-      border-radius: 32px; text-align: center; background: var(--bg-card-2);
-    }
+    .db-footer-elite { margin-top: 40px; padding: 40px; border: 1px solid var(--bdr); border-radius: 32px; text-align: center; background: var(--bg-card-2); }
     .db-footer-elite p { font-size: 10px; font-weight: 800; color: var(--text-mut); letter-spacing: 4px; line-height: 1.8; max-width: 800px; margin: 0 auto; }
 
     @media print {
@@ -396,6 +364,11 @@ import { environment } from '../../../../../environments/environment';
       .cert-content-inner { padding: 20px 20px 20px 45px; }
       #branding-bar { width: 10mm; min-height: 100%; }
     }
+
+    /* Animations */
+    .animate-stagger > * { opacity: 0; animation: slideIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+    .animate-stagger > *:nth-child(1) { animation-delay: 0.1s; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   `]
 })
 export class PinCertificateComponent implements OnInit {
