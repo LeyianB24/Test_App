@@ -244,7 +244,6 @@ interface DeclarationItem {
     .animate-draw { stroke-dasharray: 100; stroke-dashoffset: 100; animation: draw 0.8s forwards 0.4s; }
     @keyframes draw { to { stroke-dashoffset: 0; } }
   `],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomDeclarationComponent {
   steps = ['IDENTIFICATION', 'ASSET REGISTRY', 'ATTESTATION'];
