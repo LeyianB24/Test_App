@@ -222,7 +222,7 @@ interface DeclarationItem {
 
     .db-root { 
       min-height: 100vh; 
-      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background: #050505 url('/assets/kra_background.png') no-repeat center center fixed;
       background-size: cover;
       color: #fff; 
       position: relative; 

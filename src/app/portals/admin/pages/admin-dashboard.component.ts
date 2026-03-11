@@ -348,7 +348,7 @@ import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-lo
   styles: [`
     .db-root { 
       min-height: 100vh; 
-      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background: #050505 url('/assets/kra_background.png') no-repeat center center fixed;
       background-size: cover;
       color: #e2e8f0; 
       position: relative; 
