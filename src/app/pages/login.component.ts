@@ -265,6 +265,7 @@ import { environment } from '../../environments/environment';
       overflow: hidden;
       background: #060608 url('/assets/kra_background.png') no-repeat center center fixed;
       background-size: cover;
+      
       --accent:        #D92B2B;
       --accent-glow:   rgba(217, 43, 43, 0.35);
       --accent-bg:     rgba(217, 43, 43, 0.08);

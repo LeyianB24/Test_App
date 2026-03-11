@@ -109,8 +109,8 @@ import { RouterModule } from '@angular/router';
 
     .db-root { 
       min-height: 100vh; 
-      background: #050505 ;
-      background-size: cover;
+      background: #050505;
+      
       color: #fff; 
       position: relative; 
       overflow-x: hidden; 

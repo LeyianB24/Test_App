@@ -227,8 +227,8 @@ import { AdminService, Role, ModulePermission } from '../../../services/admin.se
     /* ── Root ── */
     .rm-root {
       min-height: 100vh;
-      background: #060608 ;
-      background-size: cover;
+      background: #060608;
+      
       position: relative; overflow-x: hidden;
       color: #e8e5e2; padding: 3.5rem;
       --accent: #D92B2B;

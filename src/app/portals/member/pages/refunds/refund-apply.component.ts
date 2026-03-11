@@ -106,8 +106,8 @@ import { RouterModule } from '@angular/router';
   styles: [`
     .page-container { 
       min-height: 100vh; 
-      background: #050505 ;
-      background-size: cover;
+      background: #050505;
+      
       color: #fff; 
       position: relative; 
       overflow-x: hidden; 

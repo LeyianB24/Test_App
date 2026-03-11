@@ -209,8 +209,8 @@ import { CommonModule, UpperCasePipe } from '@angular/common';
        ═══════════════════════════════ */
     .db-root { 
       min-height: 100vh;
-      background: #050505 ;
-      background-size: cover;
+      background: #050505;
+      
       color: var(--text-pri); 
       position: relative; 
       overflow-x: hidden; 
