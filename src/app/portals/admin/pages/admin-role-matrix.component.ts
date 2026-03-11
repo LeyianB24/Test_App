@@ -9,291 +9,400 @@ import { AdminService, Role, ModulePermission } from '../../../services/admin.se
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="db-root">
-      <div class="noise-overlay"></div>
-      
-      <div class="content-area animate-stagger">
-        
-        <!-- Protocol Header Manifold -->
-        <header class="mb-14 overflow-hidden relative group">
-          <div class="flex flex-col md:flex-row md:items-end justify-between gap-10 relative z-10">
-            <div class="space-y-2">
-              <div class="flex items-center gap-3 mb-2">
-                <div class="w-1.5 h-6 bg-accent rounded-full shadow-[0_0_12px_var(--color-accent)]"></div>
-                <span class="text-[10px] font-black text-accent uppercase tracking-[0.4em]">Advanced Authorization Layer</span>
-              </div>
-              <h1 class="text-5xl font-black text-primary tracking-tighter uppercase leading-none">
-                Protocol <span class="text-stroke-sm">Shield Matrix</span>
-              </h1>
-              <p class="text-[10px] font-black text-muted uppercase tracking-[0.3em] flex items-center gap-3">
-                CRITICAL ACCESS DELEGATION // SYSTEM AUTHORITY OVERRIDE NODE: SEC-KRA-09
-              </p>
-            </div>
+    <div class="rm-root">
+      <div class="rm-grid-bg"></div>
+      <div class="rm-glow-tl"></div>
+      <div class="rm-glow-br"></div>
 
-            <div class="flex items-center gap-6">
-              <div class="status-pill-precision online py-2 px-5 bg-white/5 border-white/10">
-                <span class="status-pill-dot animate-pulse shadow-[0_0_8px_var(--color-success)]"></span>
-                ENCRYPTION LAYER ACTIVE
-              </div>
-              <button (click)="savePermissions()" [disabled]="saving() || !selectedRole()" 
-                class="btn-precision online !bg-accent !text-white !border-none !px-10 shadow-[0_0_20px_var(--color-accent)] disabled:opacity-40">
-                {{ saving() ? 'SYNCHRONIZING...' : 'COMMIT PROTOCOL' }}
-              </button>
+      <div class="rm-content">
+
+        <!-- Header -->
+        <header class="rm-header">
+          <div class="rm-header-left">
+            <div class="rm-kicker">
+              <span class="rm-kicker-bar"></span>
+              <span class="rm-kicker-text">Advanced Authorization Layer · SEC-KRA-09</span>
             </div>
+            <h1 class="rm-title">Protocol <span class="rm-title-outline">Shield Matrix</span></h1>
+            <p class="rm-subtitle">Configure access control and permission vectors per authority primitive</p>
+          </div>
+          <div class="rm-header-right">
+            <div class="rm-status-pill">
+              <span class="rm-status-dot"></span>
+              ENCRYPTION ACTIVE
+            </div>
+            <button
+              class="rm-commit-btn"
+              (click)="savePermissions()"
+              [disabled]="saving() || !selectedRole()"
+              id="commit-protocol-btn"
+            >
+              <span class="rm-commit-inner">
+                @if (saving()) {
+                  <span class="rm-spinner"></span>
+                  SYNCHRONIZING...
+                } @else {
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path d="M5 13l4 4L19 7"/>
+                  </svg>
+                  COMMIT PROTOCOL
+                }
+              </span>
+              <span class="rm-commit-shimmer"></span>
+            </button>
           </div>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          <!-- Role Array Selection -->
-          <div class="lg:col-span-3 space-y-6">
-            <div class="glass-panel p-8 bg-white/[0.02]">
-              <h3 class="text-[10px] font-black text-muted uppercase tracking-[0.4em] mb-8 flex items-center gap-3">
-                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg>
-                Authority Primitives
-              </h3>
-              <div class="space-y-3">
-                @for (role of roles(); track role.id) {
-                  <button (click)="selectRole(role)" 
-                    class="w-full p-5 rounded-2xl text-left transition-all relative overflow-hidden group/role"
-                    [class.bg-accent]="selectedRole()?.id === role.id"
-                    [class.text-white]="selectedRole()?.id === role.id"
-                    [class.bg-white/5]="selectedRole()?.id !== role.id"
-                    [class.border]="selectedRole()?.id !== role.id"
-                    [class.border-white/5]="selectedRole()?.id !== role.id"
-                    [class.hover:border-accent/40]="selectedRole()?.id !== role.id">
-                    @if (selectedRole()?.id === role.id) {
-                      <div class="absolute inset-0 bg-gradient-to-r from-accent to-accent/80"></div>
-                      <div class="absolute right-[-20%] top-[-20%] w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-                    }
-                    <div class="relative z-10 flex flex-col gap-1">
-                      <span class="text-xs font-black uppercase tracking-tight">{{ role.name }}</span>
-                      <span class="text-[9px] font-black uppercase tracking-widest opacity-60">ID: SEC-{{ role.id }}</span>
+        <!-- Save Success Banner -->
+        @if (saveSuccess()) {
+          <div class="rm-success-banner">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+            Protocol matrix synchronized successfully.
+          </div>
+        }
+
+        <!-- Main Grid -->
+        <div class="rm-layout">
+
+          <!-- Role List Panel -->
+          <div class="rm-roles-panel">
+            <div class="rm-panel-header">
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+              </svg>
+              Authority Primitives
+            </div>
+            <div class="rm-roles-list" role="list">
+              @for (role of roles(); track role.id) {
+                <button
+                  class="rm-role-btn"
+                  [class.rm-role-active]="selectedRole()?.id === role.id"
+                  (click)="selectRole(role)"
+                  [id]="'role-' + role.id"
+                  role="listitem"
+                >
+                  <div class="rm-role-active-glow" *ngIf="selectedRole()?.id === role.id"></div>
+                  <div class="rm-role-content">
+                    <div class="rm-role-icon">
+                      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                      </svg>
                     </div>
-                  </button>
-                }
-              </div>
+                    <div class="rm-role-text">
+                      <span class="rm-role-name">{{ role.name }}</span>
+                      <span class="rm-role-id">SEC-{{ role.id.toString().padStart(3, '0') }}</span>
+                    </div>
+                    <div class="rm-role-arrow">
+                      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path d="M9 18l6-6-6-6"/>
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              }
             </div>
           </div>
 
-          <!-- Protocol Grid Manifold -->
-          <div class="lg:col-span-9">
-            <div class="glass-panel overflow-hidden border-white/5">
-              @if (loading()) {
-               <div class="py-40 flex flex-col items-center justify-center gap-8">
-                  <div class="relative w-16 h-16">
-                    <div class="absolute inset-0 border-4 border-accent/20 rounded-full"></div>
-                    <div class="absolute inset-0 border-4 border-t-accent rounded-full animate-spin"></div>
-                  </div>
-                  <p class="text-[10px] font-black text-muted uppercase tracking-[0.4em]">Reconstructing Protocol Grid...</p>
-                </div>
-              } @else if (!selectedRole()) {
-                <div class="py-48 flex flex-col items-center justify-center text-center gap-8 group/init">
-                  <div class="w-24 h-24 bg-white/5 rounded-[2rem] flex items-center justify-center text-muted border border-white/10 group-hover/init:border-accent/30 transition-all outline outline-offset-8 outline-white/5">
-                    <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                  </div>
-                  <div class="space-y-2">
-                    <h3 class="text-2xl font-black text-primary uppercase tracking-tighter">Authority Lockdown</h3>
-                    <p class="text-[10px] font-black text-muted uppercase tracking-[0.3em]">Select an authority primitive to decrypt its protocol matrix</p>
+          <!-- Permissions Matrix Panel -->
+          <div class="rm-matrix-panel">
+
+            @if (loading()) {
+              <div class="rm-loading-state">
+                <div class="rm-scanner">
+                  <div class="rm-scanner-ring rm-scanner-ring-1"></div>
+                  <div class="rm-scanner-ring rm-scanner-ring-2"></div>
+                  <div class="rm-scanner-beam"></div>
+                  <div class="rm-scanner-icon">
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
                   </div>
                 </div>
-              } @else {
-                <div class="overflow-x-auto custom-scrollbar">
-                  <table class="w-full text-left border-collapse">
-                    <thead>
-                      <tr class="bg-white/[0.02] border-b border-white/5">
-                        <th class="px-10 py-8 text-[10px] font-black uppercase tracking-[0.4em] text-muted">Module Node</th>
-                        <th class="px-8 py-8 text-[10px] font-black uppercase tracking-[0.4em] text-muted text-center">Visibility</th>
-                        <th class="px-8 py-8 text-[10px] font-black uppercase tracking-[0.4em] text-muted text-center">Modification</th>
-                        <th class="px-8 py-8 text-[10px] font-black uppercase tracking-[0.4em] text-muted text-center">Purge</th>
-                        <th class="px-10 py-8 text-[10px] font-black uppercase tracking-[0.4em] text-muted text-center">Extraction</th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-white/5">
-                      @for (perm of permissions(); track perm.module_id) {
-                        <tr class="hover:bg-white/[0.03] transition-colors group">
-                          <td class="px-10 py-8">
-                            <div class="flex items-center gap-5">
-                              <div class="w-2 h-2 rounded-full bg-accent shadow-[0_0_8px_var(--color-accent)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                              <div class="space-y-1">
-                                <span class="text-sm font-black text-primary uppercase tracking-tighter block">{{ perm.module_name }}</span>
-                                <span class="text-[9px] font-black text-muted uppercase tracking-widest block opacity-60">ID: MN-{{ perm.module_id }}</span>
-                              </div>
+                <p class="rm-loading-text">Decrypting Protocol Matrix...</p>
+                <div class="rm-loading-dots">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            } @else if (!selectedRole()) {
+              <div class="rm-empty-state">
+                <div class="rm-empty-icon-wrap">
+                  <svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                  </svg>
+                </div>
+                <h3 class="rm-empty-title">Authority Lockdown</h3>
+                <p class="rm-empty-sub">Select an authority primitive from the left panel to view and configure its protocol matrix.</p>
+              </div>
+            } @else {
+              <div class="rm-table-header">
+                <div class="rm-selected-role-tag">
+                  <span class="rm-selected-role-dot"></span>
+                  {{ selectedRole()?.name }}
+                </div>
+                <span class="rm-perm-count">{{ permissions().length }} modules</span>
+              </div>
+
+              <div class="rm-table-wrap">
+                <table class="rm-table" aria-label="Permission Matrix">
+                  <thead>
+                    <tr class="rm-thead-row">
+                      <th class="rm-th rm-th-module">Module Node</th>
+                      <th class="rm-th rm-th-perm">
+                        <span class="rm-perm-label view">
+                          <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                          View
+                        </span>
+                      </th>
+                      <th class="rm-th rm-th-perm">
+                        <span class="rm-perm-label edit">
+                          <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                          Edit
+                        </span>
+                      </th>
+                      <th class="rm-th rm-th-perm">
+                        <span class="rm-perm-label delete">
+                          <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                          Delete
+                        </span>
+                      </th>
+                      <th class="rm-th rm-th-perm">
+                        <span class="rm-perm-label export">
+                          <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                          Export
+                        </span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (perm of permissions(); track perm.module_id) {
+                      <tr class="rm-tr">
+                        <td class="rm-td rm-td-module">
+                          <div class="rm-module-cell">
+                            <div class="rm-module-indicator"></div>
+                            <div>
+                              <span class="rm-module-name">{{ perm.module_name }}</span>
+                              <span class="rm-module-id">MN-{{ perm.module_id.toString().padStart(3, '0') }}</span>
                             </div>
-                          </td>
-                          <td class="px-8 py-8 text-center">
-                            <label class="matrix-toggle mx-auto">
-                              <input type="checkbox" [(ngModel)]="perm.can_view">
-                              <span class="toggle-manifold">
-                                <span class="toggle-core"></span>
-                              </span>
-                            </label>
-                          </td>
-                          <td class="px-8 py-8 text-center">
-                            <label class="matrix-toggle mx-auto">
-                              <input type="checkbox" [(ngModel)]="perm.can_edit">
-                              <span class="toggle-manifold mod">
-                                <span class="toggle-core"></span>
-                              </span>
-                            </label>
-                          </td>
-                          <td class="px-8 py-8 text-center">
-                            <label class="matrix-toggle mx-auto">
-                              <input type="checkbox" [(ngModel)]="perm.can_delete">
-                              <span class="toggle-manifold purge">
-                                <span class="toggle-core"></span>
-                              </span>
-                            </label>
-                          </td>
-                          <td class="px-10 py-8 text-center">
-                            <label class="matrix-toggle mx-auto">
-                              <input type="checkbox" [(ngModel)]="perm.can_export">
-                              <span class="toggle-manifold extract">
-                                <span class="toggle-core"></span>
-                              </span>
-                            </label>
-                          </td>
-                        </tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
-              }
-            </div>
+                          </div>
+                        </td>
+                        <td class="rm-td rm-td-perm">
+                          <label class="rm-toggle view">
+                            <input type="checkbox" [(ngModel)]="perm.can_view">
+                            <span class="rm-track"><span class="rm-thumb"></span></span>
+                          </label>
+                        </td>
+                        <td class="rm-td rm-td-perm">
+                          <label class="rm-toggle edit">
+                            <input type="checkbox" [(ngModel)]="perm.can_edit">
+                            <span class="rm-track"><span class="rm-thumb"></span></span>
+                          </label>
+                        </td>
+                        <td class="rm-td rm-td-perm">
+                          <label class="rm-toggle delete">
+                            <input type="checkbox" [(ngModel)]="perm.can_delete">
+                            <span class="rm-track"><span class="rm-thumb"></span></span>
+                          </label>
+                        </td>
+                        <td class="rm-td rm-td-perm">
+                          <label class="rm-toggle export">
+                            <input type="checkbox" [(ngModel)]="perm.can_export">
+                            <span class="rm-track"><span class="rm-thumb"></span></span>
+                          </label>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
           </div>
         </div>
       </div>
     </div>
   `,
   styles: [`
-    .db-root {
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    :host { display: block; font-family: 'Inter', sans-serif; }
+
+    /* ── Root ── */
+    .rm-root {
       min-height: 100vh;
-      background: #050505 url('assets/kra_background.png') no-repeat center center fixed;
+      background: #060608 url('/assets/kra_background.png') no-repeat center center fixed;
       background-size: cover;
-      position: relative;
-      overflow-x: hidden;
-      color: #e2e8f0;
-      padding: 3.5rem;
+      position: relative; overflow-x: hidden;
+      color: #e8e5e2; padding: 3.5rem;
+      --accent: #D92B2B;
+      --accent-glow: rgba(217,43,43,0.3);
+      --success: #10b981;
+      --blue: #3b82f6;
+      --purple: #8c52ff;
+      --warning: #f59e0b;
+      --border: rgba(255,255,255,0.07);
+      --surface-1: rgba(255,255,255,0.03);
+      --surface-2: rgba(255,255,255,0.06);
+      --text-1: #f0ede8;
+      --text-2: rgba(160,154,148,0.8);
+      --text-3: #5a5650;
     }
+    .rm-root::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at top left, rgba(217,43,43,0.1) 0%, transparent 50%),
+                  radial-gradient(ellipse at bottom right, rgba(0,0,0,0.9) 0%, transparent 60%);
+      pointer-events: none; z-index: 1;
+    }
+    .rm-grid-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, black 30%, transparent 80%);
+    }
+    .rm-glow-tl { position: fixed; top: -150px; left: -150px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(217,43,43,0.12), transparent 70%); filter: blur(60px); pointer-events: none; z-index: 0; }
+    .rm-glow-br { position: fixed; bottom: -100px; right: -100px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(140,82,255,0.06), transparent 70%); filter: blur(60px); pointer-events: none; z-index: 0; }
 
-    .db-root::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top left, rgba(217, 43, 43, 0.1), transparent 40%),
-                  radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.8), transparent 60%);
-      pointer-events: none;
-      z-index: 1;
-    }
+    .rm-content { position: relative; z-index: 10; max-width: 1700px; margin: 0 auto; }
 
-    .noise-overlay {
-      position: fixed;
-      inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      opacity: 0.02;
-      pointer-events: none;
-      z-index: 2;
-    }
+    /* ── Header ── */
+    .rm-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 3rem; flex-wrap: wrap; }
+    .rm-header-left { space-y: 2; }
+    .rm-kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .rm-kicker-bar { width: 3px; height: 20px; background: var(--accent); border-radius: 2px; box-shadow: 0 0 12px var(--accent-glow); }
+    .rm-kicker-text { font-size: 9px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); }
+    .rm-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; color: var(--text-1); margin: 0 0 8px; letter-spacing: -0.04em; line-height: 1; }
+    .rm-title-outline { -webkit-text-stroke: 1.5px var(--text-1); color: transparent; }
+    .rm-subtitle { font-size: 13px; font-weight: 500; color: var(--text-2); margin: 0; }
 
-    .content-area {
-      position: relative;
-      z-index: 10;
-      max-width: 1700px;
-      margin: 0 auto;
-    }
+    .rm-header-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    .rm-status-pill { display: inline-flex; align-items: center; gap: 8px; font-size: 9px; font-weight: 900; letter-spacing: 0.18em; text-transform: uppercase; color: var(--success); background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.2); border-radius: 30px; padding: 8px 16px; }
+    .rm-status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px rgba(16,185,129,0.7); animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.4} }
 
-    .glass-panel {
-      background: rgba(15, 15, 15, 0.4);
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(40px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 2.5rem;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+    .rm-commit-btn {
+      position: relative; padding: 0 28px; height: 48px; min-width: 180px;
+      background: linear-gradient(135deg, #D92B2B 0%, #b82323 100%);
+      border: none; border-radius: 14px; cursor: pointer;
+      overflow: hidden; transition: all 0.3s ease;
     }
+    .rm-commit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(217,43,43,0.4); }
+    .rm-commit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .rm-commit-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 900; letter-spacing: 0.08em; color: white; }
+    .rm-commit-shimmer { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transform: skewX(-20deg) translateX(-150%); animation: shimmer 3s infinite; }
+    @keyframes shimmer { 0%,100%{transform:skewX(-20deg) translateX(-150%)} 60%{transform:skewX(-20deg) translateX(250%)} }
+    .rm-spinner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    .status-pill-precision {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.5rem 1.25rem;
-      border-radius: 9999px;
-      font-size: 9px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
+    /* Success Banner */
+    .rm-success-banner { display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); border-radius: 14px; color: var(--success); font-size: 13px; font-weight: 600; margin-bottom: 28px; animation: slidein 0.4s ease; }
+    @keyframes slidein { from { opacity:0; transform: translateY(-8px); } to { opacity:1; transform: translateY(0); } }
 
-    .online { color: #10b981; }
-    .status-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    /* ── Layout ── */
+    .rm-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; align-items: start; }
+    @media (max-width: 900px) { .rm-layout { grid-template-columns: 1fr; } }
 
-    .text-stroke-sm {
-      -webkit-text-stroke: 1px currentColor;
-      color: transparent;
-    }
+    /* ── Roles Panel ── */
+    .rm-roles-panel { background: rgba(15,13,12,0.5); backdrop-filter: blur(32px); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; }
+    .rm-panel-header { display: flex; align-items: center; gap: 8px; padding: 20px 20px 16px; font-size: 9px; font-weight: 900; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-2); border-bottom: 1px solid var(--border); }
+    .rm-roles-list { padding: 12px; display: flex; flex-direction: column; gap: 6px; }
 
-    .matrix-toggle {
-      display: block;
-      width: 48px;
-      height: 24px;
-      cursor: pointer;
-      position: relative;
+    .rm-role-btn {
+      position: relative; width: 100%; padding: 14px 16px; border-radius: 16px;
+      border: 1px solid var(--border); background: var(--surface-1);
+      cursor: pointer; transition: all 0.2s ease; overflow: hidden; text-align: left;
     }
-    .matrix-toggle input { display: none; }
-    
-    .toggle-manifold {
-      position: absolute;
-      inset: 0;
-      background: rgba(255,255,255,0.03);
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.08);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .toggle-core {
-      position: absolute;
-      left: 4px;
-      top: 4px;
-      width: 14px;
-      height: 14px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 8px;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    
-    .matrix-toggle input:checked + .toggle-manifold {
-      background: rgba(16, 185, 129, 0.08);
-      border-color: rgba(16, 185, 129, 0.25);
-    }
-    .matrix-toggle input:checked + .toggle-manifold .toggle-core {
-      transform: translateX(24px);
-      background: #10b981;
-      box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
-    }
+    .rm-role-btn:hover { background: var(--surface-2); border-color: rgba(255,255,255,0.12); }
+    .rm-role-btn.rm-role-active { background: rgba(217,43,43,0.12); border-color: rgba(217,43,43,0.35); }
+    .rm-role-active-glow { position: absolute; inset: 0; background: radial-gradient(circle at 30% 50%, rgba(217,43,43,0.15), transparent 70%); pointer-events: none; }
+    .rm-role-content { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; }
+    .rm-role-icon { width: 30px; height: 30px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-2); flex-shrink: 0; transition: all 0.2s; }
+    .rm-role-active .rm-role-icon { background: rgba(217,43,43,0.15); border-color: rgba(217,43,43,0.3); color: var(--accent); }
+    .rm-role-text { flex: 1; min-width: 0; }
+    .rm-role-name { display: block; font-size: 12px; font-weight: 700; color: var(--text-1); text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rm-role-active .rm-role-name { color: #ff6f6f; }
+    .rm-role-id { display: block; font-size: 9px; font-weight: 600; color: var(--text-3); letter-spacing: 0.1em; margin-top: 2px; }
+    .rm-role-arrow { color: var(--text-3); opacity: 0; transform: translateX(-4px); transition: all 0.2s; }
+    .rm-role-btn:hover .rm-role-arrow, .rm-role-btn.rm-role-active .rm-role-arrow { opacity: 1; transform: translateX(0); color: var(--accent); }
 
-    /* Override for mod/purge/extract if needed for distinct colors */
-    .matrix-toggle input:checked + .toggle-manifold.mod { background: rgba(59, 130, 246, 0.08); border-color: rgba(59, 130, 246, 0.25); }
-    .matrix-toggle input:checked + .toggle-manifold.mod .toggle-core { background: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
-    
-    .matrix-toggle input:checked + .toggle-manifold.purge { background: rgba(217, 43, 43, 0.08); border-color: rgba(217, 43, 43, 0.25); }
-    .matrix-toggle input:checked + .toggle-manifold.purge .toggle-core { background: var(--color-accent); box-shadow: 0 0 15px var(--color-accent); }
+    /* ── Matrix Panel ── */
+    .rm-matrix-panel { background: rgba(12,11,10,0.55); backdrop-filter: blur(40px); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; min-height: 400px; display: flex; flex-direction: column; }
 
-    .matrix-toggle input:checked + .toggle-manifold.extract { background: rgba(140, 82, 255, 0.08); border-color: rgba(140, 82, 255, 0.25); }
-    .matrix-toggle input:checked + .toggle-manifold.extract .toggle-core { background: #8c52ff; box-shadow: 0 0 15px rgba(140, 82, 255, 0.6); }
+    /* Loading */
+    .rm-loading-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 80px 40px; }
+    .rm-scanner { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+    .rm-scanner-ring { position: absolute; border-radius: 50%; border: 2px solid var(--accent); }
+    .rm-scanner-ring-1 { inset: 0; opacity: 0.3; animation: ring-pulse 2s ease-in-out infinite; }
+    .rm-scanner-ring-2 { inset: 10px; opacity: 0.5; animation: ring-pulse 2s ease-in-out infinite 0.5s; }
+    .rm-scanner-beam { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, transparent 70%, var(--accent) 100%); animation: spin 1.5s linear infinite; opacity: 0.6; }
+    .rm-scanner-icon { position: relative; z-index: 1; color: var(--accent); }
+    @keyframes ring-pulse { 0%,100%{opacity:0.3;transform:scale(1)}50%{opacity:0.7;transform:scale(1.05)} }
+    .rm-loading-text { font-size: 10px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-2); }
+    .rm-loading-dots { display: flex; gap: 6px; }
+    .rm-loading-dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: dot-bounce 1.2s ease-in-out infinite; }
+    .rm-loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .rm-loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dot-bounce { 0%,80%,100%{transform:scale(0.5);opacity:0.5}40%{transform:scale(1);opacity:1} }
 
-    .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
+    /* Empty State */
+    .rm-empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 80px 40px; text-align: center; }
+    .rm-empty-icon-wrap { width: 88px; height: 88px; border-radius: 28px; background: var(--surface-1); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-3); transition: all 0.4s; }
+    .rm-empty-state:hover .rm-empty-icon-wrap { border-color: rgba(217,43,43,0.2); color: var(--accent); }
+    .rm-empty-title { font-size: 22px; font-weight: 900; color: var(--text-1); text-transform: uppercase; letter-spacing: -0.02em; margin: 0; }
+    .rm-empty-sub { font-size: 12px; font-weight: 500; color: var(--text-2); max-width: 300px; line-height: 1.7; margin: 0; }
 
-    .animate-stagger > * {
-      animation: stg 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-    @keyframes stg {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-stagger > *:nth-child(1) { animation-delay: 0.1s; }
-    .animate-stagger > *:nth-child(2) { animation-delay: 0.2s; }
+    /* Table Header */
+    .rm-table-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px 16px; border-bottom: 1px solid var(--border); }
+    .rm-selected-role-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #ff6f6f; }
+    .rm-selected-role-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+    .rm-perm-count { font-size: 10px; font-weight: 700; color: var(--text-3); }
+
+    /* Table */
+    .rm-table-wrap { overflow-x: auto; flex: 1; }
+    .rm-table-wrap::-webkit-scrollbar { height: 3px; } .rm-table-wrap::-webkit-scrollbar-track { background: transparent; } .rm-table-wrap::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    .rm-table { width: 100%; border-collapse: collapse; }
+
+    .rm-thead-row { background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); }
+    .rm-th { padding: 16px 20px; font-size: 9px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-2); white-space: nowrap; }
+    .rm-th-module { text-align: left; min-width: 200px; }
+    .rm-th-perm { text-align: center; min-width: 100px; }
+
+    .rm-perm-label { display: inline-flex; align-items: center; gap: 5px; }
+    .rm-perm-label.view { color: var(--success); }
+    .rm-perm-label.edit { color: var(--blue); }
+    .rm-perm-label.delete { color: var(--accent); }
+    .rm-perm-label.export { color: var(--purple); }
+
+    .rm-tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+    .rm-tr:hover { background: rgba(255,255,255,0.025); }
+    .rm-tr:last-child { border-bottom: none; }
+    .rm-td { padding: 16px 20px; vertical-align: middle; }
+    .rm-td-module {}
+    .rm-td-perm { text-align: center; }
+
+    .rm-module-cell { display: flex; align-items: center; gap: 12px; }
+    .rm-module-indicator { width: 3px; height: 32px; background: var(--border); border-radius: 2px; transition: background 0.2s; flex-shrink: 0; }
+    .rm-tr:hover .rm-module-indicator { background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+    .rm-module-name { display: block; font-size: 12px; font-weight: 700; color: var(--text-1); text-transform: uppercase; letter-spacing: 0.03em; }
+    .rm-module-id { display: block; font-size: 9px; font-weight: 600; color: var(--text-3); letter-spacing: 0.1em; margin-top: 2px; }
+
+    /* Toggles */
+    .rm-toggle { display: inline-block; width: 44px; height: 22px; cursor: pointer; position: relative; }
+    .rm-toggle input { display: none; }
+    .rm-track { position: absolute; inset: 0; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 11px; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); }
+    .rm-thumb { position: absolute; left: 3px; top: 3px; width: 14px; height: 14px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); }
+
+    /* View - green */
+    .rm-toggle.view input:checked + .rm-track { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.35); box-shadow: 0 0 12px rgba(16,185,129,0.15); }
+    .rm-toggle.view input:checked + .rm-track .rm-thumb { transform: translateX(22px); background: var(--success); box-shadow: 0 0 12px rgba(16,185,129,0.6); }
+
+    /* Edit - blue */
+    .rm-toggle.edit input:checked + .rm-track { background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.35); box-shadow: 0 0 12px rgba(59,130,246,0.15); }
+    .rm-toggle.edit input:checked + .rm-track .rm-thumb { transform: translateX(22px); background: var(--blue); box-shadow: 0 0 12px rgba(59,130,246,0.6); }
+
+    /* Delete - red */
+    .rm-toggle.delete input:checked + .rm-track { background: rgba(217,43,43,0.12); border-color: rgba(217,43,43,0.35); box-shadow: 0 0 12px rgba(217,43,43,0.15); }
+    .rm-toggle.delete input:checked + .rm-track .rm-thumb { transform: translateX(22px); background: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+
+    /* Export - purple */
+    .rm-toggle.export input:checked + .rm-track { background: rgba(140,82,255,0.12); border-color: rgba(140,82,255,0.35); box-shadow: 0 0 12px rgba(140,82,255,0.15); }
+    .rm-toggle.export input:checked + .rm-track .rm-thumb { transform: translateX(22px); background: var(--purple); box-shadow: 0 0 12px rgba(140,82,255,0.5); }
   `]
 })
 export class AdminRoleMatrixComponent implements OnInit {
@@ -301,21 +410,18 @@ export class AdminRoleMatrixComponent implements OnInit {
 
   loading = signal(true);
   saving = signal(false);
+  saveSuccess = signal(false);
   roles = signal<Role[]>([]);
   selectedRole = signal<Role | null>(null);
   permissions = signal<ModulePermission[]>([]);
 
-  ngOnInit() {
-    this.loadRoles();
-  }
+  ngOnInit() { this.loadRoles(); }
 
   loadRoles() {
     this.loading.set(true);
     this.adminService.getRoles().subscribe({
       next: (res: { success: boolean; data: Role[] }) => {
-        if (res.success && res.data) {
-          this.roles.set(res.data);
-        }
+        if (res.success && res.data) this.roles.set(res.data);
         this.loading.set(false);
       },
       error: () => this.loading.set(false)
@@ -327,9 +433,7 @@ export class AdminRoleMatrixComponent implements OnInit {
     this.loading.set(true);
     this.adminService.getModulePermissions(role.id).subscribe({
       next: (res: { success: boolean; data: ModulePermission[] }) => {
-        if (res.success && res.data) {
-          this.permissions.set(res.data);
-        }
+        if (res.success && res.data) this.permissions.set(res.data);
         this.loading.set(false);
       },
       error: () => this.loading.set(false)
@@ -339,12 +443,12 @@ export class AdminRoleMatrixComponent implements OnInit {
   savePermissions() {
     const role = this.selectedRole();
     if (!role) return;
-
     this.saving.set(true);
     this.adminService.upsertPermissions(role.id, this.permissions()).subscribe({
       next: (res: { success: boolean }) => {
         if (res.success) {
-          // Protocol update success feedback
+          this.saveSuccess.set(true);
+          setTimeout(() => this.saveSuccess.set(false), 3500);
         }
         this.saving.set(false);
       },
