@@ -204,7 +204,7 @@ export class AdminReportsComponent implements OnInit {
 
   download(reportId: string, format: string) {
     this.reportsSvc.downloadReport(reportId, format).subscribe({
-      next: (blob) => {
+      next: (blob: Blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { AuthService, UserProfile } from '../../../services/auth.service';
+import { AuthService, UserProfile } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -291,7 +291,7 @@ export class ProfileComponent implements OnInit {
 
   loadProfile() {
     this.authSvc.getProfile().subscribe({
-      next: (res) => {
+      next: (res: { success: boolean, data: UserProfile }) => {
         if (res.success && res.data) {
           this.profile.set(res.data);
           this.editForm.patchValue({
@@ -312,7 +312,7 @@ export class ProfileComponent implements OnInit {
     if (this.editForm.invalid) return;
     this.submitting.set(true);
     this.authSvc.updateProfile(this.editForm.value as any).subscribe({
-      next: (res) => {
+      next: (res: { success: boolean }) => {
         if (res.success) {
           this.loadProfile();
           this.closeEditOverlay();

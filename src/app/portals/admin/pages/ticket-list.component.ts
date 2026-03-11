@@ -245,13 +245,16 @@ export class TicketListComponent implements OnInit {
 
   loadTickets() {
     this.loading.set(true);
-    this.helpSvc.getTickets(this.currentPage(), this.pageSize, this.searchQuery, this.filterStatus === 'all' ? '' : this.filterStatus).subscribe({
-      next: (res) => {
-        if (res.success && res.data) {
-          this.tickets.set(res.data.tickets);
-          this.totalCount.set(res.data.pagination.total);
-          this.totalPages.set(res.data.pagination.pages);
-        }
+    this.helpSvc.listTickets({
+      limit: this.pageSize,
+      offset: (this.currentPage() - 1) * this.pageSize,
+      search: this.searchQuery,
+      status: this.filterStatus === 'all' ? '' : this.filterStatus
+    }).subscribe({
+      next: (res: { tickets: Ticket[], pagination: { total: number, pages: number } }) => {
+        this.tickets.set(res.tickets);
+        this.totalCount.set(res.pagination.total);
+        this.totalPages.set(res.pagination.pages);
         this.loading.set(false);
       },
       error: () => this.loading.set(false)

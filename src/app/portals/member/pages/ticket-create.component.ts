@@ -7,7 +7,7 @@ import { CommonModule, UpperCasePipe } from '@angular/common';
 @Component({
   selector: 'app-ticket-create',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule, RouterLink, CommonModule, UpperCasePipe],
+  imports: [FormsModule, RouterLink, CommonModule],
   template: `
     <div class="db-root animate-fade-in">
       <div class="noise-overlay"></div>

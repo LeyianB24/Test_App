@@ -4,6 +4,17 @@ import { Router } from '@angular/router';
 import { Observable, of, throwError, forkJoin } from 'rxjs';
 import { tap, catchError, switchMap } from 'rxjs/operators';
 import { User, LoginCredentials, AuthResponse } from '../models/app.models';
+
+export interface UserProfile extends User {
+  phone?: string;
+  department?: string;
+  designation?: string;
+  avatar?: string;
+  last_login?: string;
+  bio?: string;
+  preferences?: any;
+}
+
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -264,5 +275,13 @@ export class AuthService {
         return throwError(() => err);
       })
     );
+  }
+
+  getProfile(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/get_profile.php`, { withCredentials: true });
+  }
+
+  updateProfile(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/update_profile.php`, data, { withCredentials: true });
   }
 }
