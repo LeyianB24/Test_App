@@ -248,7 +248,7 @@ interface PinDetails {
     .result-card { padding: 48px; background: var(--bg-card); border: 1px solid var(--bdr); border-radius: 40px; backdrop-filter: blur(24px); }
     
     .result-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
-    .id-ref { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 950; color: var(--red-bright); letter-spacing: 3px; margin-bottom: 8px; block; }
+    .id-ref { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 950; color: var(--red-bright); letter-spacing: 3px; margin-bottom: 8px; display: block; }
     .taxpayer-name { font-size: 32px; font-weight: 950; margin: 0; color: #fff; tracking: -1px; }
 
     /* kpi grid */
@@ -258,6 +258,7 @@ interface PinDetails {
     .kpi-value { font-size: 14px; font-weight: 950; color: #fff; letter-spacing: 1px; }
 
     /* Obligations */
+    .empty-title { font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
     .section-title { font-size: 11px; font-weight: 950; color: var(--text-muted); letter-spacing: 3px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
     .section-title .line { flex-grow: 1; height: 1px; background: var(--bdr); }
 

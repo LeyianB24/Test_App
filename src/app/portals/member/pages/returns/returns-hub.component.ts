@@ -305,7 +305,7 @@ import { TaxReturnService } from '../../../../services/tax-return.service';
     .group-hover-red { transition: color 0.2s; }
     .category-card:hover .group-hover-red { color: var(--red); }
     .empty-state { padding: 60px 0; text-align: center; color: var(--text-mut); }
-    .empty-title { font-size: 14px; font-weight: 900; uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .empty-title { font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
     .empty-sub { font-size: 12px; font-weight: 500; }
 
     /* Animations */

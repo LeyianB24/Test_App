@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuditLogService, AuditLog } from '../../../core/services/admin/audit-log.service';
+import { AuditLogService, AuditLog } from '../../../../core/services/admin/audit-log.service';
 
 @Component({
   selector: 'app-audit-log',
@@ -274,15 +274,15 @@ export class AuditLogComponent implements OnInit {
 
   loadLogs() {
     this.loading.set(true);
-    this.auditService.getLogs(this.currentPage(), this.pageSize, this.searchQuery, this.selectedStatus === 'all' ? '' : this.selectedStatus).subscribe({
-      next: (res) => {
+    this.auditService.getLogs(this.currentPage(), this.pageSize, this.searchQuery, this.selectedStatus).subscribe({
+      next: (res: { success: boolean, data: { logs: AuditLog[], total: number, pagination: { pages: number } } }) => {
         if (res.success && res.data) {
           this.auditLogs.set(res.data.logs);
-          this.totalLogs.set(res.data.pagination.total);
+          this.totalLogs.set(res.data.total);
           this.totalPages.set(res.data.pagination.pages);
           
-          this.nominalCount.set(res.data.logs.filter(l => this.isNominal(l.status)).length);
-          this.failureCount.set(res.data.logs.filter(l => !this.isNominal(l.status)).length);
+          this.nominalCount.set(res.data.logs.filter((l: AuditLog) => this.isNominal(l.status)).length);
+          this.failureCount.set(res.data.logs.filter((l: AuditLog) => !this.isNominal(l.status)).length);
         }
         this.loading.set(false);
       },

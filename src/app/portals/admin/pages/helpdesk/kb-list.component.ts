@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { KbService, KbCategory } from '../../../services/kb.service';
+import { KbService, KbCategory } from '../../../../services/kb.service';
 
 @Component({
   selector: 'app-kb-list',
@@ -152,9 +152,9 @@ export class KbListComponent implements OnInit {
   loadCategories() {
     this.loading.set(true);
     this.kbSvc.getCategories(this.searchQuery).subscribe({
-      next: (res) => {
+      next: (res: { success: boolean, data: { categories: KbCategory[] } }) => {
         if (res.success && res.data) {
-          this.categories.set(res.data);
+          this.categories.set(res.data.categories);
         }
         this.loading.set(false);
       },

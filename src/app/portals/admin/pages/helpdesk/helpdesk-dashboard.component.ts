@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HelpdeskService, HelpdeskSummary } from '../../../services/helpdesk.service';
+import { HelpdeskService, HelpdeskSummary } from '../../../../services/helpdesk.service';
 
 @Component({
   selector: 'app-helpdesk-dashboard',
@@ -296,7 +296,7 @@ export class HelpdeskDashboardComponent implements OnInit {
   loadSummary() {
     this.loading.set(true);
     this.helpSvc.getSummary().subscribe({
-      next: (res) => {
+      next: (res: { success: boolean, data: HelpdeskSummary }) => {
         if (res.success && res.data) this.summary.set(res.data);
         this.loading.set(false);
       },
@@ -304,3 +304,4 @@ export class HelpdeskDashboardComponent implements OnInit {
     });
   }
 }
+```
