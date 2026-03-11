@@ -276,7 +276,7 @@ import { AuthService, UserProfile } from '../../../../core/services/auth.service
     /* ── Root ── */
     .pf-root {
       min-height: 100vh;
-      background: #060608 url('/assets/kra_background.png') no-repeat center center fixed;
+      background: #060608 ;
       background-size: cover;
       position: relative; overflow-x: hidden; color: #e8e5e2;
       padding: 3.5rem;

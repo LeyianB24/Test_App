@@ -258,7 +258,7 @@ import { EtimsService } from '../../../services/etims.service';
 
     .db-root { 
       min-height: 100vh; 
-      background: #050505 url('/assets/kra_background.png') no-repeat center center fixed;
+      background: #050505 ;
       background-size: cover;
       color: var(--text-pri); 
       position: relative; 
