@@ -7,9 +7,12 @@ import { User, LoginCredentials, AuthResponse } from '../models/app.models';
 
 export interface UserProfile extends User {
   phone?: string;
+  address?: string;
+  station?: string;
   department?: string;
   designation?: string;
   avatar?: string;
+  profile_image?: string;
   last_login?: string;
   bio?: string;
   preferences?: any;

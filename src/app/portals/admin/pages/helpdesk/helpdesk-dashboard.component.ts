@@ -304,4 +304,3 @@ export class HelpdeskDashboardComponent implements OnInit {
     });
   }
 }
-```

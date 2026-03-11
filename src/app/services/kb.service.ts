@@ -47,6 +47,21 @@ export class KbService {
     this.http.get<any>(`${this.apiUrl}?action=get_categories`).subscribe({
       next: (resp) => {
         if (resp.success) this.categoriesSignal.set(resp.data);
+        this.loadingSignal.set(false);
+      },
+      error: () => this.loadingSignal.set(false)
+    });
+  }
+
+  public getCategories(query: string = ''): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}?action=get_categories&query=${query}`);
+  }
+
+  getArticles(categoryId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}?action=get_articles&category_id=${categoryId}`);
+  }
+
+  getArticle(slug: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}?action=get_article&slug=${slug}`);
   }
 
